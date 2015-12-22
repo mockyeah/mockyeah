@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<people>
+  <person>
+    <firstName>Kate</firstName>
+    <lastName>Austen</lastName>
+  </person>
+  <person>
+    <firstName>John</firstName>
+    <lastName>Locke</lastName>
+  </person>
+  <person>
+    <firstName>Jack</firstName>
+    <lastName>Shephard</lastName>
+  </person>
+  <person>
+    <firstName>Charlie</firstName>
+    <lastName>Pace</lastName>
+  </person>
+  <person>
+    <firstName>Desmond</firstName>
+    <lastName>Hume</lastName>
+  </person>
+  <person>
+    <firstName>Hugo</firstName>
+    <lastName>Reyes</lastName>
+  </person>
+  <person>
+    <firstName>James</firstName>
+    <lastName>Ford</lastName>
+  </person>
+</people>

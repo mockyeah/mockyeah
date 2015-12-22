@@ -6,6 +6,7 @@
  *  Implements Express route middleware based on Mock Yeah API options.
  */
 
+const path = require('path');
 const _ = require('lodash');
 let app;
 
@@ -14,7 +15,10 @@ const handler = function handler(response) {
   return (req, res) => {
     res.status(response.status || 200);
 
-    if (response.html) { // if html, set Content-Type to application/html and send
+    if (response.filePath) { // if filePath, send filedefaultResponseType('json');
+      if (response.type) res.type(response.type);
+      res.sendFile(path.resolve(response.filePath));
+    } else if (response.html) { // if html, set Content-Type to application/html and send
       res.type(response.type || 'html');
       res.send(response.html);
     } else if (response.json) { // if json, set Content-Type to application/json and send
