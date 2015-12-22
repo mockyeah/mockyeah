@@ -9,6 +9,7 @@
 const path = require('path');
 const _ = require('lodash');
 let app;
+let fixturesDir;
 
 const handler = function handler(response) {
   response = response || {};
@@ -18,6 +19,10 @@ const handler = function handler(response) {
     if (response.filePath) { // if filePath, send filedefaultResponseType('json');
       if (response.type) res.type(response.type);
       res.sendFile(path.resolve(response.filePath));
+    } else if (response.fixture) { // if fixture, send fixture file
+      if (response.type) res.type(response.type);
+      fixturesDir = fixturesDir || app.config.get('fixturesDir');
+      res.sendFile(path.resolve(fixturesDir, response.fixture));
     } else if (response.html) { // if html, set Content-Type to application/html and send
       res.type(response.type || 'html');
       res.send(response.html);

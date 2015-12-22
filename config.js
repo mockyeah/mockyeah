@@ -15,7 +15,8 @@ config.file({
   search: true
 })
 .defaults({
-  port: 4001
+  port: 4001,
+  fixturesDir: './fixtures'
 });
 
 module.exports = config;

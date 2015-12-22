@@ -1,3 +1,4 @@
 {
- "port": "4041"
+ "port": "4041",
+ "fixturesDir": "./test/fixtures"
 }
