@@ -1,0 +1,12 @@
+{
+  "name": "mock-yeah",
+  "version": "0.0.0",
+  "description": "An invaluable service mocking platform built on Express.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ryanricard/mock-yeah.git"
+  },
+  "author": "Ryan Ricard",
+  "license": "ISC"
+}
