@@ -14,5 +14,8 @@
     "eslint-config-airbnb": "^2.1.1",
     "gulp": "^3.9.0",
     "gulp-eslint": "^1.1.1"
+  },
+  "dependencies": {
+    "express": "^4.13.3"
   }
 }
