@@ -31,14 +31,14 @@ options.
 
 ##### Options
 Response options informing Mock Yeah how to respond to matching requests. Supported options:
-- filePath (optional) - File with contents to include in response body. Assumes response Content-Type of file type.
-- fixture (optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type.
+- filePath (String; optional) - File with contents to include in response body. Assumes response Content-Type of file type.
+- fixture (String; optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type.
 - headers (Object; optional) - Header key value pairs to include in response.
-- html (optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
-- json (optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
-- text (optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
-- type (optional) - Content-Type HTTP header to return with response. Proxies option to Express response method `res.type(type)`; more info here: http://expressjs.com/en/4x/api.html#res.type
-- status (optional; default: 200) - HTTP response status code.
+- html (String; optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
+- json (Object; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
+- text (String; optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
+- type (String; optional) - Content-Type HTTP header to return with response. Proxies option to Express response method `res.type(type)`; more info here: http://expressjs.com/en/4x/api.html#res.type
+- status (String; optional; default: 200) - HTTP response status code.
 
 Note, only one of the following is permitted per service: filePath, fixture, html, json, or text.
 
