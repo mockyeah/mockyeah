@@ -16,6 +16,9 @@ const handler = function handler(response) {
   return (req, res) => {
     res.status(response.status || 200);
 
+    // set response headers, if received
+    if (response.headers) res.set(response.headers);
+
     if (response.filePath) { // if filePath, send filedefaultResponseType('json');
       if (response.type) res.type(response.type);
       res.sendFile(path.resolve(response.filePath));

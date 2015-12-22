@@ -33,6 +33,7 @@ options.
 Response options informing Mock Yeah how to respond to matching requests. Supported options:
 - filePath (optional) - File with contents to include in response body. Assumes response Content-Type of file type.
 - fixture (optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type.
+- headers (Object; optional) - Header key value pairs to include in response.
 - html (optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
 - json (optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
 - text (optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.

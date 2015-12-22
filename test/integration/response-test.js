@@ -133,6 +133,17 @@ describe('Response', () => {
     });
   });
 
+  describe('Headers', () => {
+    it('should support custom headers', (done) => {
+      mockyeah.get('/some/service/end/point', { text: 'Hello.', headers: { 'Foo-Bar': 'abc' } });
+
+      request
+        .get('/some/service/end/point')
+        .expect('Foo-Bar', 'abc')
+        .expect(200, /Hello/, done);
+    });
+  });
+
   describe('HTML', () => {
     it('should respond HTML Content-Type for HTML', (done) => {
       mockyeah.get('/service/exists', { html: '<p>Hello</p>' });
