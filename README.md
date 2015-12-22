@@ -7,12 +7,44 @@ Testing is difficult when you don't have control of your data. This project puts
 Have a requirement to implement specific behavior when a service is slow to respond or a server returns an unexpected status code? No problem! This platform makes developing for such requirements easy.
 
 ## Install
-```
+```shell
 $ npm install mock-yeah --save-dev
 ```
 
-## Usage examples
+## Usage
 
+### Introductory tutorial
+1. Create an example project and initialized with NPM
+  ```shell
+  $ mkdir example-app && cd example-app
+  $ npm init # all defaults will be fine
+  ```
+
+1. Install `mock-yeah`
+  ```shell
+  $ npm install mock-yeah --save-dev
+  ```
+
+1. Create script file and add the source below
+  ```shell
+  $ touch index.js
+  ```
+  ```js
+  const mockyeah = require('mock-yeah');
+
+  mockyeah.get('/hello-world', { text: 'Hello World' });
+  ```
+
+1. Run the script file with Node
+  ```shell
+  $ node index.js
+  ```
+
+1. Open [http://localhost:4001/hello-world](http://localhost:4001/hello-world)
+
+1. Profit. You should see "Hello World" returned from your mock server.
+
+### Testing example
 ```js
 const request = require('supertest')('http://localhost:4041');
 const mockyeah = require('mock-yeah');
