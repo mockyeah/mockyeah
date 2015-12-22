@@ -31,9 +31,12 @@ options.
 
 ##### Options
 Response options informing Mock Yeah how to respond to matching requests. Supported options:
+- json (optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
 - text (optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
 - type (optional) - Content-Type HTTP header to return with response. Proxies option to Express response method `res.type(type)`; more info here: http://expressjs.com/en/4x/api.html#res.type
 - status (optional; default: 200) - HTTP response status code.
+
+Note, only one of the following is permitted per service: json, text;
 
 ### Mock Service Management Methods
 
