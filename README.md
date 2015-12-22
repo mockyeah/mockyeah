@@ -44,18 +44,16 @@ describe('Wondrous service', () => {
 ```
 
 ## Package Dependencies
-
 - Mock Yeah was built and tested with Node v4.2.3
 - [Mocha](https://mochajs.org/)
 
 ## API
 
 ### Mock Service Creation API
-
-__mockyeah.get(path, options)__
-__mockyeah.put(path, options)__
-__mockyeah.post(path, options)__
-__mockyeah.delete(path, options__
+__mockyeah.get(path, options)__<br/>
+__mockyeah.put(path, options)__<br/>
+__mockyeah.post(path, options)__<br/>
+__mockyeah.delete(path, options__<br/>
 
 Each of the methods above create a mock service with a HTTP verb matching its
 respective method name.
