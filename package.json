@@ -1,6 +1,6 @@
 {
   "name": "mock-yeah",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "An invaluable service mocking platform built on Express.",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,24 @@
   },
   "author": "Ryan Ricard",
   "license": "ISC",
+  "keywords": [
+    "bdd",
+    "express",
+    "http",
+    "mock",
+    "mocks",
+    "mock services",
+    "mocking",
+    "request",
+    "sinon",
+    "supertest",
+    "superagent",
+    "tdd",
+    "test",
+    "test framework",
+    "testing",
+    "web services"
+  ],
   "devDependencies": {
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^2.1.1",
