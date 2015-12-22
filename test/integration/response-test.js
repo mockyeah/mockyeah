@@ -39,6 +39,26 @@ describe('Response', () => {
     });
   });
 
+  describe('HTML', () => {
+    it('should respond HTML Content-Type for HTML', (done) => {
+      mockyeah.get('/service/exists', { html: '<p>Hello</p>' });
+
+      request
+        .get('/service/exists')
+        .expect('Content-Type', /text\/html/)
+        .expect(200, /Hello/, done);
+    });
+
+    it('should allow Content-Type override', (done) => {
+      mockyeah.get('/service/exists', { html: '<p>Hello</p>', type: 'text' });
+
+      request
+        .get('/service/exists')
+        .expect('Content-Type', /text\/plain/)
+        .expect(200, /Hello/, done);
+    });
+  });
+
   describe('JSON', () => {
     it('should respond with JSON Content-Type for JSON', (done) => {
       mockyeah.get('/service/exists', { json: { foo: 'bar' } });

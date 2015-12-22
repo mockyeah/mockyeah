@@ -14,7 +14,10 @@ const handler = function handler(response) {
   return (req, res) => {
     res.status(response.status || 200);
 
-    if (response.json) { // if json, set Content-Type to application/json and send
+    if (response.html) { // if html, set Content-Type to application/html and send
+      res.type(response.type || 'html');
+      res.send(response.html);
+    } else if (response.json) { // if json, set Content-Type to application/json and send
       res.type(response.type || 'json');
       res.send(response.json);
     } else if (response.text) { // if text, set Content-Type to text/plain and send
