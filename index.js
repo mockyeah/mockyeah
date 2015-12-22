@@ -1,14 +1,17 @@
 'use strict';
+/* eslint-disable no-console */
 
-const server = require('./server');
+const app = require('./server').app;
 
-server.app.config = require('./config');
+app.config = require('./config');
 
-server.app.listen(server.app.config.get('port'), function listen() {
+const httpServer = app.listen(app.config.get('port'), function listen() {
   const host = this.address().address;
   const port = this.address().port;
 
-  /* eslint-disable no-console */
   console.log('Mock Yeah listening at http://%s:%s', host, port);
-  /* eslint-enable no-console */
+});
+
+module.exports.close = httpServer.close.bind(httpServer, function callback() {
+  console.log('Mock Yeah server closed.');
 });
