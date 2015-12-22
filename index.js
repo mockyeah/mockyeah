@@ -2,7 +2,9 @@
 
 const server = require('./server');
 
-server.app.listen('4001', function listen() {
+server.app.config = require('./config');
+
+server.app.listen(server.app.config.get('port'), function listen() {
   const host = this.address().address;
   const port = this.address().port;
 

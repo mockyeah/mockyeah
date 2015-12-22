@@ -16,6 +16,7 @@
     "gulp-eslint": "^1.1.1"
   },
   "dependencies": {
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "nconf": "^0.8.2"
   }
 }
