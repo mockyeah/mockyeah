@@ -12,7 +12,15 @@ let app;
 const handler = function handler(response) {
   response = response || {};
   return (req, res) => {
-    res.status(response.status || 200).send();
+    res.status(response.status || 200);
+
+    if (response.text) { // if text, set Content-Type to text/plain and send
+      res.type(response.type || 'text');
+      res.send(response.text);
+    } else { // else send empty response
+      res.type(response.type || 'text');
+      res.send();
+    }
   };
 };
 

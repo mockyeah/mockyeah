@@ -15,9 +15,9 @@ Have a requirement to implement specific behavior when a service is slow to resp
 
 ### Mock Service Creation API
 
-__mockyeah.get(path, options)__  
-__mockyeah.put(path, options)__  
-__mockyeah.post(path, options)__  
+__mockyeah.get(path, options)__
+__mockyeah.put(path, options)__
+__mockyeah.post(path, options)__
 __mockyeah.delete(path, options__
 
 Each of the methods above create a mock service with a HTTP verb matching its
@@ -31,6 +31,8 @@ options.
 
 ##### Options
 Response options informing Mock Yeah how to respond to matching requests. Supported options:
+- text (optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
+- type (optional) - Content-Type HTTP header to return with response. Proxies option to Express response method `res.type(type)`; more info here: http://expressjs.com/en/4x/api.html#res.type
 - status (optional; default: 200) - HTTP response status code.
 
 ### Mock Service Management Methods

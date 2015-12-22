@@ -38,4 +38,24 @@ describe('Response', () => {
         .expect(500, done);
     });
   });
+
+  describe('Text', () => {
+    it('should respond with text Content-Type for text', (done) => {
+      mockyeah.get('/service/exists', { text: 'Hello' });
+
+      request
+        .get('/service/exists')
+        .expect('Content-Type', /text\/plain/)
+        .expect(200, 'Hello', done);
+    });
+
+    it('should allow Content-Type override', (done) => {
+      mockyeah.get('/service/exists', { text: 'Hello', type: 'html' });
+
+      request
+        .get('/service/exists')
+        .expect('Content-Type', /text\/html/)
+        .expect(200, 'Hello', done);
+    });
+  });
 });
