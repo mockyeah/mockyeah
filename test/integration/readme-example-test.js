@@ -1,5 +1,6 @@
 'use strict';
 
+require('../TestHelper');
 const request = require('supertest')('http://localhost:4041');
 const mockyeah = require('../../index.js');
 
