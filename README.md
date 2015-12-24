@@ -103,6 +103,7 @@ Response options informing Mock Yeah how to respond to matching requests. Suppor
 - headers (Object; optional) - Header key value pairs to include in response.
 - html (String; optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
 - json (Object; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
+- latency (Number/Milliseconds; optional) - Used to control the response timing of a response. 
 - text (String; optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
 - type (String; optional) - Content-Type HTTP header to return with response. Proxies option to Express response method `res.type(type)`; more info here: http://expressjs.com/en/4x/api.html#res.type
 - status (String; optional; default: 200) - HTTP response status code.

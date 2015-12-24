@@ -14,31 +14,39 @@ let fixturesDir;
 const handler = function handler(response) {
   response = response || {};
   return (req, res) => {
+    let send;
+
+    // Default latency to 0 when undefined
+    response.latency = response.latency || 0;
+
+    // Default response status to 200 when undefined
     res.status(response.status || 200);
 
     // set response headers, if received
     if (response.headers) res.set(response.headers);
 
-    if (response.filePath) { // if filePath, send filedefaultResponseType('json');
+    if (response.filePath) { // if filePath, send file
       if (response.type) res.type(response.type);
-      res.sendFile(path.resolve(response.filePath));
+      send = res.sendFile.bind(res, path.resolve(response.filePath));
     } else if (response.fixture) { // if fixture, send fixture file
       if (response.type) res.type(response.type);
       fixturesDir = fixturesDir || app.config.get('fixturesDir');
-      res.sendFile(path.resolve(fixturesDir, response.fixture));
+      send = res.sendFile.bind(res, path.resolve(fixturesDir, response.fixture));
     } else if (response.html) { // if html, set Content-Type to application/html and send
       res.type(response.type || 'html');
-      res.send(response.html);
+      send = res.send.bind(res, response.html);
     } else if (response.json) { // if json, set Content-Type to application/json and send
       res.type(response.type || 'json');
-      res.send(response.json);
+      send = res.send.bind(res, response.json);
     } else if (response.text) { // if text, set Content-Type to text/plain and send
       res.type(response.type || 'text');
-      res.send(response.text);
+      send = res.send.bind(res, response.text);
     } else { // else send empty response
       res.type(response.type || 'text');
-      res.send();
+      send = res.send.bind(res);
     }
+
+    setTimeout(send, response.latency);
   };
 };
 
