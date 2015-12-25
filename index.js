@@ -9,7 +9,7 @@ const httpServer = app.listen(app.config.get('port'), function listen() {
   const host = this.address().address;
   const port = this.address().port;
 
-  console.log('Mock Yeah listening at http://%s:%s', host, port);
+  console.log(`Mock Yeah listening at http://${host}:${port}`);
 });
 
 module.exports = app.RouteManager;
