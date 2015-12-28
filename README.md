@@ -1,4 +1,4 @@
-# Mock Yeah
+# Mock Yeah [![Build Status](https://travis-ci.org/ryanricard/mock-yeah.svg)](https://travis-ci.org/ryanricard/mock-yeah)
 
 __"An invaluable service mocking platform built on Express."__
 
