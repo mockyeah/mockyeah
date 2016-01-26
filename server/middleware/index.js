@@ -6,3 +6,8 @@ exports.accessControlAllowOrigin = function allowCrossDomain(req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 };
+
+exports.logRequest = function logRequest(req, res, next) {
+  console.log(`${req.method} ${req.url}`);
+  next();
+};
