@@ -16,7 +16,8 @@ config.file({
 })
 .defaults({
   port: 4001,
-  fixturesDir: './fixtures'
+  fixturesDir: './fixtures',
+  accessControlAllowOrigin: false
 });
 
 module.exports = config;

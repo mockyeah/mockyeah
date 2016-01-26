@@ -5,6 +5,11 @@ const app = require('./server').app;
 
 app.config = require('./config');
 
+if (app.config.get('accessControlAllowOrigin')) {
+  const accessControlAllowOrigin = require('./server/middleware').accessControlAllowOrigin;
+  app.use(accessControlAllowOrigin);
+}
+
 const httpServer = app.listen(app.config.get('port'), function listen() {
   const host = this.address().address;
   const port = this.address().port;
