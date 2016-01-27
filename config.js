@@ -8,7 +8,7 @@ const path = require('path');
  * Determine wrapping application root
  *  Needed for searching for .mock-yeah configuration file.
  */
-const root = path.resolve(__dirname, global.MOCK_YEAH_ROOT ? global.MOCK_YEAH_ROOT : '..');
+const root = path.resolve(__dirname, global.MOCK_YEAH_ROOT ? global.MOCK_YEAH_ROOT : '../..');
 
 const configDefaults = {
   port: 4001,
