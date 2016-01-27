@@ -30,7 +30,7 @@ const handler = function handler(response) {
       send = res.sendFile.bind(res, path.resolve(response.filePath));
     } else if (response.fixture) { // if fixture, send fixture file
       if (response.type) res.type(response.type);
-      fixturesDir = fixturesDir || app.config.get('fixturesDir');
+      fixturesDir = fixturesDir || app.config.fixturesDir;
       send = res.sendFile.bind(res, path.resolve(fixturesDir, response.fixture));
     } else if (response.html) { // if html, set Content-Type to application/html and send
       res.type(response.type || 'html');

@@ -5,7 +5,7 @@ const app = require('./server').app;
 
 app.config = require('./config');
 
-const httpServer = app.listen(app.config.get('port'), function listen() {
+const httpServer = app.listen(app.config.port, function listen() {
   const host = this.address().address;
   const port = this.address().port;
 
