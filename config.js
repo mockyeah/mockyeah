@@ -1,7 +1,8 @@
 'use strict';
+/* eslint-disable no-sync */
 
+const fs = require('fs');
 const path = require('path');
-const config = require('nconf');
 
 /**
  * Determine wrapping application root
@@ -9,14 +10,18 @@ const config = require('nconf');
  */
 const root = path.resolve(__dirname, global.MOCK_YEAH_ROOT ? global.MOCK_YEAH_ROOT : '..');
 
-config.file({
-  file: '.mock-yeah',
-  dir: root,
-  search: true
-})
-.defaults({
+const configDefaults = {
   port: 4001,
   fixturesDir: './fixtures'
-});
+};
 
-module.exports = config;
+let config = {};
+
+try {
+  config = fs.readFileSync(path.resolve(root, '.mock-yeah'));
+  config = JSON.parse(config);
+} catch (err) {
+  // noop
+}
+
+module.exports = Object.assign(configDefaults, config);
