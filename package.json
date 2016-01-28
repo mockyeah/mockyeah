@@ -1,5 +1,5 @@
 {
-  "name": "mock-yeah",
+  "name": "mockyeah",
   "version": "0.8.1",
   "description": "An invaluable service mocking platform built on Express.",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:ryanricard/mock-yeah.git"
+    "url": "git@github.com:ryanricard/mockyeah.git"
   },
   "author": "Ryan Ricard",
   "license": "ISC",
