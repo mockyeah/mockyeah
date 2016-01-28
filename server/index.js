@@ -14,7 +14,7 @@ require('./lib/RouteResolver')(app);
  * Attach RouteManager to app object
  *  RouteManager serves as the primary set of Mock Yeah api methods
  */
-app.RouteManager = RouteManager;
+app.RouteManager = RouteManager(app);
 
 app.get('/', (req, res) => {
   res.send('Hello, Mock Yeah!');

@@ -40,6 +40,74 @@ describe('Response', () => {
     });
   });
 
+  describe('Sets', () => {
+    it('should respond successfully', (done) => {
+      mockyeah.loadSet('example');
+
+      request
+        .get('/say-hello')
+        .expect(200, 'Well, hello there.', done);
+    });
+
+    it('should respond with a 404', (done) => {
+      mockyeah.loadSet('example');
+
+      request
+        .get('/say-your-lost')
+        .expect(404, 'I\'m lost.', done);
+    });
+
+    it('should respond with a 500', (done) => {
+      mockyeah.loadSet('example');
+
+      request
+        .get('/say-oh-noes')
+        .expect(500, 'Oh noes!', done);
+    });
+
+    it('should respond with a file', (done) => {
+      mockyeah.loadSet('example');
+
+      request
+        .get('/respond-with-a-file')
+        .expect(200, done);
+    });
+
+    it('should respond with a fixture', (done) => {
+      mockyeah.loadSet('example');
+
+      request
+        .get('/respond-with-a-fixture')
+        .expect(200, done);
+    });
+
+    it('should respond with latency', (done) => {
+      const latency = 1000;
+      const threshold = latency + 250;
+
+      mockyeah.loadSet('example');
+
+      const start = (new Date).getTime();
+
+      request
+        .get('/wait-to-respond')
+        .expect(200, 'Oh, hey there.', done)
+        .expect(() => {
+          const now = (new Date).getTime();
+          const duration = now - start;
+          expect(duration).to.be.within(latency, threshold);
+        }, done);
+    });
+
+    it('should respond with an anonymous function', (done) => {
+      mockyeah.loadSet('example');
+
+      request
+        .get('/say-anything-you-want')
+        .expect(200, 'Inversion of service control enables you to respond with whatever you want.', done);
+    });
+  });
+
   describe('File', () => {
     it('should respond with a CSV Content-Type for CSV files', (done) => {
       mockyeah.get('/service/exists', { filePath: './test/fixtures/some-data.csv' });
@@ -186,7 +254,7 @@ describe('Response', () => {
   });
 
   describe('Latency', () => {
-    it('should response with latency', (done) => {
+    it('should respond with latency', (done) => {
       const latency = 1000;
       const threshold = latency + 100;
 

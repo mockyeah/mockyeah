@@ -1,4 +1,6 @@
 'use strict';
 global.MOCK_YEAH_ROOT = __dirname;
 
-require('../../index.js');
+const mockyeah = require('mockyeah');
+
+mockyeah.loadSet('example');
