@@ -13,7 +13,8 @@ const root = path.resolve(__dirname, global.MOCK_YEAH_ROOT ? global.MOCK_YEAH_RO
 
 const configDefaults = {
   port: 4001,
-  fixturesDir: './fixtures'
+  setsDir: './mockyeah/sets',
+  fixturesDir: './mockyeah/fixtures'
 };
 
 try {
