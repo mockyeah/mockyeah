@@ -3,10 +3,11 @@
 
 const fs = require('fs');
 const path = require('path');
+let config;
 
 /**
  * Determine wrapping application root
- *  Needed for searching for .mock-yeah configuration file.
+ *  Needed for searching for .mockyeah configuration file.
  */
 const root = path.resolve(__dirname, global.MOCK_YEAH_ROOT ? global.MOCK_YEAH_ROOT : '../..');
 
@@ -15,13 +16,21 @@ const configDefaults = {
   fixturesDir: './fixtures'
 };
 
-let config = {};
-
 try {
-  config = fs.readFileSync(path.resolve(root, '.mock-yeah'));
+  config = fs.readFileSync(path.resolve(root, '.mockyeah'));
   config = JSON.parse(config);
 } catch (err) {
   // noop
 }
 
-module.exports = Object.assign(configDefaults, config);
+// TODO: .mock-yeah file is deprecated. Remove this try-catch at an opportune time.
+try {
+  if (!config) {
+    config = fs.readFileSync(path.resolve(root, '.mock-yeah'));
+    config = JSON.parse(config);
+  }
+} catch (err) {
+  // noop
+}
+
+module.exports = Object.assign(configDefaults, config || {});

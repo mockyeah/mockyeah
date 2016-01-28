@@ -1,4 +1,4 @@
-# Mock Yeah [![Build Status](https://travis-ci.org/ryanricard/mock-yeah.svg)](https://travis-ci.org/ryanricard/mock-yeah)
+# Mock Yeah [![Build Status](https://travis-ci.org/ryanricard/mockyeah.svg)](https://travis-ci.org/ryanricard/mockyeah)
 
 __"An invaluable service mocking platform built on Express."__
 
@@ -8,7 +8,7 @@ Have a requirement to implement specific behavior when a service is slow to resp
 
 ## Install
 ```shell
-$ npm install mock-yeah --save-dev
+$ npm install mockyeah --save-dev
 ```
 
 ## Usage
@@ -20,9 +20,9 @@ $ npm install mock-yeah --save-dev
   $ npm init # all defaults will be fine
   ```
 
-1. Install `mock-yeah`
+1. Install `mockyeah`
   ```shell
-  $ npm install mock-yeah --save-dev
+  $ npm install mockyeah --save-dev
   ```
 
 1. Create script file and add the source below
@@ -30,7 +30,7 @@ $ npm install mock-yeah --save-dev
   $ touch index.js
   ```
   ```js
-  const mockyeah = require('mock-yeah');
+  const mockyeah = require('mockyeah');
 
   mockyeah.get('/hello-world', { text: 'Hello World' });
   ```
@@ -47,7 +47,7 @@ $ npm install mock-yeah --save-dev
 ### Testing example
 ```js
 const request = require('supertest')('http://localhost:4041');
-const mockyeah = require('mock-yeah');
+const mockyeah = require('mockyeah');
 
 describe('Wondrous service', () => {
   // remove service mocks after each test
@@ -130,8 +130,8 @@ occupied by a server it started previously.
 Installing project and dependencies
 ```shell
 # download project
-$ git clone git@github.com:ryanricard/mock-yeah.git
-$ cd mock-yeah
+$ git clone git@github.com:ryanricard/mockyeah.git
+$ cd mockyeah
 
 # install proper Node version
 $ nvm install v4.2.3
