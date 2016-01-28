@@ -14,6 +14,8 @@ const httpServer = app.listen(app.config.port, function listen() {
 
 module.exports = app.RouteManager;
 
+module.exports.config = app.config;
+
 module.exports.close = httpServer.close.bind(httpServer, function callback() {
   console.log('Mock Yeah server closed.');
 });
