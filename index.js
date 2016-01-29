@@ -1,7 +1,7 @@
 'use strict';
 
-const app = require('./server').app;
-const log = require('./server/lib/Logger');
+const app = require('./app');
+const log = require('./app/lib/Logger');
 
 app.config = require('./config');
 
