@@ -1,0 +1,7 @@
+{
+  "method": "get",
+  "path": "/say-hello",
+  "options": {
+    "text": "Well, hello there."
+  }
+}
