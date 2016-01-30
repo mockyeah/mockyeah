@@ -8,12 +8,14 @@
 
 const path = require('path');
 const _ = require('lodash');
+const log = require('./Logger');
 let app;
 let fixturesDir;
 
 const handler = function handler(response) {
   response = response || {};
   return (req, res) => {
+    const start = (new Date).getTime();
     let send;
 
     // Default latency to 0 when undefined
@@ -46,7 +48,11 @@ const handler = function handler(response) {
       send = res.send.bind(res);
     }
 
-    setTimeout(send, response.latency);
+    setTimeout(() => {
+      const duration = (new Date).getTime() - start;
+      log(`[${req.method}] ${req.url} (${duration}ms)`);
+      send();
+    }, response.latency);
   };
 };
 
