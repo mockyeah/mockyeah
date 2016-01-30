@@ -59,6 +59,8 @@ const handler = function handler(response) {
     } else if (response.text) { // if text, set Content-Type to text/plain and send
       res.type(response.type || 'text');
       send = res.send.bind(res, response.text);
+    } else if (response.raw) { // if raw, don't set Content-Type
+      send = res.send.bind(res, response.raw);
     } else { // else send empty response
       res.type(response.type || 'text');
       send = res.send.bind(res);

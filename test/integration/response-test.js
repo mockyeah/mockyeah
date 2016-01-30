@@ -74,9 +74,9 @@ describe('Response', () => {
     });
   });
 
-  describe('Sets', () => {
+  describe('Series', () => {
     it('should respond successfully', (done) => {
-      mockyeah.loadSet('example');
+      mockyeah.startSeries('example');
 
       request
         .get('/say-hello')
@@ -84,7 +84,7 @@ describe('Response', () => {
     });
 
     it('should respond with a 404', (done) => {
-      mockyeah.loadSet('example');
+      mockyeah.startSeries('example');
 
       request
         .get('/say-your-lost')
@@ -92,7 +92,7 @@ describe('Response', () => {
     });
 
     it('should respond with a 500', (done) => {
-      mockyeah.loadSet('example');
+      mockyeah.startSeries('example');
 
       request
         .get('/say-oh-noes')
@@ -100,7 +100,7 @@ describe('Response', () => {
     });
 
     it('should respond with a file', (done) => {
-      mockyeah.loadSet('example');
+      mockyeah.startSeries('example');
 
       request
         .get('/respond-with-a-file')
@@ -108,7 +108,7 @@ describe('Response', () => {
     });
 
     it('should respond with a fixture', (done) => {
-      mockyeah.loadSet('example');
+      mockyeah.startSeries('example');
 
       request
         .get('/respond-with-a-fixture')
@@ -119,7 +119,7 @@ describe('Response', () => {
       const latency = 1000;
       const threshold = latency + 250;
 
-      mockyeah.loadSet('example');
+      mockyeah.startSeries('example');
 
       const start = (new Date).getTime();
 
@@ -131,14 +131,6 @@ describe('Response', () => {
           const duration = now - start;
           expect(duration).to.be.within(latency, threshold);
         }, done);
-    });
-
-    it('should respond with an anonymous function', (done) => {
-      mockyeah.loadSet('example');
-
-      request
-        .get('/say-anything-you-want')
-        .expect(200, 'Inversion of service control enables you to respond with whatever you want.', done);
     });
   });
 
@@ -243,6 +235,15 @@ describe('Response', () => {
       request
         .get('/some/service/end/point')
         .expect('Foo-Bar', 'abc')
+        .expect(200, /Hello/, done);
+    });
+
+    it('should send header Content-Type when set and raw', (done) => {
+      mockyeah.get('/some/service/end/point', { raw: 'Hello.', headers: { 'content-type': 'application/xml' } });
+
+      request
+        .get('/some/service/end/point')
+        .expect('Content-Type', /application\/xml/)
         .expect(200, /Hello/, done);
     });
   });

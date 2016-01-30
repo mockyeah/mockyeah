@@ -1,3 +1,4 @@
 {
- "port": "4042"
+ "port": "4042",
+ "fixturesDir": "../mockyeah_fixtures"
 }
