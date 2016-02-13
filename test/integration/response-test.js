@@ -8,6 +8,40 @@ const expect = require('chai').expect;
 describe('Response', () => {
   afterEach(() => mockyeah.reset());
 
+  it('should not allow for more than one response type', () => {
+    const payloadKeys = ['fixture', 'filePath', 'html', 'json', 'text'];
+    const optionSets = [
+      {
+        fixture: './test/fixtures/some-data.json',
+        filePath: './test/fixtures/some-data.csv'
+      },
+      {
+        fixture: './test/fixtures/some-data.json',
+        filePath: './test/fixtures/some-data.csv',
+        html: '<body></body>'
+      },
+      {
+        fixture: './test/fixtures/some-data.json',
+        filePath: './test/fixtures/some-data.csv',
+        html: '<body></body>',
+        json: '{"test": "json"}'
+      },
+      {
+        fixture: './test/fixtures/some-data.json',
+        filePath: './test/fixtures/some-data.csv',
+        html: '<body></body>',
+        json: '{"test": "json"}',
+        text: 'test text'
+      }
+    ];
+
+    optionSets.forEach(optionSet => {
+      expect(() => {
+        mockyeah.get('/service/end/point', optionSet);
+      }).to.throw('Response options must not include more than one of the following: ' + payloadKeys.join(', '));
+    });
+  });
+
   describe('Status', () => {
     it('should return 404 for undeclared services', (done) => {
       request

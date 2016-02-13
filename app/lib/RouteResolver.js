@@ -11,8 +11,24 @@ const _ = require('lodash');
 let app;
 let fixturesDir;
 
+const validateResponse = function validateResponse(response) {
+  const payloadKeysPresent = [];
+  const payloadKeys = ['fixture', 'filePath', 'html', 'json', 'text'];
+
+  payloadKeys.forEach(key => {
+    if (response[key]) payloadKeysPresent.push(response[key]);
+  });
+
+  if (payloadKeysPresent.length > 1) {
+    throw new Error('Response options must not include more than one of the following: ' + payloadKeys.join(', '));
+  }
+};
+
 const handler = function handler(response) {
   response = response || {};
+
+  validateResponse(response);
+
   return (req, res) => {
     let send;
 
