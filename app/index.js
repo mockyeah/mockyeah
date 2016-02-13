@@ -20,4 +20,4 @@ app.get('/', (req, res) => {
   res.send('Hello, Mock Yeah!');
 });
 
-module.exports.app = app;
+module.exports = app;
