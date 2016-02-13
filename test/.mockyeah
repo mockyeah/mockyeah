@@ -1,5 +1,5 @@
 {
  "port": "4041",
- "setsDir": "./test/sets",
- "fixturesDir": "./test/fixtures"
+ "fixturesDir": "./test/fixtures",
+ "seriesDir": "./test/series"
 }

@@ -1,0 +1,7 @@
+{
+  "method": "get",
+  "path": "/respond-with-a-fixture",
+  "options": {
+    "fixture": "some-data.json"
+  }
+}

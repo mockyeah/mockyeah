@@ -1,0 +1,8 @@
+{
+  "method": "get",
+  "path": "/say-your-lost",
+  "options": {
+    "text": "I'm lost.",
+    "status": 404
+  }
+}
