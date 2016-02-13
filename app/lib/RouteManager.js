@@ -2,7 +2,7 @@
 
 /**
  * RouteManager
- *  Primary Mock Yeah API (i.e. get, post, put, delete, reset).
+ *  Primary mockyeah API (i.e. get, post, put, delete, reset).
  */
 
 const path = require('path');

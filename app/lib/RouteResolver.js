@@ -3,7 +3,7 @@
 /**
  * RouteResolver
  *  Facilitates route registration and unregistration.
- *  Implements Express route middleware based on Mock Yeah API options.
+ *  Implements Express route middleware based on mockyeah API options.
  */
 
 const path = require('path');

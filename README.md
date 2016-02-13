@@ -1,4 +1,4 @@
-# Mock Yeah [![Build Status](https://travis-ci.org/ryanricard/mockyeah.svg)](https://travis-ci.org/ryanricard/mockyeah)
+# mockyeah [![Build Status](https://travis-ci.org/ryanricard/mockyeah.svg)](https://travis-ci.org/ryanricard/mockyeah)
 
 __"An invaluable service mocking platform built on Express."__
 
@@ -76,7 +76,7 @@ describe('Wondrous service', () => {
 ```
 
 ## Package Dependencies
-- Mock Yeah was built and tested with Node v4.2.3
+- mockyeah was built and tested with Node v4.2.3
 - [Mocha](https://mochajs.org/)
 
 ## API
@@ -97,7 +97,7 @@ Path to which to respond. Fully supports all Express path matching
 options.
 
 ##### Options
-Response options informing Mock Yeah how to respond to matching requests. Supported options:
+Response options informing mockyeah how to respond to matching requests. Supported options:
 - filePath (String; optional) - File with contents to include in response body. Assumes response Content-Type of file type.
 - fixture (String; optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./mockyeah/fixtures` in your project.
 - headers (Object; optional) - Header key value pairs to include in response.
@@ -190,11 +190,11 @@ module.exports = [
 Resets all existing mock services. Useful on test teardown.
 
 #### mockyeah.close()
-Shuts down the Mock Yeah Express server. Useful if running Mock Yeah with a file
-watcher. Mock Yeah attempts to start a new instance of Express each test
+Shuts down the mockyeah Express server. Useful if running mockyeah with a file
+watcher. mockyeah attempts to start a new instance of Express each test
 iteration. After all tests run, `mockyeah.close()` should be called to shutdown
-Mock Yeah's Express server. Failing to do so will result in `EADDRINUSE`
-exceptions. This is due to Mock Yeah attempting to start a server on a port
+mockyeah's Express server. Failing to do so will result in `EADDRINUSE`
+exceptions. This is due to mockyeah attempting to start a server on a port
 occupied by a server it started previously.
 
 ## Contributing

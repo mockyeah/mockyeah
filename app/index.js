@@ -12,12 +12,12 @@ require('./lib/RouteResolver')(app);
 
 /**
  * Attach RouteManager to app object
- *  RouteManager serves as the primary set of Mock Yeah api methods
+ *  RouteManager serves as the primary set of mockyeah API methods
  */
 app.RouteManager = RouteManager(app);
 
 app.get('/', (req, res) => {
-  res.send('Hello, Mock Yeah!');
+  res.send('Hello, mockyeah!');
 });
 
 module.exports = app;
