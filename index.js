@@ -1,7 +1,7 @@
 'use strict';
 /* eslint-disable no-console */
 
-const app = require('./server').app;
+const app = require('./app');
 
 app.config = require('./config');
 
