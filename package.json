@@ -1,6 +1,6 @@
 {
   "name": "mockyeah",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "An invaluable service mocking platform built on Express.",
   "main": "index.js",
   "scripts": {
