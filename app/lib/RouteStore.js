@@ -6,24 +6,21 @@
  *  Necessary in order to unregister routes upon reset.
  */
 
-const RouteResolver = require('./RouteResolver');
-let routes = [];
+function RouteStore(routeResolver) {
+  this.routeResolver = routeResolver;
+  this.routes = [];
+  return this;
+}
 
-module.exports = {
-  register: function register(method, path, response) {
-    const route = {
-      method,
-      path,
-      response
-    };
-
-    RouteResolver.register(route);
-
-    routes.push(route);
-  },
-
-  reset: function reset() {
-    RouteResolver.unregister(routes);
-    routes = [];
-  }
+RouteStore.prototype.register = function register(method, path, response) {
+  const route = { method, path, response };
+  this.routeResolver.register(route);
+  this.routes.push(route);
 };
+
+RouteStore.prototype.reset = function reset() {
+  this.routeResolver.unregister(this.routes);
+  this.routes = [];
+};
+
+module.exports = RouteStore;

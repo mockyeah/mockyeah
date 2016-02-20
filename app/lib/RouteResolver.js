@@ -8,9 +8,6 @@
 
 const path = require('path');
 const _ = require('lodash');
-const log = require('./Logger');
-let app;
-let fixturesDir;
 
 const validateResponse = function validateResponse(response) {
   const payloadKeysPresent = [];
@@ -48,8 +45,7 @@ const handler = function handler(response) {
       send = res.sendFile.bind(res, path.resolve(response.filePath));
     } else if (response.fixture) { // if fixture, send fixture file
       if (response.type) res.type(response.type);
-      fixturesDir = fixturesDir || app.config.fixturesDir;
-      send = res.sendFile.bind(res, path.resolve(fixturesDir, response.fixture));
+      send = res.sendFile.bind(res, path.resolve(this.app.config.fixturesDir, response.fixture));
     } else if (response.html) { // if html, set Content-Type to application/html and send
       res.type(response.type || 'html');
       send = res.send.bind(res, response.html);
@@ -69,27 +65,29 @@ const handler = function handler(response) {
     setTimeout(() => {
       const duration = (new Date).getTime() - start;
       send();
-      log(['request', req.method], `${req.url} (${duration}ms)`);
+      this.app.log(['request', req.method], `${req.url} (${duration}ms)`);
     }, response.latency);
   };
 };
 
-module.exports = function RouteResolver(_app) {
-  app = _app;
-};
+function RouteResolver(app) {
+  this.app = app;
+}
 
-module.exports.register = function register(route) {
+RouteResolver.prototype.register = function register(route) {
   if (!_.isFunction(route.response)) {
-    route.response = handler(route.response);
+    route.response = handler.call(this, route.response);
   }
 
-  app[route.method](route.path, route.response);
+  this.app[route.method](route.path, route.response);
 };
 
-module.exports.unregister = function unregister(routes) {
+RouteResolver.prototype.unregister = function unregister(routes) {
   const routePaths = routes.map((route) => { return route.path; });
 
-  app._router.stack = app._router.stack.filter((layer) => {
+  this.app._router.stack = this.app._router.stack.filter((layer) => {
     return !(layer.route && routePaths.indexOf(layer.route.path) >= 0);
   });
 };
+
+module.exports = RouteResolver;

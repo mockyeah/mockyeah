@@ -13,12 +13,13 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const request = require('request');
 const tildify = require('tildify');
-const log = require('./Logger');
 
-const Fixture = function Fixture(fixturePath) {
-  assert(fixturePath, 'Fixture path required');
+function Fixture(app, fixtureName) {
+  assert(app, 'App instance required');
+  assert(fixtureName, 'Fixture name required');
 
-  this.fixturePath = fixturePath;
+  this.app = app;
+  this.fixturePath = path.resolve(app.config.fixturesDir, fixtureName);
 
   return this;
 };
@@ -29,10 +30,10 @@ Fixture.prototype._initFixture = function _initFixture() {
 
   mkdirp.sync(this.fixturePath);
 
-  log(['record', 'fixture'], tildify(this.fixturePath));
+  this.app.log(['record', 'fixture'], tildify(this.fixturePath));
 
   process.on('SIGINT', () => {
-    log(['record', 'exit'], `${this.count} recordings captured.`);
+    this.app.log(['record', 'exit'], `${this.count} recordings captured.`);
     process.exit();
   });
 };
@@ -41,7 +42,7 @@ Fixture.prototype.capture = function capture(req, res) {
   const url = req.url.replace(/^\//, '');
   const start = (new Date()).getTime();
 
-  log(['record', 'proxy', req.method], url);
+  this.app.log(['record', 'proxy', req.method], url);
 
   request[req.method.toLowerCase()](url, (error, response) => {
     const fileName = url.replace(/\//g, '|');
@@ -61,10 +62,11 @@ Fixture.prototype.capture = function capture(req, res) {
       }
     }, null, 2));
 
-    log(['record', 'response', 'saved'], url);
+    this.app.log(['record', 'response', 'saved'], url);
 
     ++this.count;
-    res.end();
+
+    res.set(response.headers).send(response.body);
   });
 };
 

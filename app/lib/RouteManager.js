@@ -1,4 +1,3 @@
-
 'use strict';
 
 /**
@@ -9,17 +8,11 @@
 const path = require('path');
 const tildify = require('tildify');
 const Fixture = require('./Fixture');
-const RouteStore = require('./RouteStore');
-const log = require('./Logger');
 
-module.exports = function RouteManager(app) {
-  const resolveFixturePath = (fixtureName) => {
-    return path.resolve(app.config.fixturesDir, fixtureName);
-  };
-
+module.exports = function RouteManager(app, routeStore) {
   return {
-    register: (method, _path, response) => {
-      RouteStore.register(method, _path, response);
+    register: function register(method, _path, response) {
+      routeStore.register(method, _path, response);
     },
 
     all: function all(_path, response) {
@@ -43,20 +36,19 @@ module.exports = function RouteManager(app) {
     },
 
     reset: function reset() {
-      RouteStore.reset();
+      routeStore.reset();
     },
 
     record: function record(fixtureName, options) {
-      const fixturePath = resolveFixturePath(fixtureName);
-      const fixture = new Fixture(fixturePath);
+      const fixture = new Fixture(app, fixtureName);
       this.register('all', '*', fixture.record.bind(fixture));
     },
 
     play: function play(fixtureName, options) {
+      options = options || {};
       // const vlog = require('./Verbose')(options.verbose);
       const verbose = options.verbose;
-      const fixturePath = resolveFixturePath(fixtureName);
-      const recorder = new Fixture(fixturePath);
+      const recorder = new Fixture(app, fixtureName);
       const normalize = path => path.replace(/[\?\=\&\%]+/g, '_').replace(/^\/?/, '/');
 
       app.use(function (req, res, next) {
@@ -64,18 +56,18 @@ module.exports = function RouteManager(app) {
         req.preRewriteUrl = require('url').parse(proxiedUrl).path;
         req.url = normalize(req.preRewriteUrl);
         req.verbose = options.verbose;
-        log(['request', 'rewrite'], `${req.originalUrl} to ${req.url}`, verbose);
+        app.log(['request', 'rewrite'], `${req.originalUrl} to ${req.url}`, verbose);
         next();
       });
 
-      log(['serve', 'fixture'], tildify(fixturePath));
+      app.log(['serve', 'fixture'], tildify(recorder.fixturePath));
 
       recorder.fixture().forEach((route) => {
         const originalPath = route.path;
         const path = normalize(route.path);
 
-        log(['serve', 'mount', route.method], originalPath, !verbose);
-        log(['serve', 'mount', route.method], `${originalPath} at ${path}`, verbose);
+        app.log(['serve', 'mount', route.method], originalPath, !verbose);
+        app.log(['serve', 'mount', route.method], `${originalPath} at ${path}`, verbose);
 
         this.register(route.method.toLowerCase(), path, route.options);
       });

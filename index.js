@@ -1,21 +1,32 @@
 'use strict';
+/* eslint-disable no-sync */
 
-const app = require('./app');
-const log = require('./app/lib/Logger');
+const fs = require('fs');
+const path = require('path');
+const Server = require('./server');
+let config;
 
-app.config = require('./config');
+/**
+ * Determine wrapping application root
+ *  Needed for searching for .mockyeah configuration file.
+ */
+const root = path.resolve(__dirname, global.MOCKYEAH_ROOT ? global.MOCKYEAH_ROOT : '../..');
 
-const httpServer = app.listen(app.config.port, app.config.host, function listen() {
-  const host = this.address().address;
-  const port = this.address().port;
+try {
+  config = fs.readFileSync(path.resolve(root, '.mockyeah'));
+  config = JSON.parse(config);
+} catch (err) {
+  // noop
+}
 
-  log('serve', `Listening at http://${host}:${port}`);
-});
+// TODO: .mock-yeah file is deprecated. Remove this try-catch at an opportune time.
+try {
+  if (!config) {
+    config = fs.readFileSync(path.resolve(root, '.mock-yeah'));
+    config = JSON.parse(config);
+  }
+} catch (err) {
+  // noop
+}
 
-module.exports = app.RouteManager;
-
-module.exports.config = app.config;
-
-module.exports.close = httpServer.close.bind(httpServer, function callback() {
-  log(['serve', 'exit'], 'Goodbye.');
-});
+module.exports = new Server(config);
