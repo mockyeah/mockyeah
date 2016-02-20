@@ -4,7 +4,7 @@
   "description": "An invaluable service mocking platform built on Express.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/**/*-test.js"
+    "test": "mocha test/**/*Test.js"
   },
   "repository": {
     "type": "git",

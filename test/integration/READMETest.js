@@ -1,12 +1,22 @@
 'use strict';
 
 require('../TestHelper');
-const request = require('supertest')('http://localhost:4041');
-const mockyeah = require('../../index.js');
+const MockYeahServer = require('../../server');
+
+/**
+ * Instantiate new server that can be closed without
+ * affecting other tests.
+ */
+const mockyeah = MockYeahServer({ port: 0 });
+
+const request = require('supertest')(mockyeah.server);
 
 describe('Wondrous service', () => {
   // remove service mocks after each test
   afterEach(() => mockyeah.reset());
+
+  // stop mockyeah
+  after(() => mockyeah.close());
 
   it('should create a mock service that returns an internal error', (done) => {
     // create failing service mock

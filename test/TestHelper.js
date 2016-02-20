@@ -1,13 +1,19 @@
 'use strict';
 
-global.MOCK_YEAH_ROOT = __dirname;
+global.MOCKYEAH_ROOT = __dirname;
+global.MOCKYEAH_SUPPRESS_OUTPUT = false;
+global.MOCKYEAH_VERBOSE_OUTPUT = true;
 
-const request = require('supertest');
 const mockyeah = require('../index.js');
+const request = require('supertest');
 
 after(() => {
-  mockyeah.close();
+  mockyeah.close()
 });
 
-module.exports.mockyeah = mockyeah;
-module.exports.request = request('http://localhost:4041');
+afterEach(() => {
+  mockyeah.reset()
+});
+
+exports.mockyeah = mockyeah;
+exports.request = request(mockyeah.server);

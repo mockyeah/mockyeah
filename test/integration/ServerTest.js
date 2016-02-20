@@ -7,7 +7,7 @@ describe('Server', () => {
   it('should respond to root http requests', (done) => {
     request
       .get('/')
-      .expect(200, /Hello\, Mock Yeah\!/, done);
+      .expect(200, /Hello\, mockyeah\!/, done);
   });
 
   it('should respond with a 404 for unknown paths', (done) => {
