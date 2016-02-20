@@ -30,4 +30,4 @@ node_modules
 .idea
 
 # Temp files
-test/dummy/mockyeah/recordings
+.tmp
