@@ -3,7 +3,6 @@
 const TestHelper = require('../TestHelper');
 const mockyeah = TestHelper.mockyeah;
 const request = TestHelper.request;
-const expect = require('chai').expect;
 
 describe('Response Content Type', () => {
   describe('File', () => {

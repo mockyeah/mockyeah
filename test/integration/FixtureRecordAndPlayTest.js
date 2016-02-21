@@ -1,9 +1,10 @@
 'use strict';
 
+/* eslint-disable no-sync */
+
 const fs = require('fs');
 const path = require('path');
 const async = require('async');
-const expect = require('chai').expect;
 const supertest = require('supertest');
 const rimraf = require('rimraf');
 const MockYeahServer = require('../../server');
@@ -14,6 +15,7 @@ describe('Fixture Record and Playback', function() {
   let request;
   let proxy;
   let remote;
+  let getRemotePath;
 
   before(() => {
     // Instantiate proxy server for recording
@@ -31,7 +33,7 @@ describe('Fixture Record and Playback', function() {
 
     request = supertest(proxy.server);
 
-    getRemotePath = getRemotePath.bind(remote);
+    getRemotePath = (_path) => `/http://localhost:${remote.server.address().port}${_path}`;
   });
 
   afterEach(() => {
@@ -44,10 +46,6 @@ describe('Fixture Record and Playback', function() {
     proxy.close();
     remote.close();
   });
-
-  function getRemotePath(_path) {
-    return `/http://localhost:${this.server.address().port}${_path}`;
-  }
 
   function getCaptureFilePath(fixtureName, remoteUrl) {
     const fileName = remoteUrl.replace(/^\/?/, '').replace(/\//g, '|');
@@ -82,7 +80,7 @@ describe('Fixture Record and Playback', function() {
     // Initiate recording and playback series
     async.series([
       // Initiate recording
-      (cb) => { proxy.record(fixtureName); cb() },
+      (cb) => { proxy.record(fixtureName); cb(); },
 
       // Invoke requests to remote services through proxy
       // e.g. http://localhost:4041/http://example.com/some/service
@@ -93,15 +91,15 @@ describe('Fixture Record and Playback', function() {
       (cb) => request.get(remoteUrl5).expect(200, 'fifth', cb),
 
       // Assert files exist
-      (cb) => { fs.statSync(filePath1); cb() },
-      (cb) => { fs.statSync(filePath2); cb() },
-      (cb) => { fs.statSync(filePath3); cb() },
-      (cb) => { fs.statSync(filePath4); cb() },
-      (cb) => { fs.statSync(filePath5); cb() },
+      (cb) => { fs.statSync(filePath1); cb(); },
+      (cb) => { fs.statSync(filePath2); cb(); },
+      (cb) => { fs.statSync(filePath3); cb(); },
+      (cb) => { fs.statSync(filePath4); cb(); },
+      (cb) => { fs.statSync(filePath5); cb(); },
 
       // Reset proxy services and play captured fixture
-      (cb) => { proxy.reset(); cb() },
-      (cb) => { proxy.play(fixtureName); cb() },
+      (cb) => { proxy.reset(); cb(); },
+      (cb) => { proxy.play(fixtureName); cb(); },
 
       // Test remote url paths and their sub paths route to the same services
       // Assert remote url paths are routed the correct responses

@@ -17,35 +17,6 @@ const Logger = function Logger(options) {
 };
 
 /**
- * Logger function
- * @param {String|Array} [type=INFO] - Types string(s) to preprend output.
- * @param {String} message - Text to output.
- * @param {Boolean} [verbose=true] - Suppresses output when false.
- * @return {undefined}
- */
-Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) {
-  const args = prepareArguments.apply(this, arguments);
-
-  // If suppressing output, abort
-  if (this.suppress) return;
-
-  // If verbose is off and message is flagged as verbose output, abort
-  if (!this.verbose && args.verbose) return;
-
-  // If message is specified to not display when outputing verbose
-  if (this.verbose && !args.always && !args.verbose) return;
-
-  // Prepare string of types for output
-  args.types = args.types.reduce((result, value) => {
-    return `${result}[${value.toUpperCase()}]`;
-  }, '');
-
-  console.log(`[${this.name}]${args.types} ${args.message}`);
-};
-
-module.exports = Logger;
-
-/**
  * Prepare log arguments
  * @param {String|Array} [type=INFO] - Types string(s) to preprend output.
  * @param {String} message - Text to output.
@@ -76,4 +47,33 @@ function prepareArguments(/* [type=INFO], message, [verbose=true] */) {
   args.verbose = Boolean(args.verbose);
 
   return args;
+}
+
+/**
+ * Logger function
+ * @param {String|Array} [type=INFO] - Types string(s) to preprend output.
+ * @param {String} message - Text to output.
+ * @param {Boolean} [verbose=true] - Suppresses output when false.
+ * @return {undefined}
+ */
+Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) {
+  const args = prepareArguments.apply(this, arguments);
+
+  // If suppressing output, abort
+  if (this.suppress) return;
+
+  // If verbose is off and message is flagged as verbose output, abort
+  if (!this.verbose && args.verbose) return;
+
+  // If message is specified to not display when outputing verbose
+  if (this.verbose && !args.always && !args.verbose) return;
+
+  // Prepare string of types for output
+  args.types = args.types.reduce((result, value) => {
+    return `${result}[${value.toUpperCase()}]`;
+  }, '');
+
+  console.log(`[${this.name}]${args.types} ${args.message}`);
 };
+
+module.exports = Logger;

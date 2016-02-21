@@ -10,9 +10,6 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
-const request = require('request');
-const tildify = require('tildify');
 
 function normalizeRewritePath(_path) {
   return _path.replace(/[\?\=\&\%]+/g, '_').replace(/^\/?/, '/');
@@ -33,7 +30,7 @@ function FixturePlayer(app, fixtureName) {
    * - http://localhost:3001/http://example.com/some/service
    * - http://localhost:3001/some/service
    */
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     const proxiedUrl = req.url.replace(/^\//, '');
     req.preRewriteUrl = require('url').parse(proxiedUrl).path;
     req.url = normalizeRewritePath(req.preRewriteUrl);
@@ -42,7 +39,7 @@ function FixturePlayer(app, fixtureName) {
   });
 
   return this;
-};
+}
 
 FixturePlayer.prototype.files = function files() {
   let fileNames;

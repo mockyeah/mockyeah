@@ -20,7 +20,7 @@ gulp.task('lint', () => {
   return lint();
 });
 
-gulp.task('lint:watch:run',() => {
+gulp.task('lint:watch:run', () => {
   return lint({ exit: false });
 });
 

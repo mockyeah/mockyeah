@@ -1,7 +1,6 @@
 'use strict';
 
-const path = require('path');
-const TestHelper = require('../TestHelper');
+require('../TestHelper');
 const MockYeahServer = require('../../server');
 const request = require('supertest');
 

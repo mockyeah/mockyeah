@@ -8,11 +8,11 @@ const mockyeah = require('../index.js');
 const request = require('supertest');
 
 after(() => {
-  mockyeah.close()
+  mockyeah.close();
 });
 
 afterEach(() => {
-  mockyeah.reset()
+  mockyeah.reset();
 });
 
 exports.mockyeah = mockyeah;

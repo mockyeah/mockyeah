@@ -21,14 +21,19 @@ function test(options) {
     }))
     .once('error', function (err) {
       gutil.log(err);
+
       /**
        * if configured to exit, exit with a failure code;
        * else, emit 'end' event to avoid exiting.
        */
-      options.exit ? process.exit(1) : this.emit('end');
+      if (options.exit) {
+        process.exit(1);
+      } else {
+        this.emit('end');
+      }
     })
     .once('end', () => {
-      if(options.exit) process.exit();
+      if (options.exit) process.exit();
     });
 }
 

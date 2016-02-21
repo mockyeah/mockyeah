@@ -16,7 +16,7 @@ module.exports = function Server(config) {
   });
 
   const use = function use() {
-    app.use.apply(app, arguments)
+    app.use.apply(app, arguments);
   };
 
   return Object.assign({ server }, app.routeManager, { use, config, close });

@@ -5,7 +5,6 @@
  *  Primary mockyeah API (i.e. get, post, put, delete, reset, record, play).
  */
 
-const path = require('path');
 const tildify = require('tildify');
 const FixturePlayer = require('./FixturePlayer');
 const FixtureRecorder = require('./FixtureRecorder');

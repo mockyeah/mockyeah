@@ -55,7 +55,7 @@ function FixtureRecorder(app, fixtureName) {
   });
 
   return this;
-};
+}
 
 FixtureRecorder.prototype.record = function record(req, res) {
   const method = req.method.toLowerCase();
