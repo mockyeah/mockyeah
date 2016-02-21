@@ -8,8 +8,11 @@
 const tildify = require('tildify');
 const FixturePlayer = require('./FixturePlayer');
 const FixtureRecorder = require('./FixtureRecorder');
+const RouteStore = require('./RouteStore');
 
-module.exports = function RouteManager(app, routeStore) {
+module.exports = function RouteManager(app) {
+  const routeStore = new RouteStore(app);
+
   return {
     register: function register(method, _path, response) {
       routeStore.register(method, _path, response);

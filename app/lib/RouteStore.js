@@ -1,13 +1,14 @@
 'use strict';
 
+const RouteResolver = require('./RouteResolver');
+
 /**
  * RouteStore
  *  Keeps record or registered routes.
  *  Necessary in order to unregister routes upon reset.
  */
-
-function RouteStore(routeResolver) {
-  this.routeResolver = routeResolver;
+function RouteStore(app) {
+  this.routeResolver = new RouteResolver(app);
   this.routes = [];
   return this;
 }
