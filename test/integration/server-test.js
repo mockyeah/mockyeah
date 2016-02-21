@@ -9,4 +9,8 @@ describe('Server', () => {
       .get('/')
       .expect(200, /Hello\, Mock Yeah\!/, done);
   });
+
+  it('should respond with a 404 for unknown paths', (done) => {
+    request.get('/unknown/path').expect(404, done);
+  });
 });
