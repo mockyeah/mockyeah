@@ -1,0 +1,7 @@
+{
+  "method": "get",
+  "path": "/respond-with-a-file",
+  "options": {
+    "filePath": "./test/fixtures/some-data.json"
+  }
+}
