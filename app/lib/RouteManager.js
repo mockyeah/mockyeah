@@ -39,15 +39,12 @@ module.exports = function RouteManager(app, routeStore) {
       routeStore.reset();
     },
 
-    record: function record(fixtureName, options) {
+    record: function record(fixtureName) {
       const fixture = new Fixture(app, fixtureName);
       this.register('all', '*', fixture.record.bind(fixture));
     },
 
-    play: function play(fixtureName, options) {
-      options = options || {};
-      // const vlog = require('./Verbose')(options.verbose);
-      const verbose = options.verbose;
+    play: function play(fixtureName) {
       const recorder = new Fixture(app, fixtureName);
       const normalize = path => path.replace(/[\?\=\&\%]+/g, '_').replace(/^\/?/, '/');
 
@@ -55,8 +52,7 @@ module.exports = function RouteManager(app, routeStore) {
         const proxiedUrl = req.url.replace(/^\//, '');
         req.preRewriteUrl = require('url').parse(proxiedUrl).path;
         req.url = normalize(req.preRewriteUrl);
-        req.verbose = options.verbose;
-        app.log(['request', 'rewrite'], `${req.originalUrl} to ${req.url}`, verbose);
+        app.log(['request', 'rewrite'], `${req.originalUrl} to ${req.url}`, true);
         next();
       });
 
@@ -66,8 +62,8 @@ module.exports = function RouteManager(app, routeStore) {
         const originalPath = route.path;
         const path = normalize(route.path);
 
-        app.log(['serve', 'mount', route.method], originalPath, !verbose);
-        app.log(['serve', 'mount', route.method], `${originalPath} at ${path}`, verbose);
+        app.log(['serve', 'mount', route.method], originalPath, false);
+        app.log(['serve', 'mount', route.method], `${originalPath} at ${path}`, true);
 
         this.register(route.method.toLowerCase(), path, route.options);
       });

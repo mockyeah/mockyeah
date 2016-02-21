@@ -1,14 +1,19 @@
 'use strict';
 /* eslint-disable no-console */
 
-const hasCustomType = args => args.length >= 2;
+/**
+ * Logger module
+ * @param  {Object} options
+ * @return {Instance} Instance of Logger.
+ */
+const Logger = function Logger(options) {
+  options = options || {};
 
-const verbose = args => {
-  let _verbose = hasCustomType(args) ? args[2] : args[1];
-  _verbose = global.MOCKYEAH_VERBOSE_OUTPUT !== undefined ? global.MOCKYEAH_VERBOSE_OUTPUT : _verbose;
-  _verbose = _verbose === undefined ? true : _verbose;
-  if (global.MOCKYEAH_SUPPRESS_OUTPUT) _verbose = false;
-  return _verbose;
+  this.name = options.name;
+  this.suppress = global.MOCKYEAH_SUPPRESS_OUTPUT !== undefined ? global.MOCKYEAH_SUPPRESS_OUTPUT : false;
+  this.verbose = global.MOCKYEAH_VERBOSE_OUTPUT !== undefined ? global.MOCKYEAH_VERBOSE_OUTPUT : false;
+
+  return this;
 };
 
 /**
@@ -18,27 +23,57 @@ const verbose = args => {
  * @param {Boolean} [verbose=true] - Suppresses output when false.
  * @return {undefined}
  */
-module.exports = function Logger(options) {
-  options = options || {};
+Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) {
+  const args = prepareArguments.apply(this, arguments);
 
-  return function log(/* [type=INFO], message, [verbose=true] */) {
-    const _hasCustomType = hasCustomType(arguments);
-    const _verbose = verbose(arguments);
+  // If suppressing output, abort
+  if (this.suppress) return;
 
-    // Suppress output when not verbose
-    if (_verbose === false) return;
+  // If verbose is off and message is flagged as verbose output, abort
+  if (!this.verbose && args.verbose) return;
 
-    const message = _hasCustomType ? arguments[1] : arguments[0];
-    let types = _hasCustomType ? arguments[0] : 'info';
+  // If message is specified to not display when outputing verbose
+  if (this.verbose && !args.always && !args.verbose) return;
 
-    // Coerce String to Array
-    types = Array.isArray(types) ? types : [types];
+  // Prepare string of types for output
+  args.types = args.types.reduce((result, value) => {
+    return `${result}[${value.toUpperCase()}]`;
+  }, '');
 
-    // Prepare string of types for output
-    types = types.reduce((result, value) => {
-      return `${result}[${value.toUpperCase()}]`;
-    }, '');
+  console.log(`[${this.name}]${args.types} ${args.message}`);
+};
 
-    console.log(`[${options.name}]${types} ${message}`);
-  };
+module.exports = Logger;
+
+/**
+ * Prepare log arguments
+ * @param {String|Array} [type=INFO] - Types string(s) to preprend output.
+ * @param {String} message - Text to output.
+ * @param {Boolean} [verbose=true] - Suppresses output when false.
+ * @return {undefined}
+ */
+function prepareArguments(/* [type=INFO], message, [verbose=true] */) {
+  const args = {};
+
+  if (arguments.length === 3) {
+    args.types = arguments[0];
+    args.message = arguments[1];
+    args.verbose = arguments[2];
+  } else if (arguments.length === 2 && typeof arguments[1] === 'boolean') {
+    args.message = arguments[0];
+    args.verbose = arguments[1];
+  } else if (arguments.length === 2) {
+    args.types = arguments[0];
+    args.message = arguments[1];
+  }
+
+  args.types = args.types || 'info';
+  // Coerce types string to array
+  args.types = Array.isArray(args.types) ? args.types : [args.types];
+
+  // If verbose value is not passed, message should always output
+  args.always = args.verbose === undefined;
+  args.verbose = Boolean(args.verbose);
+
+  return args;
 };

@@ -17,9 +17,11 @@ module.exports = function App(config) {
   app.config = Object.assign({}, defaultConfig, config || {});
 
   // TODO: document
-  app.log = new Logger({
+  const logger = new Logger({
     name: app.config.name
   });
+
+  app.log = logger.log.bind(logger);
 
   /**
    * Initialize RouteResolver with app
