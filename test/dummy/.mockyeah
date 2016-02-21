@@ -1,4 +1,4 @@
 {
  "port": "4042",
- "fixturesDir": "../mockyeah_fixtures"
+ "fixturesDir": "../fixtures"
 }
