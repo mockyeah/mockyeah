@@ -13,6 +13,126 @@ $ npm install mockyeah --save-dev
 
 ## Usage
 
+- [Introductory tutorial](#Introductory-tutorial)
+- [Testing example](#Testing-example)
+
+## API
+
+### Mock service creation API
+__mockyeah.get(path, options)__<br/>
+__mockyeah.put(path, options)__<br/>
+__mockyeah.post(path, options)__<br/>
+__mockyeah.delete(path, options)__<br/>
+__mockyeah.all(path, options)__<br/>
+
+Each of the methods creates a mock service with a HTTP verb matching its respective method name.
+
+#### Parameters
+
+##### Path `String`
+Path to which to mount service. Fully supports all Express path matching options.
+
+##### Options `Object`
+Response options informing mockyeah how to respond to matching requests. Supported options:
+
+__One of the following options may be used per service:__
+- `filePath` (`String`; optional) - File with contents to include in response body. Assumes response Content-Type of file type.
+- `fixture` (`String`; optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./mockyeah/fixtures` in your project.
+- `html` (`String`; optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
+- `json` (`Object`; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
+- `raw` (`String`; optional) - Text to include in response body. Content-Type is the default Express type if not specified in header.
+- `text` (`String`; optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
+
+__Additional options:__
+- `headers` (`Object`; optional) - Header key value pairs to include in response.
+- `latency` (`Number` in Milliseconds; optional) - Used to control the response timing of a response.
+- `type` (`String`; optional) - Content-Type HTTP header to return with response. Proxies option to Express response method `res.type(type)`; more info here: http://expressjs.com/en/4x/api.html#res.type
+- `status` (`String`; optional; default: `200`) - HTTP response status code.
+
+
+### Fixture recording and playback
+__mockyeah.record(name)__
+
+`name` (`String`; required) Directory name to save service responses recordings
+(i.e. `./mockyeah/fixtures/[recording name]`).
+
+Configures mockyeah to proxy and record service requests. Recorded responses
+are written to `./mockyeah/fixtures`. To use this feature, you must update
+the service addresses in your application to proxy through mockyeah. Here is an
+example of an address configured for recording:
+
+```
+http://localhost:[mockyeah port]/http://example.com/your/service/url
+```
+
+__mockyeah.play(name)__
+
+`name` (`String`; required) Directory name from which to mount contained
+service responses recordings (i.e. `./mockyeah/fixtures/[recording name]`).
+
+Mounts each service response captured during a recording. Each service response
+will be mounted with exact same payload, headers, status, and latency as
+experienced during recording. This behavior may be changed by altering the values
+in the captured service response file.
+
+Here is an example of a service response file:
+```json
+{
+  "method": "GET",
+  "url": "http://example.com/some/service",
+  "path": "/some/service",
+  "options": {
+    "headers": {
+      "x-powered-by": "Express",
+      "content-type": "text/plain; charset=utf-8",
+      "content-length": "12",
+      "etag": "W/\"5-iwTV43ddKY54RV78XKQE1Q\"",
+      "date": "Sun, 21 Feb 2016 06:17:49 GMT",
+      "connection": "close"
+    },
+    "status": 200,
+    "raw": "Hello world!",
+    "latency": 57
+  }
+}
+```
+
+Pseudo recordings may be created manually to ease repetitive setup of multiple
+services. Here are the steps to creating a pseudo recording:
+
+1. Create a recording directory (e.g. `./mockyeah/fixtures/pseudo-example`)
+2. Add one or more JSON files containing the following properties, at minimum:
+  ```json
+    {
+      "method": "GET",
+      "path": "/some/service",
+      "options": {
+        "text": "Hello world!"
+      }
+    }
+  ```
+  See [Mock service creation API](#Mock-service-creation-API) for details on supported `options`.
+
+3. Play your pseudo recording.
+  ```js
+    require('mockyeah').play('pseudo-example');
+  ```
+4. That's it!
+
+### Mock service and server management
+__mockyeah.reset()__
+
+Removes all mounted mock services. Useful during after test teardown.
+
+__mockyeah.close()__
+
+Stops mockyeah Express server. Useful when running mockyeah with a file watcher.
+mockyeah will attempt to start a new instance of Express with each iteration of
+test execution. After all tests run, `mockyeah.close()` should be called to
+shutdown mockyeah's Express server. Failing to do so will likely result in
+`EADDRINUSE` exceptions. This is due to mockyeah attempting to start a server on
+an occupied port.
+
 ### Introductory tutorial
 1. Create an example project and initialized with NPM
   ```shell
@@ -53,6 +173,9 @@ describe('Wondrous service', () => {
   // remove service mocks after each test
   afterEach(() => mockyeah.reset());
 
+  // stop mockyeah server
+  after(() => mockyeah.close());
+
   it('should create a mock service that returns an internal error', (done) => {
     // create failing service mock
     mockyeah.get('/wondrous', { status: 500 });
@@ -75,59 +198,22 @@ describe('Wondrous service', () => {
 });
 ```
 
-## Package Dependencies
+## Package dependencies
 - mockyeah was built and tested with Node v4.2.3
 - [Mocha](https://mochajs.org/)
 
-## API
-
-### Mock Service Creation API
-__mockyeah.get(path, options)__<br/>
-__mockyeah.put(path, options)__<br/>
-__mockyeah.post(path, options)__<br/>
-__mockyeah.delete(path, options__<br/>
-
-Each of the methods above create a mock service with a HTTP verb matching its
-respective method name.
-
-#### Arguments
-
-##### Path
-Path to which to respond. Fully supports all Express path matching
-options.
-
-##### Options
-Response options informing mockyeah how to respond to matching requests. Supported options:
-- filePath (String; optional) - File with contents to include in response body. Assumes response Content-Type of file type.
-- fixture (String; optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./mockyeah/fixtures` in your project.
-- headers (Object; optional) - Header key value pairs to include in response.
-- html (String; optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
-- json (Object; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
-- latency (Number/Milliseconds; optional) - Used to control the response timing of a response.
-- raw (String; optional) - Text to include in response body. Content-Type is the default Express type if not specified in header.
-- text (String; optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
-- type (String; optional) - Content-Type HTTP header to return with response. Proxies option to Express response method `res.type(type)`; more info here: http://expressjs.com/en/4x/api.html#res.type
-- status (String; optional; default: 200) - HTTP response status code.
-
-Note, only one of the following is permitted per service: filePath, fixture, html, json, or text.
-
-### Mock Service Management Methods
-
-#### mockyeah.reset()
-Resets all existing mock services. Useful on test teardown.
-
-#### mockyeah.close()
-Shuts down the mockyeah Express server. Useful if running mockyeah with a file
-watcher. mockyeah attempts to start a new instance of Express each test
-iteration. After all tests run, `mockyeah.close()` should be called to shutdown
-mockyeah's Express server. Failing to do so will result in `EADDRINUSE`
-exceptions. This is due to mockyeah attempting to start a server on a port
-occupied by a server it started previously.
+## Release notes
+__0.13.0__
+- Removed `.loadSet()` from API, easy multiple service setup is now possible
+with `.play()`.
+- Add fixture `.play()` functionality. See documentation.
+- Add fixture `.record()` functionality. See documentation.
+- Implements necessary changes to facilitate [mockyeah-cli](https://github.com/ryanricard/mockyeah-cli)
+- Added greater test coverage.
 
 ## Contributing
 
 ### Getting started
-
 Installing project and dependencies
 ```shell
 # download project
