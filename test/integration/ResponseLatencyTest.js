@@ -8,7 +8,7 @@ const expect = require('chai').expect;
 describe('Response Latency', () => {
   it('should respond with latency', (done) => {
     const latency = 1000;
-    const threshold = latency + 100;
+    const threshold = latency + 200;
 
     mockyeah.get('/slow/service', { text: 'Hello', latency });
 

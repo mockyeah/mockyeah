@@ -22,7 +22,7 @@ describe('Fixture Play', function() {
       (cb) => request.get('/respond-with-a-fixture').expect(200, /Desmond/, cb),
       (cb) => {
         const latency = 1000;
-        const threshold = latency + 100;
+        const threshold = latency + 200;
         const start = (new Date).getTime();
 
         request
