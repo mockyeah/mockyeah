@@ -1,11 +1,5 @@
 'use strict';
-
 /* eslint-disable no-process-exit, no-sync */
-
-/**
- * FixturePlayer
- * Prepares mockyeah to mount a recording.
- */
 
 const assert = require('assert');
 const fs = require('fs');
@@ -15,6 +9,10 @@ function normalizeRewritePath(_path) {
   return _path.replace(/[\?\=\&\%]+/g, '_').replace(/^\/?/, '/');
 }
 
+/**
+ * FixturePlayer
+ *   Prepares mockyeah to mount a recording.
+ */
 function FixturePlayer(app, fixtureName) {
   assert(app, 'App instance required');
   assert(fixtureName, 'Fixture name required');

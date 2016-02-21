@@ -1,15 +1,14 @@
 'use strict';
 
-/**
- * RouteManager
- *  Primary mockyeah API (i.e. get, post, put, delete, reset, record, play).
- */
-
 const tildify = require('tildify');
 const FixturePlayer = require('./FixturePlayer');
 const FixtureRecorder = require('./FixtureRecorder');
 const RouteStore = require('./RouteStore');
 
+/**
+ * RouteManager
+ *  Primary mockyeah API (i.e. get, post, put, delete, reset, record, play).
+ */
 module.exports = function RouteManager(app) {
   const routeStore = new RouteStore(app);
 

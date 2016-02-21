@@ -1,11 +1,5 @@
 'use strict';
-
 /* eslint-disable no-process-exit, no-sync */
-
-/**
- * RouteRecorder
- *  Configures Mock Yeah to proxy and record http traffic.
- */
 
 const assert = require('assert');
 const fs = require('fs');
@@ -13,8 +7,26 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const request = require('request');
 const tildify = require('tildify');
-
 const now = () => (new Date()).getTime();
+
+/**
+ * RouteRecorder
+ *  Implements mockyeah proxy to record http traffic.
+ */
+function FixtureRecorder(app, fixtureName) {
+  assert(app, 'App instance required');
+  assert(fixtureName, 'Fixture name required');
+
+  this.app = app;
+  this.fixturePath = path.resolve(app.config.fixturesDir, fixtureName);
+  this.count = 0;
+
+  mkdirp.sync(this.fixturePath);
+
+  this.app.log(['record', 'fixture'], tildify(this.fixturePath));
+
+  return this;
+}
 
 function writeFile(filePath, data) {
   data = {
@@ -35,26 +47,6 @@ function writeFile(filePath, data) {
 function resolveFilePath(fixturePath, url) {
   const fileName = url.replace(/\//g, '|');
   return path.resolve(fixturePath, fileName);
-}
-
-function FixtureRecorder(app, fixtureName) {
-  assert(app, 'App instance required');
-  assert(fixtureName, 'Fixture name required');
-
-  this.app = app;
-  this.fixturePath = path.resolve(app.config.fixturesDir, fixtureName);
-  this.count = 0;
-
-  mkdirp.sync(this.fixturePath);
-
-  this.app.log(['record', 'fixture'], tildify(this.fixturePath));
-
-  process.on('SIGINT', () => {
-    this.app.log(['record', 'exit'], `${this.count} recordings captured.`);
-    process.exit();
-  });
-
-  return this;
 }
 
 FixtureRecorder.prototype.record = function record(req, res) {

@@ -1,15 +1,18 @@
 'use strict';
 
+const path = require('path');
+const _ = require('lodash');
+
 /**
  * RouteResolver
  *  Facilitates route registration and unregistration.
  *  Implements Express route middleware based on mockyeah API options.
  */
+function RouteResolver(app) {
+  this.app = app;
+}
 
-const path = require('path');
-const _ = require('lodash');
-
-const validateResponse = function validateResponse(response) {
+function validateResponse(response) {
   const payloadKeysPresent = [];
   const payloadKeys = ['fixture', 'filePath', 'html', 'json', 'text'];
 
@@ -20,9 +23,9 @@ const validateResponse = function validateResponse(response) {
   if (payloadKeysPresent.length > 1) {
     throw new Error('Response options must not include more than one of the following: ' + payloadKeys.join(', '));
   }
-};
+}
 
-const handler = function handler(response) {
+function handler(response) {
   response = response || {};
 
   validateResponse(response);
@@ -68,10 +71,6 @@ const handler = function handler(response) {
       this.app.log(['request', req.method], `${req.url} (${duration}ms)`);
     }, response.latency);
   };
-};
-
-function RouteResolver(app) {
-  this.app = app;
 }
 
 RouteResolver.prototype.register = function register(route) {
