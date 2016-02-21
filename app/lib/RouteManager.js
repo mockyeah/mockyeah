@@ -2,12 +2,13 @@
 
 /**
  * RouteManager
- *  Primary mockyeah API (i.e. get, post, put, delete, reset).
+ *  Primary mockyeah API (i.e. get, post, put, delete, reset, record, play).
  */
 
 const path = require('path');
 const tildify = require('tildify');
-const Fixture = require('./Fixture');
+const FixturePlayer = require('./FixturePlayer');
+const FixtureRecorder = require('./FixtureRecorder');
 
 module.exports = function RouteManager(app, routeStore) {
   return {
@@ -40,32 +41,20 @@ module.exports = function RouteManager(app, routeStore) {
     },
 
     record: function record(fixtureName) {
-      const fixture = new Fixture(app, fixtureName);
+      const fixture = new FixtureRecorder(app, fixtureName);
       this.register('all', '*', fixture.record.bind(fixture));
     },
 
     play: function play(fixtureName) {
-      const recorder = new Fixture(app, fixtureName);
-      const normalize = path => path.replace(/[\?\=\&\%]+/g, '_').replace(/^\/?/, '/');
+      const fixture = new FixturePlayer(app, fixtureName);
 
-      app.use(function (req, res, next) {
-        const proxiedUrl = req.url.replace(/^\//, '');
-        req.preRewriteUrl = require('url').parse(proxiedUrl).path;
-        req.url = normalize(req.preRewriteUrl);
-        app.log(['request', 'rewrite'], `${req.originalUrl} to ${req.url}`, true);
-        next();
-      });
+      app.log(['serve', 'fixture'], tildify(fixture.path));
 
-      app.log(['serve', 'fixture'], tildify(recorder.fixturePath));
+      fixture.files().forEach((route) => {
+        app.log(['serve', 'mount', route.method], route.originalPath, false);
+        app.log(['serve', 'mount', route.method], `${route.originalPath} at ${route.path}`, true);
 
-      recorder.fixture().forEach((route) => {
-        const originalPath = route.path;
-        const path = normalize(route.path);
-
-        app.log(['serve', 'mount', route.method], originalPath, false);
-        app.log(['serve', 'mount', route.method], `${originalPath} at ${path}`, true);
-
-        this.register(route.method.toLowerCase(), path, route.options);
+        this.register(route.method, route.path, route.options);
       });
     }
   };
