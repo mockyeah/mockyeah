@@ -1,14 +1,14 @@
 'use strict';
 
 const App = require('../app');
-
+const prepareConfig = require('../lib/prepareConfig');
 /**
  * Server module
  * @param  {Object} config Application configuration.
  * @return {Instances} Instance of a http server.
  */
 module.exports = function Server(config) {
-  config = require('./config')(config);
+  config = prepareConfig(config);
 
   // Instantiate an application
   const app = new App(config);

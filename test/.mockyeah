@@ -1,4 +1,4 @@
 {
  "port": 0,
- "fixturesDir": "./test/fixtures"
+ "fixturesDir": "./fixtures"
 }
