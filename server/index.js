@@ -2,6 +2,7 @@
 
 const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
+const cors = require('cors');
 /**
  * Server module
  * @param  {Object} config Application configuration.
@@ -12,6 +13,9 @@ module.exports = function Server(config) {
 
   // Instantiate an application
   const app = new App(config);
+
+  // Enable CORS for all routes
+  app.use(cors());
 
   // Start server on conigured hose and port
   const server = app.listen(config.port, config.host, function listen() {
