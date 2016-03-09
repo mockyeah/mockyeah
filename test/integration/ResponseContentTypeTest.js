@@ -7,7 +7,7 @@ const request = TestHelper.request;
 describe('Response Content Type', () => {
   describe('File', () => {
     it('should respond with a CSV Content-Type for CSV files', (done) => {
-      mockyeah.get('/service/exists', { filePath: './test/fixtures/some-data.csv' });
+      mockyeah.get('/service/exists', { filePath: './fixtures/some-data.csv' });
 
       request
         .get('/service/exists')
@@ -16,7 +16,7 @@ describe('Response Content Type', () => {
     });
 
     it('should respond with a JSON Content-Type for JSON files', (done) => {
-      mockyeah.get('/service/exists', { filePath: './test/fixtures/some-data.json' });
+      mockyeah.get('/service/exists', { filePath: './fixtures/some-data.json' });
 
       request
         .get('/service/exists')
@@ -25,7 +25,7 @@ describe('Response Content Type', () => {
     });
 
     it('should respond with a text Content-Type for text files', (done) => {
-      mockyeah.get('/service/exists', { filePath: './test/fixtures/some-data.txt' });
+      mockyeah.get('/service/exists', { filePath: './fixtures/some-data.txt' });
 
       request
         .get('/service/exists')
@@ -34,7 +34,7 @@ describe('Response Content Type', () => {
     });
 
     it('should respond with a XML Content-Type for XML files', (done) => {
-      mockyeah.get('/service/exists', { filePath: './test/fixtures/some-data.xml' });
+      mockyeah.get('/service/exists', { filePath: './fixtures/some-data.xml' });
 
       request
         .get('/service/exists')
@@ -43,7 +43,7 @@ describe('Response Content Type', () => {
     });
 
     it('should allow Content-Type override', (done) => {
-      mockyeah.get('/service/exists', { filePath: './test/fixtures/some-data.json', type: 'text' });
+      mockyeah.get('/service/exists', { filePath: './fixtures/some-data.json', type: 'text' });
 
       request
         .get('/service/exists')

@@ -2,6 +2,7 @@
 
 const path = require('path');
 const _ = require('lodash');
+const expandPath = require('../../lib/expandPath');
 
 /**
  * RouteResolver
@@ -45,10 +46,10 @@ function handler(response) {
 
     if (response.filePath) { // if filePath, send file
       if (response.type) res.type(response.type);
-      send = res.sendFile.bind(res, path.resolve(response.filePath));
+      send = res.sendFile.bind(res, expandPath(response.filePath));
     } else if (response.fixture) { // if fixture, send fixture file
       if (response.type) res.type(response.type);
-      send = res.sendFile.bind(res, path.resolve(this.app.config.fixturesDir, response.fixture));
+      send = res.sendFile.bind(res, path.normalize(this.app.config.fixturesDir + '/' + response.fixture));
     } else if (response.html) { // if html, set Content-Type to application/html and send
       res.type(response.type || 'html');
       send = res.send.bind(res, response.html);

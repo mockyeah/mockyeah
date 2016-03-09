@@ -18,7 +18,7 @@ function FixtureRecorder(app, fixtureName) {
   assert(fixtureName, 'Fixture name required');
 
   this.app = app;
-  this.fixturePath = path.resolve(app.config.fixturesDir, fixtureName);
+  this.fixturePath = path.normalize(app.config.fixturesDir + '/' + fixtureName);
   this.count = 0;
 
   mkdirp.sync(this.fixturePath);
