@@ -166,7 +166,7 @@ an occupied port.
 
 ### Testing example
 ```js
-const request = require('supertest')('http://localhost:4041');
+const request = require('supertest')('http://localhost:4001');
 const mockyeah = require('mockyeah');
 
 describe('Wondrous service', () => {
