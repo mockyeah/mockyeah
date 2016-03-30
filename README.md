@@ -13,8 +13,8 @@ $ npm install mockyeah --save-dev
 
 ## Usage
 
-- [Introductory tutorial](#Introductory-tutorial)
-- [Testing example](#Testing-example)
+- [Introductory tutorial](#introductory-tutorial)
+- [Testing example](#testing-example)
 
 ## API
 
