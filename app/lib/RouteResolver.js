@@ -14,15 +14,31 @@ function RouteResolver(app) {
 }
 
 function validateResponse(response) {
-  const payloadKeysPresent = [];
-  const payloadKeys = ['fixture', 'filePath', 'html', 'json', 'text'];
+  let payloadKeysPresent = 0;
+  const payloadKeys = Object.keys(response);
+  const expectedPayloadKeys = [
+    'fixture',
+    'filePath',
+    'html',
+    'json',
+    'text',
+    'status',
+    'headers',
+    'raw',
+    'latency',
+    'type'
+  ];
 
   payloadKeys.forEach(key => {
-    if (response[key]) payloadKeysPresent.push(response[key]);
+    expectedPayloadKeys.forEach(expectedKey => { if (key === expectedKey) ++payloadKeysPresent; });
   });
 
   if (payloadKeysPresent.length > 1) {
-    throw new Error('Response options must not include more than one of the following: ' + payloadKeys.join(', '));
+    throw new Error(`Response options must not include more than one of the following: ${expectedPayloadKeys.join(', ')}`);
+  }
+
+  if (payloadKeys.length !== payloadKeysPresent) {
+    throw new Error(`Response option(s) invalid. Options must include one of the following: ${expectedPayloadKeys.join(', ')}`);
   }
 }
 
