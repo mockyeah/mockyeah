@@ -9,7 +9,6 @@ let config;
 
 try {
   config = fs.readFileSync(path.resolve(relativeRoot, '.mockyeah'));
-  config = JSON.parse(config);
 } catch (err) {
   // noop
 }
@@ -18,10 +17,15 @@ try {
 try {
   if (!config) {
     config = fs.readFileSync(path.resolve(relativeRoot, '.mock-yeah'));
-    config = JSON.parse(config);
   }
 } catch (err) {
   // noop
+}
+
+try {
+  if (config) config = JSON.parse(config);
+} catch (err) {
+  throw new Error('Invalid JSON in .mockyeah configuration file');
 }
 
 module.exports = prepareConfig(config);
