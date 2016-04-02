@@ -25,7 +25,7 @@ try {
 try {
   if (config) config = JSON.parse(config);
 } catch (err) {
-  throw new Error('.mockyeah configuration file JSON invalid.');
+  throw new Error('Invalid JSON in .mockyeah configuration file');
 }
 
 module.exports = prepareConfig(config);
