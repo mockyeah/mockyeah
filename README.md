@@ -37,7 +37,7 @@ Response options informing mockyeah how to respond to matching requests. Support
 
 __One of the following options may be used per service:__
 - `filePath` (`String`; optional) - File with contents to include in response body. Assumes response Content-Type of file type.
-- `fixture` (`String`; optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./mockyeah/fixtures` in your project.
+- `fixture` (`String`; optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./fixtures` in your project.
 - `html` (`String`; optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
 - `json` (`Object`; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
 - `raw` (`String`; optional) - Text to include in response body. Content-Type is the default Express type if not specified in header.
@@ -50,14 +50,14 @@ __Additional options:__
 - `status` (`String`; optional; default: `200`) - HTTP response status code.
 
 
-### Fixture recording and playback
+### Service capture recording and playback
 __mockyeah.record(name)__
 
 `name` (`String`; required) Directory name to save service responses recordings
-(i.e. `./mockyeah/fixtures/[recording name]`).
+(i.e. `./mockyeah/[recording name]`).
 
 Configures mockyeah to proxy and record service requests. Recorded responses
-are written to `./mockyeah/fixtures`. To use this feature, you must update
+are written to `./mockyeah`. To use this feature, you must update
 the service addresses in your application to proxy through mockyeah. Here is an
 example of an address configured for recording:
 
@@ -68,7 +68,7 @@ http://localhost:[mockyeah port]/http://example.com/your/service/url
 __mockyeah.play(name)__
 
 `name` (`String`; required) Directory name from which to mount contained
-service responses recordings (i.e. `./mockyeah/fixtures/[recording name]`).
+service responses recordings (i.e. `./mockyeah/[recording name]`).
 
 Mounts each service response captured during a recording. Each service response
 will be mounted with exact same payload, headers, status, and latency as
@@ -100,7 +100,7 @@ Here is an example of a service response file:
 Pseudo recordings may be created manually to ease repetitive setup of multiple
 services. Here are the steps to creating a pseudo recording:
 
-1. Create a recording directory (e.g. `./mockyeah/fixtures/pseudo-example`)
+1. Create a recording directory (e.g. `./mockyeah/pseudo-example`)
 2. Add one or more JSON files containing the following properties, at minimum:
   ```json
     {
@@ -224,15 +224,6 @@ describe('Wondrous service', () => {
 ## Package dependencies
 - mockyeah was built and tested with Node v4.2.3
 - [Mocha](https://mochajs.org/)
-
-## Release notes
-__0.13.0__
-- Removed `.loadSet()` from API, easy multiple service setup is now possible
-with `.play()`.
-- Add fixture `.play()` functionality. See documentation.
-- Add fixture `.record()` functionality. See documentation.
-- Implements necessary changes to facilitate [mockyeah-cli](https://github.com/ryanricard/mockyeah-cli)
-- Added greater test coverage.
 
 ## Contributing
 
