@@ -9,9 +9,9 @@ const supertest = require('supertest');
 const rimraf = require('rimraf');
 const MockYeahServer = require('../../server');
 
-const PROXY_FIXTURES_DIR = path.resolve(__dirname, '../.tmp/proxy/fixtures');
+const PROXY_CAPTURES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Fixture Record and Playback', function() {
+describe('Capture Record and Playback', function() {
   let request;
   let proxy;
   let remote;
@@ -22,7 +22,7 @@ describe('Fixture Record and Playback', function() {
     proxy = MockYeahServer({
       name: 'proxy',
       port: 0,
-      fixturesDir: PROXY_FIXTURES_DIR
+      capturesDir: PROXY_CAPTURES_DIR
     });
 
     // Instantiate remote server
@@ -39,7 +39,7 @@ describe('Fixture Record and Playback', function() {
   afterEach(() => {
     proxy.reset();
     remote.reset();
-    rimraf.sync(PROXY_FIXTURES_DIR);
+    rimraf.sync(PROXY_CAPTURES_DIR);
   });
 
   after(() => {
@@ -47,13 +47,13 @@ describe('Fixture Record and Playback', function() {
     remote.close();
   });
 
-  function getCaptureFilePath(fixtureName, remoteUrl) {
+  function getCaptureFilePath(captureName, remoteUrl) {
     const fileName = remoteUrl.replace(/^\/?/, '').replace(/\//g, '|');
-    return path.resolve(PROXY_FIXTURES_DIR, fixtureName, fileName);
+    return path.resolve(PROXY_CAPTURES_DIR, captureName, fileName);
   }
 
-  it('should record and playback fixture', function(done) {
-    const fixtureName = 'some-fancy-fixture';
+  it('should record and playback capture', function(done) {
+    const captureName = 'some-fancy-capture';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -63,12 +63,12 @@ describe('Fixture Record and Playback', function() {
     const remoteUrl4 = getRemotePath('/some/service/four');
     const remoteUrl5 = getRemotePath('/some/service/five');
 
-    // Determine file save locations from fixture name and remote service urls
-    const filePath1 = getCaptureFilePath(fixtureName, remoteUrl1);
-    const filePath2 = getCaptureFilePath(fixtureName, remoteUrl2);
-    const filePath3 = getCaptureFilePath(fixtureName, remoteUrl3);
-    const filePath4 = getCaptureFilePath(fixtureName, remoteUrl4);
-    const filePath5 = getCaptureFilePath(fixtureName, remoteUrl5);
+    // Determine file save locations from capture name and remote service urls
+    const filePath1 = getCaptureFilePath(captureName, remoteUrl1);
+    const filePath2 = getCaptureFilePath(captureName, remoteUrl2);
+    const filePath3 = getCaptureFilePath(captureName, remoteUrl3);
+    const filePath4 = getCaptureFilePath(captureName, remoteUrl4);
+    const filePath5 = getCaptureFilePath(captureName, remoteUrl5);
 
     // Mount remote service end points
     remote.get('/some/service/one', { text: 'first' });
@@ -80,7 +80,7 @@ describe('Fixture Record and Playback', function() {
     // Initiate recording and playback series
     async.series([
       // Initiate recording
-      (cb) => { proxy.record(fixtureName); cb(); },
+      (cb) => { proxy.record(captureName); cb(); },
 
       // Invoke requests to remote services through proxy
       // e.g. http://localhost:4041/http://example.com/some/service
@@ -97,9 +97,9 @@ describe('Fixture Record and Playback', function() {
       (cb) => { fs.statSync(filePath4); cb(); },
       (cb) => { fs.statSync(filePath5); cb(); },
 
-      // Reset proxy services and play captured fixture
+      // Reset proxy services and play captured capture
       (cb) => { proxy.reset(); cb(); },
-      (cb) => { proxy.play(fixtureName); cb(); },
+      (cb) => { proxy.play(captureName); cb(); },
 
       // Test remote url paths and their sub paths route to the same services
       // Assert remote url paths are routed the correct responses

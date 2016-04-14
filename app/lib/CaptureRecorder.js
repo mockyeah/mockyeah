@@ -13,17 +13,17 @@ const now = () => (new Date()).getTime();
  * RouteRecorder
  *  Implements mockyeah proxy to record http traffic.
  */
-function FixtureRecorder(app, fixtureName) {
+function CaptureRecorder(app, captureName) {
   assert(app, 'App instance required');
-  assert(fixtureName, 'Fixture name required');
+  assert(captureName, 'Capture name required');
 
   this.app = app;
-  this.fixturePath = path.normalize(app.config.fixturesDir + '/' + fixtureName);
+  this.capturePath = path.normalize(app.config.capturesDir + '/' + captureName);
   this.count = 0;
 
-  mkdirp.sync(this.fixturePath);
+  mkdirp.sync(this.capturePath);
 
-  this.app.log(['record', 'fixture'], tildify(this.fixturePath));
+  this.app.log(['record', 'capture'], tildify(this.capturePath));
 
   return this;
 }
@@ -44,12 +44,12 @@ function writeFile(filePath, data) {
   fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }
 
-function resolveFilePath(fixturePath, url) {
+function resolveFilePath(capturePath, url) {
   const fileName = url.replace(/\//g, '|');
-  return path.resolve(fixturePath, fileName);
+  return path.resolve(capturePath, fileName);
 }
 
-FixtureRecorder.prototype.record = function record(req, res) {
+CaptureRecorder.prototype.record = function record(req, res) {
   const method = req.method.toLowerCase();
   const url = req.url.replace(/^\//, '');
   const startTime = now();
@@ -58,7 +58,7 @@ FixtureRecorder.prototype.record = function record(req, res) {
 
   request[method](url, (error, response) => {
     if (error) return this.app.log(['record', 'response', 'error'], error);
-    const filePath = resolveFilePath(this.fixturePath, url);
+    const filePath = resolveFilePath(this.capturePath, url);
     response.url = url;
     response.latency = now() - startTime;
     writeFile(filePath, response);
@@ -67,4 +67,4 @@ FixtureRecorder.prototype.record = function record(req, res) {
   }).pipe(res);
 };
 
-module.exports = FixtureRecorder;
+module.exports = CaptureRecorder;

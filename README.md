@@ -133,25 +133,24 @@ shutdown mockyeah's Express server. Failing to do so will likely result in
 `EADDRINUSE` exceptions. This is due to mockyeah attempting to start a server on
 an occupied port.
 
-### Configuration File
-`.mockyeah` default configurations
+### mockyeah configuration
+__Default `.mockyeah` configuration:__
 
 ```json
 {
   "name": "mockyeah",
   "host": "localhost",
   "port": 4001,
-  "fixturesDir": "./mockyeah/fixtures"
+  "fixturesDir": "./fixtures",
+  "capturesDir": "./mockyeah"
 }
 ```
-
-`name`: Used to identify the origin of logged output
-
-`host`: The host mockyeah will run on
-
-`port`: The port mockyeah will run on
-
-`fixturesDir`: The relative path to the fixtures directory
+__Configuration options:__
+- `name`: Used to identify the origin of logged output.
+- `host`: Host on which mockyeah will run.
+- `port`: Port on which mockyeah will run.
+- `fixturesDir`: Relative path to the fixtures directory.
+- `capturesDir`: Relative path to the captures directory.
 
 Overriding any of these configurations can be done by placing a `.mockyeah`
 file in root of the project and adding the key value pair that needs to be updated.

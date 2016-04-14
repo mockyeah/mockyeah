@@ -6,9 +6,9 @@ const request = TestHelper.request;
 const async = require('async');
 const expect = require('chai').expect;
 
-describe('Fixture Play', function() {
-  it('should play a custom fixture', function(done) {
-    mockyeah.play('some-custom-fixtures');
+describe('Capture Play', function() {
+  it('should play a custom capture', function(done) {
+    mockyeah.play('some-custom-capture');
 
     /**
      * Make many requests in series, waits to execute `done`

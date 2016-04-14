@@ -10,15 +10,15 @@ function normalizeRewritePath(_path) {
 }
 
 /**
- * FixturePlayer
+ * CapturePlayer
  *   Prepares mockyeah to mount a recording.
  */
-function FixturePlayer(app, fixtureName) {
+function CapturePlayer(app, captureName) {
   assert(app, 'App instance required');
-  assert(fixtureName, 'Fixture name required');
+  assert(captureName, 'Capture name required');
 
   this.app = app;
-  this.path = path.resolve(app.config.fixturesDir, fixtureName);
+  this.path = path.resolve(app.config.capturesDir, captureName);
 
   /**
    * Configure URL rewrite middleware
@@ -39,14 +39,14 @@ function FixturePlayer(app, fixtureName) {
   return this;
 }
 
-FixturePlayer.prototype.files = function files() {
+CapturePlayer.prototype.files = function files() {
   let fileNames;
 
-  // Check if fixture directory exists
+  // Check if capture directory exists
   try {
     fileNames = fs.readdirSync(this.path);
   } catch (err) {
-    throw Error(`mockyeah fixture ${this.path} not found`);
+    throw Error(`mockyeah capture ${this.path} not found`);
   }
 
   return fileNames.map((fileName) => {
@@ -62,4 +62,4 @@ FixturePlayer.prototype.files = function files() {
   });
 };
 
-module.exports = FixturePlayer;
+module.exports = CapturePlayer;

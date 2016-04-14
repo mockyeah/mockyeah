@@ -1,8 +1,8 @@
 'use strict';
 
 const tildify = require('tildify');
-const FixturePlayer = require('./FixturePlayer');
-const FixtureRecorder = require('./FixtureRecorder');
+const CapturePlayer = require('./CapturePlayer');
+const CaptureRecorder = require('./CaptureRecorder');
 const RouteStore = require('./RouteStore');
 
 /**
@@ -41,17 +41,17 @@ module.exports = function RouteManager(app) {
       routeStore.reset();
     },
 
-    record: function record(fixtureName) {
-      const fixture = new FixtureRecorder(app, fixtureName);
-      this.register('all', '*', fixture.record.bind(fixture));
+    record: function record(captureName) {
+      const capture = new CaptureRecorder(app, captureName);
+      this.register('all', '*', capture.record.bind(capture));
     },
 
-    play: function play(fixtureName) {
-      const fixture = new FixturePlayer(app, fixtureName);
+    play: function play(captureName) {
+      const capture = new CapturePlayer(app, captureName);
 
-      app.log(['serve', 'fixture'], tildify(fixture.path));
+      app.log(['serve', 'capture'], tildify(capture.path));
 
-      fixture.files().forEach((route) => {
+      capture.files().forEach((route) => {
         app.log(['serve', 'mount', route.method], route.originalPath, false);
         app.log(['serve', 'mount', route.method], `${route.originalPath} at ${route.path}`, true);
 

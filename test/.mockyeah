@@ -1,4 +1,5 @@
 {
  "port": 0,
- "fixturesDir": "./fixtures"
+ "fixturesDir": "./fixtures",
+ "capturesDir": "./mockyeah"
 }
