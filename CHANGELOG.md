@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### [Unreleased]
 - Response options validation.
 
+### [0.14.1] - 2016-05-20
+#### Add
+- Filter hidden files in capture directories.
+- Trap invalid capture JSON parsing errors and throw error for user feedback.
+- Trap invalid `fixture` and `filePath` options file paths and log for user feedback. 
+
 ### [0.14.0] - 2016-05-20
 #### Add
 - Split fixtures from captures. Change adds `capturesDir` configuration, and moves captures JSON files to this location.
@@ -40,7 +46,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Remove
 - Remove `.loadSet()` from API, easy multiple service setup is now possible with `.play()`.
 
-[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.14.1...HEAD
+[0.14.1]: https://github.com/ryanricard/mockyeah/compare/v0.14.0...v0.14.1
 [0.14.0]: https://github.com/ryanricard/mockyeah/compare/v0.13.3...v0.14.0
 [0.13.4]: https://github.com/ryanricard/mockyeah/compare/v0.13.3...v0.13.4
 [0.13.3]: https://github.com/ryanricard/mockyeah/compare/v0.13.2...v0.13.3
