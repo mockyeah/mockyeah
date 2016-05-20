@@ -9,6 +9,13 @@ function normalizeRewritePath(_path) {
   return _path.replace(/[\?\=\&\%]+/g, '_').replace(/^\/?/, '/');
 }
 
+function filterFileNames(fileNames) {
+  const hiddenFileName = /^\./;
+  return fileNames.filter((fileName) => {
+    return !hiddenFileName.test(fileName);
+  });
+}
+
 /**
  * CapturePlayer
  *   Prepares mockyeah to mount a recording.
@@ -48,6 +55,8 @@ CapturePlayer.prototype.files = function files() {
   } catch (err) {
     throw Error(`mockyeah capture ${this.path} not found`);
   }
+
+  fileNames = filterFileNames(fileNames);
 
   return fileNames.map((fileName) => {
     const filePath = path.resolve(this.path, fileName);
