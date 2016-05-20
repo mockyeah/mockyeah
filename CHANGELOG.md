@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### [Unreleased]
-- Response options validation.
+Nothing to report.
 
 ### [0.14.1] - 2016-05-20
 #### Add
