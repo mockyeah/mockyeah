@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### [Unreleased]
 - Response options validation.
 
+### [0.14.0] - 2016-05-20
+#### Add
+- Split fixtures from captures. Change adds `capturesDir` configuration, and moves captures JSON files to this location.
+- Add option validation; provides feedback when required API options are not provided.
+
 ### [0.13.4] - 2016-04-03
 #### Fix
 - Trap invalid `.mockyeah` configuration.
@@ -35,7 +40,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Remove
 - Remove `.loadSet()` from API, easy multiple service setup is now possible with `.play()`.
 
-[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.13.4...HEAD
+[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/ryanricard/mockyeah/compare/v0.13.3...v0.14.0
 [0.13.4]: https://github.com/ryanricard/mockyeah/compare/v0.13.3...v0.13.4
 [0.13.3]: https://github.com/ryanricard/mockyeah/compare/v0.13.2...v0.13.3
 [0.13.2]: https://github.com/ryanricard/mockyeah/compare/v0.13.1...v0.13.2
