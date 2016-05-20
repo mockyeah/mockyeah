@@ -60,7 +60,13 @@ CapturePlayer.prototype.files = function files() {
 
   return fileNames.map((fileName) => {
     const filePath = path.resolve(this.path, fileName);
-    const route = JSON.parse(fs.readFileSync(filePath));
+    let route;
+
+    try {
+      route = JSON.parse(fs.readFileSync(filePath));
+    } catch (err) {
+      throw new Error(`Invalid mockyeah capture JSON: ${filePath}`);
+    }
 
     // Prepare properties
     route.originalPath = route.path;
