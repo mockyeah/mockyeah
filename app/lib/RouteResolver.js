@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const expandPath = require('../../lib/expandPath');
@@ -42,6 +43,12 @@ function validateResponse(response) {
   }
 }
 
+function verifyFile(filePath, message) {
+  fs.lstat(filePath, (err) => {
+    if (err) this.app.log(['handler', 'error'], message);
+  });
+}
+
 function handler(response) {
   response = response || {};
 
@@ -61,10 +68,14 @@ function handler(response) {
     if (response.headers) res.set(response.headers);
 
     if (response.filePath) { // if filePath, send file
+      const filePath = expandPath(response.filePath);
       if (response.type) res.type(response.type);
-      send = res.sendFile.bind(res, expandPath(response.filePath));
+      verifyFile.call(this, filePath, '`filePath` option invalid, file not found at ' + filePath);
+      send = res.sendFile.bind(res, filePath);
     } else if (response.fixture) { // if fixture, send fixture file
+      const fixturePath = this.app.config.fixturesDir + '/' + response.fixture;
       if (response.type) res.type(response.type);
+      verifyFile.call(this, fixturePath, '`fixture` option invalid, fixture not found at ' + fixturePath);
       send = res.sendFile.bind(res, path.normalize(this.app.config.fixturesDir + '/' + response.fixture));
     } else if (response.html) { // if html, set Content-Type to application/html and send
       res.type(response.type || 'html');
