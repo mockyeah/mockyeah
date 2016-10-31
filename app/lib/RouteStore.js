@@ -20,9 +20,9 @@ RouteStore.prototype.register = function register(method, path, response) {
   this.routes.push(route);
 };
 
-RouteStore.prototype.unregisterRouteIfAlreadyPresent = function unregisterRouteIfAlreadyPresent(route){
-  var alreadyPresent = this.routes.filter((r) => r.method == route.method && r.path == route.path);
-  if(alreadyPresent){
+RouteStore.prototype.unregisterRouteIfAlreadyPresent = function unregisterRouteIfAlreadyPresent(route) {
+  const alreadyPresent = this.routes.filter((r) => r.method === route.method && r.path === route.path);
+  if (alreadyPresent) {
     this.routes.splice(alreadyPresent[0], 1);
   }
   this.routeResolver.unregister([route]);
