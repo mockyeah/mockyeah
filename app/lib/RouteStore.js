@@ -24,8 +24,8 @@ RouteStore.prototype.unregisterRouteIfAlreadyPresent = function unregisterRouteI
   const alreadyPresent = this.routes.filter((r) => r.method === route.method && r.path === route.path);
   if (alreadyPresent) {
     this.routes.splice(alreadyPresent[0], 1);
+    this.routeResolver.unregister([route]);
   }
-  this.routeResolver.unregister([route]);
 };
 
 RouteStore.prototype.reset = function reset() {
