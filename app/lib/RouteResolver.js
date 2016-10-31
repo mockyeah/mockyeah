@@ -106,6 +106,9 @@ RouteResolver.prototype.register = function register(route) {
     route.response = handler.call(this, route.response);
   }
 
+  // unregister existing matching routes
+  this.unregister([route]);
+
   this.app[route.method](route.path, route.response);
 };
 
