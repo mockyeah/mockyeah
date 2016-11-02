@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### [Unreleased]
 Nothing to report.
 
+### [0.15.1] - 2016-11-02
+#### Add
+- Mock expectation support. Expectations enable the ability to assert interactivity with mock services. This functionality is currently undocumented for beta testing. Once api is finalized, documentation will be added.
+
 ### [0.15.0] - 2016-10-31
 #### Fix
 - Unregister existing matching routes when registering a new route response via `.[get, post, put, delete]()`. Reported by issue [#20](https://github.com/ryanricard/mockyeah/issues/20).
@@ -50,7 +54,8 @@ Nothing to report.
 #### Remove
 - Remove `.loadSet()` from API, easy multiple service setup is now possible with `.play()`.
 
-[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.1...HEAD
+[0.15.1]: https://github.com/ryanricard/mockyeah/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/ryanricard/mockyeah/compare/v0.14.1...v0.15.0
 [0.14.1]: https://github.com/ryanricard/mockyeah/compare/v0.14.0...v0.14.1
 [0.14.0]: https://github.com/ryanricard/mockyeah/compare/v0.13.3...v0.14.0
