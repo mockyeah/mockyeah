@@ -238,9 +238,6 @@ $ cd mockyeah
 $ nvm install v4.2.3
 $ nvm use
 
-# install mocha
-$ npm install -g mocha
-
 # if tests pass, you're good to go
 $ npm test
 ```
