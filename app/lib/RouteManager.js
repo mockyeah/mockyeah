@@ -14,27 +14,27 @@ module.exports = function RouteManager(app) {
 
   return {
     register: function register(method, _path, response) {
-      routeStore.register(method, _path, response);
+      return routeStore.register(method, _path, response);
     },
 
     all: function all(_path, response) {
-      this.register('all', _path, response);
+      return this.register('all', _path, response);
     },
 
     get: function get(_path, response) {
-      this.register('get', _path, response);
+      return this.register('get', _path, response);
     },
 
     post: function post(_path, response) {
-      this.register('post', _path, response);
+      return this.register('post', _path, response);
     },
 
     put: function put(_path, response) {
-      this.register('put', _path, response);
+      return this.register('put', _path, response);
     },
 
     delete: function _delete(_path, response) {
-      this.register('delete', _path, response);
+      return this.register('delete', _path, response);
     },
 
     reset: function reset() {
