@@ -71,7 +71,7 @@ Expectation.prototype.api = function api() {
     header: function header(name, value) {
       internal.handlers.push((req) => {
         const actualValue = req.get(name);
-        assert.equal(req.get(name), value, `${internal.prefix} Expected header value ${name}:${value}, but it was ${actualValue}`);
+        assert.equal(actualValue, value, `${internal.prefix} Expected header value ${name}:${value}, but it was ${actualValue}`);
       });
       return this;
     },
