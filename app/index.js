@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const Logger = require('./lib/Logger');
 const RouteManager = require('./lib/RouteManager');
 
@@ -29,6 +30,8 @@ module.exports = function App(config) {
 
   // Attach RouteManager to app object, the primary set of mockyeah API methods.
   app.routeManager = new RouteManager(app);
+
+  app.use(bodyParser.json());
 
   app.get('/', (req, res) => {
     res.send('Hello, mockyeah!');

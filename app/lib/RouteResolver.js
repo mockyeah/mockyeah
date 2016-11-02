@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const expandPath = require('../../lib/expandPath');
-
+const Expectation = require('./Expectation');
 /**
  * RouteResolver
  *  Facilitates route registration and unregistration.
@@ -106,10 +106,16 @@ RouteResolver.prototype.register = function register(route) {
     route.response = handler.call(this, route.response);
   }
 
+  const expectation = new Expectation(route);
+
   // unregister existing matching routes
   this.unregister([route]);
 
-  this.app[route.method](route.path, route.response);
+  this.app[route.method](route.path, expectation.middleware.bind(expectation), route.response);
+
+  return {
+    expect: () => expectation.api()
+  };
 };
 
 RouteResolver.prototype.unregister = function unregister(routes) {

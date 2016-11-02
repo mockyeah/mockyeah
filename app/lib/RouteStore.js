@@ -15,8 +15,8 @@ function RouteStore(app) {
 
 RouteStore.prototype.register = function register(method, path, response) {
   const route = { method, path, response };
-  this.routeResolver.register(route);
   this.routes.push(route);
+  return this.routeResolver.register(route);
 };
 
 RouteStore.prototype.reset = function reset() {
