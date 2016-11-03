@@ -37,8 +37,9 @@ module.exports = function RouteManager(app) {
       return this.register('delete', _path, response);
     },
 
-    reset: function reset() {
-      routeStore.reset();
+    reset: function reset(/* paths 1, path 2, path 3, etc. */) {
+      const paths = [].slice.call(arguments);
+      routeStore.reset.call(routeStore, paths);
     },
 
     record: function record(captureName) {

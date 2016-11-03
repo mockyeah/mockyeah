@@ -19,8 +19,9 @@ RouteStore.prototype.register = function register(method, path, response) {
   return this.routeResolver.register(route);
 };
 
-RouteStore.prototype.reset = function reset() {
-  this.routeResolver.unregister(this.routes);
+RouteStore.prototype.reset = function reset(paths) {
+  const routes = paths.length ? this.routes.filter((route) => paths.indexOf(route.path) >= 0) : this.routes;
+  this.routeResolver.unregister(routes);
   this.routes = [];
 };
 
