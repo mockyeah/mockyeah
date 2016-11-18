@@ -8,7 +8,7 @@ const cors = require('cors');
  * @param  {Object} config Application configuration.
  * @return {Instances} Instance of a http server.
  */
-module.exports = function Server(config) {
+module.exports = function Server(config, onStart) {
   config = prepareConfig(config);
 
   // Instantiate an application
@@ -20,6 +20,8 @@ module.exports = function Server(config) {
   // Start server on conigured hose and port
   const server = app.listen(config.port, config.host, function listen() {
     app.log('serve', `Listening at http://${this.address().address}:${this.address().port}`);
+    // Execute callback once server starts
+    if (onStart) onStart.call(null);
   });
 
   // Expose ability to stop server via API
