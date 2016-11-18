@@ -16,6 +16,7 @@ module.exports = function App(config) {
   const defaultConfig = {
     name: 'mockyeah',
     output: true,
+    journal: false,
     verbose: false
   };
 

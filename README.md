@@ -144,6 +144,7 @@ __Default `.mockyeah` configuration:__
   "fixturesDir": "./fixtures",
   "capturesDir": "./mockyeah",
   "output": true,
+  "journal": false,
   "verbose": false
 }
 ```
@@ -154,6 +155,25 @@ __Configuration options:__
 - `fixturesDir`: Relative path to the fixtures directory.
 - `capturesDir`: Relative path to the captures directory.
 - `output`: Boolean to toggle mockyeah generated output written to stdout.
+- `journal`: Boolean to toggle request journaling. Example:
+```
+[mockyeah][14:54:21][REQUEST][JOURNAL] {
+  "callCount": 1,
+  "url": "/foo?bar=baa",
+  "fullUrl": "http://localhost:4001/foo?bar=baa",
+  "clientIp": "127.0.0.1",
+  "method": "GET",
+  "headers": {
+    "host": "localhost:4001",
+    "user-agent": "curl/7.43.0",
+    "accept": "*/*"
+  },
+  "query": {
+    "bar": "baa"
+  },
+  "body": {}
+}
+```
 - `verbose`: Boolean to toggle verbosity of mockyeah generated output.
 
 Overriding any of these configurations can be done by placing a `.mockyeah`

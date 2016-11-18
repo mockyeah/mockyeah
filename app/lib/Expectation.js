@@ -20,6 +20,7 @@ Expectation.prototype.middleware = function middleware(req, res, next) {
   this.handlers.forEach((handler) => {
     this.assertions.push(handler.bind(this, req));
   });
+  req.callCount = this.called;
   next();
 };
 
