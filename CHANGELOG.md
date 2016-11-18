@@ -5,6 +5,32 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### [Unreleased]
 Nothing to report.
 
+### [0.15.2] - 2016-11-18
+#### Add
+- `output`, `journal`, and `verbose` boolean configuration options for configuring mockyeah output.
+- Add request journaling to provide greater visibility into mockyeah request handling. Example:
+```
+[mockyeah][14:54:21][REQUEST][JOURNAL] {
+  "callCount": 1,
+  "url": "/foo?bar=baa",
+  "fullUrl": "http://localhost:4001/foo?bar=baa",
+  "clientIp": "127.0.0.1",
+  "method": "GET",
+  "headers": {
+    "host": "localhost:4001",
+    "user-agent": "curl/7.43.0",
+    "accept": "*/*"
+  },
+  "query": {
+    "bar": "baa"
+  },
+  "body": {}
+}
+```
+- `[MOUNT]` message now output for all mounted services.
+- `[VERBOS]` indicator added to verbose messages.
+- Timestamp added to all logged messages.
+
 ### [0.15.1] - 2016-11-02
 #### Add
 - Mock expectation support. Expectations enable the ability to assert interactivity with mock services. This functionality is currently undocumented for beta testing. Once api is finalized, documentation will be added.
@@ -54,7 +80,8 @@ Nothing to report.
 #### Remove
 - Remove `.loadSet()` from API, easy multiple service setup is now possible with `.play()`.
 
-[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.1...HEAD
+[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.2...HEAD
+[0.15.2]: https://github.com/ryanricard/mockyeah/compare/v0.15.1...v0.15.2
 [0.15.1]: https://github.com/ryanricard/mockyeah/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/ryanricard/mockyeah/compare/v0.14.1...v0.15.0
 [0.14.1]: https://github.com/ryanricard/mockyeah/compare/v0.14.0...v0.14.1
