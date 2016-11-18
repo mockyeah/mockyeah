@@ -14,15 +14,24 @@ module.exports = function App(config) {
   const app = express();
 
   const defaultConfig = {
-    name: 'mockyeah'
+    name: 'mockyeah',
+    output: true,
+    verbose: false
   };
 
-  // Prepare configuration. Merge configuration with default configuration
-  app.config = Object.assign({}, defaultConfig, config || {});
+  // Prepare global config
+  const globalConfig = {};
+  if (global.MOCKYEAH_SUPPRESS_OUTPUT !== undefined) globalConfig.output = !global.MOCKYEAH_SUPPRESS_OUTPUT;
+  if (global.MOCKYEAH_VERBOSE_OUTPUT !== undefined) globalConfig.verbose = !!global.MOCKYEAH_VERBOSE_OUTPUT;
+
+  // Prepare configuration. Merge configuration with global and default configuration
+  app.config = Object.assign({}, defaultConfig, globalConfig, config || {});
 
   // Instantiate new logger
   const logger = new Logger({
-    name: app.config.name
+    name: app.config.name,
+    output: app.config.output,
+    verbose: app.config.verbose
   });
 
   // Attach log to app instance to bind output to app instance
