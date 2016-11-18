@@ -142,7 +142,9 @@ __Default `.mockyeah` configuration:__
   "host": "localhost",
   "port": 4001,
   "fixturesDir": "./fixtures",
-  "capturesDir": "./mockyeah"
+  "capturesDir": "./mockyeah",
+  "output": true,
+  "verbose": false
 }
 ```
 __Configuration options:__
@@ -151,6 +153,8 @@ __Configuration options:__
 - `port`: Port on which mockyeah will run.
 - `fixturesDir`: Relative path to the fixtures directory.
 - `capturesDir`: Relative path to the captures directory.
+- `output`: Boolean to toggle mockyeah generated output written to stdout.
+- `verbose`: Boolean to toggle verbosity of mockyeah generated output.
 
 Overriding any of these configurations can be done by placing a `.mockyeah`
 file in root of the project and adding the key value pair that needs to be updated.
