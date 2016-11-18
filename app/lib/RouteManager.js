@@ -14,6 +14,7 @@ module.exports = function RouteManager(app) {
 
   return {
     register: function register(method, _path, response) {
+      app.log(['serve', 'mount', method], _path);
       return routeStore.register(method, _path, response);
     },
 
@@ -53,8 +54,8 @@ module.exports = function RouteManager(app) {
       app.log(['serve', 'capture'], tildify(capture.path));
 
       capture.files().forEach((route) => {
-        app.log(['serve', 'mount', route.method], route.originalPath, false);
-        app.log(['serve', 'mount', route.method], `${route.originalPath} at ${route.path}`, true);
+        app.log(['serve', 'playing', route.method], route.originalPath, false);
+        app.log(['serve', 'playing', route.method], `${route.originalPath} at ${route.path}`, true);
 
         this.register(route.method, route.path, route.options);
       });

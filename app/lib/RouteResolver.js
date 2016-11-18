@@ -58,6 +58,20 @@ function handler(response) {
     const start = (new Date).getTime();
     let send;
 
+    if (this.app.config.journal) {
+      this.app.log(['request', 'journal'], JSON.stringify({
+        callCount: req.callCount,
+        url: req.url,
+        fullUrl: req.protocol + '://' + req.get('host') + req.originalUrl,
+        clientIp: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        method: req.method,
+        headers: req.headers,
+        query: req.query,
+        body: req.body,
+        cookies: req.cookies
+      }, null, 2));
+    }
+
     // Default latency to 0 when undefined
     response.latency = response.latency || 0;
 

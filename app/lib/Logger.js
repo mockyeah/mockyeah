@@ -10,8 +10,8 @@ const Logger = function Logger(options) {
   options = options || {};
 
   this.name = options.name;
-  this.suppress = global.MOCKYEAH_SUPPRESS_OUTPUT !== undefined ? global.MOCKYEAH_SUPPRESS_OUTPUT : false;
-  this.verbose = global.MOCKYEAH_VERBOSE_OUTPUT !== undefined ? global.MOCKYEAH_VERBOSE_OUTPUT : false;
+  this.output = options.output;
+  this.verbose = options.verbose;
 
   return this;
 };
@@ -59,14 +59,20 @@ function prepareArguments(/* [type=INFO], message, [verbose=true] */) {
 Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) {
   const args = prepareArguments.apply(this, arguments);
 
-  // If suppressing output, abort
-  if (this.suppress) return;
+  // If silencing output, abort
+  if (!this.output) return;
 
   // If verbose is off and message is flagged as verbose output, abort
   if (!this.verbose && args.verbose) return;
 
   // If message is specified to not display when outputing verbose
   if (this.verbose && !args.always && !args.verbose) return;
+
+  // Explicity indicate verbose messages
+  if (args.verbose) args.types.unshift('verbose');
+
+  // Add timestamp to message
+  args.types.unshift((new Date()).toLocaleTimeString('en-US', { hour12: false }));
 
   // Prepare string of types for output
   args.types = args.types.reduce((result, value) => {
