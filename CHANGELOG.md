@@ -28,7 +28,7 @@ Nothing to report.
 }
 ```
 - `[MOUNT]` message now output for all mounted services.
-- `[VERBOS]` indicator added to verbose messages.
+- `[VERBOSE]` indicator added to verbose messages.
 - Timestamp added to all logged messages.
 
 ### [0.15.1] - 2016-11-02
