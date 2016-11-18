@@ -38,6 +38,9 @@ module.exports = function App(config) {
   // Attach log to app instance to bind output to app instance
   app.log = logger.log.bind(logger);
 
+  // Provide user feedback when verbose output is enabled
+  app.log('info', 'verbose output enabled', true);
+
   // Attach RouteManager to app object, the primary set of mockyeah API methods.
   app.routeManager = new RouteManager(app);
 
