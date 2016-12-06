@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### [Unreleased]
 Nothing to report.
 
+### [0.15.3] - 2016-12-06
+#### Add
+- Pass server context as parameter to `onStart()` callback when instantiating a server.
+- Attach `rootUrl` to server context for consumer reuse.
+
 ### [0.15.2] - 2016-11-18
 #### Add
 - `output`, `journal`, and `verbose` boolean configuration options for configuring mockyeah output.
@@ -80,7 +85,8 @@ Nothing to report.
 #### Remove
 - Remove `.loadSet()` from API, easy multiple service setup is now possible with `.play()`.
 
-[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.2...HEAD
+[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.3...HEAD
+[0.15.3]: https://github.com/ryanricard/mockyeah/compare/v0.15.2...v0.15.3
 [0.15.2]: https://github.com/ryanricard/mockyeah/compare/v0.15.1...v0.15.2
 [0.15.1]: https://github.com/ryanricard/mockyeah/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/ryanricard/mockyeah/compare/v0.14.1...v0.15.0
