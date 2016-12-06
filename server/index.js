@@ -19,9 +19,10 @@ module.exports = function Server(config, onStart) {
 
   // Start server on conigured hose and port
   const server = app.listen(config.port, config.host, function listen() {
-    app.log('serve', `Listening at http://${this.address().address}:${this.address().port}`);
+    this.rootUrl = `http://${this.address().address}:${this.address().port}`;
+    app.log('serve', `Listening at ${this.rootUrl}`);
     // Execute callback once server starts
-    if (onStart) onStart.call(null);
+    if (onStart) onStart.call(null, this);
   });
 
   // Expose ability to stop server via API
