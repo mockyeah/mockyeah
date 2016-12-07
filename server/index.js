@@ -22,7 +22,7 @@ module.exports = function Server(config, onStart) {
     this.rootUrl = `http://${this.address().address}:${this.address().port}`;
     app.log('serve', `Listening at ${this.rootUrl}`);
     // Execute callback once server starts
-    if (onStart) onStart.call(null, this);
+    if (onStart) onStart.call(this);
   });
 
   // Expose ability to stop server via API
