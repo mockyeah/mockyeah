@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### [Unreleased]
 Nothing to report.
 
+### [0.15.4] - 2016-12-06
+#### Fix
+- Set context of `onStart` callback to be the server context. Resolves circular JSON exception
+received when attempting to pass context as a parameter.
+
 ### [0.15.3] - 2016-12-06
 #### Add
 - Pass server context as parameter to `onStart()` callback when instantiating a server.
@@ -85,7 +90,8 @@ Nothing to report.
 #### Remove
 - Remove `.loadSet()` from API, easy multiple service setup is now possible with `.play()`.
 
-[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.3...HEAD
+[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.4...HEAD
+[0.15.4]: https://github.com/ryanricard/mockyeah/compare/v0.15.3...v0.15.4
 [0.15.3]: https://github.com/ryanricard/mockyeah/compare/v0.15.2...v0.15.3
 [0.15.2]: https://github.com/ryanricard/mockyeah/compare/v0.15.1...v0.15.2
 [0.15.1]: https://github.com/ryanricard/mockyeah/compare/v0.15.0...v0.15.1
