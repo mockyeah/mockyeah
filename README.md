@@ -1,6 +1,6 @@
 # mockyeah [![Build Status](https://travis-ci.org/ryanricard/mockyeah.svg)](https://travis-ci.org/ryanricard/mockyeah)
 
-__"A powerful service mocking, recording, and playback utility.."__
+__"A powerful service mocking, recording, and playback utility."__
 
 Testing is difficult when you don't have control of your data. mockyeah puts you in complete control, enabling you to implement __real mock web services__ with ease. Real mock services means you have control of response payloads, HTTP Status Codes, response latency, and more.
 
