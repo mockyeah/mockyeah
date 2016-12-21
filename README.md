@@ -24,6 +24,11 @@ $ npm install mockyeah --save-dev
 - [Mock Expectations](https://github.com/ryanricard/mockyeah/wiki/Mock-Expectations)
 - [Service Snapshots](https://github.com/ryanricard/mockyeah/wiki/Service-Snapshots)
 
+## CLI
+
+- [mockyeah-cli](https://github.com/ryanricard/mockyeah-cli)
+- [mockyeah-cli Documentation](https://github.com/ryanricard/mockyeah/wiki/Service-Snapshot-CLI)
+
 ## Introductory tutorial
 1. Create an example project and initialized with NPM
   ```shell
