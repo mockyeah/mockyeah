@@ -14,10 +14,10 @@ $ npm install mockyeah --save-dev
 ## Usage
 
 - [Introductory tutorial](#introductory-tutorial)
-- [Testing example](#testing-example)
+- [Testing with mockyeah](#testing-with-mockyeah)
 - [Configuration](https://github.com/ryanricard/mockyeah/wiki/Configuration)
 
-#### API
+## API
 
 - [Mock Services](https://github.com/ryanricard/mockyeah/wiki/Mock-Services)
 - [Server Management](https://github.com/ryanricard/mockyeah/wiki/Server-Management)
@@ -55,7 +55,7 @@ $ npm install mockyeah --save-dev
 
 1. Profit. You should see "Hello World" returned from your mock server.
 
-### Testing example
+### Testing with mockyeah
 ```js
 const request = require('supertest')('http://localhost:4001');
 const mockyeah = require('mockyeah');
