@@ -24,7 +24,7 @@ $ npm install mockyeah --save-dev
 - [Mock Expectations](https://github.com/ryanricard/mockyeah/wiki/Mock-Expectations)
 - [Service Snapshots](https://github.com/ryanricard/mockyeah/wiki/Service-Snapshots)
 
-### Introductory tutorial
+## Introductory tutorial
 1. Create an example project and initialized with NPM
   ```shell
   $ mkdir example-app && cd example-app
@@ -55,7 +55,7 @@ $ npm install mockyeah --save-dev
 
 1. Profit. You should see "Hello World" returned from your mock server.
 
-### Testing with mockyeah
+## Testing with mockyeah
 ```js
 const request = require('supertest')('http://localhost:4001');
 const mockyeah = require('mockyeah');
