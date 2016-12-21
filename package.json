@@ -1,6 +1,6 @@
 {
   "name": "mockyeah",
-  "version": "0.15.4",
+  "version": "0.15.5",
   "description": "A simple but powerful web service mocking utility.",
   "main": "index.js",
   "scripts": {
