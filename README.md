@@ -15,6 +15,7 @@ $ npm install mockyeah --save-dev
 
 - [Introductory tutorial](#introductory-tutorial)
 - [Testing with mockyeah](#testing-with-mockyeah)
+- [Examples](https://github.com/ryanricard/mockyeah/tree/master/examples)
 - [Configuration](https://github.com/ryanricard/mockyeah/wiki/Configuration)
 
 ## API
