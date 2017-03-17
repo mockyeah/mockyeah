@@ -1,5 +1,5 @@
 const http = require('http');
-const mockyeah = require('../');
+const mockyeah = require('./mockyeah');
 
 mockyeah.get('/', { latency: 3000 });
 
