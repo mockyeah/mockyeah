@@ -1,5 +1,4 @@
 const http = require('http');
-const querystring = require('querystring');
 const log = require('./log');
 const mockyeah = require('./mockyeah');
 

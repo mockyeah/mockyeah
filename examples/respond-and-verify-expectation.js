@@ -5,7 +5,7 @@ const mockyeah = require('./mockyeah');
 const expectation = mockyeah
   .get('/', { text: 'it worked!' })
   .expect()
-  .header('host', 'example.com');
+  .header('host', 'example.com')
   .params({
     foo: 'bar'
   })
@@ -15,7 +15,7 @@ const expectation = mockyeah
 http.get('http://localhost:4001', (res) => {
   try {
     expectation.verify();
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
   log(res);
