@@ -2,7 +2,7 @@ const http = require('http');
 const log = require('./log');
 const mockyeah = require('./mockyeah');
 
-mockyeah.get('/', (req, res, next) => {
+mockyeah.get('/', (req, res) => {
   res.send('I\'m an Express.js route! Customize to your heart\'s content.');
 });
 
