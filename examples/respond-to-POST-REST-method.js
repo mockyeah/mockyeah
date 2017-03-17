@@ -1,15 +1,28 @@
 const http = require('http');
+const querystring = require('querystring');
 const log = require('./log');
 const mockyeah = require('./mockyeah');
 
-mockyeah.post('/', { text: 'it worked!' });
+mockyeah.post('/', (req, res) => {
+  res.send(req.body.hey);
+});
 
-http.get({
+const postData = JSON.stringify({
+  hey: 'it worked!'
+});
+
+const request = http.request({
   hostname: 'localhost',
   port: 4001,
   path: '/',
-  method: 'POST'
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  }
 }, (res) => {
   log(res);
   mockyeah.close();
 });
+
+request.write(postData);
+request.end();
