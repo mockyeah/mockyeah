@@ -15,6 +15,7 @@ describe('Capture Play', function() {
      * until all complete.
      */
     async.series([
+      (cb) => request.get('/path+includes+problem+characters').expect(200, /it worked/, cb),
       (cb) => request.get('/say-hello').expect(200, /hello there/, cb),
       (cb) => request.get('/say-oh-noes').expect(500, /Oh noes/, cb),
       (cb) => request.get('/say-your-lost').expect(404, /I\'m lost/, cb),

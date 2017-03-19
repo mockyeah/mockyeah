@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 function normalizeRewritePath(_path) {
-  return _path.replace(/[\?\=\&\%]+/g, '_').replace(/^\/?/, '/');
+  return _path.replace(/[\?\=\&\%\+]+/g, '_').replace(/^\/?/, '/');
 }
 
 function filterFileNames(fileNames) {
