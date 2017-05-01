@@ -32,30 +32,30 @@ $ npm install mockyeah --save-dev
 
 ## Introductory tutorial
 1. Create an example project and initialized with NPM
-  ```shell
-  $ mkdir example-app && cd example-app
-  $ npm init # all defaults will be fine
-  ```
+    ```shell
+    $ mkdir example-app && cd example-app
+    $ npm init # all defaults will be fine
+    ```
 
 1. Install `mockyeah`
-  ```shell
-  $ npm install mockyeah --save-dev
-  ```
+    ```shell
+    $ npm install mockyeah --save-dev
+    ```
 
 1. Create script file and add the source below
-  ```shell
-  $ touch index.js
-  ```
-  ```js
-  const mockyeah = require('mockyeah');
+    ```shell
+    $ touch index.js
+    ```
+    ```js
+    const mockyeah = require('mockyeah');
 
-  mockyeah.get('/hello-world', { text: 'Hello World' });
-  ```
+    mockyeah.get('/hello-world', { text: 'Hello World' });
+    ```
 
 1. Run the script file with Node
-  ```shell
-  $ node index.js
-  ```
+    ```shell
+    $ node index.js
+    ```
 
 1. Open [http://localhost:4001/hello-world](http://localhost:4001/hello-world)
 
