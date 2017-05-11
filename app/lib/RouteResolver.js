@@ -133,10 +133,10 @@ RouteResolver.prototype.register = function register(route) {
 };
 
 RouteResolver.prototype.unregister = function unregister(routes) {
-  const routePaths = routes.map((route) => { return route.path; });
-
   this.app._router.stack = this.app._router.stack.filter((layer) => {
-    return !(layer.route && routePaths.indexOf(layer.route.path) >= 0);
+    return !(layer.route && routes.some((route) => {
+      return route.path === layer.route.path && layer.route.methods[route.method] === true;
+    }));
   });
 };
 
