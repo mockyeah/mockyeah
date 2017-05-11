@@ -17,23 +17,28 @@ describe('Capture Record and Playback', function() {
   let remote;
   let getRemotePath;
 
-  before(() => {
-    // Instantiate proxy server for recording
-    proxy = MockYeahServer({
-      name: 'proxy',
-      port: 0,
-      capturesDir: PROXY_CAPTURES_DIR
+  before((done) => {
+    async.parallel([
+      function(cb) {
+        // Instantiate proxy server for recording
+        proxy = MockYeahServer({
+          name: 'proxy',
+          port: 0,
+          capturesDir: PROXY_CAPTURES_DIR
+        }, cb);
+      },
+      function(cb) {
+        // Instantiate remote server
+        remote = MockYeahServer({
+          name: 'remote',
+          port: 0
+        }, cb);
+      }
+    ], function() {
+      request = supertest(proxy.server);
+      getRemotePath = (_path) => `/http://localhost:${remote.server.address().port}${_path}`;
+      done();
     });
-
-    // Instantiate remote server
-    remote = MockYeahServer({
-      name: 'remote',
-      port: 0
-    });
-
-    request = supertest(proxy.server);
-
-    getRemotePath = (_path) => `/http://localhost:${remote.server.address().port}${_path}`;
   });
 
   afterEach(() => {
