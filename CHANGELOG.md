@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### [Unreleased]
 Nothing to report.
 
+### [0.15.9] - 2017-05-25
+#### Add
+- Add support for multiple HTTP verbs per route.
+
 ### [0.15.4] - 2016-12-06
 #### Fix
 - Set context of `onStart` callback to be the server context. Resolves circular JSON exception
@@ -90,7 +94,8 @@ received when attempting to pass context as a parameter.
 #### Remove
 - Remove `.loadSet()` from API, easy multiple service setup is now possible with `.play()`.
 
-[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.4...HEAD
+[Unreleased]: https://github.com/ryanricard/mockyeah/compare/v0.15.9...HEAD
+[0.15.9]: https://github.com/ryanricard/mockyeah/compare/v0.15.8...v0.15.9
 [0.15.4]: https://github.com/ryanricard/mockyeah/compare/v0.15.3...v0.15.4
 [0.15.3]: https://github.com/ryanricard/mockyeah/compare/v0.15.2...v0.15.3
 [0.15.2]: https://github.com/ryanricard/mockyeah/compare/v0.15.1...v0.15.2
