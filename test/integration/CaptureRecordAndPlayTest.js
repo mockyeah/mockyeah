@@ -12,10 +12,10 @@ const MockYeahServer = require('../../server');
 const PROXY_CAPTURES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
 describe('Capture Record and Playback', function() {
-  let request;
   let proxy;
   let remote;
-  let getRemotePath;
+  let proxyReq;
+  let remoteReq;
 
   before((done) => {
     async.parallel([
@@ -34,9 +34,9 @@ describe('Capture Record and Playback', function() {
           port: 0
         }, cb);
       }
-    ], function() {
-      request = supertest(proxy.server);
-      getRemotePath = (_path) => `/http://localhost:${remote.server.address().port}${_path}`;
+    ], () => {
+      remoteReq = supertest(remote.server);
+      proxyReq = supertest(proxy.server.rootUrl + '/' + remote.server.rootUrl);
       done();
     });
   });
@@ -52,28 +52,30 @@ describe('Capture Record and Playback', function() {
     remote.close();
   });
 
-  function getCaptureFilePath(captureName, remoteUrl) {
-    const fileName = remoteUrl.replace(/^\/?/, '').replace(/\//g, '|');
+  function getCaptureFilePath(captureName, _path) {
+    const fileName = _path.replace(/^\/?/, '').replace(/\//g, '|');
     return path.resolve(PROXY_CAPTURES_DIR, captureName, fileName);
   }
 
   it('should record and playback capture', function(done) {
+    this.timeout = 10000;
+
     const captureName = 'some-fancy-capture';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
-    const remoteUrl1 = getRemotePath('/some/service/one');
-    const remoteUrl2 = getRemotePath('/some/service/two');
-    const remoteUrl3 = getRemotePath('/some/service/three');
-    const remoteUrl4 = getRemotePath('/some/service/four');
-    const remoteUrl5 = getRemotePath('/some/service/five');
+    const path1 = '/some/service/one';
+    const path2 = '/some/service/two';
+    const path3 = '/some/service/three';
+    const path4 = '/some/service/four';
+    const path5 = '/some/service/five';
 
     // Determine file save locations from capture name and remote service urls
-    const filePath1 = getCaptureFilePath(captureName, remoteUrl1);
-    const filePath2 = getCaptureFilePath(captureName, remoteUrl2);
-    const filePath3 = getCaptureFilePath(captureName, remoteUrl3);
-    const filePath4 = getCaptureFilePath(captureName, remoteUrl4);
-    const filePath5 = getCaptureFilePath(captureName, remoteUrl5);
+    const filePath1 = getCaptureFilePath(captureName, remote.server.rootUrl + path1);
+    const filePath2 = getCaptureFilePath(captureName, remote.server.rootUrl + path2);
+    const filePath3 = getCaptureFilePath(captureName, remote.server.rootUrl + path3);
+    const filePath4 = getCaptureFilePath(captureName, remote.server.rootUrl + path4);
+    const filePath5 = getCaptureFilePath(captureName, remote.server.rootUrl + path5);
 
     // Mount remote service end points
     remote.get('/some/service/one', { text: 'first' });
@@ -89,11 +91,11 @@ describe('Capture Record and Playback', function() {
 
       // Invoke requests to remote services through proxy
       // e.g. http://localhost:4041/http://example.com/some/service
-      (cb) => request.get(remoteUrl1).expect(200, 'first', cb),
-      (cb) => request.get(remoteUrl2).expect(200, 'second', cb),
-      (cb) => request.get(remoteUrl3).expect(200, 'third', cb),
-      (cb) => request.get(remoteUrl4).expect(200, 'fourth', cb),
-      (cb) => request.get(remoteUrl5).expect(200, 'fifth', cb),
+      (cb) => proxyReq.get(path1).expect(200, 'first', cb),
+      (cb) => proxyReq.get(path2).expect(200, 'second', cb),
+      (cb) => proxyReq.get(path3).expect(200, 'third', cb),
+      (cb) => proxyReq.get(path4).expect(200, 'fourth', cb),
+      (cb) => proxyReq.get(path5).expect(200, 'fifth', cb),
 
       // Assert files exist
       (cb) => { fs.statSync(filePath1); cb(); },
@@ -109,19 +111,19 @@ describe('Capture Record and Playback', function() {
       // Test remote url paths and their sub paths route to the same services
       // Assert remote url paths are routed the correct responses
       // e.g. http://localhost:4041/http://example.com/some/service
-      (cb) => request.get(remoteUrl1).expect(200, 'first', cb),
-      (cb) => request.get(remoteUrl2).expect(200, 'second', cb),
-      (cb) => request.get(remoteUrl3).expect(200, 'third', cb),
-      (cb) => request.get(remoteUrl4).expect(200, 'fourth', cb),
-      (cb) => request.get(remoteUrl5).expect(200, 'fifth', cb),
+      (cb) => remoteReq.get(path1).expect(200, 'first', cb),
+      (cb) => remoteReq.get(path2).expect(200, 'second', cb),
+      (cb) => remoteReq.get(path3).expect(200, 'third', cb),
+      (cb) => remoteReq.get(path4).expect(200, 'fourth', cb),
+      (cb) => remoteReq.get(path5).expect(200, 'fifth', cb),
 
       // Assert paths are routed the correct responses
       // e.g. http://localhost:4041/some/service
-      (cb) => request.get('/some/service/one').expect(200, 'first', cb),
-      (cb) => request.get('/some/service/two').expect(200, 'second', cb),
-      (cb) => request.get('/some/service/three').expect(200, 'third', cb),
-      (cb) => request.get('/some/service/four').expect(200, 'fourth', cb),
-      (cb) => request.get('/some/service/five').expect(200, 'fifth', cb)
+      (cb) => proxyReq.get(path1).expect(200, 'first', cb),
+      (cb) => proxyReq.get(path2).expect(200, 'second', cb),
+      (cb) => proxyReq.get(path3).expect(200, 'third', cb),
+      (cb) => proxyReq.get(path4).expect(200, 'fourth', cb),
+      (cb) => proxyReq.get(path5).expect(200, 'fifth', cb)
     ], done);
   });
 });
