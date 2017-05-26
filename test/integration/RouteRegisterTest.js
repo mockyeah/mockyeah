@@ -1,5 +1,6 @@
 'use strict';
 
+const async = require('async');
 const TestHelper = require('../TestHelper');
 const MockYeahServer = require('../../server');
 const supertest = require('supertest');
@@ -29,5 +30,19 @@ describe('Route register', () => {
     request
       .get('/foo')
       .expect(301, 'baa', done);
+  });
+
+  it('should not replace existing matching routes with different http verbs', (done) => {
+    mockyeah.get('/foo', { text: 'bar get' });
+    mockyeah.post('/foo', { text: 'bar post' });
+    mockyeah.put('/foo', { text: 'bar put' });
+    mockyeah.delete('/foo', { text: 'bar delete' });
+
+    async.parallel([
+      (cb) => request.get('/foo').expect(200, 'bar get', cb),
+      (cb) => request.post('/foo').expect(200, 'bar post', cb),
+      (cb) => request.put('/foo').expect(200, 'bar put', cb),
+      (cb) => request.delete('/foo').expect(200, 'bar delete', cb)
+    ], done);
   });
 });
