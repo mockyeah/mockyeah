@@ -45,4 +45,20 @@ describe('Route register', () => {
       (cb) => request.delete('/foo').expect(200, 'bar delete', cb)
     ], done);
   });
+
+  it('should work even with query/search parameters', (done) => {
+    mockyeah.get('/foo?ok=yes', { text: 'bar', status: 200 });
+
+    request
+      .get('/foo')
+      .query({ ok: 'yes', other: 'sure' })
+      .expect(200, 'bar', () => {
+        mockyeah.get('/foo?ok', { text: 'baa', status: 301 });
+
+        request
+          .get('/foo')
+          .query({ ok: '', other: 'why not' })
+          .expect(301, 'baa', done);
+      });
+  });
 });

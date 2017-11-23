@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const parse = require('url').parse;
 const _ = require('lodash');
 const expandPath = require('../../lib/expandPath');
 const Expectation = require('./Expectation');
@@ -120,12 +121,14 @@ RouteResolver.prototype.register = function register(route) {
     route.response = handler.call(this, route.response);
   }
 
+  route.pathname = parse(route.path, true).pathname;
+
   const expectation = new Expectation(route);
 
   // unregister existing matching routes
   this.unregister([route]);
 
-  this.app[route.method](route.path, expectation.middleware.bind(expectation), route.response);
+  this.app[route.method](route.pathname, expectation.middleware.bind(expectation), route.response);
 
   return {
     expect: () => expectation.api()
@@ -135,7 +138,7 @@ RouteResolver.prototype.register = function register(route) {
 RouteResolver.prototype.unregister = function unregister(routes) {
   this.app._router.stack = this.app._router.stack.filter((layer) => {
     return !(layer.route && routes.some((route) => {
-      return route.path === layer.route.path && layer.route.methods[route.method] === true;
+      return route.pathname === layer.route.path && layer.route.methods[route.method] === true;
     }));
   });
 };
