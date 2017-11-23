@@ -15,11 +15,11 @@ describe('Response Headers', () => {
   });
 
   it('should send header Content-Type when set and raw', (done) => {
-    mockyeah.get('/some/service/end/point', { raw: 'Hello.', headers: { 'content-type': 'application/xml' } });
+    mockyeah.get('/some/service/end/point', { raw: 'Hello.', headers: { 'content-type': 'text/xml' } });
 
     request
       .get('/some/service/end/point')
-      .expect('Content-Type', /application\/xml/)
+      .expect('Content-Type', /text\/xml/)
       .expect(200, /Hello/, done);
   });
 });

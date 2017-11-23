@@ -38,7 +38,7 @@ describe('Response Content Type', () => {
 
       request
         .get('/service/exists')
-        .expect('Content-Type', /application\/xml/)
+        .expect('Content-Type', /text\/xml/)
         .expect(200, done);
     });
 
@@ -85,7 +85,7 @@ describe('Response Content Type', () => {
 
       request
         .get('/service/exists')
-        .expect('Content-Type', /application\/xml/)
+        .expect('Content-Type', /text\/xml/)
         .expect(200, done);
     });
 
