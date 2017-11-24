@@ -45,7 +45,7 @@ module.exports = function RouteManager(app) {
 
     record: function record(captureName) {
       const capture = new CaptureRecorder(app, captureName);
-      this.register('all', '*', capture.record.bind(capture));
+      app.use(capture.record.bind(capture));
     },
 
     play: function play(captureName) {
