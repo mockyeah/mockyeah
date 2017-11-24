@@ -36,5 +36,5 @@ module.exports = function Server(config, onStart) {
   };
 
   // Construct and return mockyeah API
-  return Object.assign({ server }, app.routeManager, { use, config, close });
+  return Object.assign({ server }, app, app.routeManager, { use, config, close });
 };
