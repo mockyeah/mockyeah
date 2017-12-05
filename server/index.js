@@ -30,11 +30,6 @@ module.exports = function Server(config, onStart) {
     app.log(['serve', 'exit'], 'Goodbye.');
   });
 
-  // Expose ability to implement middleware via API
-  const use = function use() {
-    app.use.apply(app, arguments);
-  };
-
   // Construct and return mockyeah API
-  return Object.assign({ server }, app, app.routeManager, { use, config, close });
+  return Object.assign({ server }, app, app.routeManager, { config, close });
 };
