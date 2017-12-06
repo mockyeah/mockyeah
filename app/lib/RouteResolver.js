@@ -27,11 +27,7 @@ function isRouteForRequest(route, req) {
 }
 
 function isRouteToReplace(newRoute, oldRoute) {
-  if (newRoute.pathname === oldRoute.pathname && newRoute.method === oldRoute.method) {
-    return true;
-  }
-
-  return false;
+  return newRoute.pathname === oldRoute.pathname && newRoute.method === oldRoute.method;
 }
 
 /**
