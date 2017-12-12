@@ -3,19 +3,19 @@
 const tildify = require('tildify');
 const CapturePlayer = require('./CapturePlayer');
 const CaptureRecorder = require('./CaptureRecorder');
-const RouteStore = require('./RouteStore');
+const RouteResolver = require('./RouteResolver');
 
 /**
  * RouteManager
  *  Primary mockyeah API (i.e. get, post, put, delete, reset, record, play).
  */
 module.exports = function RouteManager(app) {
-  const routeStore = new RouteStore(app);
+  const routeResolver = new RouteResolver(app);
 
   return {
     register: function register(method, _path, response) {
       app.log(['serve', 'mount', method], _path);
-      return routeStore.register(method, _path, response);
+      return routeResolver.register(method, _path, response);
     },
 
     all: function all(_path, response) {
@@ -38,9 +38,8 @@ module.exports = function RouteManager(app) {
       return this.register('delete', _path, response);
     },
 
-    reset: function reset(/* paths 1, path 2, path 3, etc. */) {
-      const paths = [].slice.call(arguments);
-      routeStore.reset.call(routeStore, paths);
+    reset: function reset() {
+      routeResolver.reset();
     },
 
     record: function record(captureName) {
