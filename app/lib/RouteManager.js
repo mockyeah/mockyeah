@@ -52,7 +52,7 @@ module.exports = function RouteManager(app) {
 
       app.log(['serve', 'capture'], tildify(capture.path));
 
-      capture.files().forEach((route) => {
+      capture.files().forEach(route => {
         app.log(['serve', 'playing', route.method], route.originalPath, false);
         app.log(['serve', 'playing', route.method], `${route.originalPath} at ${route.path}`, true);
 

@@ -61,17 +61,21 @@ module.exports = function handler(response) {
     if (this.app.config.journal) {
       this.app.log(
         ['request', 'journal'],
-        JSON.stringify({
-          callCount: req.callCount,
-          url: req.url,
-          fullUrl: req.protocol + '://' + req.get('host') + req.originalUrl,
-          clientIp: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-          method: req.method,
-          headers: req.headers,
-          query: req.query,
-          body: req.body,
-          cookies: req.cookies
-        }, null, 2)
+        JSON.stringify(
+          {
+            callCount: req.callCount,
+            url: req.url,
+            fullUrl: req.protocol + '://' + req.get('host') + req.originalUrl,
+            clientIp: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+            method: req.method,
+            headers: req.headers,
+            query: req.query,
+            body: req.body,
+            cookies: req.cookies
+          },
+          null,
+          2
+        )
       );
     }
 

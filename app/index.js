@@ -22,8 +22,12 @@ module.exports = function App(config) {
 
   // Prepare global config
   const globalConfig = {};
-  if (global.MOCKYEAH_SUPPRESS_OUTPUT !== undefined) globalConfig.output = !global.MOCKYEAH_SUPPRESS_OUTPUT;
-  if (global.MOCKYEAH_VERBOSE_OUTPUT !== undefined) globalConfig.verbose = !!global.MOCKYEAH_VERBOSE_OUTPUT;
+  if (global.MOCKYEAH_SUPPRESS_OUTPUT !== undefined) {
+    globalConfig.output = !global.MOCKYEAH_SUPPRESS_OUTPUT;
+  }
+  if (global.MOCKYEAH_VERBOSE_OUTPUT !== undefined) {
+    globalConfig.verbose = !!global.MOCKYEAH_VERBOSE_OUTPUT;
+  }
 
   // Prepare configuration. Merge configuration with global and default configuration
   app.config = Object.assign({}, defaultConfig, globalConfig, config || {});

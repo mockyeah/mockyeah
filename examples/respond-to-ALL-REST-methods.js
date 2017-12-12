@@ -10,19 +10,19 @@ const options = {
   path: '/'
 };
 
-http.get(Object.assign(options, { method: 'GET' }), (res) => {
+http.get(Object.assign(options, { method: 'GET' }), res => {
   log(res);
 });
 
-http.get(Object.assign(options, { method: 'POST' }), (res) => {
+http.get(Object.assign(options, { method: 'POST' }), res => {
   log(res);
 });
 
-http.get(Object.assign(options, { method: 'PUT' }), (res) => {
+http.get(Object.assign(options, { method: 'PUT' }), res => {
   log(res);
 });
 
-http.get(Object.assign(options, { method: 'DELETE' }), (res) => {
+http.get(Object.assign(options, { method: 'DELETE' }), res => {
   log(res);
   mockyeah.close();
 });

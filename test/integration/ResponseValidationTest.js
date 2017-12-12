@@ -12,12 +12,12 @@ describe('Response Validation', () => {
       // Use incorrect option 'file'
       mockyeah.get('/some/service/end/point', { file: './fixtures/some-data.json' });
     } catch (err) {
-      expect(err.message).to.equal('Response option(s) invalid. Options must include one of the following: fixture, filePath, html, json, text, status, headers, raw, latency, type');
+      expect(err.message).to.equal(
+        'Response option(s) invalid. Options must include one of the following: fixture, filePath, html, json, text, status, headers, raw, latency, type'
+      );
       done();
     }
 
-    request
-      .get('/some/service/end/point')
-      .expect(404);
+    request.get('/some/service/end/point').expect(404);
   });
 });

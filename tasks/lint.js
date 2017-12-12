@@ -10,7 +10,8 @@ const PATH = require('./path');
 function lint(options) {
   options = options || { exit: true };
 
-  return gulp.src(PATH.scripts)
+  return gulp
+    .src(PATH.scripts)
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(options.exit ? eslint.failAfterError() : gutil.noop());

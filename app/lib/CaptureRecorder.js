@@ -7,7 +7,7 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const request = require('request');
 const tildify = require('tildify');
-const now = () => (new Date()).getTime();
+const now = () => new Date().getTime();
 
 /**
  * RouteRecorder

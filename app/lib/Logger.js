@@ -72,7 +72,7 @@ Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) 
   if (args.verbose) args.types.unshift('verbose');
 
   // Add timestamp to message
-  args.types.unshift((new Date()).toLocaleTimeString('en-US', { hour12: false }));
+  args.types.unshift(new Date().toLocaleTimeString('en-US', { hour12: false }));
 
   // Prepare string of types for output
   args.types = args.types.reduce((result, value) => {

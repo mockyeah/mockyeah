@@ -18,27 +18,23 @@ describe('Wondrous service', () => {
   // stop mockyeah server
   after(() => mockyeah.close());
 
-  it('should create a mock service that returns an internal error', (done) => {
+  it('should create a mock service that returns an internal error', done => {
     // create failing service mock
     mockyeah.get('/wondrous', { status: 500 });
 
     // assert service mock is working
-    request
-      .get('/wondrous')
-      .expect(500, done);
+    request.get('/wondrous').expect(500, done);
   });
 
-  it('should create a mock service that returns JSON', (done) => {
+  it('should create a mock service that returns JSON', done => {
     // create service mock that returns json data
     mockyeah.get('/wondrous', { json: { foo: 'bar' } });
 
     // assert service mock is working
-    request
-      .get('/wondrous')
-      .expect(200, { foo: 'bar' }, done);
+    request.get('/wondrous').expect(200, { foo: 'bar' }, done);
   });
 
-  it('should verify a mock service expectation', (done) => {
+  it('should verify a mock service expectation', done => {
     // create service mock with expectation
     const expectation = mockyeah
       .get('/wondrous', { text: 'it worked' })

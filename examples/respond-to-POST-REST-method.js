@@ -10,18 +10,21 @@ const postData = JSON.stringify({
   hey: 'it worked!'
 });
 
-const request = http.request({
-  hostname: 'localhost',
-  port: 4001,
-  path: '/',
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
+const request = http.request(
+  {
+    hostname: 'localhost',
+    port: 4001,
+    path: '/',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  },
+  res => {
+    log(res);
+    mockyeah.close();
   }
-}, (res) => {
-  log(res);
-  mockyeah.close();
-});
+);
 
 request.write(postData);
 request.end();

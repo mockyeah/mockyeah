@@ -5,7 +5,7 @@ const mockyeah = TestHelper.mockyeah;
 const request = TestHelper.request;
 
 describe('Response Headers', () => {
-  it('should support custom headers', (done) => {
+  it('should support custom headers', done => {
     mockyeah.get('/some/service/end/point', { text: 'Hello.', headers: { 'Foo-Bar': 'abc' } });
 
     request
@@ -14,8 +14,11 @@ describe('Response Headers', () => {
       .expect(200, /Hello/, done);
   });
 
-  it('should send header Content-Type when set and raw', (done) => {
-    mockyeah.get('/some/service/end/point', { raw: 'Hello.', headers: { 'content-type': 'text/xml' } });
+  it('should send header Content-Type when set and raw', done => {
+    mockyeah.get('/some/service/end/point', {
+      raw: 'Hello.',
+      headers: { 'content-type': 'text/xml' }
+    });
 
     request
       .get('/some/service/end/point')

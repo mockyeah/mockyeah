@@ -12,7 +12,7 @@ const expectation = mockyeah
   .body('{ "some": "data" }')
   .once();
 
-http.get('http://localhost:4001', (res) => {
+http.get('http://localhost:4001', res => {
   try {
     expectation.verify();
   } catch (err) {

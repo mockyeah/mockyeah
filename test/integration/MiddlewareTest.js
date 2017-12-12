@@ -31,7 +31,7 @@ describe('Application Middleware', () => {
   afterEach(() => mockyeah.reset());
   after(() => mockyeah.close());
 
-  it('should be exposed for external use', (done) => {
+  it('should be exposed for external use', done => {
     mockyeah.get('/validate', validateMiddleware);
 
     request(mockyeah.server)

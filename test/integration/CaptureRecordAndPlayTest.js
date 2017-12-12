@@ -17,28 +17,37 @@ describe('Capture Record and Playback', function() {
   let proxyReq;
   let remoteReq;
 
-  before((done) => {
-    async.parallel([
-      function(cb) {
-        // Instantiate proxy server for recording
-        proxy = MockYeahServer({
-          name: 'proxy',
-          port: 0,
-          capturesDir: PROXY_CAPTURES_DIR
-        }, cb);
-      },
-      function(cb) {
-        // Instantiate remote server
-        remote = MockYeahServer({
-          name: 'remote',
-          port: 0
-        }, cb);
+  before(done => {
+    async.parallel(
+      [
+        function(cb) {
+          // Instantiate proxy server for recording
+          proxy = MockYeahServer(
+            {
+              name: 'proxy',
+              port: 0,
+              capturesDir: PROXY_CAPTURES_DIR
+            },
+            cb
+          );
+        },
+        function(cb) {
+          // Instantiate remote server
+          remote = MockYeahServer(
+            {
+              name: 'remote',
+              port: 0
+            },
+            cb
+          );
+        }
+      ],
+      () => {
+        remoteReq = supertest(remote.server);
+        proxyReq = supertest(proxy.server.rootUrl + '/' + remote.server.rootUrl);
+        done();
       }
-    ], () => {
-      remoteReq = supertest(remote.server);
-      proxyReq = supertest(proxy.server.rootUrl + '/' + remote.server.rootUrl);
-      done();
-    });
+    );
   });
 
   afterEach(() => {
@@ -85,45 +94,72 @@ describe('Capture Record and Playback', function() {
     remote.get('/some/service/five', { text: 'fifth' });
 
     // Initiate recording and playback series
-    async.series([
-      // Initiate recording
-      (cb) => { proxy.record(captureName); cb(); },
+    async.series(
+      [
+        // Initiate recording
+        cb => {
+          proxy.record(captureName);
+          cb();
+        },
 
-      // Invoke requests to remote services through proxy
-      // e.g. http://localhost:4041/http://example.com/some/service
-      (cb) => proxyReq.get(path1).expect(200, 'first', cb),
-      (cb) => proxyReq.get(path2).expect(200, 'second', cb),
-      (cb) => proxyReq.get(path3).expect(200, 'third', cb),
-      (cb) => proxyReq.get(path4).expect(200, 'fourth', cb),
-      (cb) => proxyReq.get(path5).expect(200, 'fifth', cb),
+        // Invoke requests to remote services through proxy
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => proxyReq.get(path1).expect(200, 'first', cb),
+        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path3).expect(200, 'third', cb),
+        cb => proxyReq.get(path4).expect(200, 'fourth', cb),
+        cb => proxyReq.get(path5).expect(200, 'fifth', cb),
 
-      // Assert files exist
-      (cb) => { fs.statSync(filePath1); cb(); },
-      (cb) => { fs.statSync(filePath2); cb(); },
-      (cb) => { fs.statSync(filePath3); cb(); },
-      (cb) => { fs.statSync(filePath4); cb(); },
-      (cb) => { fs.statSync(filePath5); cb(); },
+        // Assert files exist
+        cb => {
+          fs.statSync(filePath1);
+          cb();
+        },
+        cb => {
+          fs.statSync(filePath2);
+          cb();
+        },
+        cb => {
+          fs.statSync(filePath3);
+          cb();
+        },
+        cb => {
+          fs.statSync(filePath4);
+          cb();
+        },
+        cb => {
+          fs.statSync(filePath5);
+          cb();
+        },
 
-      // Reset proxy services and play captured capture
-      (cb) => { proxy.reset(); cb(); },
-      (cb) => { proxy.play(captureName); cb(); },
+        // Reset proxy services and play captured capture
+        cb => {
+          proxy.reset();
+          cb();
+        },
+        cb => {
+          proxy.play(captureName);
+          cb();
+        },
 
-      // Test remote url paths and their sub paths route to the same services
-      // Assert remote url paths are routed the correct responses
-      // e.g. http://localhost:4041/http://example.com/some/service
-      (cb) => remoteReq.get(path1).expect(200, 'first', cb),
-      (cb) => remoteReq.get(path2).expect(200, 'second', cb),
-      (cb) => remoteReq.get(path3).expect(200, 'third', cb),
-      (cb) => remoteReq.get(path4).expect(200, 'fourth', cb),
-      (cb) => remoteReq.get(path5).expect(200, 'fifth', cb),
+        // Test remote url paths and their sub paths route to the same services
+        // Assert remote url paths are routed the correct responses
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => remoteReq.get(path1).expect(200, 'first', cb),
+        cb => remoteReq.get(path2).expect(200, 'second', cb),
+        cb => remoteReq.get(path3).expect(200, 'third', cb),
+        cb => remoteReq.get(path4).expect(200, 'fourth', cb),
+        cb => remoteReq.get(path5).expect(200, 'fifth', cb),
 
-      // Assert paths are routed the correct responses
-      // e.g. http://localhost:4041/some/service
-      (cb) => proxyReq.get(path1).expect(200, 'first', cb),
-      (cb) => proxyReq.get(path2).expect(200, 'second', cb),
-      (cb) => proxyReq.get(path3).expect(200, 'third', cb),
-      (cb) => proxyReq.get(path4).expect(200, 'fourth', cb),
-      (cb) => proxyReq.get(path5).expect(200, 'fifth', cb)
-    ], done);
+        // Assert paths are routed the correct responses
+        // e.g. http://localhost:4041/some/service
+        cb => proxyReq.get(path1).expect(200, 'first', cb),
+        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path3).expect(200, 'third', cb),
+        cb => proxyReq.get(path4).expect(200, 'fourth', cb),
+        cb => proxyReq.get(path5).expect(200, 'fifth', cb)
+      ],
+      done
+    );
   });
 });
