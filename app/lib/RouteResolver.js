@@ -2,9 +2,34 @@
 
 const fs = require('fs');
 const path = require('path');
+const parse = require('url').parse;
 const _ = require('lodash');
+const pathToRegExp = require('path-to-regexp');
 const expandPath = require('../../lib/expandPath');
 const Expectation = require('./Expectation');
+
+function isEqualMethod(method1, method2) {
+  const m1 = method1.toLowerCase();
+  const m2 = method2.toLowerCase();
+  return m1 === 'all' || m2 === 'all' || m1 === m2;
+}
+
+function isRouteForRequest(route, req) {
+  if (!isEqualMethod(req.method, route.method)) return false;
+
+  const pathname = parse(req.url, true).pathname;
+
+  if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
+
+  // TODO: Later add features to match other things, like query parameters, etc.
+
+  return true;
+}
+
+function isRouteToReplace(newRoute, oldRoute) {
+  return newRoute.pathname === oldRoute.pathname && newRoute.method === oldRoute.method;
+}
+
 /**
  * RouteResolver
  *  Facilitates route registration and unregistration.
@@ -12,6 +37,10 @@ const Expectation = require('./Expectation');
  */
 function RouteResolver(app) {
   this.app = app;
+
+  this.routes = [];
+
+  this.listening = false;
 }
 
 function validateResponse(response) {
@@ -120,12 +149,18 @@ RouteResolver.prototype.register = function register(route) {
     route.response = handler.call(this, route.response);
   }
 
+  route.pathname = parse(route.path, true).pathname;
+  route.pathRegExp = pathToRegExp(route.pathname);
+
   const expectation = new Expectation(route);
+  route.expectation = expectation;
 
   // unregister existing matching routes
   this.unregister([route]);
 
-  this.app[route.method](route.path, expectation.middleware.bind(expectation), route.response);
+  this.routes.push(route);
+
+  this.listen();
 
   return {
     expect: () => expectation.api()
@@ -133,10 +168,35 @@ RouteResolver.prototype.register = function register(route) {
 };
 
 RouteResolver.prototype.unregister = function unregister(routes) {
-  this.app._router.stack = this.app._router.stack.filter((layer) => {
-    return !(layer.route && routes.some((route) => {
-      return route.path === layer.route.path && layer.route.methods[route.method] === true;
-    }));
+  // Filter out any old routes that match any of the new routes being unregistered.
+  this.routes = this.routes.filter(oldRoute =>
+    !routes.some(newRoute => isRouteToReplace(newRoute, oldRoute))
+  );
+};
+
+RouteResolver.prototype.listen = function listen() {
+  if (this.listening) return;
+
+  this.listening = true;
+
+  this.app.all('*', (req, res, next) => {
+    const route = this.routes.find(r => isRouteForRequest(r, req));
+
+    if (!route) {
+      next();
+      return;
+    }
+
+    const expectationNext = err => {
+      if (err) {
+        this.app.log(['record', 'expectation', 'error'], err);
+        res.sendStatus(500);
+        return;
+      }
+      route.response(req, res);
+    };
+
+    route.expectation.middleware(req, res, expectationNext);
   });
 };
 

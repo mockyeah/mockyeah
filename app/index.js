@@ -41,14 +41,14 @@ module.exports = function App(config) {
   // Provide user feedback when verbose output is enabled
   app.log('info', 'verbose output enabled', true);
 
-  // Attach RouteManager to app object, the primary set of mockyeah API methods.
-  app.routeManager = new RouteManager(app);
-
-  app.use(bodyParser.json());
-
   app.get('/', (req, res) => {
     res.send('Hello, mockyeah!');
   });
+
+  app.use(bodyParser.json());
+
+  // Attach RouteManager to app object, the primary set of mockyeah API methods.
+  app.routeManager = new RouteManager(app);
 
   return app;
 };
