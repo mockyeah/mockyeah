@@ -1,7 +1,7 @@
 {
   "name": "mock-yeah",
   "version": "0.8.2",
-  "description": "An invaluable service mocking platform built on Express.",
+  "description": "This package has been renamed to \"mockyeah\".",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/**/*-test.js"
