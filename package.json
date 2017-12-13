@@ -9,10 +9,7 @@
     "lint": "gulp lint",
     "lint:watch": "gulp lint:watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:ryanricard/mockyeah.git"
-  },
+  "repository": "git@github.com:ryanricard/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "ISC",
   "keywords": [
@@ -76,5 +73,6 @@
     "path-to-regexp": "^2.1.0",
     "request": "^2.69.0",
     "tildify": "^1.1.2"
-  }
+  },
+  "private": false
 }
