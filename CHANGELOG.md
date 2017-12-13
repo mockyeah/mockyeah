@@ -3,7 +3,19 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### [Unreleased]
-Nothing to report.
+#### Add
+- Routing changes in preparation for supporting enhanced mock service capabilities.
+- An Express change forced the content-type `application/xml` response to be changed to `text/xml`.
+#### Remove
+- Unmounting specific services has been removed. The following will be no longer provided post 0.15.9: 
+```js
+// unmounts only /foo-1 and /foo-2
+mockyeah.reset('/foo-1', '/bar-2');
+```
+#### Maintenance
+- Travis CI updated to execution automation against each of respective latest Node versions: 8, 6, and 4.
+- Prettier added and applied to all JavaScript files.
+- Yarn added.
 
 ### [0.15.9] - 2017-05-25
 #### Add
