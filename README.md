@@ -1,3 +1,16 @@
+:bangbang: This package has been renamed to `mockyeah`
+
+Install latest:
+```shell
+$ npm install mockyeah --save-dev
+```
+
+Latest documentation and repository:
+- https://github.com/ryanricard/mockyeah 
+- https://www.npmjs.com/package/mockyeah
+
+The documentation below is relevant to mockyeah version v0.8.x, which is old and crusty. Installing the latest above is advised.
+
 # Mock Yeah [![Build Status](https://travis-ci.org/ryanricard/mock-yeah.svg)](https://travis-ci.org/ryanricard/mock-yeah)
 
 __"An invaluable service mocking platform built on Express."__
