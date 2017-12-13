@@ -1,6 +1,6 @@
 {
   "name": "mock-yeah",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "This package has been renamed to \"mockyeah\".",
   "main": "index.js",
   "scripts": {
