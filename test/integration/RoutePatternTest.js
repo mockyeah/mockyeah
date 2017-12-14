@@ -36,7 +36,7 @@ describe('Route Patterns', () => {
     });
   });
 
-  it.only('should expose path parameters to custom middleware as indexed array', done => {
+  it('should expose path parameters to custom middleware as indexed array', done => {
     let report = true;
     mockyeah.get('/service/:one/:two/other/:three', (req, res) => {
       try {
