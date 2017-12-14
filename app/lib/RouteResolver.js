@@ -47,6 +47,18 @@ function listen() {
         res.sendStatus(500);
         return;
       }
+
+      const match = req.path.match(route.pathRegExp);
+
+      const params = {};
+
+      route.matchKeys.forEach((key, i) => {
+        params[key.name] = match[i + 1];
+        params[i] = match[i + 1];
+      });
+
+      req.params = params;
+
       route.response(req, res);
     };
 
@@ -70,12 +82,14 @@ function RouteResolver(app) {
 RouteResolver.prototype.register = function register(method, path, response) {
   const route = { method, path, response };
 
-  if (!_.isFunction(route.response)) {
-    route.response = routeHandler.call(this, route.response);
-  }
-
   route.pathname = parse(route.path, true).pathname;
-  route.pathRegExp = pathToRegExp(route.pathname);
+  const matchKeys = [];
+  route.pathRegExp = pathToRegExp(route.pathname, matchKeys);
+  route.matchKeys = matchKeys;
+
+  if (!_.isFunction(route.response)) {
+    route.response = routeHandler.call(this, route);
+  }
 
   const expectation = new Expectation(route);
   route.expectation = expectation;
