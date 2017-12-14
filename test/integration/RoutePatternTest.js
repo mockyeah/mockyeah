@@ -12,7 +12,7 @@ describe('Route Patterns', () => {
     request.get('/service/exists').expect(200, done);
   });
 
-  it.only('should expose path parameters to custom middleware as keyed object', done => {
+  it('should expose path parameters to custom middleware as keyed object', done => {
     let report = true;
     mockyeah.get('/service/:one/:two/other/:three', (req, res) => {
       try {
