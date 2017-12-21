@@ -3,6 +3,7 @@
 const parse = require('url').parse;
 const _ = require('lodash');
 const pathToRegExp = require('path-to-regexp');
+const isAbsoluteUrl = require('is-absolute-url');
 const Expectation = require('./Expectation');
 const routeHandler = require('./routeHandler');
 
@@ -17,6 +18,10 @@ function isRouteForRequest(route, req) {
 
   const pathname = parse(req.url, true).pathname;
 
+  const routePathnameIsAbsoluteUrl = isAbsoluteUrl(route.pathname.replace(/^\//, ''));
+
+  if (routePathnameIsAbsoluteUrl && pathname === route.pathname) return true;
+
   if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
 
   // TODO: Later add features to match other things, like query parameters, etc.
@@ -29,10 +34,6 @@ function isRouteMatch(route1, route2) {
 }
 
 function listen() {
-  if (this.listening) return;
-
-  this.listening = true;
-
   this.app.all('*', (req, res, next) => {
     const route = this.routes.find(r => isRouteForRequest(r, req));
 
@@ -64,7 +65,7 @@ function RouteResolver(app) {
 
   this.routes = [];
 
-  this.listening = false;
+  listen.call(this);
 }
 
 RouteResolver.prototype.register = function register(method, path, response) {
@@ -84,9 +85,6 @@ RouteResolver.prototype.register = function register(method, path, response) {
   this.unregister([route]);
 
   this.routes.push(route);
-
-  // it is necessary to mount catch all route here to avoid overriding middleware
-  listen.call(this);
 
   return {
     expect: () => expectation.api()

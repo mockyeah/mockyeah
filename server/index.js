@@ -26,9 +26,12 @@ module.exports = function Server(config, onStart) {
   });
 
   // Expose ability to stop server via API
-  const close = server.close.bind(server, function callback() {
-    app.log(['serve', 'exit'], 'Goodbye.');
-  });
+  const close = function close(cb) {
+    server.close(function callback() {
+      app.log(['serve', 'exit'], 'Goodbye.');
+      if (cb) cb();
+    });
+  };
 
   // Expose ability to implement middleware via API
   const use = function use() {
@@ -36,5 +39,10 @@ module.exports = function Server(config, onStart) {
   };
 
   // Construct and return mockyeah API
-  return Object.assign({ server }, app.routeManager, { use, config, close });
+  return Object.assign(
+    { server },
+    app.routeManager,
+    { proxy: app.proxy, reset: app.reset },
+    { use, config, close }
+  );
 };
