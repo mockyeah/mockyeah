@@ -29,10 +29,6 @@ function isRouteMatch(route1, route2) {
 }
 
 function listen() {
-  if (this.listening) return;
-
-  this.listening = true;
-
   this.app.all('*', (req, res, next) => {
     const route = this.routes.find(r => isRouteForRequest(r, req));
 
@@ -64,7 +60,7 @@ function RouteResolver(app) {
 
   this.routes = [];
 
-  this.listening = false;
+  listen.call(this);
 }
 
 RouteResolver.prototype.register = function register(method, path, response) {
@@ -84,9 +80,6 @@ RouteResolver.prototype.register = function register(method, path, response) {
   this.unregister([route]);
 
   this.routes.push(route);
-
-  // it is necessary to mount catch all route here to avoid overriding middleware
-  listen.call(this);
 
   return {
     expect: () => expectation.api()
