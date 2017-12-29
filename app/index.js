@@ -2,6 +2,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const async = require('async');
 const Logger = require('./lib/Logger');
 const RouteManager = require('./lib/RouteManager');
 
@@ -50,6 +51,16 @@ module.exports = function App(config) {
   });
 
   app.use(bodyParser.json());
+
+  app.middlewares = [];
+
+  app.use((req, res, next) => {
+    async.series(app.middlewares.map(middleware => cb => middleware(req, res, cb)), err => next(err));
+  });
+
+  app.use = middleware => {
+    app.middlewares.push(middleware);
+  };
 
   // Attach RouteManager to app object, the primary set of mockyeah API methods.
   app.routeManager = new RouteManager(app);
