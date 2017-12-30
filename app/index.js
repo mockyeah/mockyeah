@@ -54,8 +54,11 @@ module.exports = function App(config) {
 
   app.middlewares = [];
 
+  // A single middleware to execute any/all consumer-configured middleware.
   app.use((req, res, next) => {
-    async.series(app.middlewares.map(middleware => cb => middleware(req, res, cb)), err => next(err));
+    async.series(app.middlewares.map(middleware => cb => middleware(req, res, cb)), err =>
+      next(err)
+    );
   });
 
   app.use = middleware => {

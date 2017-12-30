@@ -80,6 +80,7 @@ RouteResolver.prototype.register = function register(method, path, response) {
 
   route.pathname = parse(route.path, true).pathname;
   const matchKeys = [];
+  // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
   route.pathRegExp = pathToRegExp(route.pathname, matchKeys);
   route.matchKeys = matchKeys;
 
