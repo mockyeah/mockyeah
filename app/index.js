@@ -56,11 +56,7 @@ module.exports = function App(config) {
   app.middlewares = [];
 
   app.use((req, res, next) => {
-    const callbacks = app.middlewares.map(middleware =>
-      cb => middleware(req, res, cb)
-    );
-
-    async.series(callbacks, next);
+    async.series(app.middlewares.map(middleware => cb => middleware(req, res, cb)), err => next(err));
   });
 
   app.use = middleware => {
