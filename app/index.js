@@ -63,6 +63,10 @@ module.exports = function App(config) {
     async.series(callbacks, next);
   });
 
+  app.use = middleware => {
+    app.middlewares.push(middleware);
+  };
+
   // Attach RouteManager to app object, the primary set of mockyeah API methods.
   app.routeManager = new RouteManager(app);
 

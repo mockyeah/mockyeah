@@ -49,8 +49,8 @@ function verifyFile(filePath, message) {
   });
 }
 
-module.exports = function handler(response) {
-  response = response || {};
+module.exports = function handler(route) {
+  const response = route.response || {};
 
   validateResponse(response);
 
