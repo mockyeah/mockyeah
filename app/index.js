@@ -80,8 +80,8 @@ module.exports = function App(config) {
     middleware(req, res, next);
   });
 
-  app.proxy = () => {
-    app.proxying = true;
+  app.proxy = (on = true) => {
+    app.proxying = on;
   };
 
   app.reset = () => {
