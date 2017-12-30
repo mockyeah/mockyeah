@@ -80,8 +80,8 @@ module.exports = function App(config) {
     middleware(req, res, next);
   });
 
-  app.proxy = (on = true) => {
-    app.proxying = on;
+  app.proxy = on => {
+    app.proxying = typeof on !== 'undefined' ? on : true;
   };
 
   app.reset = () => {
