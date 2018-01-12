@@ -3,6 +3,7 @@
 const parse = require('url').parse;
 const _ = require('lodash');
 const pathToRegExp = require('path-to-regexp');
+const isAbsoluteUrl = require('is-absolute-url');
 const Expectation = require('./Expectation');
 const routeHandler = require('./routeHandler');
 
@@ -16,6 +17,10 @@ function isRouteForRequest(route, req) {
   if (!isEqualMethod(req.method, route.method)) return false;
 
   const pathname = parse(req.url, true).pathname;
+
+  const routePathnameIsAbsoluteUrl = isAbsoluteUrl(route.pathname.replace(/^\//, ''));
+
+  if (routePathnameIsAbsoluteUrl && pathname === route.pathname) return true;
 
   if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
 
