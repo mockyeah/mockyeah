@@ -32,6 +32,7 @@ describe('Route register', () => {
     mockyeah.get('/foo', { text: 'bar get' });
     mockyeah.post('/foo', { text: 'bar post' });
     mockyeah.put('/foo', { text: 'bar put' });
+    mockyeah.patch('/foo', { text: 'bar patch' });
     mockyeah.delete('/foo', { text: 'bar delete' });
 
     async.parallel(
@@ -39,6 +40,7 @@ describe('Route register', () => {
         cb => request.get('/foo').expect(200, 'bar get', cb),
         cb => request.post('/foo').expect(200, 'bar post', cb),
         cb => request.put('/foo').expect(200, 'bar put', cb),
+        cb => request.patch('/foo').expect(200, 'bar patch', cb),
         cb => request.delete('/foo').expect(200, 'bar delete', cb)
       ],
       done
