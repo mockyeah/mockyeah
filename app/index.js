@@ -47,10 +47,6 @@ module.exports = function App(config) {
   // Provide user feedback when verbose output is enabled
   app.log('info', 'verbose output enabled', true);
 
-  app.get('/', (req, res) => {
-    res.send('Hello, mockyeah!');
-  });
-
   app.use(bodyParser.json());
 
   app.middlewares = [];
