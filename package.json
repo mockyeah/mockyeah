@@ -1,6 +1,6 @@
 {
   "name": "mockyeah",
-  "version": "0.16.1",
+  "version": "0.16.2",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
