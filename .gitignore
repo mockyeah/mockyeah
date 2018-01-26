@@ -28,6 +28,7 @@ node_modules
 
 # Editor configurations
 .idea
+.vscode
 
 # Temp files
 .tmp
