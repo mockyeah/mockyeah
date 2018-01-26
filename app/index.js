@@ -46,16 +46,14 @@ module.exports = function App(config) {
   // Provide user feedback when verbose output is enabled
   app.log('info', 'verbose output enabled', true);
 
-  app.get('/', (req, res) => {
-    res.send('Hello, mockyeah!');
-  });
-
   app.use(bodyParser.json());
 
   app.middlewares = [];
 
   app.use((req, res, next) => {
-    async.series(app.middlewares.map(middleware => cb => middleware(req, res, cb)), err => next(err));
+    async.series(app.middlewares.map(middleware => cb => middleware(req, res, cb)), err =>
+      next(err)
+    );
   });
 
   app.use = middleware => {
