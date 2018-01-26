@@ -13,10 +13,19 @@ function isEqualMethod(method1, method2) {
   return m1 === 'all' || m2 === 'all' || m1 === m2;
 }
 
+const justSlashes = /^\/+$/;
+const trailingSlashes = /\/+$/;
+
+function normalizePathname(pathname) {
+  if (!pathname || justSlashes.test(pathname)) return '/';
+  // remove any trailing slashes
+  return pathname.replace(trailingSlashes, '');
+}
+
 function isRouteForRequest(route, req) {
   if (!isEqualMethod(req.method, route.method)) return false;
 
-  const pathname = parse(req.url, true).pathname;
+  const pathname = normalizePathname(parse(req.url, true).pathname);
 
   const routePathnameIsAbsoluteUrl = isAbsoluteUrl(route.pathname.replace(/^\//, ''));
 
@@ -83,7 +92,7 @@ function RouteResolver(app) {
 RouteResolver.prototype.register = function register(method, path, response) {
   const route = { method, path, response };
 
-  route.pathname = parse(route.path, true).pathname;
+  route.pathname = normalizePathname(parse(route.path, true).pathname);
   const matchKeys = [];
   // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
   route.pathRegExp = pathToRegExp(route.pathname, matchKeys);
