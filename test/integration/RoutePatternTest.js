@@ -6,6 +6,86 @@ const request = TestHelper.request;
 const expect = require('chai').expect;
 
 describe('Route Patterns', () => {
+  describe('trailing slashes', () => {
+    it('should match when root mock and request use trailing slash', done => {
+      mockyeah.get('//');
+
+      request.get('//').expect(200, done);
+    });
+
+    it('should match when root mock but not request uses trailing slash', done => {
+      mockyeah.get('//');
+
+      request.get('/').expect(200, done);
+    });
+
+    it('should match when root request but not mock uses trailing slash', done => {
+      mockyeah.get('/');
+
+      request.get('//').expect(200, done);
+    });
+
+    it('should match when root mock uses trailing slash and request is blank', done => {
+      mockyeah.get('//');
+
+      request.get('').expect(200, done);
+    });
+
+    it('should match when root mock is blank and request uses trailing slash', done => {
+      mockyeah.get('');
+
+      request.get('//').expect(200, done);
+    });
+
+    it('should match when root mock uses slash and request is blank', done => {
+      mockyeah.get('/');
+
+      request.get('').expect(200, done);
+    });
+
+    it('should match when root mock is blank and request uses slash', done => {
+      mockyeah.get('');
+
+      request.get('/').expect(200, done);
+    });
+
+    it('should match when mock and request use trailing slash', done => {
+      mockyeah.get('/foo/bar/');
+
+      request.get('/foo/bar/').expect(200, done);
+    });
+
+    it('should match when mock but not request uses trailing slash', done => {
+      mockyeah.get('/foo/bar/');
+
+      request.get('/foo/bar').expect(200, done);
+    });
+
+    it('should match when request but not mock uses trailing slash', done => {
+      mockyeah.get('/foo/bar');
+
+      request.get('/foo/bar/').expect(200, done);
+    });
+
+    it('should match when mock and request use trailing slashes', done => {
+      mockyeah.get('/foo/bar//');
+
+      request.get('/foo/bar///').expect(200, done);
+    });
+
+    it('should match when mock but not request uses trailing slashes', done => {
+      mockyeah.get('/foo/bar//');
+
+      request.get('/foo/bar').expect(200, done);
+    });
+
+    it('should match when request but not mock uses trailing slashes', done => {
+      mockyeah.get('/foo/bar');
+
+      request.get('/foo/bar//').expect(200, done);
+    });
+  });
+
   it('should work with path parameter', done => {
     mockyeah.get('/service/:key');
 

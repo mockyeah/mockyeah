@@ -22,6 +22,10 @@ http.get(Object.assign(options, { method: 'PUT' }), res => {
   log(res);
 });
 
+http.get(Object.assign(options, { method: 'PATCH' }), res => {
+  log(res);
+});
+
 http.get(Object.assign(options, { method: 'DELETE' }), res => {
   log(res);
   mockyeah.close();
