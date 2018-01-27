@@ -89,7 +89,7 @@ RouteResolver.prototype.register = function register(method, path, response) {
   } else {
     const object = route.path;
     route.pathname = object.path;
-    route.query = object.query || {};
+    route.query = object.query || null; // because `url.parse` returns `null`
   }
 
   route.pathRegExp = pathToRegExp(route.pathname);
