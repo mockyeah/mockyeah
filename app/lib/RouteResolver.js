@@ -78,9 +78,16 @@ RouteResolver.prototype.register = function register(method, path, response) {
     route.response = routeHandler.call(this, route.response);
   }
 
-  const url = parse(route.path, true);
-  route.pathname = url.pathname;
-  route.query = url.query;
+  if (typeof path === 'string') {
+    const url = parse(route.path, true);
+    route.pathname = url.pathname;
+    route.query = url.query;
+  } else {
+    const object = route.path;
+    route.pathname = object.path;
+    route.query = object.query || {};
+  }
+
   route.pathRegExp = pathToRegExp(route.pathname);
 
   const expectation = new Expectation(route);
