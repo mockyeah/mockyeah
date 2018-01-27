@@ -94,8 +94,6 @@ describe('Route Patterns', () => {
     request.get('/foo').expect(200, done);
   });
 
-  it('should work with route parameter', done => {
-
   it('should work with path parameter', done => {
     mockyeah.get('/service/:key');
 
