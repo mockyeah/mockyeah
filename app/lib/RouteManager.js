@@ -7,7 +7,7 @@ const RouteResolver = require('./RouteResolver');
 
 /**
  * RouteManager
- *  Primary mockyeah API (i.e. get, post, put, delete, reset, record, play).
+ *  Primary mockyeah API (i.e. get, post, put, patch, delete, reset, record, play).
  */
 module.exports = function RouteManager(app) {
   const routeResolver = new RouteResolver(app);
@@ -32,6 +32,10 @@ module.exports = function RouteManager(app) {
 
     put: function put(_path, response) {
       return this.register('put', _path, response);
+    },
+
+    patch: function patch(_path, response) {
+      return this.register('patch', _path, response);
     },
 
     delete: function _delete(_path, response) {

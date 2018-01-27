@@ -3,6 +3,7 @@
 const parse = require('url').parse;
 const _ = require('lodash');
 const pathToRegExp = require('path-to-regexp');
+const isAbsoluteUrl = require('is-absolute-url');
 const Expectation = require('./Expectation');
 const routeHandler = require('./routeHandler');
 
@@ -12,10 +13,23 @@ function isEqualMethod(method1, method2) {
   return m1 === 'all' || m2 === 'all' || m1 === m2;
 }
 
+const justSlashes = /^\/+$/;
+const trailingSlashes = /\/+$/;
+
+function normalizePathname(pathname) {
+  if (!pathname || justSlashes.test(pathname)) return '/';
+  // remove any trailing slashes
+  return pathname.replace(trailingSlashes, '');
+}
+
 function isRouteForRequest(route, req) {
   if (!isEqualMethod(req.method, route.method)) return false;
 
-  const pathname = parse(req.url, true).pathname;
+  const pathname = normalizePathname(parse(req.url, true).pathname);
+
+  const routePathnameIsAbsoluteUrl = isAbsoluteUrl(route.pathname.replace(/^\//, ''));
+
+  if (routePathnameIsAbsoluteUrl && pathname === route.pathname) return true;
 
   if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
 
@@ -37,10 +51,6 @@ function isRouteMatch(route1, route2) {
 }
 
 function listen() {
-  if (this.listening) return;
-
-  this.listening = true;
-
   this.app.all('*', (req, res, next) => {
     const route = this.routes.find(r => isRouteForRequest(r, req));
 
@@ -55,6 +65,18 @@ function listen() {
         res.sendStatus(500);
         return;
       }
+
+      const match = req.path.match(route.pathRegExp);
+
+      const params = {};
+
+      route.matchKeys.forEach((key, i) => {
+        params[key.name] = match[i + 1];
+        params[i] = match[i + 1];
+      });
+
+      req.params = params;
+
       route.response(req, res);
     };
 
@@ -72,14 +94,20 @@ function RouteResolver(app) {
 
   this.routes = [];
 
-  this.listening = false;
+  listen.call(this);
 }
 
 RouteResolver.prototype.register = function register(method, path, response) {
   const route = { method, path, response };
 
+  route.pathname = normalizePathname(parse(route.path, true).pathname);
+  const matchKeys = [];
+  // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
+  route.pathRegExp = pathToRegExp(route.pathname, matchKeys);
+  route.matchKeys = matchKeys;
+
   if (!_.isFunction(route.response)) {
-    route.response = routeHandler.call(this, route.response);
+    route.response = routeHandler.call(this, route);
   }
 
   if (typeof path === 'string') {
@@ -101,9 +129,6 @@ RouteResolver.prototype.register = function register(method, path, response) {
   this.unregister([route]);
 
   this.routes.push(route);
-
-  // it is necessary to mount catch all route here to avoid overriding middleware
-  listen.call(this);
 
   return {
     expect: () => expectation.api()

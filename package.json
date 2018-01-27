@@ -1,6 +1,6 @@
 {
   "name": "mockyeah",
-  "version": "0.15.9",
+  "version": "0.16.2",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
@@ -51,7 +51,6 @@
     "web service"
   ],
   "devDependencies": {
-    "async": "^1.5.2",
     "chai": "^3.4.1",
     "dateformat": "^1.0.12",
     "eslint": "^1.10.3",
@@ -65,9 +64,12 @@
     "supertest": "^1.1.0"
   },
   "dependencies": {
+    "async": "^1.5.2",
     "body-parser": "^1.15.2",
     "cors": "^2.7.1",
     "express": "^4.13.3",
+    "http-proxy-middleware": "^0.17.4",
+    "is-absolute-url": "^2.1.0",
     "lodash": "^3.10.1",
     "mkdirp": "^0.5.1",
     "path-to-regexp": "^2.1.0",
