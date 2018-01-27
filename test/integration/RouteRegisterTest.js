@@ -28,6 +28,16 @@ describe('Route register', () => {
     request.get('/foo').expect(301, 'baa', done);
   });
 
+  it('should replace existing matching routes with query parameters', done => {
+    mockyeah.get('/foo?bar=yes', { text: 'bar', status: 200 });
+
+    request.get('/foo').expect(200, 'bar');
+
+    mockyeah.get('/foo?bar=yes', { text: 'baa', status: 301 });
+
+    request.get('/foo').expect(301, 'baa', done);
+  });
+
   it('should not replace existing matching routes with different http verbs', done => {
     mockyeah.get('/foo', { text: 'bar get' });
     mockyeah.post('/foo', { text: 'bar post' });

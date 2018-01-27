@@ -29,7 +29,11 @@ function isRouteForRequest(route, req) {
 }
 
 function isRouteMatch(route1, route2) {
-  return route1.pathname === route2.pathname && route1.method === route2.method;
+  return (
+    route1.pathname === route2.pathname &&
+    route1.method === route2.method &&
+    _.isEqual(route1.query, route2.query)
+  );
 }
 
 function listen() {
