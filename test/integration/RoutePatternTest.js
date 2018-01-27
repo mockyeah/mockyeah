@@ -34,4 +34,28 @@ describe('Route Patterns', () => {
 
     request.get('/service/exists').expect(200, done);
   });
+
+  it('should fail when doesnt match query parameters', done => {
+    mockyeah.get('/foo?bar=yes');
+
+    request.get('/foo').expect(404, done);
+  });
+
+  it('should match single query parameter', done => {
+    mockyeah.get('/foo?bar=yes');
+
+    request.get('/foo?bar=yes').expect(200, done);
+  });
+
+  it('should match multiple query parameters', done => {
+    mockyeah.get('/foo?bar=yes&cow=moo');
+
+    request.get('/foo?bar=yes&cow=moo').expect(200, done);
+  });
+
+  it('should match list query parameters', done => {
+    mockyeah.get('/foo?bar=yes&list=a&list=b');
+
+    request.get('/foo?bar=yes&list=a&list=b').expect(200, done);
+  });
 });

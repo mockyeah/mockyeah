@@ -19,9 +19,13 @@ function isRouteForRequest(route, req) {
 
   if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
 
-  // TODO: Later add features to match other things, like query parameters, etc.
+  const matchesParams = _.every(route.query, (value, key) => {
+    return _.isEqual(_.get(req.query, key), value);
+  });
 
-  return true;
+  // TODO: Later add features to match other things, like request body, etc.
+
+  return matchesParams;
 }
 
 function isRouteMatch(route1, route2) {
@@ -74,7 +78,9 @@ RouteResolver.prototype.register = function register(method, path, response) {
     route.response = routeHandler.call(this, route.response);
   }
 
-  route.pathname = parse(route.path, true).pathname;
+  const url = parse(route.path, true);
+  route.pathname = url.pathname;
+  route.query = url.query;
   route.pathRegExp = pathToRegExp(route.pathname);
 
   const expectation = new Expectation(route);
