@@ -223,4 +223,43 @@ describe('Route Patterns', () => {
 
     request.get('/foo?bar=yes&list=a&list=b').expect(200, done);
   });
+
+  it('should match request body', done => {
+    mockyeah.post({
+      path: '/foo',
+      body: {
+        bar: 'yes'
+      }
+    });
+
+    request
+      .post('/foo')
+      .send({ bar: 'yes' })
+      .expect(200, done);
+  });
+
+  it('should fail to match when different request body', done => {
+    mockyeah.post({
+      path: '/nope',
+      body: {
+        bar: 'nope'
+      }
+    });
+
+    request
+      .post('/nope')
+      .send({ bar: 'yes' })
+      .expect(404, done);
+  });
+
+  it('should fail to match when no request body', done => {
+    mockyeah.post({
+      path: '/nope',
+      body: {
+        bar: 'nope'
+      }
+    });
+
+    request.post('/nope').expect(404, done);
+  });
 });

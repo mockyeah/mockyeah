@@ -37,16 +37,24 @@ function isRouteForRequest(route, req) {
     return _.isEqual(_.get(req.query, key), value);
   });
 
-  // TODO: Later add features to match other things, like request body, etc.
+  if (!matchesParams) return false;
 
-  return matchesParams;
+  if (route.body) {
+    const matchesBody = _.isEqual(route.body, req.body);
+    return matchesBody;
+  }
+
+  // TODO: Later add features to match other things, like headers, or with functions, regex, etc.
+
+  return true;
 }
 
 function isRouteMatch(route1, route2) {
   return (
     route1.pathname === route2.pathname &&
     route1.method === route2.method &&
-    _.isEqual(route1.query, route2.query)
+    _.isEqual(route1.query, route2.query) &&
+    _.isEqual(route1.body, route2.body)
   );
 }
 
@@ -108,6 +116,7 @@ RouteResolver.prototype.register = function register(method, path, response) {
     const object = route.path;
     route.pathname = normalizePathname(object.path);
     route.query = object.query || null; // because `url.parse` returns `null`
+    route.body = object.body;
   }
 
   const matchKeys = [];
