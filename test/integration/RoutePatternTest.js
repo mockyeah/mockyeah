@@ -85,7 +85,7 @@ describe('Route Patterns', () => {
       request.get('/foo/bar//').expect(200, done);
     });
   });
-  
+
   it('should allow match object', done => {
     mockyeah.get({
       path: '/foo'
