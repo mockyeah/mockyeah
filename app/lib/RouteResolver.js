@@ -100,7 +100,16 @@ function RouteResolver(app) {
 RouteResolver.prototype.register = function register(method, path, response) {
   const route = { method, path, response };
 
-  route.pathname = normalizePathname(parse(route.path, true).pathname);
+  if (typeof path === 'string') {
+    const url = parse(route.path, true);
+    route.pathname = normalizePathname(url.pathname);
+    route.query = url.query;
+  } else {
+    const object = route.path;
+    route.pathname = normalizePathname(object.path);
+    route.query = object.query || null; // because `url.parse` returns `null`
+  }
+
   const matchKeys = [];
   // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
   route.pathRegExp = pathToRegExp(route.pathname, matchKeys);
@@ -109,18 +118,6 @@ RouteResolver.prototype.register = function register(method, path, response) {
   if (!_.isFunction(route.response)) {
     route.response = routeHandler.call(this, route);
   }
-
-  if (typeof path === 'string') {
-    const url = parse(route.path, true);
-    route.pathname = url.pathname;
-    route.query = url.query;
-  } else {
-    const object = route.path;
-    route.pathname = object.path;
-    route.query = object.query || null; // because `url.parse` returns `null`
-  }
-
-  route.pathRegExp = pathToRegExp(route.pathname);
 
   const expectation = new Expectation(route);
   route.expectation = expectation;
