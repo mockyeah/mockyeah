@@ -40,6 +40,7 @@ function isRouteForRequest(route, req) {
   if (!matchesParams) return false;
 
   if (route.body) {
+    // TODO: See what `req.body` looks like with different request content types.
     const matchesBody = _.isEqual(route.body, req.body);
     return matchesBody;
   }
