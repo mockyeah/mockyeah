@@ -1,6 +1,6 @@
 'use strict';
 
-const TestHelper = require('../TestHelper');
+require('../TestHelper');
 const MockYeahServer = require('../../server');
 const supertest = require('supertest');
 const async = require('async');
