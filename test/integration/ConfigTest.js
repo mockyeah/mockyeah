@@ -9,7 +9,7 @@ describe('Config', () => {
       `echo "
       const mockyeah = new require('./server')({ port: 0 }, function() { process.exit() });
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.include('mockyeah');
         done();
       }
@@ -21,7 +21,7 @@ describe('Config', () => {
       `echo "
       const mockyeah = new require('./server')({ port: 0, output: true }, function() { process.exit() });
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.include('mockyeah');
         done();
       }
@@ -33,7 +33,7 @@ describe('Config', () => {
       `echo "
       const mockyeah = new require('./server')({ port: 0, output: false }, function() { process.exit() });
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.not.include('mockyeah');
         done();
       }
@@ -50,7 +50,7 @@ describe('Config', () => {
       .get('/foo?bar=true')
       .expect(200, /bar/, process.exit);
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.not.include('verbose output enabled');
         done();
       }
@@ -67,7 +67,7 @@ describe('Config', () => {
       .get('/foo?bar=true')
       .expect(200, /bar/, process.exit);
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.include('verbose output enabled');
         done();
       }
@@ -87,7 +87,7 @@ describe('Config', () => {
         .expect(200, /bar/, process.exit);
       }, 1000);
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.not.include('verbose output enabled');
         done();
       }
@@ -104,7 +104,7 @@ describe('Config', () => {
         .get('/foo?bar=true')
         .expect(200, /bar/, process.exit);
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.not.include('JOURNAL');
         done();
       }
@@ -121,7 +121,7 @@ describe('Config', () => {
         .get('/foo?bar=true')
         .expect(200, /bar/, process.exit);
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.include('JOURNAL');
         done();
       }
@@ -138,7 +138,7 @@ describe('Config', () => {
         .get('/foo?bar=true')
         .expect(200, /bar/, process.exit);
       " | node`,
-      function(err, stdout, stderr) {
+      function(err, stdout) {
         expect(stdout).to.not.include('JOURNAL');
         done();
       }
