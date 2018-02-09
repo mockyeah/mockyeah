@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const proxy = require('http-proxy-middleware');
 const async = require('async');
+const isAbsoluteUrl = require('is-absolute-url');
 const Logger = require('./lib/Logger');
 const RouteManager = require('./lib/RouteManager');
 
@@ -68,9 +69,14 @@ module.exports = function App(config) {
     }
 
     const reqPath = req.path.replace(/^\//, '');
-    const target = reqPath;
+
+    if (!isAbsoluteUrl(reqPath)) {
+      next();
+      return;
+    }
+
     const middleware = proxy({
-      target,
+      target: reqPath,
       changeOrigin: true,
       logLevel: 'silent', // TODO: Sync with mockyeah settings.
       ignorePath: true
