@@ -19,13 +19,67 @@ describe('Route register', () => {
   after(() => mockyeah.close());
 
   it('should replace existing matching routes', done => {
-    mockyeah.get('/foo', { text: 'bar', status: 200 });
+    mockyeah.get('/path', { text: 'bar', status: 200 });
 
-    request.get('/foo').expect(200, 'bar');
+    request.get('/path').expect(200, 'bar', err => {
+      if (err) return done(err);
 
-    mockyeah.get('/foo', { text: 'baa', status: 301 });
+      mockyeah.get('/path', { text: 'baa', status: 301 });
 
-    request.get('/foo').expect(301, 'baa', done);
+      request.get('/path').expect(301, 'baa', done);
+    });
+  });
+
+  it('should replace existing matching routes with query parameters', done => {
+    mockyeah.get('/foo?bar=yes', { text: 'bar', status: 200 });
+
+    request
+      .get('/foo')
+      .query('bar=yes')
+      .expect(200, 'bar', err => {
+        if (err) return done(err);
+
+        mockyeah.get('/foo?bar=yes', { text: 'baa', status: 301 });
+
+        request
+          .get('/foo')
+          .query('bar=yes')
+          .expect(301, 'baa', done);
+      });
+  });
+
+  it('should replace existing matching routes with request body', done => {
+    mockyeah.post(
+      {
+        path: '/foo',
+        body: {
+          bar: 'yes'
+        }
+      },
+      { text: 'bar', status: 200 }
+    );
+
+    request
+      .post('/foo')
+      .send({ bar: 'yes' })
+      .expect(200, 'bar', err => {
+        if (err) return done(err);
+
+        mockyeah.post(
+          {
+            path: '/foo',
+            body: {
+              bar: 'yes'
+            }
+          },
+          { text: 'baa', status: 301 }
+        );
+
+        request
+          .post('/foo')
+          .send({ bar: 'yes' })
+          .expect(301, 'baa', done);
+      });
   });
 
   it('should not replace existing matching routes with different http verbs', done => {

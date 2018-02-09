@@ -33,13 +33,30 @@ function isRouteForRequest(route, req) {
 
   if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
 
-  // TODO: Later add features to match other things, like query parameters, etc.
+  const matchesParams = _.every(route.query, (value, key) => {
+    return _.isEqual(_.get(req.query, key), value);
+  });
+
+  if (!matchesParams) return false;
+
+  if (route.body) {
+    // TODO: See what `req.body` looks like with different request content types.
+    const matchesBody = _.isEqual(route.body, req.body);
+    return matchesBody;
+  }
+
+  // TODO: Later add features to match other things, like headers, or with functions, regex, etc.
 
   return true;
 }
 
 function isRouteMatch(route1, route2) {
-  return route1.pathname === route2.pathname && route1.method === route2.method;
+  return (
+    route1.pathname === route2.pathname &&
+    route1.method === route2.method &&
+    _.isEqual(route1.query, route2.query) &&
+    _.isEqual(route1.body, route2.body)
+  );
 }
 
 function listen() {
@@ -92,7 +109,17 @@ function RouteResolver(app) {
 RouteResolver.prototype.register = function register(method, path, response) {
   const route = { method, path, response };
 
-  route.pathname = normalizePathname(parse(route.path, true).pathname);
+  if (typeof path === 'string') {
+    const url = parse(route.path, true);
+    route.pathname = normalizePathname(url.pathname);
+    route.query = url.query;
+  } else {
+    const object = route.path;
+    route.pathname = normalizePathname(object.path);
+    route.query = object.query || null; // because `url.parse` returns `null`
+    route.body = object.body;
+  }
+
   const matchKeys = [];
   // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
   route.pathRegExp = pathToRegExp(route.pathname, matchKeys);
