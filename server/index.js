@@ -39,6 +39,6 @@ module.exports = function Server(config, onStart) {
     app,
     app.routeManager,
     { proxy: app.proxy, reset: app.reset },
-    { use, config, close }
+    { config, close }
   );
 };
