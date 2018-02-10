@@ -26,10 +26,19 @@ module.exports = function Server(config, onStart) {
   });
 
   // Expose ability to stop server via API
-  const close = server.close.bind(server, function callback() {
-    app.log(['serve', 'exit'], 'Goodbye.');
-  });
+  const close = function close(cb) {
+    server.close(function callback() {
+      app.log(['serve', 'exit'], 'Goodbye.');
+      if (cb) cb();
+    });
+  };
 
   // Construct and return mockyeah API
-  return Object.assign({ server }, app, app.routeManager, { config, close });
+  return Object.assign(
+    { server },
+    app,
+    app.routeManager,
+    { proxy: app.proxy, reset: app.reset },
+    { use, config, close }
+  );
 };

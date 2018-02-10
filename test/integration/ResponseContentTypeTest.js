@@ -6,7 +6,7 @@ const request = TestHelper.request;
 
 describe('Response Content Type', () => {
   describe('File', () => {
-    it('should respond with a CSV Content-Type for CSV files', (done) => {
+    it('should respond with a CSV Content-Type for CSV files', done => {
       mockyeah.get('/service/exists', { filePath: './fixtures/some-data.csv' });
 
       request
@@ -15,7 +15,7 @@ describe('Response Content Type', () => {
         .expect(200, done);
     });
 
-    it('should respond with a JSON Content-Type for JSON files', (done) => {
+    it('should respond with a JSON Content-Type for JSON files', done => {
       mockyeah.get('/service/exists', { filePath: './fixtures/some-data.json' });
 
       request
@@ -24,7 +24,7 @@ describe('Response Content Type', () => {
         .expect(200, done);
     });
 
-    it('should respond with a text Content-Type for text files', (done) => {
+    it('should respond with a text Content-Type for text files', done => {
       mockyeah.get('/service/exists', { filePath: './fixtures/some-data.txt' });
 
       request
@@ -33,7 +33,7 @@ describe('Response Content Type', () => {
         .expect(200, done);
     });
 
-    it('should respond with a XML Content-Type for XML files', (done) => {
+    it('should respond with a XML Content-Type for XML files', done => {
       mockyeah.get('/service/exists', { filePath: './fixtures/some-data.xml' });
 
       request
@@ -42,7 +42,7 @@ describe('Response Content Type', () => {
         .expect(200, done);
     });
 
-    it('should allow Content-Type override', (done) => {
+    it('should allow Content-Type override', done => {
       mockyeah.get('/service/exists', { filePath: './fixtures/some-data.json', type: 'text' });
 
       request
@@ -53,7 +53,7 @@ describe('Response Content Type', () => {
   });
 
   describe('Fixture', () => {
-    it('should respond with a CSV Content-Type for CSV fixtures', (done) => {
+    it('should respond with a CSV Content-Type for CSV fixtures', done => {
       mockyeah.get('/service/exists', { fixture: 'some-data.csv' });
 
       request
@@ -62,7 +62,7 @@ describe('Response Content Type', () => {
         .expect(200, done);
     });
 
-    it('should respond with a JSON Content-Type for JSON fixtures', (done) => {
+    it('should respond with a JSON Content-Type for JSON fixtures', done => {
       mockyeah.get('/service/exists', { fixture: 'some-data.json' });
 
       request
@@ -71,7 +71,7 @@ describe('Response Content Type', () => {
         .expect(200, done);
     });
 
-    it('should respond with a text Content-Type for text fixtures', (done) => {
+    it('should respond with a text Content-Type for text fixtures', done => {
       mockyeah.get('/service/exists', { fixture: 'some-data.txt' });
 
       request
@@ -80,7 +80,7 @@ describe('Response Content Type', () => {
         .expect(200, done);
     });
 
-    it('should respond with a XML Content-Type for XML fixtures', (done) => {
+    it('should respond with a XML Content-Type for XML fixtures', done => {
       mockyeah.get('/service/exists', { fixture: 'some-data.xml' });
 
       request
@@ -89,7 +89,7 @@ describe('Response Content Type', () => {
         .expect(200, done);
     });
 
-    it('should allow Content-Type override', (done) => {
+    it('should allow Content-Type override', done => {
       mockyeah.get('/service/exists', { fixture: 'some-data.json', type: 'text' });
 
       request
@@ -100,7 +100,7 @@ describe('Response Content Type', () => {
   });
 
   describe('HTML', () => {
-    it('should respond HTML Content-Type for HTML', (done) => {
+    it('should respond HTML Content-Type for HTML', done => {
       mockyeah.get('/service/exists', { html: '<p>Hello</p>' });
 
       request
@@ -109,7 +109,7 @@ describe('Response Content Type', () => {
         .expect(200, /Hello/, done);
     });
 
-    it('should allow Content-Type override', (done) => {
+    it('should allow Content-Type override', done => {
       mockyeah.get('/service/exists', { html: '<p>Hello</p>', type: 'text' });
 
       request
@@ -120,7 +120,7 @@ describe('Response Content Type', () => {
   });
 
   describe('JSON', () => {
-    it('should respond with JSON Content-Type for JSON', (done) => {
+    it('should respond with JSON Content-Type for JSON', done => {
       mockyeah.get('/service/exists', { json: { foo: 'bar' } });
 
       request
@@ -129,7 +129,7 @@ describe('Response Content Type', () => {
         .expect(200, { foo: 'bar' }, done);
     });
 
-    it('should allow Content-Type override', (done) => {
+    it('should allow Content-Type override', done => {
       mockyeah.get('/service/exists', { json: { foo: 'bar' }, type: 'text' });
 
       request
@@ -140,7 +140,7 @@ describe('Response Content Type', () => {
   });
 
   describe('Text', () => {
-    it('should respond with text Content-Type for text', (done) => {
+    it('should respond with text Content-Type for text', done => {
       mockyeah.get('/service/exists', { text: 'Hello' });
 
       request
@@ -149,7 +149,7 @@ describe('Response Content Type', () => {
         .expect(200, 'Hello', done);
     });
 
-    it('should allow Content-Type override', (done) => {
+    it('should allow Content-Type override', done => {
       mockyeah.get('/service/exists', { text: 'Hello', type: 'html' });
 
       request

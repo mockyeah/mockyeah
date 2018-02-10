@@ -11,7 +11,7 @@ function normalizeRewritePath(_path) {
 
 function filterFileNames(fileNames) {
   const hiddenFileName = /^\./;
-  return fileNames.filter((fileName) => {
+  return fileNames.filter(fileName => {
     return !hiddenFileName.test(fileName);
   });
 }
@@ -58,7 +58,7 @@ CapturePlayer.prototype.files = function files() {
 
   fileNames = filterFileNames(fileNames);
 
-  return fileNames.map((fileName) => {
+  return fileNames.map(fileName => {
     const filePath = path.resolve(this.path, fileName);
     let route;
 

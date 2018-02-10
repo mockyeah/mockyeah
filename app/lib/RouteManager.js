@@ -3,19 +3,19 @@
 const tildify = require('tildify');
 const CapturePlayer = require('./CapturePlayer');
 const CaptureRecorder = require('./CaptureRecorder');
-const RouteStore = require('./RouteStore');
+const RouteResolver = require('./RouteResolver');
 
 /**
  * RouteManager
- *  Primary mockyeah API (i.e. get, post, put, delete, reset, record, play).
+ *  Primary mockyeah API (i.e. get, post, put, patch, delete, reset, record, play).
  */
 module.exports = function RouteManager(app) {
-  const routeStore = new RouteStore(app);
+  const routeResolver = new RouteResolver(app);
 
   return {
     register: function register(method, _path, response) {
       app.log(['serve', 'mount', method], _path);
-      return routeStore.register(method, _path, response);
+      return routeResolver.register(method, _path, response);
     },
 
     all: function all(_path, response) {
@@ -34,18 +34,21 @@ module.exports = function RouteManager(app) {
       return this.register('put', _path, response);
     },
 
+    patch: function patch(_path, response) {
+      return this.register('patch', _path, response);
+    },
+
     delete: function _delete(_path, response) {
       return this.register('delete', _path, response);
     },
 
-    reset: function reset(/* paths 1, path 2, path 3, etc. */) {
-      const paths = [].slice.call(arguments);
-      routeStore.reset.call(routeStore, paths);
+    reset: function reset() {
+      routeResolver.reset();
     },
 
     record: function record(captureName) {
       const capture = new CaptureRecorder(app, captureName);
-      this.register('all', '*', capture.record.bind(capture));
+      app.use(capture.record.bind(capture));
     },
 
     play: function play(captureName) {
@@ -53,7 +56,7 @@ module.exports = function RouteManager(app) {
 
       app.log(['serve', 'capture'], tildify(capture.path));
 
-      capture.files().forEach((route) => {
+      capture.files().forEach(route => {
         app.log(['serve', 'playing', route.method], route.originalPath, false);
         app.log(['serve', 'playing', route.method], `${route.originalPath} at ${route.path}`, true);
 

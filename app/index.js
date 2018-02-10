@@ -2,6 +2,9 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const proxy = require('http-proxy-middleware');
+const async = require('async');
+const isAbsoluteUrl = require('is-absolute-url');
 const Logger = require('./lib/Logger');
 const RouteManager = require('./lib/RouteManager');
 
@@ -22,8 +25,12 @@ module.exports = function App(config) {
 
   // Prepare global config
   const globalConfig = {};
-  if (global.MOCKYEAH_SUPPRESS_OUTPUT !== undefined) globalConfig.output = !global.MOCKYEAH_SUPPRESS_OUTPUT;
-  if (global.MOCKYEAH_VERBOSE_OUTPUT !== undefined) globalConfig.verbose = !!global.MOCKYEAH_VERBOSE_OUTPUT;
+  if (global.MOCKYEAH_SUPPRESS_OUTPUT !== undefined) {
+    globalConfig.output = !global.MOCKYEAH_SUPPRESS_OUTPUT;
+  }
+  if (global.MOCKYEAH_VERBOSE_OUTPUT !== undefined) {
+    globalConfig.verbose = !!global.MOCKYEAH_VERBOSE_OUTPUT;
+  }
 
   // Prepare configuration. Merge configuration with global and default configuration
   app.config = Object.assign({}, defaultConfig, globalConfig, config || {});
@@ -41,14 +48,56 @@ module.exports = function App(config) {
   // Provide user feedback when verbose output is enabled
   app.log('info', 'verbose output enabled', true);
 
+  app.use(bodyParser.json());
+
+  app.middlewares = [];
+
+  // A single middleware to execute any/all consumer-configured middleware.
+  app.use((req, res, next) => {
+    async.series(app.middlewares.map(middleware => cb => middleware(req, res, cb)), err =>
+      next(err)
+    );
+  });
+
   // Attach RouteManager to app object, the primary set of mockyeah API methods.
   app.routeManager = new RouteManager(app);
 
-  app.use(bodyParser.json());
+  app.use('/', (req, res, next) => {
+    if (!app.proxying) {
+      next();
+      return;
+    }
 
-  app.get('/', (req, res) => {
-    res.send('Hello, mockyeah!');
+    const reqPath = req.path.replace(/^\//, '');
+
+    if (!isAbsoluteUrl(reqPath)) {
+      next();
+      return;
+    }
+
+    const middleware = proxy({
+      target: reqPath,
+      changeOrigin: true,
+      logLevel: 'silent', // TODO: Sync with mockyeah settings.
+      ignorePath: true
+    });
+
+    middleware(req, res, next);
   });
+
+  app.proxy = on => {
+    app.proxying = typeof on !== 'undefined' ? on : true;
+  };
+
+  app.reset = () => {
+    app.routeManager.reset();
+    app.proxying = false;
+    app.middlewares = [];
+  };
+
+  app.use = middleware => {
+    app.middlewares.push(middleware);
+  };
 
   return app;
 };

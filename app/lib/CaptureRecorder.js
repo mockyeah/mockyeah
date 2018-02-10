@@ -7,7 +7,7 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const request = require('request');
 const tildify = require('tildify');
-const now = () => (new Date()).getTime();
+const now = () => new Date().getTime();
 
 /**
  * RouteRecorder
@@ -28,7 +28,7 @@ function CaptureRecorder(app, captureName) {
   return this;
 }
 
-function writeFile(filePath, data) {
+function writeFile(filePath, data, cb) {
   data = {
     method: data.request.method,
     url: data.url,
@@ -41,7 +41,7 @@ function writeFile(filePath, data) {
     }
   };
 
-  fs.writeFile(filePath, JSON.stringify(data, null, 2));
+  fs.writeFile(filePath, JSON.stringify(data, null, 2), cb);
 }
 
 function resolveFilePath(capturePath, url) {
@@ -61,9 +61,13 @@ CaptureRecorder.prototype.record = function record(req, res) {
     const filePath = resolveFilePath(this.capturePath, url);
     response.url = url;
     response.latency = now() - startTime;
-    writeFile(filePath, response);
-    this.app.log(['record', 'response', 'saved'], url);
-    ++this.count;
+    writeFile(filePath, response, () => {
+      if (error) return this.app.log(['record', 'response', 'error'], error);
+
+      this.app.log(['record', 'response', 'saved'], url);
+
+      ++this.count;
+    });
   }).pipe(res);
 };
 
