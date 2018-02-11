@@ -1,8 +1,12 @@
 'use strict';
 
+const cors = require('cors');
+const https = require('https');
+const fs = require('fs');
+const createCertFiles = require('create-cert-files');
 const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
-const cors = require('cors');
+
 /**
  * Server module
  * @param  {Object} config Application configuration.
@@ -17,13 +21,48 @@ module.exports = function Server(config, onStart) {
   // Enable CORS for all routes
   app.use(cors());
 
-  // Start server on conigured hose and port
-  const server = app.listen(config.port, config.host, function listen() {
-    this.rootUrl = `http://${this.address().address}:${this.address().port}`;
-    app.log('serve', `Listening at ${this.rootUrl}`);
-    // Execute callback once server starts
-    if (onStart) onStart.call(this);
-  });
+  // Start server on configured host and port
+  let server;
+
+  if (config.portHttps) {
+    let certFiles;
+    if (!config.httpsKeyPath && !config.httpsCertPath) {
+      certFiles = createCertFiles();
+    } else {
+      certFiles = {
+        key: config.httpsKeyPath,
+        cert: config.httpsCertPath
+      };
+    }
+
+    /* eslint-disable no-sync */
+    const key = fs.readFileSync(certFiles.key);
+    const cert = fs.readFileSync(certFiles.cert);
+    /* eslint-enable no-sync */
+
+    const credentials = {
+      key,
+      cert
+    };
+
+    const httpsServer = https.createServer(credentials, app);
+
+    server = httpsServer.listen(config.portHttps, config.host, function listen(err) {
+      if (err) throw err;
+      this.rootUrl = `https://${this.address().address}:${this.address().port}`;
+      app.log('serve', `Listening at ${this.rootUrl}`);
+      // Execute callback once server starts
+      if (onStart) onStart.call(this);
+    });
+  } else {
+    server = app.listen(config.port, config.host, function listen(err) {
+      if (err) throw err;
+      this.rootUrl = `http://${this.address().address}:${this.address().port}`;
+      app.log('serve', `Listening at ${this.rootUrl}`);
+      // Execute callback once server starts
+      if (onStart) onStart.call(this);
+    });
+  }
 
   // Expose ability to stop server via API
   const close = function close(cb) {

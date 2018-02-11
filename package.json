@@ -67,6 +67,7 @@
     "async": "^1.5.2",
     "body-parser": "^1.15.2",
     "cors": "^2.7.1",
+    "create-cert-files": "^1.0.2",
     "express": "^4.13.3",
     "http-proxy-middleware": "^0.17.4",
     "is-absolute-url": "^2.1.0",
