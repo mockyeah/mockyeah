@@ -4,6 +4,7 @@ const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 const createCertFiles = require('create-cert-files');
+const { partial } = require('lodash');
 const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
 
@@ -20,6 +21,14 @@ module.exports = function Server(config, onStart) {
 
   // Enable CORS for all routes
   app.use(cors());
+
+  function listen(secure, err) {
+    if (err) throw err;
+    this.rootUrl = `http${secure ? 's' : ''}://${this.address().address}:${this.address().port}`;
+    app.log('serve', `Listening at ${this.rootUrl}`);
+    // Execute callback once server starts
+    if (onStart) onStart.call(this);
+  }
 
   // Start server on configured host and port
   let server;
@@ -47,21 +56,9 @@ module.exports = function Server(config, onStart) {
 
     const httpsServer = https.createServer(credentials, app);
 
-    server = httpsServer.listen(config.portHttps, config.host, function listen(err) {
-      if (err) throw err;
-      this.rootUrl = `https://${this.address().address}:${this.address().port}`;
-      app.log('serve', `Listening at ${this.rootUrl}`);
-      // Execute callback once server starts
-      if (onStart) onStart.call(this);
-    });
+    server = httpsServer.listen(config.portHttps, config.host, partial(listen, true));
   } else {
-    server = app.listen(config.port, config.host, function listen(err) {
-      if (err) throw err;
-      this.rootUrl = `http://${this.address().address}:${this.address().port}`;
-      app.log('serve', `Listening at ${this.rootUrl}`);
-      // Execute callback once server starts
-      if (onStart) onStart.call(this);
-    });
+    server = app.listen(config.port, config.host, partial(listen, false));
   }
 
   // Expose ability to stop server via API
