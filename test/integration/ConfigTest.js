@@ -57,7 +57,7 @@ describe('Config', () => {
     );
   });
 
-  it('should  write verbose output to stdout when enabled', function(done) {
+  it('should write verbose output to stdout when enabled', function(done) {
     exec(
       `echo "
       const request = require('supertest');
