@@ -1,0 +1,16 @@
+{
+  "name": "mockyeah-docs",
+  "version": "0.0.0",
+  "description": "Documentation for a powerful service mocking, recording, and playback utility.",
+  "main": "index.js",
+  "scripts": {
+    "start": "gitbook serve",
+    "build": "gitbook build"
+  },
+  "repository": "git@github.com:ryanricard/mockyeah.git",
+  "author": "Ryan Ricard",
+  "license": "ISC",
+  "devDependencies": {
+    "gitbook-cli": "^2.3.2"
+  }
+}

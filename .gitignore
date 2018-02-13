@@ -1,3 +1,15 @@
+docs/_book
+
+# Editor configurations
+.idea
+.vscode
+
+# Temp files
+.tmp
+
+# Created by https://www.gitignore.io/api/node
+
+### Node ###
 # Logs
 logs
 *.log
