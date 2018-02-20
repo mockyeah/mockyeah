@@ -238,7 +238,7 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
-  it('should match partial request body', done => {
+  it('should match with partial request body', done => {
     mockyeah.post({
       path: '/foo',
       body: {
