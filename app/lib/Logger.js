@@ -1,5 +1,6 @@
 'use strict';
-/* eslint-disable no-console */
+
+/* eslint-disable no-console, prefer-destructuring */
 
 /**
  * Logger module
@@ -75,9 +76,7 @@ Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) 
   args.types.unshift(new Date().toLocaleTimeString('en-US', { hour12: false }));
 
   // Prepare string of types for output
-  args.types = args.types.reduce((result, value) => {
-    return `${result}[${value.toUpperCase()}]`;
-  }, '');
+  args.types = args.types.reduce((result, value) => `${result}[${value.toUpperCase()}]`, '');
 
   console.log(`[${this.name}]${args.types} ${args.message}`);
 };

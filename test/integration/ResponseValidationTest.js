@@ -1,10 +1,9 @@
 'use strict';
 
+const { expect } = require('chai');
 const TestHelper = require('../TestHelper');
-const mockyeah = TestHelper.mockyeah;
-const request = TestHelper.request;
-const chai = require('chai');
-const expect = chai.expect;
+
+const { mockyeah, request } = TestHelper;
 
 describe('Response Validation', () => {
   it('should validate response option(s) are correct', done => {

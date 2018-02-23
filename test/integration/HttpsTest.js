@@ -1,6 +1,7 @@
 'use strict';
 
 const TestHelper = require('../TestHelper');
+
 const mockyeah = TestHelper.mockyeahHttps;
 const request = TestHelper.requestHttps;
 

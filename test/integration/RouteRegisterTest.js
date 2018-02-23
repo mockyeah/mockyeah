@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-disable consistent-return */
+
 const async = require('async');
 require('../TestHelper');
 const MockYeahServer = require('../../server');
