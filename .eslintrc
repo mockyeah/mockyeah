@@ -1,5 +1,6 @@
 ---
-extends: "airbnb/base"
+plugins: ["node"] 
+extends: ["airbnb/base", "prettier", "plugin:node/recommended"]
 
 env:
   node: true
