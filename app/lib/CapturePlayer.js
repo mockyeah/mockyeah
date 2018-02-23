@@ -8,7 +8,7 @@ const path = require('path');
 const url = require('url');
 
 function normalizeRewritePath(_path) {
-  return _path.replace(/[\?\=\&\%\+]+/g, '_').replace(/^\/?/, '/'); // eslint-disable-line no-useless-escape
+  return _path.replace(/[?=&%+]+/g, '_').replace(/^\/?/, '/');
 }
 
 function filterFileNames(fileNames) {

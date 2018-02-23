@@ -20,7 +20,7 @@ function CaptureRecorder(app, captureName) {
   assert(captureName, 'Capture name required');
 
   this.app = app;
-  this.capturePath = path.normalize(app.config.capturesDir + '/' + captureName); // eslint-disable-line prefer-template
+  this.capturePath = path.normalize(`${app.config.capturesDir}/${captureName}`);
   this.count = 0;
 
   mkdirp.sync(this.capturePath);
