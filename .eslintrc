@@ -5,9 +5,6 @@ env:
   node: true
   mocha: true
 
-ecmaFeatures:
-  modules: false
-
 rules:
   strict: [2, global]
   no-param-reassign: 0
