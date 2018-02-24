@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "gitbook serve",
-    "build": "gitbook build",
+    "build": "gitbook build && cp CNAME _book/CNAME",
     "docs:publish": "gh-pages -d _book"
   },
   "repository": "git@github.com:ryanricard/mockyeah.git",
