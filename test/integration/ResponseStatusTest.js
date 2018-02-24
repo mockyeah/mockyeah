@@ -1,8 +1,8 @@
 'use strict';
 
 const TestHelper = require('../TestHelper');
-const mockyeah = TestHelper.mockyeah;
-const request = TestHelper.request;
+
+const { mockyeah, request } = TestHelper;
 
 describe('Response Status', () => {
   it('should return 404 for undeclared services', done => {

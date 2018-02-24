@@ -1,6 +1,6 @@
 'use strict';
 
-/* eslint-disable no-process-exit */
+/* eslint-disable no-process-exit, import/no-extraneous-dependencies */
 
 const gulp = require('gulp');
 const gutil = require('gulp-util');
@@ -17,13 +17,9 @@ function lint(options) {
     .pipe(options.exit ? eslint.failAfterError() : gutil.noop());
 }
 
-gulp.task('lint', () => {
-  return lint();
-});
+gulp.task('lint', () => lint());
 
-gulp.task('lint:watch:run', () => {
-  return lint({ exit: false });
-});
+gulp.task('lint:watch:run', () => lint({ exit: false }));
 
 gulp.task('lint:watch', ['lint:watch:run'], () => {
   gulp.watch(PATH.scripts, ['lint:watch:run']);

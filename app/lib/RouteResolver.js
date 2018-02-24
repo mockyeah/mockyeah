@@ -1,6 +1,6 @@
 'use strict';
 
-const parse = require('url').parse;
+const { parse } = require('url');
 const _ = require('lodash');
 const pathToRegExp = require('path-to-regexp');
 const isAbsoluteUrl = require('is-absolute-url');
@@ -33,9 +33,9 @@ function isRouteForRequest(route, req) {
 
   if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
 
-  const matchesParams = _.every(route.query, (value, key) => {
-    return _.isEqual(_.get(req.query, key), value);
-  });
+  const matchesParams = _.every(route.query, (value, key) =>
+    _.isEqual(_.get(req.query, key), value)
+  );
 
   if (!matchesParams) return false;
 

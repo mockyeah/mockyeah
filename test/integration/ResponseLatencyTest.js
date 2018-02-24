@@ -1,9 +1,9 @@
 'use strict';
 
+const { expect } = require('chai');
 const TestHelper = require('../TestHelper');
-const mockyeah = TestHelper.mockyeah;
-const request = TestHelper.request;
-const expect = require('chai').expect;
+
+const { mockyeah, request } = TestHelper;
 
 describe('Response Latency', () => {
   it('should respond with latency', done => {

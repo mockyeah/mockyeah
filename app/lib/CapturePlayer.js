@@ -1,19 +1,19 @@
 'use strict';
+
 /* eslint-disable no-process-exit, no-sync */
 
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+const url = require('url');
 
 function normalizeRewritePath(_path) {
-  return _path.replace(/[\?\=\&\%\+]+/g, '_').replace(/^\/?/, '/');
+  return _path.replace(/[?=&%+]+/g, '_').replace(/^\/?/, '/');
 }
 
 function filterFileNames(fileNames) {
   const hiddenFileName = /^\./;
-  return fileNames.filter(fileName => {
-    return !hiddenFileName.test(fileName);
-  });
+  return fileNames.filter(fileName => !hiddenFileName.test(fileName));
 }
 
 /**
@@ -37,7 +37,7 @@ function CapturePlayer(app, captureName) {
    */
   app.use((req, res, next) => {
     const proxiedUrl = req.url.replace(/^\//, '');
-    req.preRewriteUrl = require('url').parse(proxiedUrl).path;
+    req.preRewriteUrl = url.parse(proxiedUrl).path;
     req.url = normalizeRewritePath(req.preRewriteUrl);
     app.log(['request', 'rewrite'], `${req.originalUrl} to ${req.url}`, true);
     next();

@@ -1,7 +1,8 @@
 'use strict';
 
 const TestHelper = require('../TestHelper');
-const request = TestHelper.request;
+
+const { request } = TestHelper;
 
 describe('Server', () => {
   it('should respond with a 404 for unknown paths', done => {
