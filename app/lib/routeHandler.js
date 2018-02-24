@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const expandPath = require('../../lib/expandPath');
 
+/* eslint-disable prefer-template */
 function validateResponse(response) {
   let payloadKeysPresent = 0;
   const payloadKeys = Object.keys(response);
@@ -22,7 +23,7 @@ function validateResponse(response) {
 
   payloadKeys.forEach(key => {
     expectedPayloadKeys.forEach(expectedKey => {
-      if (key === expectedKey) ++payloadKeysPresent;
+      if (key === expectedKey) ++payloadKeysPresent; // eslint-disable-line no-plusplus
     });
   });
 

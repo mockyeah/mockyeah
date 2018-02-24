@@ -1,10 +1,12 @@
 'use strict';
+
 /* eslint-disable no-sync */
 
 const fs = require('fs');
 const path = require('path');
 const prepareConfig = require('./lib/prepareConfig');
 const relativeRoot = require('./lib/relativeRoot');
+
 let config;
 
 try {

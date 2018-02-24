@@ -1,15 +1,13 @@
 ---
-extends: "airbnb/base"
+plugins: ["node"] 
+extends: ["airbnb/base", "prettier", "plugin:node/recommended"]
 
 env:
   node: true
   mocha: true
 
-ecmaFeatures:
-  modules: false
-
 rules:
-  strict: [2, global]
+  strict: [0, safe]
   no-param-reassign: 0
   no-shadow: 1
   comma-dangle: [2, never]
@@ -17,6 +15,10 @@ rules:
   space-before-function-paren: 0
   new-cap: 0
   eol-last: 0
+  prefer-arrow-callback: 0
+  arrow-parens: [0, "as-needed"]
+  prefer-rest-params: 0 // Not supported
+  prefer-spread: 0 // Not SUpported
 
   # Node Rules
   no-new-require: 2
@@ -26,3 +28,4 @@ rules:
   no-mixed-requires: 1
   callback-return: 0
   handle-callback-err: 0
+  "node/no-unpublished-require": 0

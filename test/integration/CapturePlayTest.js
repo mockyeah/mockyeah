@@ -1,10 +1,10 @@
 'use strict';
 
-const TestHelper = require('../TestHelper');
-const mockyeah = TestHelper.mockyeah;
-const request = TestHelper.request;
 const async = require('async');
-const expect = require('chai').expect;
+const { expect } = require('chai');
+const TestHelper = require('../TestHelper');
+
+const { mockyeah, request } = TestHelper;
 
 describe('Capture Play', function() {
   it('should play a custom capture', function(done) {
@@ -19,7 +19,7 @@ describe('Capture Play', function() {
         cb => request.get('/path+includes+problem+characters').expect(200, /it worked/, cb),
         cb => request.get('/say-hello').expect(200, /hello there/, cb),
         cb => request.get('/say-oh-noes').expect(500, /Oh noes/, cb),
-        cb => request.get('/say-your-lost').expect(404, /I\'m lost/, cb),
+        cb => request.get('/say-your-lost').expect(404, /I'm lost/, cb),
         cb => request.get('/respond-with-a-file').expect(200, /Hugo/, cb),
         cb => request.get('/respond-with-a-fixture').expect(200, /Desmond/, cb),
         cb => {
@@ -29,7 +29,7 @@ describe('Capture Play', function() {
 
           request
             .get('/wait-to-respond')
-            .expect(200, /Oh\, hey there/, done)
+            .expect(200, /Oh, hey there/, done)
             .expect(() => {
               const now = new Date().getTime();
               const duration = now - start;

@@ -1,4 +1,5 @@
 'use strict';
+
 /* eslint-disable no-sync */
 
 const Server = require('./server');

@@ -1,5 +1,6 @@
 'use strict';
-/* eslint-disable no-process-exit, no-sync */
+
+/* eslint-disable no-process-exit, no-sync, consistent-return, no-plusplus */
 
 const assert = require('assert');
 const fs = require('fs');
@@ -7,6 +8,7 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const request = require('request');
 const tildify = require('tildify');
+
 const now = () => new Date().getTime();
 
 /**
@@ -18,7 +20,7 @@ function CaptureRecorder(app, captureName) {
   assert(captureName, 'Capture name required');
 
   this.app = app;
-  this.capturePath = path.normalize(app.config.capturesDir + '/' + captureName);
+  this.capturePath = path.normalize(`${app.config.capturesDir}/${captureName}`);
   this.count = 0;
 
   mkdirp.sync(this.capturePath);

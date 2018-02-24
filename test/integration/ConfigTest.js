@@ -1,7 +1,9 @@
 'use strict';
 
-const exec = require('child_process').exec;
-const expect = require('chai').expect;
+/* eslint-disable prefer-arrow-callback */
+
+const { exec } = require('child_process');
+const { expect } = require('chai');
 
 describe('Config', () => {
   it('should write output to stdout by default', function(done) {
