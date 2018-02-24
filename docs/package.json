@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "gitbook serve",
-    "build": "gitbook build"
+    "build": "gitbook build",
+    "docs:publish": "gh-pages -d _book"
   },
   "repository": "git@github.com:ryanricard/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "ISC",
   "devDependencies": {
+    "gh-pages": "^1.1.0",
     "gitbook-cli": "^2.3.2"
   }
 }
