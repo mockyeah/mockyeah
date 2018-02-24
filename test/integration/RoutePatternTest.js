@@ -238,6 +238,30 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
+  it('should match with partial request body', done => {
+    mockyeah.post({
+      path: '/foo',
+      body: {
+        bar: 'yes',
+        nest: {
+          deep: 'too'
+        }
+      }
+    });
+
+    request
+      .post('/foo')
+      .send({
+        bar: 'yes',
+        nest: {
+          deep: 'too',
+          also: 'more'
+        },
+        and: 'this'
+      })
+      .expect(200, done);
+  });
+
   it('should fail to match when different request body', done => {
     mockyeah.post({
       path: '/nope',

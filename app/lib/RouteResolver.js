@@ -41,7 +41,7 @@ function isRouteForRequest(route, req) {
 
   if (route.body) {
     // TODO: See what `req.body` looks like with different request content types.
-    const matchesBody = _.isEqual(route.body, req.body);
+    const matchesBody = _.isMatch(req.body, route.body);
     return matchesBody;
   }
 
