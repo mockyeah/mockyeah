@@ -29,3 +29,4 @@ rules:
   callback-return: 0
   handle-callback-err: 0
   "node/no-unpublished-require": 0
+  "node/no-unsupported-features": 0

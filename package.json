@@ -2,8 +2,10 @@
   "name": "mockyeah",
   "version": "0.16.2",
   "description": "A powerful service mocking, recording, and playback utility.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build":
+      "rm -rf dist && babel . --out-dir dist --ignore dist,node_modules,docs,examples,mockyeah-cli,test,tasks,gulpfile.js",
     "test": "mocha test/**/*Test.js",
     "test:watch": "npm test -- --watch",
     "lint": "gulp lint",
@@ -12,7 +14,9 @@
   "repository": "git@github.com:ryanricard/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "ISC",
-  "engines": { "node" : ">=6.0.0" },
+  "engines": {
+    "node": ">=0.12"
+  },
   "keywords": [
     "assert",
     "assertion",
@@ -52,6 +56,9 @@
     "web service"
   ],
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "chai": "^3.4.1",
     "dateformat": "^1.0.12",
     "eslint": "^4.18.1",
