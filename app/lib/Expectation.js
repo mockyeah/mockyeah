@@ -24,6 +24,17 @@ Expectation.prototype.middleware = function middleware(req, res, next) {
   next();
 };
 
+const assertion = function assertion(value, actualValue, message) {
+  try {
+    const result = value(actualValue);
+    if (result !== undefined) {
+      assert(result, message);
+    }
+  } catch (err) {
+    throw new Error(message);
+  }
+};
+
 Expectation.prototype.api = function api() {
   const internal = this;
   return {
@@ -111,31 +122,42 @@ Expectation.prototype.api = function api() {
     header: function header(name, value) {
       internal.handlers.push(req => {
         const actualValue = req.get(name);
-        assert.equal(
-          actualValue,
-          value,
-          `${internal.prefix} Expected header value ${name}:${value}, but it was ${actualValue}`
-        );
+        if (typeof value === 'function') {
+          const message = `${
+            internal.prefix
+          } Expected header value ${name}:${actualValue} to match expected for request`;
+          assertion(value, actualValue, message);
+        } else {
+          assert.equal(
+            actualValue,
+            value,
+            `${internal.prefix} Expected header value ${name}:${value}, but it was ${actualValue}`
+          );
+        }
       });
       return this;
     },
     params: function params(value) {
       internal.handlers.push(req => {
-        assert.deepStrictEqual(
-          req.query,
-          value,
-          `${internal.prefix} Expected params did not match expected for request`
-        );
+        const message = `${internal.prefix} Expected params did not match expected for request`;
+        if (typeof value === 'function') {
+          assertion(value, req.query, message);
+        } else {
+          assert.deepStrictEqual(req.query, value, message);
+        }
       });
       return this;
     },
     body: function body(value) {
       internal.handlers.push(req => {
-        assert.deepStrictEqual(
-          req.body,
-          value,
-          `${internal.prefix} Expected body to match expected for request`
-        );
+        internal.handlers.push(req => {
+          const message = `${internal.prefix} Expected body to match expected for request`;
+          if (typeof value === 'function') {
+            assertion(value, req.body, message);
+          } else {
+            assert.deepStrictEqual(req.body, value, message);
+          }
+        });
       });
       return this;
     },
