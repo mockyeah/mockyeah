@@ -10,6 +10,10 @@ Have a requirement to implement specific behavior when a service is slow to resp
 ```shell
 $ npm install mockyeah --save-dev
 ```
+or
+```shell
+$ yarn add -D mockyeah
+```
 
 ## Usage
 
@@ -40,6 +44,10 @@ $ npm install mockyeah --save-dev
 1. Install `mockyeah`
     ```shell
     $ npm install mockyeah --save-dev
+    ```
+    or
+    ```shell
+    $ yarn add -D mockyeah
     ```
 
 1. Create script file and add the source below
