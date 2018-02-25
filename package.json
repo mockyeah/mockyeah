@@ -4,15 +4,20 @@
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/**/*Test.js",
-    "test:watch": "npm test -- --watch",
+    "test": "yarn lint && yarn test:unit",
+    "test:watch": "yarn test:unit --watch",
+    "test:unit": "mocha test/**/*Test.js",
     "lint": "gulp lint",
-    "lint:watch": "gulp lint:watch"
+    "lint:watch": "gulp lint:watch",
+    "precommit": "yarn test",
+    "prepush": "yarn test"
   },
   "repository": "git@github.com:ryanricard/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "ISC",
-  "engines": { "node" : ">=6.0.0" },
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "keywords": [
     "assert",
     "assertion",
@@ -64,6 +69,7 @@
     "gulp-eslint": "^4.0.2",
     "gulp-mocha": "^2.2.0",
     "gulp-util": "^3.0.7",
+    "husky": "^0.14.3",
     "mocha": "^3.1.2",
     "rimraf": "^2.5.2",
     "supertest": "^1.1.0"

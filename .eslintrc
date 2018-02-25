@@ -2,9 +2,13 @@
 plugins: ["node"] 
 extends: ["airbnb/base", "prettier", "plugin:node/recommended"]
 
+parserOptions:
+  ecmaVersion: 2015
+
 env:
   node: true
   mocha: true
+  es6: true
 
 rules:
   strict: [0, safe]
