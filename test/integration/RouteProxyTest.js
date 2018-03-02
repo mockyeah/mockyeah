@@ -22,7 +22,7 @@ describe('Route proxy', () => {
       },
       cb => {
         proxiedApp = express();
-        proxiedApp.get('/foo?ok=yes', (req, res) => res.sendStatus(200));
+        proxiedApp.get('/foo', (req, res) => res.sendStatus(200));
         proxiedServer = proxiedApp.listen(8888, cb);
       }
     ], done);
