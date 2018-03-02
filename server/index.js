@@ -69,16 +69,12 @@ module.exports = function Server(config, onStart) {
     });
   };
 
-  // Expose ability to implement middleware via API
-  const use = function use() {
-    app.use.apply(app, arguments);
-  };
-
   // Construct and return mockyeah API
   return Object.assign(
     { server },
+    app,
     app.routeManager,
     { proxy: app.proxy, reset: app.reset },
-    { use, config, close }
+    { config, close }
   );
 };
