@@ -22,7 +22,7 @@ describe('Route proxy', () => {
       },
       cb => {
         proxiedApp = express();
-        proxiedApp.get('/foo', (req, res) => res.sendStatus(200));
+        proxiedApp.get('/foo?ok=yes', (req, res) => res.sendStatus(200));
         proxiedServer = proxiedApp.listen(8888, cb);
       }
     ], done);
@@ -44,15 +44,15 @@ describe('Route proxy', () => {
   });
 
   it('should support registering full URLs manually', done => {
-    mockyeah.get('/http://localhost:8888/foo', { text: 'bar', status: 500 });
+    mockyeah.get('/http://localhost:8888/foo?ok=yes', { text: 'bar', status: 500 });
 
     async.series([
       cb => supertest(proxiedApp).get('/foo').expect(200, cb),
-      cb => request.get('/http://localhost:8888/foo').expect(500, 'bar', cb)
+      cb => request.get('/http://localhost:8888/foo?ok=yes').expect(500, 'bar', cb)
     ], done);
   });
 
   it('should support proxying other URLs', done => {
-    request.get('/http://localhost:8888/foo').expect(200, done);
+    request.get('/http://localhost:8888/foo?ok=yes').expect(200, done);
   });
 });
