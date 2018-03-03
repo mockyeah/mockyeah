@@ -29,7 +29,7 @@ function CapturePlayer(app, captureName) {
 
   /**
    * Configure URL rewrite middleware
-   * Necessary to share services between equivilent proxy
+   * Necessary to share services between equivalent proxy
    * routes and normal routes. Meaning, the following two routes
    * should be routed to the same `/some/service` end point:
    * - http://localhost:3001/http://example.com/some/service
