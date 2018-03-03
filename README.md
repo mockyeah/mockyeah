@@ -1,4 +1,5 @@
 # mockyeah
+
 [![npm](https://img.shields.io/npm/v/mockyeah.svg)](https://www.npmjs.com/package/mockyeah)
 [![Travis](https://img.shields.io/travis/mockyeah/mockyeah.svg)](https://travis-ci.org/mockyeah/mockyeah)
 
@@ -13,7 +14,9 @@ Have a requirement to implement specific behavior when a service is slow to resp
 ```shell
 $ npm install mockyeah --save-dev
 ```
+
 or
+
 ```shell
 $ yarn add -D mockyeah
 ```
@@ -48,13 +51,15 @@ $ yarn add -D mockyeah
 
 1. Install `mockyeah`
 
-    ```shell
-    $ npm install mockyeah --save-dev
-    ```
-    or
-    ```shell
-    $ yarn add -D mockyeah
-    ```
+   ```shell
+   $ npm install mockyeah --save-dev
+   ```
+
+   or
+
+   ```shell
+   $ yarn add -D mockyeah
+   ```
 
 1. Create script file and add the source below
 
