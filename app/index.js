@@ -68,15 +68,15 @@ module.exports = function App(config) {
       return;
     }
 
-    const reqPath = req.path.replace(/^\//, '');
+    const reqUrl = req.originalUrl.replace(/^\//, '');
 
-    if (!isAbsoluteUrl(reqPath)) {
+    if (!isAbsoluteUrl(reqUrl)) {
       next();
       return;
     }
 
     const middleware = proxy({
-      target: reqPath,
+      target: reqUrl,
       changeOrigin: true,
       logLevel: 'silent', // TODO: Sync with mockyeah settings.
       ignorePath: true
