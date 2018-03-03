@@ -262,7 +262,7 @@ describe('Route expectation', () => {
         },
         cb => request.get('/foo').end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Expected params did not match expected for request');
+          expect(expectation.verify).to.throw('Params did not match expected');
           cb();
         }
       ],
@@ -289,7 +289,7 @@ describe('Route expectation', () => {
         },
         cb => request.get('/foo').end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Expected params did not match expected for request');
+          expect(expectation.verify).to.throw('Params did not match expectation callback');
           cb();
         }
       ],
@@ -322,7 +322,7 @@ describe('Route expectation', () => {
             .send({ some: 'value' })
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Expected body to match expected for request');
+          expect(expectation.verify).to.throw('Body did not match expected');
           cb();
         }
       ],
@@ -357,7 +357,7 @@ describe('Route expectation', () => {
             .send({ some: 'value' })
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Expected body to match expected for request');
+          expect(expectation.verify).to.throw('Body did not match expectation callback');
           cb();
         }
       ],
@@ -389,7 +389,7 @@ describe('Route expectation', () => {
             .end(cb),
         cb => {
           expect(expectation.verify).to.throw(
-            'Expected header value host:example.com, but it was unknown.com'
+            'Header "host: example.com" expected, but got "unknown.com"'
           );
           cb();
         }
@@ -422,7 +422,7 @@ describe('Route expectation', () => {
             .end(cb),
         cb => {
           expect(expectation.verify).to.throw(
-            'Expected header value host:unknown.com to match expected for request'
+            'Header "host: unknown.com" did not match expectation callback'
           );
           cb();
         }

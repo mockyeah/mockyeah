@@ -31,7 +31,7 @@ const assertion = function assertion(value, actualValue, message) {
       assert(result, message);
     }
   } catch (err) {
-    throw new Error(message);
+    assert(false, message);
   }
 };
 
@@ -125,13 +125,13 @@ Expectation.prototype.api = function api() {
         if (typeof value === 'function') {
           const message = `${
             internal.prefix
-          } Expected header value ${name}:${actualValue} to match expected for request`;
+          } Header "${name}: ${actualValue}" did not match expectation callback`;
           assertion(value, actualValue, message);
         } else {
           assert.equal(
             actualValue,
             value,
-            `${internal.prefix} Expected header value ${name}:${value}, but it was ${actualValue}`
+            `${internal.prefix} Header "${name}: ${value}" expected, but got "${actualValue}"`
           );
         }
       });
@@ -139,11 +139,18 @@ Expectation.prototype.api = function api() {
     },
     params: function params(value) {
       internal.handlers.push(req => {
-        const message = `${internal.prefix} Expected params did not match expected for request`;
         if (typeof value === 'function') {
-          assertion(value, req.query, message);
+          assertion(
+            value,
+            req.query,
+            `${internal.prefix} Params did not match expectation callback`
+          );
         } else {
-          assert.deepStrictEqual(req.query, value, message);
+          assert.deepStrictEqual(
+            req.query,
+            value,
+            `${internal.prefix} Params did not match expected`
+          );
         }
       });
       return this;
@@ -151,11 +158,18 @@ Expectation.prototype.api = function api() {
     body: function body(value) {
       internal.handlers.push(req => {
         internal.handlers.push(req => {
-          const message = `${internal.prefix} Expected body to match expected for request`;
           if (typeof value === 'function') {
-            assertion(value, req.body, message);
+            assertion(
+              value,
+              req.body,
+              `${internal.prefix} Body did not match expectation callback`
+            );
           } else {
-            assert.deepStrictEqual(req.body, value, message);
+            assert.deepStrictEqual(
+              req.body,
+              value,
+              `${internal.prefix} Body did not match expected`
+            );
           }
         });
       });
