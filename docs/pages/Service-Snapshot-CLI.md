@@ -1,6 +1,6 @@
 # Service Snapshot CLI
 
-[mockyeah-cli](https://github.com/ryanricard/mockyeah-cli) provides a simple command line interface for easily capturing and mounting service snapshots to integrate with during development.
+[mockyeah-cli](https://github.com/mockyeah/mockyeah-cli) provides a simple command line interface for easily capturing and mounting service snapshots to integrate with during development.
 
 ## Getting started
 
