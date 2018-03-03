@@ -12,7 +12,9 @@
   "repository": "git@github.com:ryanricard/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "ISC",
-  "engines": { "node" : ">=6.0.0" },
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "keywords": [
     "assert",
     "assertion",
@@ -60,6 +62,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-node": "^6.0.1",
+    "gitbook-plugin-github": "2.0.0",
     "gulp": "^3.9.0",
     "gulp-eslint": "^4.0.2",
     "gulp-mocha": "^2.2.0",

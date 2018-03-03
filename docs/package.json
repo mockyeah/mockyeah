@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "gh-pages": "^1.1.0",
-    "gitbook-cli": "^2.3.2"
+    "gitbook-cli": "^2.3.2",
+    "gitbook-plugin-github": "2"
   }
 }

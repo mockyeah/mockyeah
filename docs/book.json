@@ -1,6 +1,12 @@
 {
   "title": "mockyeah",
   "description": "A powerful service mocking, recording, and playback utility.",
-  "author": "Ryan Ricard"
+  "author": "Ryan Ricard",
+  "plugins": ["github"],
+  "pluginsConfig": {
+    "github": {
+      "url": "https://github.com/mockyeah/mockyeah"
+    }
+  }
 }
 
