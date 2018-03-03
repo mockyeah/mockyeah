@@ -1,4 +1,6 @@
-# mockyeah [![Build Status](https://travis-ci.org/ryanricard/mockyeah.svg)](https://travis-ci.org/ryanricard/mockyeah)
+# mockyeah
+[![npm](https://img.shields.io/npm/v/mockyeah.svg)](https://www.npmjs.com/package/mockyeah)
+[![Travis](https://img.shields.io/travis/mockyeah/mockyeah.svg)](https://travis-ci.org/mockyeah/mockyeah)
 
 __"A powerful service mocking, recording, and playback utility."__
 
@@ -9,6 +11,10 @@ Have a requirement to implement specific behavior when a service is slow to resp
 ## Install
 ```shell
 $ npm install mockyeah --save-dev
+```
+or
+```shell
+$ yarn add -D mockyeah
 ```
 
 ## Usage
@@ -40,6 +46,10 @@ $ npm install mockyeah --save-dev
 1. Install `mockyeah`
     ```shell
     $ npm install mockyeah --save-dev
+    ```
+    or
+    ```shell
+    $ yarn add -D mockyeah
     ```
 
 1. Create script file and add the source below
