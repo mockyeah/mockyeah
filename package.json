@@ -9,7 +9,7 @@
     "lint": "gulp lint",
     "lint:watch": "gulp lint:watch"
   },
-  "repository": "git@github.com:ryanricard/mockyeah.git",
+  "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "ISC",
   "engines": {
