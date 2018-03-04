@@ -8,7 +8,7 @@
     "build": "gitbook build && cp CNAME _book/CNAME",
     "docs:publish": "gh-pages -d _book"
   },
-  "repository": "git@github.com:ryanricard/mockyeah.git",
+  "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "ISC",
   "devDependencies": {
