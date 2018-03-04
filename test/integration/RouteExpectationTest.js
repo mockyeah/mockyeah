@@ -1,10 +1,11 @@
 'use strict';
 
-require('../TestHelper');
-const MockYeahServer = require('../../server');
 const supertest = require('supertest');
 const async = require('async');
 const { expect } = require('chai');
+const assert = require('assert');
+require('../TestHelper');
+const MockYeahServer = require('../../server');
 
 describe('Route expectation', () => {
   let mockyeah;
@@ -261,7 +262,34 @@ describe('Route expectation', () => {
         },
         cb => request.get('/foo').end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Expected params did not match expected for request');
+          expect(expectation.verify).to.throw('Params did not match expected');
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should implement params() function expectation', done => {
+    const expectation = mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params(params =>
+        assert.deepEqual(params, {
+          id: '9999'
+        })
+      );
+
+    async.series(
+      [
+        cb => request.get('/foo?id=9999').end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb => request.get('/foo').end(cb),
+        cb => {
+          expect(expectation.verify).to.throw('Params did not match expectation callback');
           cb();
         }
       ],
@@ -294,7 +322,42 @@ describe('Route expectation', () => {
             .send({ some: 'value' })
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Expected body to match expected for request');
+          expect(expectation.verify).to.throw('Body did not match expected');
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should implement body() function expectation', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .body(body =>
+        assert.deepEqual(body, {
+          foo: 'bar'
+        })
+      );
+
+    async.series(
+      [
+        cb =>
+          request
+            .post('/foo')
+            .send({ foo: 'bar' })
+            .end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb =>
+          request
+            .post('/foo')
+            .send({ some: 'value' })
+            .end(cb),
+        cb => {
+          expect(expectation.verify).to.throw('Body did not match expectation callback');
           cb();
         }
       ],
@@ -326,7 +389,40 @@ describe('Route expectation', () => {
             .end(cb),
         cb => {
           expect(expectation.verify).to.throw(
-            'Expected header value host:example.com, but it was unknown.com'
+            'Header "host: example.com" expected, but got "unknown.com"'
+          );
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should implement header() function expectation', done => {
+    const expectation = mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .header('host', value => value === 'example.com');
+
+    async.series(
+      [
+        cb =>
+          request
+            .get('/foo')
+            .set('HOST', 'example.com')
+            .end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb =>
+          request
+            .get('/foo')
+            .set('HOST', 'unknown.com')
+            .end(cb),
+        cb => {
+          expect(expectation.verify).to.throw(
+            'Header "host: unknown.com" did not match expectation callback'
           );
           cb();
         }
