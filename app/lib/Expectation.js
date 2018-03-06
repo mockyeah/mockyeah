@@ -157,26 +157,16 @@ Expectation.prototype.api = function api() {
     },
     body: function body(value) {
       internal.handlers.push(req => {
-        internal.handlers.push(req => {
-          if (typeof value === 'function') {
-            assertion(
-              value,
-              req.body,
-              `${internal.prefix} Body did not match expectation callback`
-            );
-          } else {
-            assert.deepStrictEqual(
-              req.body,
-              value,
-              `${internal.prefix} Body did not match expected`
-            );
-          }
-        });
+        if (typeof value === 'function') {
+          assertion(value, req.body, `${internal.prefix} Body did not match expectation callback`);
+        } else {
+          assert.deepStrictEqual(req.body, value, `${internal.prefix} Body did not match expected`);
+        }
       });
       return this;
     },
     verify: function verify() {
-      internal.assertions.forEach(assertion => assertion());
+      internal.assertions.forEach(_assertion => _assertion());
     }
   };
 };

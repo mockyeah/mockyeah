@@ -22,6 +22,26 @@ function normalizePathname(pathname) {
   return pathname.replace(trailingSlashes, '');
 }
 
+// eslint-disable-next-line consistent-return
+function customizer(object, source) {
+  if (_.isRegExp(source)) {
+    return source.test(object);
+  } else if (typeof source === 'function') {
+    const result = source(object);
+    // if the function returns undefined, we'll skip this to fallback
+    if (result !== undefined) return result;
+  }
+  // else return undefined to fallback to default equality check
+}
+
+function isMatchWithCustomizer(object, source) {
+  return _.isMatchWith(object, source, customizer);
+}
+
+function isEqualWithCustomizer(value, other) {
+  return _.isEqualWith(value, other, customizer);
+}
+
 function isRouteForRequest(route, req) {
   if (!isEqualMethod(req.method, route.method)) return false;
 
@@ -34,28 +54,31 @@ function isRouteForRequest(route, req) {
   if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
 
   const matchesParams = _.every(route.query, (value, key) =>
-    _.isEqual(_.get(req.query, key), value)
+    isEqualWithCustomizer(_.get(req.query, key), value)
   );
 
   if (!matchesParams) return false;
 
-  if (route.body) {
-    // TODO: See what `req.body` looks like with different request content types.
-    const matchesBody = _.isMatch(req.body, route.body);
-    return matchesBody;
-  }
+  // TODO: See what `req.body` looks like with different request content types.
+  if (route.body && !isMatchWithCustomizer(req.body, route.body)) return false;
 
-  // TODO: Later add features to match other things, like headers, or with functions, regex, etc.
+  if (route.headers && !isMatchWithCustomizer(req.headers, route.headers)) return false;
+
+  // TODO: Later add features to match other things, like cookies, or with other types, etc.
 
   return true;
 }
 
+/**
+ * This is used for replacing routes, so we need exact matches.
+ */
 function isRouteMatch(route1, route2) {
   return (
     route1.pathname === route2.pathname &&
     route1.method === route2.method &&
     _.isEqual(route1.query, route2.query) &&
-    _.isEqual(route1.body, route2.body)
+    _.isEqual(route1.body, route2.body) &&
+    _.isEqual(route1.headers, route2.headers)
   );
 }
 
@@ -118,6 +141,7 @@ RouteResolver.prototype.register = function register(method, path, response) {
     route.pathname = normalizePathname(object.path);
     route.query = object.query || null; // because `url.parse` returns `null`
     route.body = object.body;
+    route.headers = object.headers;
   }
 
   const matchKeys = [];
