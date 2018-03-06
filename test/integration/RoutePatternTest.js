@@ -275,6 +275,19 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
+  it('should match request body with function', done => {
+    mockyeah.post({
+      path: '/foo',
+      body: {
+        bar: value => value === 'yes'
+      }
+    });
+    request
+      .post('/foo')
+      .send({ bar: 'yes' })
+      .expect(200, done);
+  });
+
   it('should match with partial request body', done => {
     mockyeah.post({
       path: '/foo',
@@ -401,6 +414,20 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
+  it('should match request headers with function', done => {
+    mockyeah.post({
+      path: '/foo',
+      headers: {
+        bar: value => value === 'yes'
+      }
+    });
+
+    request
+      .post('/foo')
+      .set('bar', 'yes')
+      .expect(200, done);
+  });
+
   it('should match with partial request headers', done => {
     mockyeah.post({
       path: '/foo',
@@ -421,6 +448,21 @@ describe('Route Patterns', () => {
       path: '/foo',
       headers: {
         bar: /ye/
+      }
+    });
+
+    request
+      .post('/foo')
+      .set('bar', 'yes')
+      .set('and', 'this')
+      .expect(200, done);
+  });
+
+  it('should match with partial request headers with function', done => {
+    mockyeah.post({
+      path: '/foo',
+      headers: {
+        bar: value => value === 'yes'
       }
     });
 
@@ -459,6 +501,20 @@ describe('Route Patterns', () => {
       .expect(404, done);
   });
 
+  it('should fail to match when different request headers with function', done => {
+    mockyeah.post({
+      path: '/nope',
+      headers: {
+        bar: value => value === 'nope'
+      }
+    });
+
+    request
+      .post('/nope')
+      .set('bar', 'yes')
+      .expect(404, done);
+  });
+
   it('should fail to match when no request headers', done => {
     mockyeah.post({
       path: '/nope',
@@ -475,6 +531,17 @@ describe('Route Patterns', () => {
       path: '/nope',
       headers: {
         bar: /pe/
+      }
+    });
+
+    request.post('/nope').expect(404, done);
+  });
+
+  it('should fail to match when no request headers with function', done => {
+    mockyeah.post({
+      path: '/nope',
+      headers: {
+        bar: value => value === 'yes'
       }
     });
 
