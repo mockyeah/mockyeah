@@ -39,23 +39,26 @@ function isRouteForRequest(route, req) {
 
   if (!matchesParams) return false;
 
-  if (route.body) {
-    // TODO: See what `req.body` looks like with different request content types.
-    const matchesBody = _.isMatch(req.body, route.body);
-    return matchesBody;
-  }
+  // TODO: See what `req.body` looks like with different request content types.
+  if (route.body && !_.isMatch(req.body, route.body)) return false;
 
-  // TODO: Later add features to match other things, like headers, or with functions, regex, etc.
+  if (route.headers && !_.isMatch(req.headers, route.headers)) return false;
+
+  // TODO: Later add features to match other things, like cookies, or with functions, regex, etc.
 
   return true;
 }
 
+/**
+ * This is used for replacing routes, so we need exact matches.
+ */
 function isRouteMatch(route1, route2) {
   return (
     route1.pathname === route2.pathname &&
     route1.method === route2.method &&
     _.isEqual(route1.query, route2.query) &&
-    _.isEqual(route1.body, route2.body)
+    _.isEqual(route1.body, route2.body) &&
+    _.isEqual(route1.headers, route2.headers)
   );
 }
 
@@ -118,6 +121,7 @@ RouteResolver.prototype.register = function register(method, path, response) {
     route.pathname = normalizePathname(object.path);
     route.query = object.query || null; // because `url.parse` returns `null`
     route.body = object.body;
+    route.headers = object.headers;
   }
 
   const matchKeys = [];

@@ -286,4 +286,58 @@ describe('Route Patterns', () => {
 
     request.post('/nope').expect(404, done);
   });
+
+  it('should match request headers', done => {
+    mockyeah.post({
+      path: '/foo',
+      headers: {
+        bar: 'yes'
+      }
+    });
+
+    request
+      .post('/foo')
+      .set('bar', 'yes')
+      .expect(200, done);
+  });
+
+  it('should match with partial request headers', done => {
+    mockyeah.post({
+      path: '/foo',
+      headers: {
+        bar: 'yes'
+      }
+    });
+
+    request
+      .post('/foo')
+      .set('bar', 'yes')
+      .set('and', 'this')
+      .expect(200, done);
+  });
+
+  it('should fail to match when different request headers', done => {
+    mockyeah.post({
+      path: '/nope',
+      headers: {
+        bar: 'nope'
+      }
+    });
+
+    request
+      .post('/nope')
+      .set('bar', 'yes')
+      .expect(404, done);
+  });
+
+  it('should fail to match when no request headers', done => {
+    mockyeah.post({
+      path: '/nope',
+      headers: {
+        bar: 'nope'
+      }
+    });
+
+    request.post('/nope').expect(404, done);
+  });
 });
