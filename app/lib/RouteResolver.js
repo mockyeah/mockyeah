@@ -22,6 +22,26 @@ function normalizePathname(pathname) {
   return pathname.replace(trailingSlashes, '');
 }
 
+// eslint-disable-next-line consistent-return
+function customizer(object, source) {
+  if (_.isRegExp(source)) {
+    return source.test(object);
+  } else if (typeof source === 'function') {
+    const result = source(object);
+    // if the function returns undefined, we'll skip this to fallback
+    if (result !== undefined) return result;
+  }
+  // else return undefined to fallback to default equality check
+}
+
+function isMatchWithCustomizer(object, source) {
+  return _.isMatchWith(object, source, customizer);
+}
+
+function isEqualWithCustomizer(value, other) {
+  return _.isEqualWith(value, other, customizer);
+}
+
 function isRouteForRequest(route, req) {
   if (!isEqualMethod(req.method, route.method)) return false;
 
@@ -34,17 +54,17 @@ function isRouteForRequest(route, req) {
   if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
 
   const matchesParams = _.every(route.query, (value, key) =>
-    _.isEqual(_.get(req.query, key), value)
+    isEqualWithCustomizer(_.get(req.query, key), value)
   );
 
   if (!matchesParams) return false;
 
   // TODO: See what `req.body` looks like with different request content types.
-  if (route.body && !_.isMatch(req.body, route.body)) return false;
+  if (route.body && !isMatchWithCustomizer(req.body, route.body)) return false;
 
-  if (route.headers && !_.isMatch(req.headers, route.headers)) return false;
+  if (route.headers && !isMatchWithCustomizer(req.headers, route.headers)) return false;
 
-  // TODO: Later add features to match other things, like cookies, or with functions, regex, etc.
+  // TODO: Later add features to match other things, like cookies, or with other types, etc.
 
   return true;
 }
