@@ -4,6 +4,63 @@ const fs = require('fs');
 const path = require('path');
 const expandPath = require('../../lib/expandPath');
 
+/**
+ *
+ * @param {*} res
+ * @param {*} next
+ * @param {*} promise
+ * @returns {bool} Whether or not the argument was a promise and was handled.
+ */
+const handlePromise = (res, next, promise) => {
+  if (!(promise instanceof Promise)) return false;
+
+  promise
+    .then(result => {
+      res.send(result);
+    })
+    .catch(err => next(err));
+
+  return true;
+};
+
+/**
+ *
+ * @param {*} res
+ * @param {*} next
+ * @param {*} promise
+ * @returns {bool} Whether or not the argument was a function and was handled.
+ */
+const handleFunction = (req, res, next, data) => {
+  if (typeof data !== 'function') return false;
+
+  try {
+    const result = data(req);
+    if (handlePromise(res, next, result)) return true;
+    res.send(result);
+  } catch (err) {
+    next(err);
+  }
+
+  return true;
+};
+
+/**
+ * Handle data as potentially function or promise.
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @param {*} data Either raw data supported but `res.send`,
+ *  or a promise resolving such data, or a function returning such data or such a promise.
+ */
+const handleData = (req, res, next, data) => {
+  if (handleFunction(req, res, next, data)) return;
+  if (handlePromise(res, next, data)) return;
+
+  // Else it's raw data, so send it directly.
+  res.send(data);
+};
+
 /* eslint-disable prefer-template */
 function validateResponse(response) {
   let payloadKeysPresent = 0;
@@ -55,7 +112,7 @@ module.exports = function handler(route) {
 
   validateResponse(response);
 
-  return (req, res) => {
+  return (req, res, next) => {
     const start = new Date().getTime();
     let send;
 
@@ -89,6 +146,8 @@ module.exports = function handler(route) {
     // set response headers, if received
     if (response.headers) res.set(response.headers);
 
+    const handleDataBound = handleData.bind(null, req, res, next);
+
     if (response.filePath) {
       // if filePath, send file
       const filePath = expandPath(response.filePath);
@@ -111,18 +170,18 @@ module.exports = function handler(route) {
     } else if (response.html) {
       // if html, set Content-Type to application/html and send
       res.type(response.type || 'html');
-      send = res.send.bind(res, response.html);
+      send = handleDataBound.bind(null, response.html);
     } else if (response.json) {
       // if json, set Content-Type to application/json and send
       res.type(response.type || 'json');
-      send = res.send.bind(res, response.json);
+      send = handleDataBound.bind(null, response.json);
     } else if (response.text) {
       // if text, set Content-Type to text/plain and send
       res.type(response.type || 'text');
-      send = res.send.bind(res, response.text);
+      send = handleDataBound.bind(null, response.text);
     } else if (response.raw) {
       // if raw, don't set Content-Type
-      send = res.send.bind(res, response.raw);
+      send = handleDataBound.bind(null, response.raw);
     } else {
       // else send empty response
       res.type(response.type || 'text');

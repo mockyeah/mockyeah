@@ -18,7 +18,7 @@ function Expectation(route) {
 Expectation.prototype.middleware = function middleware(req, res, next) {
   this.called += 1;
   this.handlers.forEach(handler => {
-    this.assertions.push(handler.bind(this, req));
+    this.assertions.push(handler.bind(this, req, res, next));
   });
   req.callCount = this.called;
   next();
