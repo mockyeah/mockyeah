@@ -35,8 +35,8 @@ const handleFunction = (req, res, next, data) => {
 
   try {
     const result = data(req);
-    if (handlePromise(res, next, data)) return true;
-    res.send(data(req));
+    if (handlePromise(res, next, result)) return true;
+    res.send(result);
   } catch (err) {
     next(err);
   }
