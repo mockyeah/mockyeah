@@ -1,0 +1,390 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>API: Service Snapshots · mockyeah</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="Ryan Ricard">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="Service-Snapshot-CLI.html" />
+    
+    
+    <link rel="prev" href="Mock-Expectations.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Home
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="Mock-Services.html">
+            
+                <a href="Mock-Services.html">
+            
+                    
+                    API: Mock Services
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="Server-Management.html">
+            
+                <a href="Server-Management.html">
+            
+                    
+                    API: Server Management
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="Mock-Expectations.html">
+            
+                <a href="Mock-Expectations.html">
+            
+                    
+                    API: Mock Expectations
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5" data-path="Service-Snapshots.html">
+            
+                <a href="Service-Snapshots.html">
+            
+                    
+                    API: Service Snapshots
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="Service-Snapshot-CLI.html">
+            
+                <a href="Service-Snapshot-CLI.html">
+            
+                    
+                    Service Snapshot CLI
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="Configuration.html">
+            
+                <a href="Configuration.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="Contributing.html">
+            
+                <a href="Contributing.html">
+            
+                    
+                    Contributing
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >API: Service Snapshots</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="api-service-snapshots">API: Service Snapshots</h1>
+<p>mockyeah provides the ability to capture service snapshots from real services and playing them back later as mock services.
+While recording, mockyeah proxies all received requests to configured hosts and captures their responses as snapshots.
+Snapshots include: response body, method, headers, status code, latency, and path.</p>
+<h2 id="mockyeahrecordsnapshot-name">mockyeah.record([snapshot name])</h2>
+<p><code>snapshot name</code> (<code>String</code>; required) Directory name to save service snapshots
+(i.e. <code>./mockyeah/[snapshot name]</code>).</p>
+<p>Configures mockyeah to proxy and capture service requests. Recorded responses
+are written to <code>./mockyeah</code>. To use this feature, you must update
+the service addresses in your application to proxy through mockyeah. Here is an
+example of an address configured for recording:</p>
+<pre><code>http://localhost:[mockyeah port]/http://example.com/your/service/url
+</code></pre><p>The above URL looks pretty crazy, but rest assured it works and eliminates the need for a system level proxy.</p>
+<h2 id="mockyeahplaysnapshot-name">mockyeah.play([snapshot name])</h2>
+<p><code>snapshot name</code> (<code>String</code>; required) Directory name from which to mount contained
+service snapshots (i.e. <code>./mockyeah/[snapshot name]</code>).</p>
+<p>Mounts each service snapshot. Each snapshot will be mounted with the
+exact same payload, headers, status, and latency as captured during its recording.
+This behavior may be changed by altering the values in the snapshot files.</p>
+<p>Here is an example of a service snapshot file:</p>
+<pre><code class="lang-json">{
+  <span class="hljs-string">&quot;method&quot;</span>: <span class="hljs-string">&quot;GET&quot;</span>,
+  <span class="hljs-string">&quot;url&quot;</span>: <span class="hljs-string">&quot;http://example.com/some/service&quot;</span>,
+  <span class="hljs-string">&quot;path&quot;</span>: <span class="hljs-string">&quot;/some/service&quot;</span>,
+  <span class="hljs-string">&quot;options&quot;</span>: {
+    <span class="hljs-string">&quot;headers&quot;</span>: {
+      <span class="hljs-string">&quot;x-powered-by&quot;</span>: <span class="hljs-string">&quot;Express&quot;</span>,
+      <span class="hljs-string">&quot;content-type&quot;</span>: <span class="hljs-string">&quot;text/plain; charset=utf-8&quot;</span>,
+      <span class="hljs-string">&quot;content-length&quot;</span>: <span class="hljs-string">&quot;12&quot;</span>,
+      <span class="hljs-string">&quot;etag&quot;</span>: <span class="hljs-string">&quot;W/\&quot;5-iwTV43ddKY54RV78XKQE1Q\&quot;&quot;</span>,
+      <span class="hljs-string">&quot;date&quot;</span>: <span class="hljs-string">&quot;Sun, 21 Feb 2016 06:17:49 GMT&quot;</span>,
+      <span class="hljs-string">&quot;connection&quot;</span>: <span class="hljs-string">&quot;close&quot;</span>
+    },
+    <span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-number">200</span>,
+    <span class="hljs-string">&quot;raw&quot;</span>: <span class="hljs-string">&quot;Hello world!&quot;</span>,
+    <span class="hljs-string">&quot;latency&quot;</span>: <span class="hljs-number">57</span>
+  }
+}
+</code></pre>
+<h2 id="ad-hoc-snapshots">Ad hoc snapshots</h2>
+<p>Snapshots can be created manually. This can ease the repetitive setup of multiple
+services. Here are the steps to creating ad hoc snapshots:</p>
+<ol>
+<li>Create a snapshot directory (e.g. <code>./mockyeah/snapshot-example</code>)</li>
+<li>Add one or more JSON files containing, at minimum, the following properties:</li>
+</ol>
+<pre><code class="lang-json">{
+  <span class="hljs-string">&quot;method&quot;</span>: <span class="hljs-string">&quot;GET&quot;</span>,
+  <span class="hljs-string">&quot;path&quot;</span>: <span class="hljs-string">&quot;/some/service&quot;</span>,
+  <span class="hljs-string">&quot;options&quot;</span>: {
+    <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Hello world!&quot;</span>
+  }
+}
+</code></pre>
+<ol>
+<li>Play your ad hoc snapshots.</li>
+</ol>
+<pre><code class="lang-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;mockyeah&apos;</span>).play(<span class="hljs-string">&apos;snapshot-example&apos;</span>);
+</code></pre>
+<ol>
+<li>That&apos;s it!</li>
+</ol>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="Mock-Expectations.html" class="navigation navigation-prev " aria-label="Previous page: API: Mock Expectations">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="Service-Snapshot-CLI.html" class="navigation navigation-next " aria-label="Next page: Service Snapshot CLI">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"API: Service Snapshots","level":"1.5","depth":1,"next":{"title":"Service Snapshot CLI","level":"1.6","depth":1,"path":"pages/Service-Snapshot-CLI.md","ref":"pages/Service-Snapshot-CLI.md","articles":[]},"previous":{"title":"API: Mock Expectations","level":"1.4","depth":1,"path":"pages/Mock-Expectations.md","ref":"pages/Mock-Expectations.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github","livereload"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"pages/Service-Snapshots.md","mtime":"2018-02-13T03:16:18.623Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-04T17:33:54.609Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
