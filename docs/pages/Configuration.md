@@ -7,7 +7,6 @@
   "name": "mockyeah",
   "host": "localhost",
   "port": 4001,
-  "portHttps": 4443,
   "fixturesDir": "./fixtures",
   "capturesDir": "./mockyeah",
   "output": true,
@@ -24,11 +23,13 @@ be written using standard `JSON`.
 
 * `name`: Used to identify the origin of logged output.
 * `host`: Host on which mockyeah will run.
-* `port`: Port on which mockyeah will run over HTTP.
-* `portHttps`: Port on which mockyeah will run over HTTPS.
+* `port`: Port on which mockyeah will run over HTTP (or use `portHttps`).
+* `portHttps`: Port on which mockyeah will run over HTTPS (instead of `port`).
+* `httpsKeyPath`: Optional file path to SSL key for custom certificates (instead of auto-generated).
+* `httpsCertPath`: Optional file path to SSL key for custom certificates (instead of auto-generated)
 * `fixturesDir`: Relative path to the fixtures directory.
 * `capturesDir`: Relative path to the captures directory.
-* `output`: Boolean to toggle mockyeah generated output written to stdout.
+* `output`: Boolean to toggle mockyeah generated output written to `stdout`.
 * `journal`: Boolean to toggle request journaling. Example journaling output:
 
   ```shell
@@ -51,3 +52,9 @@ be written using standard `JSON`.
   ```
 
 * `verbose`: Boolean to toggle verbosity of mockyeah generated output.
+
+### HTTPS
+
+For HTTPS support, use the `portHttps` option. By default, this uses `create-cert-files` (based on `selfsigned`, used by `webpack-dev-server`, etc.),
+where it will initially auto-generate a self-signed cert within `node_modules` then continue to re-use that as long as it exists.
+Alternatively, to provide your own, you can pass config options httpsKeyPath and httpsCertPath relative to `.mockyeah`/`MOCKYEAH_ROOT`.
