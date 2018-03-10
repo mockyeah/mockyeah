@@ -1,4 +1,4 @@
-# API: Service Snapshots
+# Service Snapshots
 
 mockyeah provides the ability to capture service snapshots from real services and playing them back later as mock services.
 While recording, mockyeah proxies all received requests to configured hosts and captures their responses as snapshots.

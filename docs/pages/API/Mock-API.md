@@ -1,10 +1,12 @@
-## \[get, post, put, patch, delete, all\](path, options)
+# Mock API
+
+`get/post/put/patch/delete/all(match, options)`
 
 Each method creates a mock service with a HTTP verb matching its respective method name.
 
-### Parameters
+## Parameters
 
-#### Request Match `String` or `Object`
+### `match` Request Match (`String` or `Object`)
 
 Specifies how to match requests to this mock.
 In the simplest case, it can be a string specifying the `path` to match.
@@ -23,7 +25,7 @@ mockyeah.get('/say-hello?to=someone', { text: 'hello, someone' });
 
 If you want the mock to match only for specific headers, query parameters, or request body,
 or use some of the more advanced matching features like regular expressions or functions,
-then use the object syntax. Its structure is:
+then use the object syntax. All keys but `path` are optional. Its structure is:
 
 <!-- prettier-ignore -->
 ```js
@@ -71,7 +73,7 @@ mockyeah.post(
 );
 ```
 
-#### Response Options `Object`
+### `options` Response Options (`Object`)
 
 Response options informing mockyeah how to respond to matching requests. Supported options:
 

@@ -1,38 +1,31 @@
 # Summary
 
-* API: Mock Services
-* API: Mock Expectations
-* [API: Service Snapshots](pages/Service-Snapshots.md)
-
 * [Introduction](README.md)
-* [Getting started](pages/Getting-Started.md)
+* [Getting Started](pages/Getting-Started.md)
+* [Configuration](pages/Configuration.md)
+* [Service Snapshots](pages/Service-Snapshots.md)
 * API
-  * [Service API](pages/Mock-Services.md)
-    * [HTTP Methods](pages/API/HTTP-Methods.md)
-      * [`get()`](pages/API/HTTP-Methods.md)
-      * [`post()`](pages/API/HTTP-Methods.md)
-      * [`put()`](pages/API/HTTP-Methods.md)
-      * [`patch()`](pages/API/HTTP-Methods.md)
-      * [`delete()`](pages/API/HTTP-Methods.md)
-      * [`all()`](pages/API/HTTP-Methods.md)]
+  * Mock API
+    * [`get/post/put/patch/delete/all()`](pages/API/Mock-API.md#get)
     * [`record()`](pages/API/record.md)
     * [`play()`](pages/API/play.md)
     * [`reset()`](pages/API/reset.md)
     * [`close()`](pages/API/close.md)
-  * [Expectation API](pages/Mock-Expectations.md)
-    * `.expect()`
-    * `.expect().body()`
-    * `.expect().count()`
-    * `.expect().header()`
-    * `.expect().once()`
-    * `.expect().params()`
-    * `.expect().twice()`
-    * `.expect().thrice()`
-    * `.expect().verify()`
+    * [`proxy()`](pages/API/proxy.md)
+  * Expectation API
+    * [`.expect()`](pages/Mock-Expectations.md#expect)
+    * [`.expect().atLeast()`](pages/Mock-Expectations.md#atLeast)
+    * [`.expect().atMost()`](pages/Mock-Expectations.md#atMost)
+    * [`.expect().never()`](pages/Mock-Expectations.md#never)
+    * [`.expect().once()`](pages/Mock-Expectations.md#once)
+    * [`.expect().twice()`](pages/Mock-Expectations.md#twice)
+    * [`.expect().thrice()`](pages/Mock-Expectations.md#thrice)
+    * [`.expect().body()`](pages/Mock-Expectations.md#body)
+    * [`.expect().params()`](pages/Mock-Expectations.md#params)
+    * [`.expect().header()`](pages/Mock-Expectations.md#header)
+    * [`.expect().verify()`](pages/Mock-Expectations.md#verify)
   * Classes
-    * `Server`
-* [Configuration](pages/Configuration.md)
+    * [`Server`](pages/API/Server.md)
 * [Recipes/Examples](https://github.com/mockyeah/mockyeah/tree/master/examples)
 * [CLI](pages/Service-Snapshot-CLI.md)
 * [Contributing](pages/Contributing.md)
-  i

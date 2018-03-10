@@ -17,18 +17,6 @@ $ yarn add -D mockyeah
 * [Introductory tutorial](#introductory-tutorial)
 * [Testing with mockyeah](#testing-with-mockyeah)
 
-## API
-
-* [Mock Services](https://github.com/mockyeah/mockyeah/wiki/Mock-Services)
-* [Server Management](https://github.com/mockyeah/mockyeah/wiki/Server-Management)
-* [Mock Expectations](https://github.com/mockyeah/mockyeah/wiki/Mock-Expectations)
-* [Service Snapshots](https://github.com/mockyeah/mockyeah/wiki/Service-Snapshots)
-
-## CLI
-
-* [mockyeah-cli](https://github.com/mockyeah/mockyeah-cli)
-* [mockyeah-cli Documentation](https://github.com/mockyeah/mockyeah/wiki/Service-Snapshot-CLI)
-
 ## Introductory tutorial
 
 1.  Create an example project and initialized with NPM

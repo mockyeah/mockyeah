@@ -7,6 +7,7 @@
   "name": "mockyeah",
   "host": "localhost",
   "port": 4001,
+  "portHttps": 4443,
   "fixturesDir": "./fixtures",
   "capturesDir": "./mockyeah",
   "output": true,
@@ -23,7 +24,8 @@ be written using standard `JSON`.
 
 * `name`: Used to identify the origin of logged output.
 * `host`: Host on which mockyeah will run.
-* `port`: Port on which mockyeah will run.
+* `port`: Port on which mockyeah will run over HTTP.
+* `portHttps`: Port on which mockyeah will run over HTTPS.
 * `fixturesDir`: Relative path to the fixtures directory.
 * `capturesDir`: Relative path to the captures directory.
 * `output`: Boolean to toggle mockyeah generated output written to stdout.

@@ -21,3 +21,5 @@ Have a requirement to implement specific behavior when a service is slow to resp
 * To isolate application behavior
 * To increase developer productivity
 * To increase integration testing performance by eliminating network latency
+
+To begin, see our [Getting Started](pages/Getting-Started.md) guide.
