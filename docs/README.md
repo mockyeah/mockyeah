@@ -1,12 +1,18 @@
-# Home
+# mockyeah
 
-## What is mockyeah?
+[![npm](https://img.shields.io/npm/v/mockyeah.svg)](https://www.npmjs.com/package/mockyeah)
+[![Travis](https://img.shields.io/travis/mockyeah/mockyeah.svg)](https://travis-ci.org/mockyeah/mockyeah)
 
-A web service mocking utility that helps decouple HTTP integrations throughout development and testing.
+**"A powerful web service mocking, recording, and playback utility."**
+
+Helps decouple HTTP integrations throughout development and testing.
 
 ## What problem does mockyeah solve?
 
-Developing service integrations can be a painful process. APIs designs are often influx, incomplete, unstable, or completely unavailable. mockyeah solves this problem by enabling you to easily create mock services to integrate and test with during development.
+Testing is difficult when you don't have control of your data. Developing service integrations can be a painful process. APIs designs are often influx, incomplete, unstable, or completely unavailable.
+mockyeah puts you in complete control, enabling you to implement **real mock web services** with ease to integrate and test with during development. Real mock services means you have control of response payloads, HTTP status codes, response latency, and more.
+
+Have a requirement to implement specific behavior when a service is slow to respond or a server returns an unexpected status code? No problem! mockyeah makes developing for such requirements easy.
 
 ## What is mockyeah's purpose?
 
