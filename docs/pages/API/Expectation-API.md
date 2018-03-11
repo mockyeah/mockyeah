@@ -92,3 +92,30 @@ const expectation = mockyeah
 ```js
 expectation.verify();
 ```
+
+The `body`, `params`, and `header` methods also accept a function instead of an object, for custom validations.
+These functions receive as a first parameter the parsed body, query parameters object, or header value, respectively,
+and should return `true` or `false` to indicate a pass or failure of the expectation.
+
+Examples:
+
+```js
+const expectation = mockyeah
+  .get('/foo', { text: 'bar' })
+  .expect()
+  .header('X-API-Key', value => /[0-9A-F]{32}/i.test(value));
+```
+
+```js
+const expectation = mockyeah
+  .get('/foo', { text: 'bar' })
+  .expect()
+  .params(params => params.someParam === 'yes');
+```
+
+```js
+const expectation = mockyeah
+  .get('/foo', { text: 'bar' })
+  .expect()
+  .body(body => body.id === '123');
+```
