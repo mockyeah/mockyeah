@@ -2,20 +2,15 @@
 
 ## Install
 
-```shell
-$ npm install mockyeah --save-dev
+```sh
+npm install mockyeah --save-dev
 ```
 
 or
 
-```shell
-$ yarn add -D mockyeah
+```sh
+yarn add -D mockyeah
 ```
-
-## Usage
-
-* [Introductory tutorial](#introductory-tutorial)
-* [Testing with mockyeah](#testing-with-mockyeah)
 
 ## Introductory tutorial
 

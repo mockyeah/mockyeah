@@ -2,11 +2,16 @@
 
 * [Introduction](README.md)
 * [Getting Started](pages/Getting-Started.md)
+  * [Install](pages/Getting-Started.md#install)
+  * [Introductory tutorial](pages/Getting-Started.md#introductory-tutorial)
+  * [Testing with mockyeah](pages/Getting-Started.md#testing-with-mockyeah)
 * [Configuration](pages/Configuration.md)
 * [Service Snapshots](pages/Service-Snapshots.md)
 * API
   * Mock API
-    * [`get/post/put/patch/delete/all()`](pages/API/Mock-API.md#get)
+    * [`get/post/put/patch/delete/all()`](pages/API/Mock-API.md)
+      * [Request Match](pages/API/Mock-API.md#match)
+      * [Response Options](pages/API/Mock-API.md#options)
     * [`record()`](pages/API/record.md)
     * [`play()`](pages/API/play.md)
     * [`reset()`](pages/API/reset.md)

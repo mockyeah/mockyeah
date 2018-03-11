@@ -29,7 +29,7 @@ describe('This test', () => {
 ```
 
 <div id="expect"></div>
-`.expect()` - Returns an expectation object for a given mock service when chained to a [Mock Services API](API/Mock-API.md) method call.
+`.expect()` - Returns an expectation object for a given mock service when chained to a [Mock Services API](Mock-API.md) method call.
 
 <div id="atLeast">
 `.atLeast(Number)` - Adds expectation that a service must be called at least a specified number of times.

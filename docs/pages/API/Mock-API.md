@@ -6,6 +6,7 @@ Each method creates a mock service with a HTTP verb matching its respective meth
 
 ## Parameters
 
+<div id="match"></div>
 ### `match` Request Match (`String` or `Object`)
 
 Specifies how to match requests to this mock.
@@ -73,6 +74,7 @@ mockyeah.post(
 );
 ```
 
+<div id="options"></div>
 ### `options` Response Options (`Object`)
 
 Response options informing mockyeah how to respond to matching requests. Supported options:
