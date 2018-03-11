@@ -81,10 +81,29 @@ Response options informing mockyeah how to respond to matching requests. Support
 
 * `filePath` (`String`; optional) - File with contents to include in response body. Assumes response Content-Type of file type.
 * `fixture` (`String`; optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./fixtures` in your project.
-* `html` (`String`; optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
-* `json` (`Object`; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
-* `raw` (`String`; optional) - Text to include in response body. Content-Type is the default Express type if not specified in header.
-* `text` (`String`; optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
+
+* `html` (`String|Function|Promise`; optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
+* `json` (`Object|Function|Promise`; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
+* `raw` (`String|Function|Promise`; optional) - Text to include in response body. Content-Type is the default Express type if not specified in header.
+* `text` (`String|Function|Promise`; optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
+
+For dynamic behavior, the noted methods above can also be defined as functions that return response body values.
+For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises.
+The functions will receive the Express request object as a first and only argument.
+
+Examples:
+
+```js
+mockyeah.get('/service/exists', { json: req => ({ hello: req.query.name }) });
+```
+
+```js
+mockyeah.get('/service/exists', { json: req => Promise.resolve({ hello: req.query.name }) });
+```
+
+```js
+mockyeah.get('/service/exists', { json: Promise.resolve({ hello: 'there' }) });
+```
 
 **Additional options:**
 
