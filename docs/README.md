@@ -3,9 +3,11 @@
 [![npm](https://img.shields.io/npm/v/mockyeah.svg)](https://www.npmjs.com/package/mockyeah)
 [![Travis](https://img.shields.io/travis/mockyeah/mockyeah.svg)](https://travis-ci.org/mockyeah/mockyeah)
 
-**"A powerful web service mocking, recording, and playback utility."**
+**A powerful web service mocking, recording, and playback utility.**
 
 Helps decouple HTTP integrations throughout development and testing.
+
+<img src="logo/mockyeah.png" height="200" />
 
 ## What problem does mockyeah solve?
 
