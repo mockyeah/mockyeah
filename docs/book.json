@@ -2,6 +2,7 @@
   "title": "mockyeah",
   "description": "A powerful service mocking, recording, and playback utility.",
   "author": "Ryan Ricard",
+  "root": "book",
   "plugins": ["github", "expandable-chapters"],
   "pluginsConfig": {
     "github": {
