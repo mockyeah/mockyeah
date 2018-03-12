@@ -1286,6 +1286,10 @@ gitbook-cli@^2.3.2:
     tmp "0.0.31"
     user-home "2.0.0"
 
+gitbook-plugin-expandable-chapters@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/gitbook-plugin-expandable-chapters/-/gitbook-plugin-expandable-chapters-0.2.0.tgz#45d7087ae6907a41f48128c54fe56224a9c1ada2"
+
 gitbook-plugin-github@2:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/gitbook-plugin-github/-/gitbook-plugin-github-2.0.0.tgz#5166e763cfcc402d432880b7a6c85c1c54b56a8d"
