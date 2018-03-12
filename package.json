@@ -4,9 +4,11 @@
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
-    "test": "yarn lint && yarn test:unit",
+    "test": "yarn lint && yarn test:coverage",
     "test:watch": "yarn test:unit --watch",
     "test:unit": "mocha test/**/*Test.js",
+    "test:coverage": "nyc yarn test:unit",
+    "test:coverage:report": "nyc report --reporter=text-lcov | coveralls",
     "lint": "gulp lint",
     "lint:watch": "gulp lint:watch",
     "precommit": "yarn test",
@@ -58,6 +60,7 @@
   ],
   "devDependencies": {
     "chai": "^3.4.1",
+    "coveralls": "^3.0.0",
     "dateformat": "^1.0.12",
     "eslint": "^4.18.1",
     "eslint-config-airbnb": "^16.1.0",
@@ -72,6 +75,7 @@
     "gulp-util": "^3.0.7",
     "husky": "^0.14.3",
     "mocha": "^3.1.2",
+    "nyc": "^11.4.1",
     "rimraf": "^2.5.2",
     "supertest": "^1.1.0"
   },
