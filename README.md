@@ -6,5 +6,6 @@
 
 [![npm](https://img.shields.io/npm/v/mockyeah.svg)](https://www.npmjs.com/package/mockyeah)
 [![Travis](https://img.shields.io/travis/mockyeah/mockyeah.svg)](https://travis-ci.org/mockyeah/mockyeah)
+[![Coveralls github](https://img.shields.io/coveralls/github/mockyeah/mockyeah.svg)](https://coveralls.io/github/mockyeah/mockyeah)
 
 More at **https://mockyeah.js.org**.
