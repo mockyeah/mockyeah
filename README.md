@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/mockyeah.svg)](https://www.npmjs.com/package/mockyeah)
 [![Travis](https://img.shields.io/travis/mockyeah/mockyeah.svg)](https://travis-ci.org/mockyeah/mockyeah)
+[![Coveralls github](https://img.shields.io/coveralls/github/mockyeah/mockyeah.svg)](https://coveralls.io/github/mockyeah/mockyeah)
 
 **"A powerful service mocking, recording, and playback utility."**
 
@@ -42,46 +43,46 @@ $ yarn add -D mockyeah
 
 ## Introductory tutorial
 
-1. Create an example project and initialized with NPM
+1.  Create an example project and initialized with NPM
 
-   ```shell
-   $ mkdir example-app && cd example-app
-   $ npm init # all defaults will be fine
-   ```
+    ```shell
+    $ mkdir example-app && cd example-app
+    $ npm init # all defaults will be fine
+    ```
 
-1. Install `mockyeah`
+1.  Install `mockyeah`
 
-   ```shell
-   $ npm install mockyeah --save-dev
-   ```
+    ```shell
+    $ npm install mockyeah --save-dev
+    ```
 
-   or
+    or
 
-   ```shell
-   $ yarn add -D mockyeah
-   ```
+    ```shell
+    $ yarn add -D mockyeah
+    ```
 
-1. Create script file and add the source below
+1.  Create script file and add the source below
 
-   ```shell
-   $ touch index.js
-   ```
+    ```shell
+    $ touch index.js
+    ```
 
-   ```js
-   const mockyeah = require('mockyeah');
+    ```js
+    const mockyeah = require('mockyeah');
 
-   mockyeah.get('/hello-world', { text: 'Hello World' });
-   ```
+    mockyeah.get('/hello-world', { text: 'Hello World' });
+    ```
 
-1. Run the script file with Node
+1.  Run the script file with Node
 
-   ```shell
-   $ node index.js
-   ```
+    ```shell
+    $ node index.js
+    ```
 
-1. Open [http://localhost:4001/hello-world](http://localhost:4001/hello-world)
+1.  Open [http://localhost:4001/hello-world](http://localhost:4001/hello-world)
 
-1. Profit. You should see "Hello World" returned from your mock server.
+1.  Profit. You should see "Hello World" returned from your mock server.
 
 ## Testing with mockyeah
 
