@@ -1,5 +1,7 @@
 docs/_book
 
+.nyc_output
+
 # Editor configurations
 .idea
 .vscode
