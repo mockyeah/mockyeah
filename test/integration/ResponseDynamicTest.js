@@ -43,6 +43,42 @@ describe('Response Dynamic', () => {
           .expect('Content-Type', /text\/plain/)
           .expect(200, set.body, done);
       });
+
+      it('should respond with content and type for promise', done => {
+        mockyeah.get('/service/exists', { [label]: Promise.resolve(set.data) });
+
+        request
+          .get('/service/exists')
+          .expect('Content-Type', set.type)
+          .expect(200, set.body, done);
+      });
+
+      it('should allow Content-Type override for promise', done => {
+        mockyeah.get('/service/exists', { [label]: Promise.resolve(set.data), type: 'text' });
+
+        request
+          .get('/service/exists')
+          .expect('Content-Type', /text\/plain/)
+          .expect(200, set.body, done);
+      });
+
+      it('should respond with content and type for function returning promise', done => {
+        mockyeah.get('/service/exists', { [label]: () => Promise.resolve(set.data) });
+
+        request
+          .get('/service/exists')
+          .expect('Content-Type', set.type)
+          .expect(200, set.body, done);
+      });
+
+      it('should allow Content-Type override for function returning promise', done => {
+        mockyeah.get('/service/exists', { [label]: () => Promise.resolve(set.data), type: 'text' });
+
+        request
+          .get('/service/exists')
+          .expect('Content-Type', /text\/plain/)
+          .expect(200, set.body, done);
+      });
     });
   });
 });

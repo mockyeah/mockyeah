@@ -10,6 +10,7 @@ const mockyeah = require('../index.js');
 const request = require('supertest');
 
 const configHttps = Object.assign({}, mockyeah.config, {
+  port: undefined,
   portHttps: 4443
 });
 const mockyeahHttps = new mockyeah.Server(configHttps);
