@@ -6,13 +6,15 @@
   "scripts": {
     "start": "gitbook serve",
     "build": "gitbook build && cp CNAME _book/CNAME",
-    "docs:publish": "gh-pages -d _book"
+    "docs:publish": "gh-pages -d _book",
+    "docs:publish:archive": "gh-pages -d _book -e"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "ISC",
   "devDependencies": {
     "gh-pages": "^1.1.0",
+    "gitbook": "^3.2.3",
     "gitbook-cli": "^2.3.2",
     "gitbook-plugin-expandable-chapters": "^0.2.0",
     "gitbook-plugin-github": "2",
