@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Introduction · mockyeah</title>
+        <title>Service Snapshots · mockyeah</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,8 +61,8 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Getting-Started.html" />
     
+    <link rel="prev" href="Configuration.html" />
     
 
     </head>
@@ -91,7 +91,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -175,7 +175,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="Service-Snapshots.html">
+        <li class="chapter active" data-level="1.4" data-path="Service-Snapshots.html">
             
                 <a href="Service-Snapshots.html">
             
@@ -599,7 +599,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Introduction</a>
+        <a href="." >Service Snapshots</a>
     </h1>
 </div>
 
@@ -614,25 +614,34 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="mockyeah">mockyeah</h1>
-<p><strong>A powerful service mocking, recording, and playback utility.</strong></p>
-<p><img src="logo/mockyeah.png" height="200"></p>
-<p><a href="https://www.npmjs.com/package/mockyeah" target="_blank"><img src="https://img.shields.io/npm/v/mockyeah.svg" alt="npm"></a>
-<a href="https://travis-ci.org/mockyeah/mockyeah" target="_blank"><img src="https://img.shields.io/travis/mockyeah/mockyeah.svg" alt="Travis"></a></p>
-<h2 id="what-problem-does-mockyeah-solve">What problem does mockyeah solve?</h2>
-<p>Helps decouple HTTP integrations throughout development and testing.</p>
-<p>Testing is difficult when you don&apos;t have control of your data. Developing service integrations can be a painful process. APIs designs are often influx, incomplete, unstable, or completely unavailable.
-mockyeah puts you in complete control, enabling you to implement <strong>real mock web services</strong> with ease to integrate and test with during development. Real mock services means you have control of response payloads, HTTP status codes, response latency, and more.</p>
-<p>Have a requirement to implement specific behavior when a service is slow to respond or a server returns an unexpected status code? No problem! mockyeah makes developing for such requirements easy.</p>
-<h2 id="what-is-mockyeahs-purpose">What is mockyeah&apos;s purpose?</h2>
-<ul>
-<li>To eliminate service side effects</li>
-<li>To provide dependable integrations</li>
-<li>To isolate application behavior</li>
-<li>To increase developer productivity</li>
-<li>To increase integration testing performance by eliminating network latency</li>
-</ul>
-<p>To begin, see our <a href="Getting-Started.html">Getting Started</a> guide.</p>
+                                <h1 id="service-snapshots">Service Snapshots</h1>
+<p>mockyeah provides the ability to capture service snapshots from real services and playing them back later as mock services.
+While recording, mockyeah proxies all received requests to configured hosts and captures their responses as snapshots.
+Snapshots include: response body, method, headers, status code, latency, and path.</p>
+<p>See <a href="API/record.html"><code>record</code></a> and <a href="API/play.html"><code>play</code></a>.</p>
+<h2 id="ad-hoc-snapshots">Ad hoc snapshots</h2>
+<p>Snapshots can be created manually. This can ease the repetitive setup of multiple
+services. Here are the steps to creating ad hoc snapshots:</p>
+<ol>
+<li>Create a snapshot directory (e.g. <code>./mockyeah/snapshot-example</code>)</li>
+<li>Add one or more JSON files containing, at minimum, the following properties:</li>
+</ol>
+<pre><code class="lang-json">{
+  <span class="hljs-string">&quot;method&quot;</span>: <span class="hljs-string">&quot;GET&quot;</span>,
+  <span class="hljs-string">&quot;path&quot;</span>: <span class="hljs-string">&quot;/some/service&quot;</span>,
+  <span class="hljs-string">&quot;options&quot;</span>: {
+    <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Hello world!&quot;</span>
+  }
+}
+</code></pre>
+<ol>
+<li>Play your ad hoc snapshots.</li>
+</ol>
+<pre><code class="lang-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;mockyeah&apos;</span>).play(<span class="hljs-string">&apos;snapshot-example&apos;</span>);
+</code></pre>
+<ol>
+<li>That&apos;s it!</li>
+</ol>
 
                                 
                                 </section>
@@ -660,10 +669,10 @@ mockyeah puts you in complete control, enabling you to implement <strong>real mo
 
             
                 
-                
-                <a href="Getting-Started.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Getting Started">
-                    <i class="fa fa-angle-right"></i>
+                <a href="Configuration.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Configuration">
+                    <i class="fa fa-angle-left"></i>
                 </a>
+                
                 
             
         
@@ -672,7 +681,7 @@ mockyeah puts you in complete control, enabling you to implement <strong>real mo
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Getting Started","level":"1.2","depth":1,"path":"Getting-Started.md","ref":"Getting-Started.md","articles":[{"title":"Install","level":"1.2.1","depth":2,"anchor":"#install","path":"Getting-Started.md","ref":"Getting-Started.md#install","articles":[]},{"title":"Introductory tutorial","level":"1.2.2","depth":2,"anchor":"#introductory-tutorial","path":"Getting-Started.md","ref":"Getting-Started.md#introductory-tutorial","articles":[]},{"title":"Testing with mockyeah","level":"1.2.3","depth":2,"anchor":"#testing-with-mockyeah","path":"Getting-Started.md","ref":"Getting-Started.md#testing-with-mockyeah","articles":[]}]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"README.md","mtime":"2018-03-12T23:00:04.540Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-13T12:27:46.179Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Service Snapshots","level":"1.4","depth":1,"next":{"title":"API","level":"1.5","depth":1,"ref":"","articles":[{"title":"Mock API","level":"1.5.1","depth":2,"ref":"","articles":[{"title":"get/post/put/patch/delete/all()","level":"1.5.1.1","depth":3,"path":"API/Mock-API.md","ref":"API/Mock-API.md","articles":[{"title":"Request Match","level":"1.5.1.1.1","depth":4,"anchor":"#match","path":"API/Mock-API.md","ref":"API/Mock-API.md#match","articles":[]},{"title":"Response Options","level":"1.5.1.1.2","depth":4,"anchor":"#options","path":"API/Mock-API.md","ref":"API/Mock-API.md#options","articles":[]}]},{"title":"record()","level":"1.5.1.2","depth":3,"path":"API/record.md","ref":"API/record.md","articles":[]},{"title":"play()","level":"1.5.1.3","depth":3,"path":"API/play.md","ref":"API/play.md","articles":[]},{"title":"reset()","level":"1.5.1.4","depth":3,"path":"API/reset.md","ref":"API/reset.md","articles":[]},{"title":"close()","level":"1.5.1.5","depth":3,"path":"API/close.md","ref":"API/close.md","articles":[]},{"title":"proxy()","level":"1.5.1.6","depth":3,"path":"API/proxy.md","ref":"API/proxy.md","articles":[]}]},{"title":"Expectation API","level":"1.5.2","depth":2,"ref":"","articles":[{"title":".expect()","level":"1.5.2.1","depth":3,"anchor":"#expect","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#expect","articles":[]},{"title":".expect().atLeast()","level":"1.5.2.2","depth":3,"anchor":"#atLeast","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#atLeast","articles":[]},{"title":".expect().atMost()","level":"1.5.2.3","depth":3,"anchor":"#atMost","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#atMost","articles":[]},{"title":".expect().never()","level":"1.5.2.4","depth":3,"anchor":"#never","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#never","articles":[]},{"title":".expect().once()","level":"1.5.2.5","depth":3,"anchor":"#once","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#once","articles":[]},{"title":".expect().twice()","level":"1.5.2.6","depth":3,"anchor":"#twice","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#twice","articles":[]},{"title":".expect().thrice()","level":"1.5.2.7","depth":3,"anchor":"#thrice","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#thrice","articles":[]},{"title":".expect().body()","level":"1.5.2.8","depth":3,"anchor":"#body","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#body","articles":[]},{"title":".expect().params()","level":"1.5.2.9","depth":3,"anchor":"#params","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#params","articles":[]},{"title":".expect().header()","level":"1.5.2.10","depth":3,"anchor":"#header","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#header","articles":[]},{"title":".expect().verify()","level":"1.5.2.11","depth":3,"anchor":"#verify","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#verify","articles":[]}]},{"title":"Classes","level":"1.5.3","depth":2,"ref":"","articles":[{"title":"Server","level":"1.5.3.1","depth":3,"path":"API/Server.md","ref":"API/Server.md","articles":[]}]}]},"previous":{"title":"Configuration","level":"1.3","depth":1,"path":"Configuration.md","ref":"Configuration.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"Service-Snapshots.md","mtime":"2018-03-12T23:00:04.541Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-13T12:27:46.179Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

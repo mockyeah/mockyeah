@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Introduction · mockyeah</title>
+        <title>Configuration · mockyeah</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,8 +61,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Getting-Started.html" />
+    <link rel="next" href="Service-Snapshots.html" />
     
+    
+    <link rel="prev" href="Getting-Started.html" />
     
 
     </head>
@@ -91,7 +93,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -162,7 +164,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="Configuration.html">
+        <li class="chapter active" data-level="1.3" data-path="Configuration.html">
             
                 <a href="Configuration.html">
             
@@ -599,7 +601,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Introduction</a>
+        <a href="." >Configuration</a>
     </h1>
 </div>
 
@@ -614,25 +616,59 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="mockyeah">mockyeah</h1>
-<p><strong>A powerful service mocking, recording, and playback utility.</strong></p>
-<p><img src="logo/mockyeah.png" height="200"></p>
-<p><a href="https://www.npmjs.com/package/mockyeah" target="_blank"><img src="https://img.shields.io/npm/v/mockyeah.svg" alt="npm"></a>
-<a href="https://travis-ci.org/mockyeah/mockyeah" target="_blank"><img src="https://img.shields.io/travis/mockyeah/mockyeah.svg" alt="Travis"></a></p>
-<h2 id="what-problem-does-mockyeah-solve">What problem does mockyeah solve?</h2>
-<p>Helps decouple HTTP integrations throughout development and testing.</p>
-<p>Testing is difficult when you don&apos;t have control of your data. Developing service integrations can be a painful process. APIs designs are often influx, incomplete, unstable, or completely unavailable.
-mockyeah puts you in complete control, enabling you to implement <strong>real mock web services</strong> with ease to integrate and test with during development. Real mock services means you have control of response payloads, HTTP status codes, response latency, and more.</p>
-<p>Have a requirement to implement specific behavior when a service is slow to respond or a server returns an unexpected status code? No problem! mockyeah makes developing for such requirements easy.</p>
-<h2 id="what-is-mockyeahs-purpose">What is mockyeah&apos;s purpose?</h2>
+                                <h1 id="configuration">Configuration</h1>
+<h2 id="default-configuration">Default configuration:</h2>
+<pre><code class="lang-json">{
+  <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;mockyeah&quot;</span>,
+  <span class="hljs-string">&quot;host&quot;</span>: <span class="hljs-string">&quot;localhost&quot;</span>,
+  <span class="hljs-string">&quot;port&quot;</span>: <span class="hljs-number">4001</span>,
+  <span class="hljs-string">&quot;fixturesDir&quot;</span>: <span class="hljs-string">&quot;./fixtures&quot;</span>,
+  <span class="hljs-string">&quot;capturesDir&quot;</span>: <span class="hljs-string">&quot;./mockyeah&quot;</span>,
+  <span class="hljs-string">&quot;output&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">&quot;journal&quot;</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-string">&quot;verbose&quot;</span>: <span class="hljs-literal">false</span>
+}
+</code></pre>
+<p>The default configuration may be overridden by placing a <code>.mockyeah</code> file in root of
+your project and adding the key value pair that you wish to change. The file should
+be written using standard <code>JSON</code>.</p>
+<h3 id="options">Options:</h3>
 <ul>
-<li>To eliminate service side effects</li>
-<li>To provide dependable integrations</li>
-<li>To isolate application behavior</li>
-<li>To increase developer productivity</li>
-<li>To increase integration testing performance by eliminating network latency</li>
+<li><code>name</code>: Used to identify the origin of logged output.</li>
+<li><code>host</code>: Host on which mockyeah will run.</li>
+<li><code>port</code>: Port on which mockyeah will run over HTTP (or use <code>portHttps</code>).</li>
+<li><code>portHttps</code>: Port on which mockyeah will run over HTTPS (instead of <code>port</code>).</li>
+<li><code>httpsKeyPath</code>: Optional file path to SSL key for custom certificates (instead of auto-generated).</li>
+<li><code>httpsCertPath</code>: Optional file path to SSL key for custom certificates (instead of auto-generated)</li>
+<li><code>fixturesDir</code>: Relative path to the fixtures directory.</li>
+<li><code>capturesDir</code>: Relative path to the captures directory.</li>
+<li><code>output</code>: Boolean to toggle mockyeah generated output written to <code>stdout</code>.</li>
+<li><p><code>journal</code>: Boolean to toggle request journaling. Example journaling output:</p>
+<pre><code class="lang-shell">[mockyeah][14:54:21][REQUEST][JOURNAL] {
+  &quot;callCount&quot;: 1,
+  &quot;url&quot;: &quot;/foo?bar=baa&quot;,
+  &quot;fullUrl&quot;: &quot;http://localhost:4001/foo?bar=baa&quot;,
+  &quot;clientIp&quot;: &quot;127.0.0.1&quot;,
+  &quot;method&quot;: &quot;GET&quot;,
+  &quot;headers&quot;: {
+    &quot;host&quot;: &quot;localhost:4001&quot;,
+    &quot;user-agent&quot;: &quot;curl/7.43.0&quot;,
+    &quot;accept&quot;: &quot;*/*&quot;
+  },
+  &quot;query&quot;: {
+    &quot;bar&quot;: &quot;baa&quot;
+  },
+  &quot;body&quot;: {}
+}
+</code></pre>
+</li>
+<li><p><code>verbose</code>: Boolean to toggle verbosity of mockyeah generated output.</p>
+</li>
 </ul>
-<p>To begin, see our <a href="Getting-Started.html">Getting Started</a> guide.</p>
+<h3 id="https">HTTPS</h3>
+<p>For HTTPS support, use the <code>portHttps</code> option. By default, this uses <code>create-cert-files</code> (based on <code>selfsigned</code>, used by <code>webpack-dev-server</code>, etc.),
+where it will initially auto-generate a self-signed cert within <code>node_modules</code> then continue to re-use that as long as it exists.
+Alternatively, to provide your own, you can pass config options httpsKeyPath and httpsCertPath relative to <code>.mockyeah</code>/<code>MOCKYEAH_ROOT</code>.</p>
 
                                 
                                 </section>
@@ -660,8 +696,12 @@ mockyeah puts you in complete control, enabling you to implement <strong>real mo
 
             
                 
+                <a href="Getting-Started.html#testing-with-mockyeah" class="navigation navigation-prev " aria-label="Previous page: Testing with mockyeah">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="Getting-Started.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Getting Started">
+                
+                <a href="Service-Snapshots.html" class="navigation navigation-next " aria-label="Next page: Service Snapshots">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -672,7 +712,7 @@ mockyeah puts you in complete control, enabling you to implement <strong>real mo
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Getting Started","level":"1.2","depth":1,"path":"Getting-Started.md","ref":"Getting-Started.md","articles":[{"title":"Install","level":"1.2.1","depth":2,"anchor":"#install","path":"Getting-Started.md","ref":"Getting-Started.md#install","articles":[]},{"title":"Introductory tutorial","level":"1.2.2","depth":2,"anchor":"#introductory-tutorial","path":"Getting-Started.md","ref":"Getting-Started.md#introductory-tutorial","articles":[]},{"title":"Testing with mockyeah","level":"1.2.3","depth":2,"anchor":"#testing-with-mockyeah","path":"Getting-Started.md","ref":"Getting-Started.md#testing-with-mockyeah","articles":[]}]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"README.md","mtime":"2018-03-12T23:00:04.540Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-13T12:27:46.179Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Configuration","level":"1.3","depth":1,"next":{"title":"Service Snapshots","level":"1.4","depth":1,"path":"Service-Snapshots.md","ref":"Service-Snapshots.md","articles":[]},"previous":{"title":"Testing with mockyeah","level":"1.2.3","depth":2,"anchor":"#testing-with-mockyeah","path":"Getting-Started.md","ref":"Getting-Started.md#testing-with-mockyeah","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"Configuration.md","mtime":"2018-03-12T23:00:04.587Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-13T12:27:46.179Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
