@@ -7,6 +7,8 @@
 [![npm](https://img.shields.io/npm/v/mockyeah.svg)](https://www.npmjs.com/package/mockyeah)
 [![Travis](https://img.shields.io/travis/mockyeah/mockyeah.svg)](https://travis-ci.org/mockyeah/mockyeah)
 
+[v0.x docs](https://mockyeah.js.org/archive/0.16)
+
 ## What problem does mockyeah solve?
 
 Helps decouple HTTP integrations throughout development and testing.

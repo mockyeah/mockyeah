@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "gitbook serve",
-    "build": "gitbook build && cp CNAME _book/CNAME",
-    "docs:publish": "gh-pages -d _book",
-    "docs:publish:archive": "gh-pages -d _book -e"
+    "build": "gitbook build",
+    "docs:publish": "yarn build && git checkout f1d15fb && mkdir -p _book/archive/0.16 && gitbook build . _book/archive/0.16 && cp CNAME _book/CNAME && gh-pages -d _book && git checkout -"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
