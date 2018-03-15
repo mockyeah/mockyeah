@@ -7,8 +7,8 @@
   * [Testing with mockyeah](Getting-Started.md#testing-with-mockyeah)
 * [Configuration](Configuration.md)
 * [Service Snapshots](Service-Snapshots.md)
-* API
-  * Mock API
+* [API](API/Mock-API.md)
+  * [Mock API](API/Mock-API.md)
     * [`get/post/put/patch/delete/all()`](API/Mock-API.md)
       * [Request Match](API/Mock-API.md#match)
       * [Response Options](API/Mock-API.md#options)
@@ -17,8 +17,8 @@
     * [`reset()`](API/reset.md)
     * [`close()`](API/close.md)
     * [`proxy()`](API/proxy.md)
-  * Expectation API
-    * [`.expect()`](API/Expectation-API.md#expect)
+  * [Expectation API](API/Expectation-API.md)
+    * [`.expect()`](API/Expectation-API.md)
     * [`.expect().atLeast()`](API/Expectation-API.md#atLeast)
     * [`.expect().atMost()`](API/Expectation-API.md#atMost)
     * [`.expect().never()`](API/Expectation-API.md#never)
