@@ -34,3 +34,4 @@
 * [Recipes/Examples](https://github.com/mockyeah/mockyeah/tree/master/examples)
 * [CLI](Service-Snapshot-CLI.md)
 * [Contributing](Contributing.md)
+* [v0.x docs](https://mockyeah.js.org/archive/0.16)
