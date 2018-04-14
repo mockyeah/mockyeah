@@ -50,8 +50,10 @@ function isRouteForRequest(route, req) {
   const routePathnameIsAbsoluteUrl = isAbsoluteUrl(route.pathname.replace(/^\//, ''));
 
   if (routePathnameIsAbsoluteUrl) {
+    // eslint-disable-next-line no-lonely-if
     if (route.pathname !== pathname) return false;
   } else {
+    // eslint-disable-next-line no-lonely-if
     if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
   }
 
