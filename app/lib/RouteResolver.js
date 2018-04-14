@@ -49,9 +49,11 @@ function isRouteForRequest(route, req) {
 
   const routePathnameIsAbsoluteUrl = isAbsoluteUrl(route.pathname.replace(/^\//, ''));
 
-  if (routePathnameIsAbsoluteUrl && pathname === route.pathname) return true;
-
-  if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
+  if (routePathnameIsAbsoluteUrl) {
+    if (route.pathname !== pathname) return false;
+  } else {
+    if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
+  }
 
   const matchesParams = _.every(route.query, (value, key) =>
     isEqualWithCustomizer(_.get(req.query, key), value)
