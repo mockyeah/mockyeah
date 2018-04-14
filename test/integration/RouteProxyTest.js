@@ -55,4 +55,10 @@ describe('Route proxy', () => {
   it('should support proxying other URLs', done => {
     request.get('/http://localhost:8888/foo?ok=yes').expect(200, done);
   });
+  
+  it('should support proxying other URLs even with other mocks', done => {
+    mockyeah.get('/http://localhost:8888/bar', { text: 'bar' });
+
+    request.get('/http://localhost:8888/foo?ok=yes').expect(200, done);
+  });
 });
