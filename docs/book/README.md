@@ -18,7 +18,7 @@ Have a requirement to implement specific behavior when a service is slow to resp
 
 ## What is mockyeah's purpose?
 
-* To eliminate service side effects
+* To eliminate service side effects, increasing test durability
 * To provide dependable integrations
 * To isolate application behavior
 * To increase developer productivity
