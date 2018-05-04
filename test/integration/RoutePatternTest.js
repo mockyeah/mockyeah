@@ -188,6 +188,22 @@ describe('Route Patterns', () => {
     request.get('/foo?bar=yes').expect(200, done);
   });
 
+  it('should match single query parameter in path with object', done => {
+    mockyeah.get({
+      path: '/foo?bar=yes'
+    });
+
+    request.get('/foo?bar=yes').expect(200, done);
+  });
+
+  it('should not match without single query parameter in path with object', done => {
+    mockyeah.get({
+      path: '/foo?bar=yes'
+    });
+
+    request.get('/foo').expect(404, done);
+  });
+
   it('should match single query parameter with object and regex', done => {
     mockyeah.get({
       path: '/foo',
