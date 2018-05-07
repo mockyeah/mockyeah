@@ -133,16 +133,25 @@ function RouteResolver(app) {
   listen.call(this);
 }
 
+const relativizePath = path => (isAbsoluteUrl(path) ? `/${path}` : path);
+
 RouteResolver.prototype.register = function register(method, path, response) {
-  const route = { method, path, response };
+  const route = {};
 
   if (typeof path === 'string') {
-    const url = parse(route.path, true);
+    path = relativizePath(path);
+    const url = parse(path, true);
+    route.method = method;
+    route.response = response;
+    route.path = path;
     route.pathname = normalizePathname(url.pathname);
     route.query = url.query;
   } else {
-    const object = route.path;
-    route.pathname = normalizePathname(object.path);
+    const object = path;
+    route.method = method;
+    route.response = response;
+    route.path = relativizePath(object.path);
+    route.pathname = normalizePathname(route.path);
     route.query = object.query || null; // because `url.parse` returns `null`
     route.body = object.body;
     route.headers = object.headers;

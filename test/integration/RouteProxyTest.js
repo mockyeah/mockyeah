@@ -13,26 +13,29 @@ describe('Route proxy', () => {
   let request;
 
   before(done => {
-    async.parallel([
-      cb => {
-        mockyeah = MockYeahServer({
-          port: 0
-        }, cb);
-        request = supertest(mockyeah.server);
-      },
-      cb => {
-        proxiedApp = express();
-        proxiedApp.get('/foo', (req, res) => res.sendStatus(200));
-        proxiedServer = proxiedApp.listen(8888, cb);
-      }
-    ], done);
+    async.parallel(
+      [
+        cb => {
+          mockyeah = MockYeahServer(
+            {
+              port: 0
+            },
+            cb
+          );
+          request = supertest(mockyeah.server);
+        },
+        cb => {
+          proxiedApp = express();
+          proxiedApp.get('/foo', (req, res) => res.sendStatus(200));
+          proxiedServer = proxiedApp.listen(8888, cb);
+        }
+      ],
+      done
+    );
   });
 
   after(done => {
-    async.parallel([
-      cb => mockyeah.close(cb),
-      cb => proxiedServer.close(cb)
-    ], done);
+    async.parallel([cb => mockyeah.close(cb), cb => proxiedServer.close(cb)], done);
   });
 
   beforeEach(() => {
@@ -46,10 +49,31 @@ describe('Route proxy', () => {
   it('should support registering full URLs manually', done => {
     mockyeah.get('/http://localhost:8888/foo?ok=yes', { text: 'bar', status: 500 });
 
-    async.series([
-      cb => supertest(proxiedApp).get('/foo').expect(200, cb),
-      cb => request.get('/http://localhost:8888/foo?ok=yes').expect(500, 'bar', cb)
-    ], done);
+    async.series(
+      [
+        cb =>
+          supertest(proxiedApp)
+            .get('/foo')
+            .expect(200, cb),
+        cb => request.get('/http://localhost:8888/foo?ok=yes').expect(500, 'bar', cb)
+      ],
+      done
+    );
+  });
+
+  it('should support registering full URLs manually without leading slash', done => {
+    mockyeah.get('http://localhost:8888/foo?ok=yes', { text: 'bar', status: 500 });
+
+    async.series(
+      [
+        cb =>
+          supertest(proxiedApp)
+            .get('/foo')
+            .expect(200, cb),
+        cb => request.get('/http://localhost:8888/foo?ok=yes').expect(500, 'bar', cb)
+      ],
+      done
+    );
   });
 
   it('should support proxying other URLs', done => {
