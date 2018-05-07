@@ -6,7 +6,9 @@
   * [Introductory tutorial](Getting-Started.md#introductory-tutorial)
   * [Testing with mockyeah](Getting-Started.md#testing-with-mockyeah)
 * [Configuration](Configuration.md)
-* [Service Snapshots](Service-Snapshots.md)
+  * [Defaults](Configuration.md#default-configuration)
+  * [Options](Configuration.md#options)
+  * [HTTPS](Configuration.md#https)
 * API
   * Mock API
     * [`get/post/put/patch/delete/all()`](API/Mock-API.md)
@@ -31,7 +33,10 @@
     * [`.expect().verify()`](API/Expectation-API.md#verify)
   * Classes
     * [`Server`](API/Server.md)
-* [Recipes/Examples](https://github.com/mockyeah/mockyeah/tree/master/examples)
-* [CLI](Service-Snapshot-CLI.md)
+* [Snapshots](Snapshots/Overview.md)
+  * [Snapshots Overview](Snapshots/Overview.md#snapshots-overview)
+  * [Ad Hoc Snapshots](Snapshots/Overview.md#ad-hoc-snapshots)
+  * [CLI](Snapshots/CLI.md)
+* [Recipes & Examples](https://github.com/mockyeah/mockyeah/tree/master/examples)
 * [Contributing](Contributing.md)
 * [v0.x docs](https://mockyeah.js.org/archive/0.16)
