@@ -61,6 +61,21 @@ describe('Route proxy', () => {
     );
   });
 
+  it('should support registering full URLs manually with wildcards', done => {
+    mockyeah.get('/http://localhost:8888/f(.*)', { text: 'bar', status: 500 });
+
+    async.series(
+      [
+        cb =>
+          supertest(proxiedApp)
+            .get('/foo')
+            .expect(200, cb),
+        cb => request.get('/http://localhost:8888/foo?ok=yes').expect(500, 'bar', cb)
+      ],
+      done
+    );
+  });
+
   it('should support registering full URLs manually without leading slash', done => {
     mockyeah.get('http://localhost:8888/foo?ok=yes', { text: 'bar', status: 500 });
 

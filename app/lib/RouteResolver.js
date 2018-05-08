@@ -51,7 +51,7 @@ function isRouteForRequest(route, req) {
 
   if (routePathnameIsAbsoluteUrl) {
     // eslint-disable-next-line no-lonely-if
-    if (route.pathname !== pathname) return false;
+    if (!route.pathRegExp.test(pathname)) return false;
   } else {
     // eslint-disable-next-line no-lonely-if
     if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
