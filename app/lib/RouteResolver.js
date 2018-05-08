@@ -150,9 +150,11 @@ RouteResolver.prototype.register = function register(method, path, response) {
     const object = path;
     route.method = method;
     route.response = response;
-    route.path = relativizePath(object.path);
-    route.pathname = normalizePathname(route.path);
-    route.query = object.query || null; // because `url.parse` returns `null`
+    path = relativizePath(object.path);
+    const url = parse(path, true);
+    route.path = path;
+    route.pathname = normalizePathname(url.pathname);
+    route.query = object.query || url.query || null; // because `url.parse` returns `null`
     route.body = object.body;
     route.headers = object.headers;
   }
