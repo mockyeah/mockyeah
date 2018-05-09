@@ -19,7 +19,7 @@ module.exports = function RouteManager(app) {
     },
 
     all: function all(_path, response) {
-      return this.register('all', _path, response);
+      return this.register(_path.method || 'all', _path, response);
     },
 
     get: function get(_path, response) {
