@@ -135,11 +135,11 @@ function RouteResolver(app) {
 
 const relativizePath = path => (isAbsoluteUrl(path) ? `/${path}` : path);
 
-RouteResolver.prototype.register = function register(method, path, response) {
+RouteResolver.prototype.register = function register(method, _path, response) {
   const route = {};
 
-  if (typeof path === 'string') {
-    path = relativizePath(path);
+  if (typeof _path === 'string') {
+    const path = relativizePath(_path);
     const url = parse(path, true);
     route.method = method;
     route.response = response;
@@ -147,10 +147,10 @@ RouteResolver.prototype.register = function register(method, path, response) {
     route.pathname = normalizePathname(url.pathname);
     route.query = url.query;
   } else {
-    const object = path;
+    const object = _path;
+    const path = relativizePath(object.path || object.url); // support `url` alias of `path`
     route.method = method;
     route.response = response;
-    path = relativizePath(object.path);
     const url = parse(path, true);
     route.path = path;
     route.pathname = normalizePathname(url.pathname);
