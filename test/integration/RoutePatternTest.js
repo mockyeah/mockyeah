@@ -424,6 +424,22 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
+  it('should match request header names with any casing', done => {
+    mockyeah.post({
+      path: '/foo',
+      headers: {
+        bar: 'yes',
+        BAZ: 'also'
+      }
+    });
+
+    request
+      .post('/foo')
+      .set('BAR', 'yes')
+      .set('baz', 'also')
+      .expect(200, done);
+  });
+
   it('should match request headers with regex', done => {
     mockyeah.post({
       path: '/foo',

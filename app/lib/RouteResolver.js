@@ -156,7 +156,7 @@ RouteResolver.prototype.register = function register(method, path, response) {
     route.pathname = normalizePathname(url.pathname);
     route.query = object.query || url.query || null; // because `url.parse` returns `null`
     route.body = object.body;
-    route.headers = object.headers;
+    route.headers = _.mapKeys(object.headers, (value, key) => key.toLowerCase());
   }
 
   const matchKeys = [];
