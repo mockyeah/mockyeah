@@ -20,7 +20,8 @@ module.exports = function App(config) {
     name: 'mockyeah',
     output: true,
     journal: false,
-    verbose: false
+    verbose: false,
+    proxy: false
   };
 
   // Prepare global config
