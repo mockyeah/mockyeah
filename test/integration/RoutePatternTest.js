@@ -15,6 +15,15 @@ describe('Route Patterns', () => {
 
       request.post('/').expect(200, done);
     });
+    
+    it('should match method in uppercase if passed as option', done => {
+      mockyeah.all({
+        path: '/',
+        method: 'POST'
+      });
+
+      request.post('/').expect(200, done);
+    });
 
     it('should match only method if passed as option', done => {
       mockyeah.all({
