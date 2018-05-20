@@ -11,6 +11,7 @@ describe('Route proxy', () => {
   let proxiedApp;
   let proxiedServer;
   let request;
+  let proxiedPort;
 
   before(done => {
     async.parallel(
@@ -22,7 +23,14 @@ describe('Route proxy', () => {
         cb => {
           proxiedApp = express();
           proxiedApp.get('/foo', (req, res) => res.sendStatus(200));
-          proxiedServer = proxiedApp.listen(8888, cb);
+          proxiedServer = proxiedApp.listen(0, err => {
+            if (err) {
+              cb(err);
+              return;
+            }
+            proxiedPort = proxiedServer.address().port;
+            cb();
+          });
         }
       ],
       done
@@ -42,7 +50,7 @@ describe('Route proxy', () => {
   });
 
   it('should support registering full URLs manually', done => {
-    mockyeah.get('/http://localhost:8888/foo?ok=yes', { text: 'bar', status: 500 });
+    mockyeah.get(`/http://localhost:${proxiedPort}/foo?ok=yes`, { text: 'bar', status: 500 });
 
     async.series(
       [
@@ -50,14 +58,14 @@ describe('Route proxy', () => {
           supertest(proxiedApp)
             .get('/foo')
             .expect(200, cb),
-        cb => request.get('/http://localhost:8888/foo?ok=yes').expect(500, 'bar', cb)
+        cb => request.get(`/http://localhost:${proxiedPort}/foo?ok=yes`).expect(500, 'bar', cb)
       ],
       done
     );
   });
 
   it('should support registering full URLs manually with wildcards', done => {
-    mockyeah.get('/http://localhost:8888/f(.*)', { text: 'bar', status: 500 });
+    mockyeah.get(`/http://localhost:${proxiedPort}/f(.*)`, { text: 'bar', status: 500 });
 
     async.series(
       [
@@ -65,14 +73,14 @@ describe('Route proxy', () => {
           supertest(proxiedApp)
             .get('/foo')
             .expect(200, cb),
-        cb => request.get('/http://localhost:8888/foo?ok=yes').expect(500, 'bar', cb)
+        cb => request.get(`/http://localhost:${proxiedPort}/foo?ok=yes`).expect(500, 'bar', cb)
       ],
       done
     );
   });
 
   it('should support registering full URLs manually without leading slash', done => {
-    mockyeah.get('http://localhost:8888/foo?ok=yes', { text: 'bar', status: 500 });
+    mockyeah.get(`http://localhost:${proxiedPort}/foo?ok=yes`, { text: 'bar', status: 500 });
 
     async.series(
       [
@@ -80,19 +88,19 @@ describe('Route proxy', () => {
           supertest(proxiedApp)
             .get('/foo')
             .expect(200, cb),
-        cb => request.get('/http://localhost:8888/foo?ok=yes').expect(500, 'bar', cb)
+        cb => request.get(`/http://localhost:${proxiedPort}/foo?ok=yes`).expect(500, 'bar', cb)
       ],
       done
     );
   });
 
   it('should support proxying other URLs', done => {
-    request.get('/http://localhost:8888/foo?ok=yes').expect(200, done);
+    request.get(`/http://localhost:${proxiedPort}/foo?ok=yes`).expect(200, done);
   });
 
   it('should support proxying other URLs even with other mocks', done => {
-    mockyeah.get('/http://localhost:8888/bar', { text: 'bar' });
+    mockyeah.get(`/http://localhost:${proxiedPort}/bar`, { text: 'bar' });
 
-    request.get('/http://localhost:8888/foo?ok=yes').expect(200, done);
+    request.get(`/http://localhost:${proxiedPort}/foo?ok=yes`).expect(200, done);
   });
 });
