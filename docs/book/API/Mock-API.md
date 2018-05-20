@@ -39,7 +39,7 @@ then use the object syntax. All keys but `path` are optional. Its structure is:
     [name: string]: MatchString
   },
   body?: MatchBody,
-  method?: string
+  method?: Method
 }
 ```
 
@@ -52,13 +52,15 @@ type MatchString = string | RegExp | (string) => boolean;
 type MatchBody = {
   [key: string]: MatchBody | MatchString | mixed
 };
+
+type Method = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'all'
 ```
 
 Body matching is currently only supported for JSON payloads.
 
 Objects like `headers` and `body` can be partial, deep object matches - they do not need to match the entire set of headers or the entire body of the request.
 
-If using `.all`, you may use `method` to match only a specific method anyway. This may ease programmatic use, e.g., wiring up mocks from a declarative definition.
+If using `.all`, you may use `method` to match only a specific method anyway. Supports any casing. This may ease programmatic use, e.g., wiring up mocks from a declarative definition.
 
 Examples:
 
