@@ -6,6 +6,35 @@ const TestHelper = require('../TestHelper');
 const { mockyeah, request } = TestHelper;
 
 describe('Route Patterns', () => {
+  describe('method', () => {
+    it('should match method if passed as option', done => {
+      mockyeah.all({
+        path: '/',
+        method: 'post'
+      });
+
+      request.post('/').expect(200, done);
+    });
+    
+    it('should match method in uppercase if passed as option', done => {
+      mockyeah.all({
+        path: '/',
+        method: 'POST'
+      });
+
+      request.post('/').expect(200, done);
+    });
+
+    it('should match only method if passed as option', done => {
+      mockyeah.all({
+        path: '/',
+        method: 'get'
+      });
+
+      request.post('/').expect(404, done);
+    });
+  });
+
   describe('trailing slashes', () => {
     it('should match when root mock and request use trailing slash', done => {
       mockyeah.get('//');

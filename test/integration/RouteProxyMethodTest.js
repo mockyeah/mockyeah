@@ -17,12 +17,7 @@ describe('Route proxy', () => {
     async.parallel(
       [
         cb => {
-          mockyeah = MockYeahServer(
-            {
-              proxy: true
-            },
-            cb
-          );
+          mockyeah = MockYeahServer({}, cb);
           request = supertest(mockyeah.server);
         },
         cb => {
@@ -44,6 +39,10 @@ describe('Route proxy', () => {
 
   after(done => {
     async.parallel([cb => mockyeah.close(cb), cb => proxiedServer.close(cb)], done);
+  });
+
+  beforeEach(() => {
+    mockyeah.proxy();
   });
 
   afterEach(() => {
