@@ -206,6 +206,14 @@ describe('Route Patterns', () => {
     request.get('/foo?bar=yes').expect(200, done);
   });
 
+  it('should allow match object with `url` as alias of `path`', done => {
+    mockyeah.get({
+      url: '/foo?bar=yes'
+    });
+
+    request.get('/foo?bar=yes').expect(200, done);
+  });
+
   it('should match path alone with object', done => {
     mockyeah.get({
       path: '/foo'
