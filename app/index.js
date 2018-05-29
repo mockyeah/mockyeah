@@ -20,7 +20,8 @@ module.exports = function App(config) {
     name: 'mockyeah',
     output: true,
     journal: false,
-    verbose: false
+    verbose: false,
+    proxy: false
   };
 
   // Prepare global config
@@ -62,6 +63,8 @@ module.exports = function App(config) {
   // Attach RouteManager to app object, the primary set of mockyeah API methods.
   app.routeManager = new RouteManager(app);
 
+  app.proxying = app.config.proxy;
+
   app.use('/', (req, res, next) => {
     if (!app.proxying) {
       next();
@@ -91,7 +94,7 @@ module.exports = function App(config) {
 
   app.reset = () => {
     app.routeManager.reset();
-    app.proxying = false;
+    app.proxying = app.config.proxy;
     app.middlewares = [];
   };
 
