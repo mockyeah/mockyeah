@@ -19,7 +19,8 @@ module.exports = function RouteManager(app) {
     },
 
     all: function all(_path, response) {
-      return this.register('all', _path, response);
+      const method = _path.method ? _path.method.toLowerCase() : 'all';
+      return this.register(method, _path, response);
     },
 
     get: function get(_path, response) {
