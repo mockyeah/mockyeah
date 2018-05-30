@@ -9,3 +9,7 @@
 [![Coveralls github](https://img.shields.io/coveralls/github/mockyeah/mockyeah.svg)](https://coveralls.io/github/mockyeah/mockyeah)
 
 More at **https://mockyeah.js.org**.
+
+## License
+
+mockyeah is released under the [MIT License](https://opensource.org/licenses/MIT).
