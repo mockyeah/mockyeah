@@ -16,7 +16,7 @@
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
-  "license": "ISC",
+  "license": "MIT",
   "engines": {
     "node": ">=6.0.0"
   },
