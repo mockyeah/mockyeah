@@ -11,8 +11,7 @@
     "test:coverage:report": "nyc report --reporter=text-lcov | coveralls",
     "lint": "gulp lint",
     "lint:watch": "gulp lint:watch",
-    "precommit": "yarn test",
-    "prepush": "yarn test"
+    "precommit": "yarn test"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
