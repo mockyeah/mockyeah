@@ -2,11 +2,10 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const proxy = require('http-proxy-middleware');
 const async = require('async');
-const isAbsoluteUrl = require('is-absolute-url');
 const Logger = require('./lib/Logger');
 const RouteManager = require('./lib/RouteManager');
+const proxyRoute = require('./proxyRoute');
 
 /**
  * App module
@@ -65,28 +64,7 @@ module.exports = function App(config) {
 
   app.proxying = app.config.proxy;
 
-  app.use('/', (req, res, next) => {
-    if (!app.proxying) {
-      next();
-      return;
-    }
-
-    const reqUrl = req.originalUrl.replace(/^\//, '');
-
-    if (!isAbsoluteUrl(reqUrl)) {
-      next();
-      return;
-    }
-
-    const middleware = proxy({
-      target: reqUrl,
-      changeOrigin: true,
-      logLevel: 'silent', // TODO: Sync with mockyeah settings.
-      ignorePath: true
-    });
-
-    middleware(req, res, next);
-  });
+  app.use('/', proxyRoute);
 
   app.proxy = on => {
     app.proxying = typeof on !== 'undefined' ? on : true;
