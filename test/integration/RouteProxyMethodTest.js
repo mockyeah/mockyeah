@@ -6,7 +6,7 @@ const express = require('express');
 const MockYeahServer = require('../../server');
 const supertest = require('supertest');
 
-describe('Route proxy', () => {
+describe('Route proxy method', () => {
   let mockyeah;
   let proxiedApp;
   let proxiedServer;
@@ -17,7 +17,7 @@ describe('Route proxy', () => {
     async.parallel(
       [
         cb => {
-          mockyeah = MockYeahServer({}, cb);
+          mockyeah = MockYeahServer({ port: 0, adminPort: 0 }, cb);
           request = supertest(mockyeah.server);
         },
         cb => {

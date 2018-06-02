@@ -21,6 +21,7 @@
     "commander": "^2.9.0",
     "inquirer": "^0.11.4",
     "liftoff": "^2.2.0",
+    "request": "^2.87.0",
     "tildify": "^1.1.2",
     "v8flags": "^2.0.11"
   },
@@ -28,6 +29,7 @@
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^2.1.1",
     "gulp": "^3.9.0",
-    "gulp-eslint": "^1.1.1"
+    "gulp-eslint": "^1.1.1",
+    "mockyeah": "^0.17.0"
   }
 }

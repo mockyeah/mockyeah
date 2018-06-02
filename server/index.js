@@ -7,6 +7,7 @@ const createCertFiles = require('create-cert-files');
 const { partial } = require('lodash');
 const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
+const AdminServer = require('./admin');
 
 /**
  * Server module
@@ -74,11 +75,29 @@ module.exports = function Server(config, onStart) {
     app.use.apply(app, arguments);
   };
 
+  // Instantiate an admin server, if configured as such.
+  let adminServer;
+  if (config.adminServer) {
+    const admin = new AdminServer(config, app);
+    adminServer = admin.listen(config.adminPort, config.adminHost, function adminListen() {
+      adminServer.rootUrl = `http://${this.address().address}:${this.address().port}`;
+      app.log(['serve', 'admin'], `Admin server listening at ${adminServer.rootUrl}`);
+    });
+  }
+
+  const { proxy, reset, play, record, recordStop } = app;
+
   // Construct and return mockyeah API
-  return Object.assign(
-    { server },
-    app.routeManager,
-    { proxy: app.proxy, reset: app.reset },
-    { use, config, close }
-  );
+  return Object.assign({}, app.routeManager, {
+    server,
+    adminServer,
+    use,
+    config,
+    close,
+    proxy,
+    reset,
+    play,
+    record,
+    recordStop
+  });
 };

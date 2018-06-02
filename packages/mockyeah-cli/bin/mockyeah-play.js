@@ -14,26 +14,36 @@ const boot = require('../lib/boot');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const tildify = require('tildify');
-let name;
+const request = require('request');
 
-program
-  .option('-v, --verbose', 'Verbose output')
-  .parse(process.argv);
+program.option('-v, --verbose', 'Verbose output').parse(process.argv);
+
+const withName = (env, name) => {
+  const { adminUrl } = env;
+
+  request.get(`${adminUrl}/play?name=${name}`, (err, res) => {
+    if (err) {
+      // TODO: Detect errors that shouldn't result in local fallback.
+      require(env.modulePath).play(name);
+    }
+  });
+};
 
 // Prepare options
 global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
-name = program.args[0];
 
-boot((env) => {
+boot(env => {
+  const name = program.args[0];
+
   const capturesDir = env.config.capturesDir;
   let captureNames;
 
   try {
-    captureNames = fs.readdirSync(capturesDir).filter((file) => {
+    captureNames = fs.readdirSync(capturesDir).filter(file => {
       return fs.statSync(path.join(capturesDir, file)).isDirectory();
     });
   } catch (err) {
-    console.log(chalk.red('Capture directory not found at ' + tildify(capturesDir)));
+    console.log(chalk.red('Capture directory not found at ' + capturesDir));
     process.exit(1);
   }
 
@@ -44,19 +54,20 @@ boot((env) => {
   }
 
   if (!name) {
-    inquirer.prompt([
-      {
-        type: 'list',
-        name: 'name',
-        message: 'Choose a recording to play:',
-        choices: captureNames
+    inquirer.prompt(
+      [
+        {
+          type: 'list',
+          name: 'name',
+          message: 'Choose a recording to play:',
+          choices: captureNames
+        }
+      ],
+      answers => {
+        withName(env, answers.name);
       }
-    ], answers => {
-      require(env.modulePath).play(answers.name);
-    });
-  }
-
-  if (name) {
-    require(env.modulePath).play(name);
+    );
+  } else {
+    withName(env, name);
   }
 });

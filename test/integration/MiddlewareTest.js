@@ -8,7 +8,7 @@ const request = require('supertest');
  * Instantiate new mockyeah server so that `TestHelper.mockyeah`
  * is not affected with middleware.
  */
-const mockyeah = new MockYeahServer({ port: 0 });
+const mockyeah = new MockYeahServer({ port: 0, adminPort: 0 });
 
 const dummyMiddleware = (req, res, next) => {
   res.set('custom', 'middleware');

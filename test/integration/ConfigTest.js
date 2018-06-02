@@ -9,7 +9,7 @@ describe('Config', () => {
   it('should write output to stdout by default', function(done) {
     exec(
       `echo "
-      const mockyeah = new require('./server')({ port: 0 }, function() { process.exit() });
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0 }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
         expect(stdout).to.include('mockyeah');
@@ -21,7 +21,7 @@ describe('Config', () => {
   it('should write output to stdout when enabled', function(done) {
     exec(
       `echo "
-      const mockyeah = new require('./server')({ port: 0, output: true }, function() { process.exit() });
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0, output: true }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
         expect(stdout).to.include('mockyeah');
@@ -33,7 +33,7 @@ describe('Config', () => {
   it('should not write to stdout when disabled', function(done) {
     exec(
       `echo "
-      const mockyeah = new require('./server')({ port: 0, output: false }, function() { process.exit() });
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0, output: false }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
         expect(stdout).to.not.include('mockyeah');
@@ -46,7 +46,7 @@ describe('Config', () => {
     exec(
       `echo "
       const request = require('supertest');
-      const mockyeah = new require('./server')({ port: 0 });
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0 });
       mockyeah.get('/foo', { text: 'bar' });
       request(mockyeah.server)
       .get('/foo?bar=true')
@@ -63,7 +63,7 @@ describe('Config', () => {
     exec(
       `echo "
       const request = require('supertest');
-      const mockyeah = new require('./server')({ port: 0, verbose: true });
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0, verbose: true });
       mockyeah.get('/foo', { text: 'bar' });
       request(mockyeah.server)
       .get('/foo?bar=true')
@@ -80,7 +80,7 @@ describe('Config', () => {
     exec(
       `echo "
       const request = require('supertest');
-      // const mockyeah = new require('./server')({ port: 0, verbose: false });
+      // const mockyeah = new require('./server')({ port: 0, adminPort: 0, verbose: false });
       const mockyeah = require('./index');
       setTimeout(function() {
         mockyeah.get('/foo', { text: 'bar' });
@@ -100,7 +100,7 @@ describe('Config', () => {
     exec(
       `echo "
       const request = require('supertest');
-      const mockyeah = new require('./server')({ port: 0 });
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0 });
       mockyeah.get('/foo', { text: 'bar' });
       request(mockyeah.server)
         .get('/foo?bar=true')
@@ -117,7 +117,7 @@ describe('Config', () => {
     exec(
       `echo "
       const request = require('supertest');
-      const mockyeah = new require('./server')({ port: 0, journal: true });
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0, journal: true });
       mockyeah.get('/foo', { text: 'bar' });
       request(mockyeah.server)
         .get('/foo?bar=true')
@@ -134,7 +134,7 @@ describe('Config', () => {
     exec(
       `echo "
       const request = require('supertest');
-      const mockyeah = new require('./server')({ port: 0, journal: false });
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0, journal: false });
       mockyeah.get('/foo', { text: 'bar' });
       request(mockyeah.server)
         .get('/foo?bar=true')

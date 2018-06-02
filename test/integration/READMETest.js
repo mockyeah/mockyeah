@@ -7,7 +7,7 @@ const MockYeahServer = require('../../server');
  * Instantiate new server that can be closed without
  * affecting other tests.
  */
-const mockyeah = MockYeahServer({ port: 0 });
+const mockyeah = MockYeahServer({ port: 0, adminPort: 0 });
 
 const request = require('supertest')(mockyeah.server);
 

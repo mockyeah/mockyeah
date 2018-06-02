@@ -11,34 +11,73 @@ const program = require('commander');
 const boot = require('../lib/boot');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-let name;
+const request = require('request');
 
-program
-  .option('-v, --verbose', 'Verbose output')
-  .parse(process.argv);
+program.option('-v, --verbose', 'Verbose output').parse(process.argv);
+
+const withName = (env, name) => {
+  const { adminUrl } = env;
+
+  // This is preemptive future work to support options like in #151.
+  const options = {};
+
+  let remote;
+  request.get(`${adminUrl}/record?name=${name}&options=${JSON.stringify(options)}`, (err, res) => {
+    if (err) {
+      remote = false;
+
+      // TODO: Detect errors that shouldn't result in local fallback.
+      require(env.modulePath).record(name, options);
+    } else {
+      remote = true;
+    }
+
+    inquirer.prompt(
+      [
+        {
+          type: 'confirm',
+          name: 'stop',
+          message: 'Press enter when ready to stop recording.'
+        }
+      ],
+      answers => {
+        if (remote) {
+          request.get(`${adminUrl}/record-stop`, (err, res) => {});
+        } else {
+          require(env.modulePath).recordStop();
+        }
+      }
+    );
+  });
+};
 
 // Prepare options
 global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
-name = program.args[0];
 
-boot((env) => {
+boot(env => {
+  const name = program.args[0];
+
+  env.program = program;
+
   if (!name) {
-    inquirer.prompt([
-      {
-        type: 'input',
-        name: 'name',
-        message: 'Recording name:'
-      }
-    ], answers => {
-      if (!answers.name.length) {
-        console.log(chalk.red('Recording name required'));
-        process.exit(1);
-      }
-      require(env.modulePath).record(answers.name);
-    });
-  }
+    inquirer.prompt(
+      [
+        {
+          type: 'input',
+          name: 'name',
+          message: 'Recording name:'
+        }
+      ],
+      answers => {
+        if (!answers.name.length) {
+          console.log(chalk.red('Recording name required'));
+          process.exit(1);
+        }
 
-  if (name) {
-    require(env.modulePath).record(name);
+        withName(env, answers.name);
+      }
+    );
+  } else {
+    withName(env, name);
   }
 });

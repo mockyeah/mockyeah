@@ -11,10 +11,11 @@ const MockYeahServer = require('../../server');
 
 const PROXY_CAPTURES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Capture Record and Playback', function() {
+describe('Capture Record and Playback Admin Server', function() {
   let proxy;
   let remote;
   let proxyReq;
+  let proxyAdminReq;
   let remoteReq;
 
   before(done => {
@@ -46,6 +47,7 @@ describe('Capture Record and Playback', function() {
       ],
       () => {
         remoteReq = supertest(remote.server);
+        proxyAdminReq = supertest(`${proxy.adminServer.rootUrl}`);
         proxyReq = supertest(`${proxy.server.rootUrl}/${remote.server.rootUrl}`);
         done();
       }
@@ -67,7 +69,7 @@ describe('Capture Record and Playback', function() {
     return path.resolve(PROXY_CAPTURES_DIR, captureName, 'index.js');
   }
 
-  it('should record and playback capture', function(done) {
+  it('should record and playback capture over admin server', function(done) {
     this.timeout = 10000;
 
     const captureName = 'some-fancy-capture';
@@ -92,8 +94,7 @@ describe('Capture Record and Playback', function() {
       [
         // Initiate recording
         cb => {
-          proxy.record(captureName);
-          cb();
+          proxyAdminReq.get(`/record?name=${captureName}`).expect(204, cb);
         },
 
         // Invoke requests to remote services through proxy
@@ -106,7 +107,7 @@ describe('Capture Record and Playback', function() {
 
         // Stop recording
         cb => {
-          proxy.recordStop(cb);
+          proxyAdminReq.get('/record-stop').expect(204, cb);
         },
 
         // Assert capture file exists
@@ -122,8 +123,7 @@ describe('Capture Record and Playback', function() {
         },
 
         cb => {
-          proxy.play(captureName);
-          cb();
+          proxyAdminReq.get(`/play?name=${captureName}`).expect(204, cb);
         },
 
         // Test remote url paths and their sub paths route to the same services
