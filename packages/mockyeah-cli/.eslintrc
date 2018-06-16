@@ -1,0 +1,28 @@
+---
+extends: "airbnb/base"
+
+env:
+  node: true
+  mocha: true
+
+ecmaFeatures:
+  modules: false
+
+rules:
+  strict: [2, global]
+  no-param-reassign: 0
+  no-shadow: 1
+  comma-dangle: [2, never]
+  no-unused-vars: 1
+  space-before-function-paren: 0
+  new-cap: 0
+  eol-last: 0
+
+  # Node Rules
+  no-new-require: 2
+  no-path-concat: 2
+  no-process-exit: 2
+  no-sync: 2
+  no-mixed-requires: 1
+  callback-return: 0
+  handle-callback-err: 0

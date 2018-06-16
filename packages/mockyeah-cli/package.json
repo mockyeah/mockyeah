@@ -1,0 +1,33 @@
+{
+  "name": "mockyeah-cli",
+  "version": "0.2.3",
+  "description": "A cli to an invaluable service mocking platform built on Express.",
+  "main": "index.js",
+  "bin": {
+    "mockyeah": "./bin/index.js"
+  },
+  "preferGlobal": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ryanricard/mockyeah-cli.git"
+  },
+  "author": "Ryan Ricard",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "commander": "^2.9.0",
+    "inquirer": "^0.11.4",
+    "liftoff": "^2.2.0",
+    "tildify": "^1.1.2",
+    "v8flags": "^2.0.11"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^2.1.1",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^1.1.1"
+  }
+}
