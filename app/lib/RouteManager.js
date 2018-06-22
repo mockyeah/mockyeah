@@ -14,7 +14,7 @@ module.exports = function RouteManager(app) {
 
   return {
     register: function register(method, _path, response) {
-      app.log(['serve', 'mount', method], _path);
+      app.log(['serve', 'mount', method], _path.path || _path);
       return routeResolver.register(method, _path, response);
     },
 
