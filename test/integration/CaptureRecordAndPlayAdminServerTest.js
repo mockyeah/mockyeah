@@ -92,6 +92,11 @@ describe('Capture Record and Playback Admin Server', function() {
     // Initiate recording and playback series
     async.series(
       [
+        // Fail to initiate recording without name
+        cb => {
+          proxyAdminReq.get(`/record`).expect(400, cb);
+        },
+
         // Initiate recording
         cb => {
           proxyAdminReq.get(`/record?name=${captureName}`).expect(204, cb);
@@ -120,6 +125,11 @@ describe('Capture Record and Playback Admin Server', function() {
         cb => {
           proxy.reset();
           cb();
+        },
+
+        // Fail to initiate playing without name
+        cb => {
+          proxyAdminReq.get(`/play`).expect(400, cb);
         },
 
         cb => {
