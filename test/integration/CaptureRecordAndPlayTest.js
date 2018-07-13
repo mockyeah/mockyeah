@@ -104,6 +104,20 @@ describe('Capture Record and Playback', function() {
         cb => proxyReq.get(path4).expect(200, 'fourth', cb),
         cb => proxyReq.get(path5).expect(200, 'fifth', cb),
 
+        // Stop recording but pretend there's a file write error.
+        cb => {
+          const { writeFile } = fs;
+          fs.writeFile = (filePath, js, _cb) => _cb(new Error('fake fs error'));
+          proxy.recordStop(err => {
+            fs.writeFile = writeFile;
+            if (err) {
+              cb();
+              return;
+            }
+            cb(new Error('expected error'));
+          });
+        },
+
         // Stop recording
         cb => {
           proxy.recordStop(cb);
