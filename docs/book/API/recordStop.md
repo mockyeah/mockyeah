@@ -1,4 +1,4 @@
-# `record()`
+# `recordStop()`
 
 `mockyeah.recordStop()`
 
