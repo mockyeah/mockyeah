@@ -25,8 +25,6 @@ module.exports = app => cb => {
 
   set.forEach(capture => {
     app.log(['serve', 'capture'], capture[0].url);
-    // TODO: Are these play logs still appropriate?
-    app.log(['serve', 'playing', capture[0].method], capture[0].url, false);
   });
 
   const json = JSON.stringify(set, null, 2);
