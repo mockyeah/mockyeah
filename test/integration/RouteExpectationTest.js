@@ -12,7 +12,7 @@ describe('Route expectation', () => {
   let request;
 
   before(() => {
-    mockyeah = MockYeahServer({ port: 0 });
+    mockyeah = MockYeahServer({ port: 0, adminPort: 0 });
     request = supertest(mockyeah.server);
   });
 

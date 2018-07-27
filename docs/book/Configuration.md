@@ -12,7 +12,11 @@
   "output": true,
   "journal": false,
   "verbose": false,
-  "proxy": false
+  "proxy": false,
+  "record": false,
+  "adminServer": true,
+  "adminHost": "localhost",
+  "adminPort": 4777
 }
 ```
 
@@ -22,16 +26,16 @@ be written using standard `JSON`.
 
 ### Options:
 
-* `name`: Used to identify the origin of logged output.
-* `host`: Host on which mockyeah will run.
-* `port`: Port on which mockyeah will run over HTTP (or use `portHttps`).
-* `portHttps`: Port on which mockyeah will run over HTTPS (instead of `port`).
-* `httpsKeyPath`: Optional file path to SSL key for custom certificates (instead of auto-generated).
-* `httpsCertPath`: Optional file path to SSL key for custom certificates (instead of auto-generated)
-* `fixturesDir`: Relative path to the fixtures directory.
-* `capturesDir`: Relative path to the captures directory.
-* `output`: Boolean to toggle mockyeah generated output written to `stdout`.
-* `journal`: Boolean to toggle request journaling. Example journaling output:
+- `name`: Used to identify the origin of logged output.
+- `host`: Host on which mockyeah will run.
+- `port`: Port on which mockyeah will run over HTTP (or use `portHttps`).
+- `portHttps`: Port on which mockyeah will run over HTTPS (instead of `port`).
+- `httpsKeyPath`: Optional file path to SSL key for custom certificates (instead of auto-generated).
+- `httpsCertPath`: Optional file path to SSL key for custom certificates (instead of auto-generated)
+- `fixturesDir`: Relative path to the fixtures directory.
+- `capturesDir`: Relative path to the captures directory.
+- `output`: Boolean to toggle mockyeah generated output written to `stdout`.
+- `journal`: Boolean to toggle request journaling. Example journaling output:
 
   ```shell
   [mockyeah][14:54:21][REQUEST][JOURNAL] {
@@ -52,17 +56,16 @@ be written using standard `JSON`.
   }
   ```
 
-* `verbose`: Boolean to toggle verbosity of mockyeah generated output.
-* `proxy`: Boolean to enable a proxy.
+- `verbose`: Boolean to toggle verbosity of mockyeah generated output.
+- `proxy`: Boolean to enable a proxy on startup.
 
 The proxy will transparently forward all non-matching requests onto their original URL.
 
 This enables working with real APIs by default but partially mocking responses for some requests.
 
 Then you can hit your mockyeah server's URLs like:
-
-* `https://localhost:4001/https://api.example.com?foo=bar`
-* `https://localhost:4001/https://service.example.com/foo/bar`
+`https://localhost:4001/https://api.example.com?foo=bar`
+`https://localhost:4001/https://service.example.com/foo/bar`
 
 and allow the first to pass through to the actual origin by not defining any mocks, but mock the second with:
 
@@ -75,6 +78,11 @@ mockyeah.get('https://service.example.com/foo/bar', {
 ```
 
 Internally, this mounts with a leading slash, i.e., `'/https://service.example.com/foo/bar'`.
+
+- `record`: Boolean to enable recording on startup.
+- `adminServer`: Boolean to enable admin server (for recording, playing, etc.)
+- `adminHost`: Host on which admin server will run.
+- `adminPort`: Port on which admin server will run.
 
 ### HTTPS
 

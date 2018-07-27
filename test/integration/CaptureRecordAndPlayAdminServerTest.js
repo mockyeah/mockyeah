@@ -11,10 +11,11 @@ const MockYeahServer = require('../../server');
 
 const PROXY_CAPTURES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Capture Record and Playback', function() {
+describe('Capture Record and Playback Admin Server', function() {
   let proxy;
   let remote;
   let proxyReq;
+  let proxyAdminReq;
   let remoteReq;
 
   before(done => {
@@ -46,6 +47,7 @@ describe('Capture Record and Playback', function() {
       ],
       () => {
         remoteReq = supertest(remote.server);
+        proxyAdminReq = supertest(`${proxy.adminServer.rootUrl}`);
         proxyReq = supertest(`${proxy.server.rootUrl}/${remote.server.rootUrl}`);
         done();
       }
@@ -67,7 +69,7 @@ describe('Capture Record and Playback', function() {
     return path.resolve(PROXY_CAPTURES_DIR, captureName, 'index.js');
   }
 
-  it('should record and playback capture', function(done) {
+  it('should record and playback capture over admin server', function(done) {
     this.timeout = 10000;
 
     const captureName = 'some-fancy-capture';
@@ -90,10 +92,14 @@ describe('Capture Record and Playback', function() {
     // Initiate recording and playback series
     async.series(
       [
+        // Fail to initiate recording without name
+        cb => {
+          proxyAdminReq.get(`/record`).expect(400, cb);
+        },
+
         // Initiate recording
         cb => {
-          proxy.record(captureName);
-          cb();
+          proxyAdminReq.get(`/record?name=${captureName}`).expect(204, cb);
         },
 
         // Invoke requests to remote services through proxy
@@ -104,23 +110,9 @@ describe('Capture Record and Playback', function() {
         cb => proxyReq.get(path4).expect(200, 'fourth', cb),
         cb => proxyReq.get(path5).expect(200, 'fifth', cb),
 
-        // Stop recording but pretend there's a file write error.
-        cb => {
-          const { writeFile } = fs;
-          fs.writeFile = (filePath, js, _cb) => _cb(new Error('fake fs error'));
-          proxy.recordStop(err => {
-            fs.writeFile = writeFile;
-            if (err) {
-              cb();
-              return;
-            }
-            cb(new Error('expected error'));
-          });
-        },
-
         // Stop recording
         cb => {
-          proxy.recordStop(cb);
+          proxyAdminReq.get('/record-stop').expect(204, cb);
         },
 
         // Assert capture file exists
@@ -135,9 +127,13 @@ describe('Capture Record and Playback', function() {
           cb();
         },
 
+        // Fail to initiate playing without name
         cb => {
-          proxy.play(captureName);
-          cb();
+          proxyAdminReq.get(`/play`).expect(400, cb);
+        },
+
+        cb => {
+          proxyAdminReq.get(`/play?name=${captureName}`).expect(204, cb);
         },
 
         // Test remote url paths and their sub paths route to the same services

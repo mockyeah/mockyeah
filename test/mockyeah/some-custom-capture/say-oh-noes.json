@@ -1,8 +1,0 @@
-{
-  "method": "get",
-  "path": "/say-oh-noes",
-  "options": {
-    "text": "Oh noes!",
-    "status": 500
-  }
-}

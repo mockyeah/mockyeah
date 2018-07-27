@@ -1,3 +1,6 @@
+captures
+fixtures
+
 docs/_book
 
 .nyc_output

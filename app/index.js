@@ -6,6 +6,9 @@ const async = require('async');
 const Logger = require('./lib/Logger');
 const RouteManager = require('./lib/RouteManager');
 const proxyRoute = require('./proxyRoute');
+const recorder = require('./recorder');
+const recordStopper = require('./recordStopper');
+const player = require('./player');
 
 /**
  * App module
@@ -14,14 +17,6 @@ const proxyRoute = require('./proxyRoute');
  */
 module.exports = function App(config) {
   const app = express();
-
-  const defaultConfig = {
-    name: 'mockyeah',
-    output: true,
-    journal: false,
-    verbose: false,
-    proxy: false
-  };
 
   // Prepare global config
   const globalConfig = {};
@@ -33,7 +28,7 @@ module.exports = function App(config) {
   }
 
   // Prepare configuration. Merge configuration with global and default configuration
-  app.config = Object.assign({}, defaultConfig, globalConfig, config || {});
+  app.config = Object.assign({}, globalConfig, config || {});
 
   // Instantiate new logger
   const logger = new Logger({
@@ -62,17 +57,24 @@ module.exports = function App(config) {
   // Attach RouteManager to app object, the primary set of mockyeah API methods.
   app.routeManager = new RouteManager(app);
 
-  app.proxying = app.config.proxy;
+  app.locals.proxying = app.config.proxy;
+
+  app.locals.recording = app.config.record;
+  app.locals.recordMeta = {};
 
   app.use('/', proxyRoute);
 
   app.proxy = on => {
-    app.proxying = typeof on !== 'undefined' ? on : true;
+    app.locals.proxying = typeof on !== 'undefined' ? on : true;
   };
+
+  app.record = recorder(app);
+  app.recordStop = recordStopper(app);
+  app.play = player(app);
 
   app.reset = () => {
     app.routeManager.reset();
-    app.proxying = app.config.proxy;
+    app.locals.proxying = app.config.proxy;
     app.middlewares = [];
   };
 

@@ -15,7 +15,7 @@ const liftoff = new Liftoff({
 });
 
 module.exports = function boot(callback) {
-  liftoff.launch({}, (env) => {
+  liftoff.launch({}, env => {
     // check for local mockyeah
     if (!env.modulePath) {
       console.log(chalk.red('Local mockyeah not found in ' + env.cwd));
@@ -24,6 +24,12 @@ module.exports = function boot(callback) {
     }
 
     env.config = require('./config')(env);
+
+    // TODO: Implement support for HTTPS admin server protocol.
+
+    const { adminProtocol, adminHost, adminPort } = env.config;
+
+    env.adminUrl = `${adminProtocol}://${adminHost}:${adminPort}`;
 
     callback.call(this, env);
   });

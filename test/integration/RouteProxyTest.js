@@ -19,6 +19,8 @@ describe('Route proxy', () => {
         cb => {
           mockyeah = MockYeahServer(
             {
+              port: 0,
+              adminPort: 0,
               proxy: true
             },
             cb

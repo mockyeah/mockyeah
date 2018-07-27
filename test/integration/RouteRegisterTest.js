@@ -13,7 +13,8 @@ describe('Route register', () => {
 
   before(() => {
     mockyeah = MockYeahServer({
-      port: 0
+      port: 0,
+      adminPort: 0
     });
     request = supertest(mockyeah.server);
   });
