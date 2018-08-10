@@ -16,7 +16,7 @@ const chalk = require('chalk');
 const tildify = require('tildify');
 const request = require('request');
 
-program.option('-v, --verbose', 'Verbose output').parse(process.argv);
+program.option('-v, --verbose', 'verbose output').parse(process.argv);
 
 const withName = (env, name) => {
   const { adminUrl } = env;

@@ -92,7 +92,8 @@
     "mkdirp": "^0.5.1",
     "path-to-regexp": "^2.1.0",
     "request": "^2.69.0",
-    "tildify": "^1.1.2"
+    "tildify": "^1.1.2",
+    "url-pattern": "^1.0.3"
   },
   "private": false
 }

@@ -54,7 +54,7 @@ module.exports = (req, res, next) => {
       return;
     }
 
-    if (app.locals.recording) {
+    if (app.locals.recording && app.locals.recordMeta.match(reqUrl)) {
       const { method, body: reqBody } = req;
 
       const { statusCode: status, _headers: headers } = res;

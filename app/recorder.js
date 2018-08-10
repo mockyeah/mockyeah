@@ -1,12 +1,24 @@
-module.exports = app => (name, options) => {
+const UrlPattern = require('url-pattern');
+
+module.exports = app => (name, options = {}) => {
+  const { match } = options;
+  let matchFn = () => true;
+
   app.locals.recording = true;
   if (!name) throw new Error('Must provide a recording name.');
 
   app.log(['serve', 'record'], name);
 
+  if (match) {
+    const urlPattern = new UrlPattern(match);
+    app.log(['serve', 'record', 'match'], urlPattern.stringify());
+    matchFn = urlPattern.match.bind(urlPattern);
+  }
+
   app.locals.recordMeta = {
     name,
-    options
+    options,
+    match: matchFn
   };
 
   // Store whether we're proxying so we can reset it later.
