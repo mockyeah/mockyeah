@@ -1,8 +1,0 @@
-"firstName", "lastName"
-"Kate", "Austen"
-"John", "Locke"
-"Jack", "Shephard"
-"Charlie", "Pace"
-"Desmond", "Hume"
-"Hugo", "Reyes"
-"James", "Ford"
