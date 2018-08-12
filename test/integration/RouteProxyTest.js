@@ -1,10 +1,12 @@
 'use strict';
 
-require('../TestHelper');
+const { expect } = require('chai');
 const async = require('async');
 const express = require('express');
-const MockYeahServer = require('../../server');
+const bodyParser = require('body-parser');
 const supertest = require('supertest');
+require('../TestHelper');
+const MockYeahServer = require('../../server');
 
 describe('Route proxy', () => {
   let mockyeah;
@@ -12,6 +14,8 @@ describe('Route proxy', () => {
   let proxiedServer;
   let request;
   let proxiedPort;
+  let receivedHeaders = {};
+  let receivedBody;
 
   before(done => {
     async.parallel(
@@ -29,7 +33,13 @@ describe('Route proxy', () => {
         },
         cb => {
           proxiedApp = express();
-          proxiedApp.get('/foo', (req, res) => res.sendStatus(200));
+          proxiedApp.use(bodyParser.json());
+          proxiedApp.all('/foo', (req, res) => {
+            receivedHeaders = Object.assign(receivedHeaders, req.headers);
+            console.log('req.body', req.body);
+            receivedBody = req.body;
+            res.sendStatus(200);
+          });
           proxiedServer = proxiedApp.listen(0, err => {
             if (err) {
               cb(err);
@@ -99,6 +109,26 @@ describe('Route proxy', () => {
 
   it('should support proxying other URLs', done => {
     request.get(`/http://localhost:${proxiedPort}/foo?ok=yes`).expect(200, done);
+  });
+
+  it('should pass headers and body to proxied service', done => {
+    request
+      .post(`/http://localhost:${proxiedPort}/foo?ok=yes`)
+      .set('X-Foo', 'bar')
+      .send({ foo: 'bar' })
+      .expect(200, err => {
+        if (err) {
+          done(err);
+          return;
+        }
+        try {
+          expect(receivedHeaders['x-foo']).to.equal('bar');
+          expect(receivedBody).to.deep.equal({ foo: 'bar' });
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
   });
 
   it('should support proxying other URLs even with other mocks', done => {
