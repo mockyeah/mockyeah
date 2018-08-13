@@ -89,11 +89,11 @@
     "express": "^4.13.3",
     "is-absolute-url": "^2.1.0",
     "lodash": "^4.17.5",
+    "minimatch": "^3.0.4",
     "mkdirp": "^0.5.1",
     "path-to-regexp": "^2.1.0",
     "request": "^2.69.0",
-    "tildify": "^1.1.2",
-    "url-pattern": "^1.0.3"
+    "tildify": "^1.1.2"
   },
   "private": false
 }

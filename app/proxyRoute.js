@@ -31,6 +31,7 @@ const makeRequestOptions = req => {
 
 module.exports = (req, res, next) => {
   const { app } = req;
+  const { onlyPattern } = app.locals.recordMeta;
 
   if (!app.locals.proxying) {
     next();
@@ -54,7 +55,7 @@ module.exports = (req, res, next) => {
       return;
     }
 
-    if (app.locals.recording && app.locals.recordMeta.match(reqUrl)) {
+    if (app.locals.recording && (!onlyPattern || onlyPattern(reqUrl))) {
       const { method, body: reqBody } = req;
 
       const { statusCode: status, _headers: headers } = res;

@@ -14,7 +14,7 @@ const chalk = require('chalk');
 const request = require('request');
 
 program
-  .option('-m, --match [pattern]', 'url patterns to record')
+  .option('-o, --only [pattern]', 'only record calls matching given pattern')
   .option('-v, --verbose', 'verbose output')
   .parse(process.argv);
 
@@ -56,7 +56,7 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
   const [name] = program.args;
-  const { match } = program;
+  const { only } = program;
 
   env.program = program;
 
@@ -75,10 +75,10 @@ boot(env => {
           process.exit(1);
         }
 
-        withName(env, answers.name, { match });
+        withName(env, answers.name, { only });
       }
     );
   } else {
-    withName(env, name, { match });
+    withName(env, name, { only });
   }
 });
