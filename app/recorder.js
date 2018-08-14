@@ -1,7 +1,7 @@
 const Minimatch = require('minimatch').Minimatch;
 
 module.exports = app => (name, options = {}) => {
-  let onlyPattern;
+  let only;
 
   app.locals.recording = true;
   if (!name) throw new Error('Must provide a recording name.');
@@ -9,15 +9,16 @@ module.exports = app => (name, options = {}) => {
   app.log(['serve', 'record'], name);
 
   if (options.only) {
-    // if match is a string, assume it is a url pattern
-    onlyPattern = new Minimatch(options.only);
-    app.log(['serve', 'record', 'only'], onlyPattern);
+    // if only is truthy, assume it is a glob pattern
+    const mm = new Minimatch(options.only);
+    only = mm.match.bind(mm);
+    app.log(['serve', 'record', 'only'], mm.pattern);
   }
 
   app.locals.recordMeta = {
     name,
     options,
-    onlyPattern
+    only
   };
 
   // Store whether we're proxying so we can reset it later.
