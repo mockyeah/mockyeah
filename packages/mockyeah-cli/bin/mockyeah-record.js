@@ -14,7 +14,7 @@ const chalk = require('chalk');
 const request = require('request');
 
 program
-  .option('-o, --only [glob]', 'only record calls to URLs matching given glob pattern')
+  .option('-o, --only [regex]', 'only record calls to URLs matching given regex pattern')
   .option('-v, --verbose', 'verbose output')
   .parse(process.argv);
 

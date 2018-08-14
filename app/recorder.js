@@ -1,5 +1,3 @@
-const Minimatch = require('minimatch').Minimatch;
-
 module.exports = app => (name, options = {}) => {
   let only;
 
@@ -9,10 +7,10 @@ module.exports = app => (name, options = {}) => {
   app.log(['serve', 'record'], name);
 
   if (options.only) {
-    // if only is truthy, assume it is a glob pattern
-    const mm = new Minimatch(options.only);
-    only = mm.match.bind(mm);
-    app.log(['serve', 'record', 'only'], mm.pattern);
+    // if only is truthy, assume it is a regex pattern
+    const regex = new RegExp(options.only);
+    only = regex.test.bind(regex);
+    app.log(['serve', 'record', 'only'], regex);
   }
 
   app.locals.recordMeta = {
