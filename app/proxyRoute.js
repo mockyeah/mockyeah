@@ -66,8 +66,6 @@ module.exports = (req, res, next) => {
 
       const latency = now() - startTime;
 
-      app.locals.recordMeta = app.locals.recordMeta || {};
-      app.locals.recordMeta.set = app.locals.recordMeta.set || [];
       app.locals.recordMeta.set.push([
         {
           method: method.toLowerCase(),
