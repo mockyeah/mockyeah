@@ -16,8 +16,8 @@ module.exports = app => (name, options = {}) => {
   app.locals.recordMeta = {
     name,
     options,
-    set: [],
-    only
+    only,
+    set: []
   };
 
   // Store whether we're proxying so we can reset it later.
