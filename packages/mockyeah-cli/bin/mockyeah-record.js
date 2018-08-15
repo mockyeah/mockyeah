@@ -13,13 +13,13 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 const request = require('request');
 
-program.option('-v, --verbose', 'Verbose output').parse(process.argv);
+program
+  .option('-o, --only [regex]', 'only record calls to URLs matching given regex pattern')
+  .option('-v, --verbose', 'verbose output')
+  .parse(process.argv);
 
-const withName = (env, name) => {
+const withName = (env, name, options = {}) => {
   const { adminUrl } = env;
-
-  // This is preemptive future work to support options like in #151.
-  const options = {};
 
   let remote;
   request.get(`${adminUrl}/record?name=${name}&options=${JSON.stringify(options)}`, (err, res) => {
@@ -55,7 +55,8 @@ const withName = (env, name) => {
 global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
-  const name = program.args[0];
+  const [name] = program.args;
+  const { only } = program;
 
   env.program = program;
 
@@ -74,10 +75,10 @@ boot(env => {
           process.exit(1);
         }
 
-        withName(env, answers.name);
+        withName(env, answers.name, { only });
       }
     );
   } else {
-    withName(env, name);
+    withName(env, name, { only });
   }
 });

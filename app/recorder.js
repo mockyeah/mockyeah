@@ -1,12 +1,22 @@
-module.exports = app => (name, options) => {
+module.exports = app => (name, options = {}) => {
+  let only;
+
   app.locals.recording = true;
   if (!name) throw new Error('Must provide a recording name.');
 
   app.log(['serve', 'record'], name);
 
+  if (options.only) {
+    // if only is truthy, assume it is a regex pattern
+    const regex = new RegExp(options.only);
+    only = regex.test.bind(regex);
+    app.log(['serve', 'record', 'only'], regex);
+  }
+
   app.locals.recordMeta = {
     name,
-    options
+    options,
+    only
   };
 
   // Store whether we're proxying so we can reset it later.
