@@ -1,12 +1,13 @@
 const request = require('request');
 const isAbsoluteUrl = require('is-absolute-url');
+const { isEmpty } = require('lodash');
 
 const now = () => new Date().getTime();
 
 const makeRequestUrl = req => req.originalUrl.replace(/^\//, '');
 
 const makeRequestOptions = req => {
-  const { _headers, method: _method } = req;
+  const { headers: _headers, method: _method } = req;
 
   const headers = Object.assign({}, _headers);
   const method = _method.toLowerCase();
@@ -21,10 +22,13 @@ const makeRequestOptions = req => {
     method,
     url: reqUrl,
     // TODO: Should we even record headers? Optional?
-    headers,
-    body: req.body,
-    json: typeof req.body === 'object'
+    headers
   };
+
+  if (!isEmpty(req.body)) {
+    options.body = req.body;
+    options.json = typeof req.body === 'object'
+  }
 
   return options;
 };
