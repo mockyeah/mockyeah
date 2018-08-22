@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 'use strict';
 
 /* eslint-disable no-console, no-process-exit, no-sync */
@@ -13,7 +12,6 @@ const program = require('commander');
 const boot = require('../lib/boot');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-const tildify = require('tildify');
 const request = require('request');
 
 program.option('-v, --verbose', 'verbose output').parse(process.argv);
@@ -21,9 +19,10 @@ program.option('-v, --verbose', 'verbose output').parse(process.argv);
 const withName = (env, name) => {
   const { adminUrl } = env;
 
-  request.get(`${adminUrl}/play?name=${name}`, (err, res) => {
+  request.get(`${adminUrl}/play?name=${name}`, err => {
     if (err) {
       // TODO: Detect errors that shouldn't result in local fallback.
+      // eslint-disable-next-line global-require, import/no-dynamic-require
       require(env.modulePath).play(name);
     }
   });
@@ -35,15 +34,15 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 boot(env => {
   const name = program.args[0];
 
-  const capturesDir = env.config.capturesDir;
+  const { capturesDir } = env.config;
   let captureNames;
 
   try {
-    captureNames = fs.readdirSync(capturesDir).filter(file => {
-      return fs.statSync(path.join(capturesDir, file)).isDirectory();
-    });
+    captureNames = fs
+      .readdirSync(capturesDir)
+      .filter(file => fs.statSync(path.join(capturesDir, file)).isDirectory());
   } catch (err) {
-    console.log(chalk.red('Capture directory not found at ' + capturesDir));
+    console.log(chalk.red(`Capture directory not found at ${capturesDir}`));
     process.exit(1);
   }
 

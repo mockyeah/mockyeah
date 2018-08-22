@@ -25,5 +25,8 @@
   },
   "devDependencies": {
     "mockyeah": "^0.17.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   }
 }

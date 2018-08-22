@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 'use strict';
 
 /* eslint-disable no-console, no-process-exit, no-sync */
@@ -22,11 +21,12 @@ const withName = (env, name, options = {}) => {
   const { adminUrl } = env;
 
   let remote;
-  request.get(`${adminUrl}/record?name=${name}&options=${JSON.stringify(options)}`, (err, res) => {
+  request.get(`${adminUrl}/record?name=${name}&options=${JSON.stringify(options)}`, err => {
     if (err) {
       remote = false;
 
       // TODO: Detect errors that shouldn't result in local fallback.
+      // eslint-disable-next-line global-require, import/no-dynamic-require
       require(env.modulePath).record(name, options);
     } else {
       remote = true;
@@ -40,10 +40,11 @@ const withName = (env, name, options = {}) => {
           message: 'Press enter when ready to stop recording.'
         }
       ],
-      answers => {
+      () => {
         if (remote) {
-          request.get(`${adminUrl}/record-stop`, (err, res) => {});
+          request.get(`${adminUrl}/record-stop`, () => {});
         } else {
+          // eslint-disable-next-line global-require, import/no-dynamic-require
           require(env.modulePath).recordStop();
         }
       }
