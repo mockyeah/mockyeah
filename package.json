@@ -11,11 +11,9 @@
     "test:coverage": "lerna run test:coverage",
     "test:coverage:report": "lerna run test:coverage:report",
     "lint": "lerna run lint",
-    "lint:watch": "lerna run lint:watch",
-    "precommit": "yarn test"
+    "lint:watch": "lerna run lint:watch"
   },
   "devDependencies": {
-    "husky": "^0.14.3",
     "lerna": "^2.11.0"
   }
 }

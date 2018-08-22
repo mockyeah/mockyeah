@@ -10,8 +10,7 @@
     "test:unit": "mocha test/**/*Test.js",
     "test:coverage": "nyc yarn test:unit",
     "test:coverage:report": "nyc report --reporter=text-lcov | coveralls",
-    "lint": "eslint -c ./eslint.config.js ./app ./lib ./server ./test",
-    "precommit": "yarn test"
+    "lint": "eslint -c ./eslint.config.js ./app ./lib ./server ./test"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
@@ -62,7 +61,6 @@
     "coveralls": "^3.0.0",
     "dateformat": "^1.0.12",
     "gitbook-plugin-github": "2.0.0",
-    "husky": "^0.14.3",
     "mocha": "^3.1.2",
     "nodemon": "^1.17.5",
     "nyc": "^11.4.1",
