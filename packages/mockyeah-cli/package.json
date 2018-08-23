@@ -1,19 +1,17 @@
 {
   "name": "mockyeah-cli",
   "version": "0.2.3",
-  "description": "A cli to an invaluable service mocking platform built on Express.",
+  "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "bin": {
     "mockyeah": "./bin/index.js"
   },
   "preferGlobal": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "yarn lint",
+    "lint": "eslint -c eslint.config.js ./bin ./lib"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:ryanricard/mockyeah-cli.git"
-  },
+  "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "MIT",
   "dependencies": {
@@ -26,10 +24,9 @@
     "v8flags": "^2.0.11"
   },
   "devDependencies": {
-    "eslint": "^1.10.3",
-    "eslint-config-airbnb": "^2.1.1",
-    "gulp": "^3.9.0",
-    "gulp-eslint": "^1.1.1",
     "mockyeah": "^0.17.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   }
 }

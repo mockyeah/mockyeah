@@ -1,4 +1,5 @@
 'use strict';
+
 /* eslint-disable no-console, no-process-exit, no-sync */
 
 const Liftoff = require('liftoff');
@@ -18,11 +19,12 @@ module.exports = function boot(callback) {
   liftoff.launch({}, env => {
     // check for local mockyeah
     if (!env.modulePath) {
-      console.log(chalk.red('Local mockyeah not found in ' + env.cwd));
+      console.log(chalk.red(`Local mockyeah not found in ${env.cwd}`));
       console.log(chalk.red('Try running: npm install mockyeah --save-dev'));
       process.exit(1);
     }
 
+    // eslint-disable-next-line global-require
     env.config = require('./config')(env);
 
     // TODO: Implement support for HTTPS admin server protocol.
