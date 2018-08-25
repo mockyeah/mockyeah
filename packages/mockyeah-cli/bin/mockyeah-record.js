@@ -37,8 +37,6 @@ const withName = (env, name, options = {}) => {
     options: JSON.stringify(options)
   });
 
-  console.log(options);
-
   let remote;
   request.get(`${adminUrl}/record?${qs}`, err => {
     if (err) {
@@ -82,7 +80,7 @@ boot(env => {
 
   const options = {
     only,
-    header
+    headers: header
   };
 
   if (!name) {
