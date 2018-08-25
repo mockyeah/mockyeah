@@ -20,7 +20,7 @@ const configDefaults = {
   adminPort: 4777
 };
 
-module.exports = config => {
+module.exports = (config = {}) => {
   config.adminHost = config.adminHost || config.host || configDefaults.host;
   config.proxy = (config.proxy || config.record) === true;
 
