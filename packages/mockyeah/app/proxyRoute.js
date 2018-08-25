@@ -27,7 +27,7 @@ const makeRequestOptions = req => {
 
   if (!isEmpty(req.body)) {
     options.body = req.body;
-    options.json = typeof req.body === 'object'
+    options.json = typeof req.body === 'object';
   }
 
   return options;
@@ -60,18 +60,34 @@ module.exports = (req, res, next) => {
     }
 
     if (app.locals.recording && (!only || only(reqUrl))) {
-      const { method, body: reqBody } = req;
+      const { method: _method = 'get', body: reqBody } = req;
 
-      const { statusCode: status, _headers: headers } = res;
+      const method = _method.toLowerCase();
 
       const latency = now() - startTime;
 
+      let match = {
+        url: reqUrl
+      };
+
+      if (method !== 'get') {
+        match.method = method;
+      }
+
+      // TODO: Consider also not recording an empty body.
+      if (reqBody) {
+        match.body = reqBody;
+      }
+
+      // If the match has only `url`, we can just serialize that as string.
+      if (Object.keys(match).length === 1) {
+        match = match.url;
+      }
+
+      const { statusCode: status, _headers: headers } = res;
+
       app.locals.recordMeta.set.push([
-        {
-          method: method.toLowerCase(),
-          url: reqUrl,
-          body: reqBody
-        },
+        match,
         {
           headers,
           status,
