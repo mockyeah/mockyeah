@@ -37,6 +37,8 @@ const withName = (env, name, options = {}) => {
     options: JSON.stringify(options)
   });
 
+  console.log(options);
+
   let remote;
   request.get(`${adminUrl}/record?${qs}`, err => {
     if (err) {
@@ -74,9 +76,14 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
   const [name] = program.args;
-  const { only } = program;
+  const { only, header } = program;
 
   env.program = program;
+
+  const options = {
+    only,
+    header
+  };
 
   if (!name) {
     inquirer.prompt(
@@ -93,10 +100,10 @@ boot(env => {
           process.exit(1);
         }
 
-        withName(env, answers.name, { only });
+        withName(env, answers.name, options);
       }
     );
   } else {
-    withName(env, name, { only });
+    withName(env, name, options);
   }
 });
