@@ -1,5 +1,14 @@
 /captures
+/mockyeah
 /fixtures
+
+/packages/mockyeah-cli/captures
+/packages/mockyeah-cli/mockyeah
+/packages/mockyeah-cli/fixtures
+
+/packages/mockyeah/captures
+/packages/mockyeah/mockyeah
+/packages/mockyeah/fixtures
 
 docs/_book
 
