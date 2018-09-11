@@ -10,7 +10,7 @@ const leadProtocolRegex = /^(https?)%3A%2F%2F/;
 const makeRequestUrl = req =>
   req.originalUrl
     .replace(openingSlashRegex, '')
-    .replace(leadProtocolRegex, (match, p1) => p1 + '://');
+    .replace(leadProtocolRegex, (match, p1) => `${p1}://`);
 
 const makeRequestOptions = req => {
   const { headers: _headers, method: _method } = req;
