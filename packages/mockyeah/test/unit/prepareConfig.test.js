@@ -2,9 +2,16 @@
 
 const { expect } = require('chai');
 
+const { MOCKYEAH_ROOT } = process.env;
+process.env.MOCKYEAH_ROOT = '/fake/root';
+
 const prepareConfig = require('../../lib/prepareConfig');
 
 describe('prepareConfig', () => {
+  after(() => {
+    process.env.MOCKYEAH_ROOT = MOCKYEAH_ROOT;
+  });
+
   it('should work and use defaults with no config input', () => {
     const config = prepareConfig();
     expect(config).to.deep.equal({
@@ -12,8 +19,8 @@ describe('prepareConfig', () => {
       adminPort: 4777,
       adminProtocol: 'http',
       adminServer: true,
-      capturesDir: '/Users/anders/code/mockyeah/mockyeah',
-      fixturesDir: '/Users/anders/code/mockyeah/fixtures',
+      capturesDir: '/fake/root/mockyeah',
+      fixturesDir: '/fake/root/fixtures',
       host: 'localhost',
       httpsCertPath: undefined,
       httpsKeyPath: undefined,
@@ -33,8 +40,8 @@ describe('prepareConfig', () => {
       adminPort: 4777,
       adminProtocol: 'http',
       adminServer: true,
-      capturesDir: '/Users/anders/code/mockyeah/mockyeah',
-      fixturesDir: '/Users/anders/code/mockyeah/fixtures',
+      capturesDir: '/fake/root/mockyeah',
+      fixturesDir: '/fake/root/fixtures',
       host: 'localhost',
       httpsCertPath: undefined,
       httpsKeyPath: undefined,
