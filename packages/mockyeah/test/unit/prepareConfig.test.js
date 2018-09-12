@@ -1,15 +1,23 @@
 'use strict';
 
+const clearRequire = require('clear-require');
 const { expect } = require('chai');
 
-const { MOCKYEAH_ROOT } = process.env;
-process.env.MOCKYEAH_ROOT = '/fake/root';
-
-const prepareConfig = require('../../lib/prepareConfig');
-
 describe('prepareConfig', () => {
+  let MOCKYEAH_ROOT_BACKUP;
+  let prepareConfig;
+
+  before(() => {
+    clearRequire.all();
+    MOCKYEAH_ROOT_BACKUP = process.env.MOCKYEAH_ROOT;
+    process.env.MOCKYEAH_ROOT = '/fake/root';
+    // eslint-disable-next-line global-require
+    prepareConfig = require('../../lib/prepareConfig');
+  });
+
   after(() => {
-    process.env.MOCKYEAH_ROOT = MOCKYEAH_ROOT;
+    process.env.MOCKYEAH_ROOT = MOCKYEAH_ROOT_BACKUP;
+    clearRequire.all();
   });
 
   it('should work and use defaults with no config input', () => {
