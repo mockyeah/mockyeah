@@ -4,7 +4,13 @@ const { isEmpty } = require('lodash');
 
 const now = () => new Date().getTime();
 
-const makeRequestUrl = req => req.originalUrl.replace(/^\//, '');
+const openingSlashRegex = /^\//;
+const leadProtocolRegex = /^(https?)%3A%2F%2F/;
+
+const makeRequestUrl = req =>
+  req.originalUrl
+    .replace(openingSlashRegex, '')
+    .replace(leadProtocolRegex, (match, p1) => `${p1}://`);
 
 const makeRequestOptions = req => {
   const { headers: _headers, method: _method } = req;
@@ -27,13 +33,13 @@ const makeRequestOptions = req => {
 
   if (!isEmpty(req.body)) {
     options.body = req.body;
-    options.json = typeof req.body === 'object'
+    options.json = typeof req.body === 'object';
   }
 
   return options;
 };
 
-module.exports = (req, res, next) => {
+const proxyRoute = (req, res, next) => {
   const { app } = req;
   const { only } = app.locals.recordMeta;
 
@@ -82,3 +88,8 @@ module.exports = (req, res, next) => {
     }
   }).pipe(res);
 };
+
+// Export for testing purposes.
+proxyRoute.makeRequestUrl = makeRequestUrl;
+
+module.exports = proxyRoute;
