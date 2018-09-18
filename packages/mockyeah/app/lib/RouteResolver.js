@@ -134,7 +134,7 @@ function RouteResolver(app) {
 }
 
 const relativizePath = path =>
-  typeof path === 'string' ? (isAbsoluteUrl(path) ? `/${path}` : path) : path;
+  typeof path === 'string' && isAbsoluteUrl(path) ? `/${path}` : path;
 
 RouteResolver.prototype.register = function register(method, _path, response) {
   const route = {};
