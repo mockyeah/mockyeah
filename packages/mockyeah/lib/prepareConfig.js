@@ -20,11 +20,11 @@ const configDefaults = {
   adminPort: 4777
 };
 
-module.exports = config => {
+module.exports = (config = {}) => {
   config.adminHost = config.adminHost || config.host || configDefaults.host;
   config.proxy = (config.proxy || config.record) === true;
 
-  config = Object.assign({}, configDefaults, config || {});
+  config = Object.assign({}, configDefaults, config);
 
   // Expand file system configuration paths relative to configuration root
   config.fixturesDir = expandPath(config.fixturesDir);
