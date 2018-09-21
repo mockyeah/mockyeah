@@ -26,6 +26,8 @@ function normalizePathname(pathname) {
 function customizer(object, source) {
   if (_.isRegExp(source)) {
     return source.test(object);
+  } else if (typeof source === 'number') {
+    return source.toString() === object;
   } else if (typeof source === 'function') {
     const result = source(object);
     // if the function returns undefined, we'll skip this to fallback
