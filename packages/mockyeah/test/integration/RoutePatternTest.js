@@ -15,7 +15,7 @@ describe('Route Patterns', () => {
 
       request.post('/').expect(200, done);
     });
-    
+
     it('should match method in uppercase if passed as option', done => {
       mockyeah.all({
         path: '/',
@@ -170,6 +170,46 @@ describe('Route Patterns', () => {
     });
   });
 
+  it('should work with actual regular expression', done => {
+    mockyeah.get(/\/service\/(.{0,})/);
+
+    request.get('/service/exists').expect(200, done);
+  });
+
+  it('should work with actual regular expression in object', done => {
+    mockyeah.get({
+      path: /\/service\/(.{0,})/
+    });
+
+    request.get('/service/exists').expect(200, done);
+  });
+
+  it('should work with actual regular expression and absolute url', done => {
+    mockyeah.get(/\/https:\/\/example.com\/service\/(.{0,})/);
+
+    request.get('/https://example.com/service/exists').expect(200, done);
+  });
+
+  it('should work with actual regular expression and absolute url without slash prefix', done => {
+    mockyeah.get(/https:\/\/example.com\/service\/(.{0,})/);
+
+    request.get('/https://example.com/service/exists').expect(200, done);
+  });
+
+  it('should not match with actual regular expression and absolute url with caret without slash prefix', done => {
+    mockyeah.get(/^https:\/\/example.com\/service\/(.{0,})/);
+
+    request.get('/https://example.com/service/exists').expect(404, done);
+  });
+
+  it('should work with actual regular expression and absolute url in object', done => {
+    mockyeah.get({
+      path: /\/https:\/\/example.com\/service\/(.{0,})/
+    });
+
+    request.get('/https://example.com/service/exists').expect(200, done);
+  });
+
   it('should work with regular expression slash any count', done => {
     mockyeah.get('/service/(.{0,})');
 
@@ -231,6 +271,17 @@ describe('Route Patterns', () => {
     });
 
     request.get('/foo?bar=yes').expect(200, done);
+  });
+
+  it('should match query parameter as number with object', done => {
+    mockyeah.get({
+      path: '/foo',
+      query: {
+        bar: 1
+      }
+    });
+
+    request.get('/foo?bar=1').expect(200, done);
   });
 
   it('should match single query parameter in path with object', done => {
