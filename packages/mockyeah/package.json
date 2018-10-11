@@ -7,7 +7,7 @@
     "start": "MOCKYEAH_ROOT=. nodemon --inspect index.js --ignore captures",
     "test": "yarn lint && yarn test:coverage",
     "test:watch": "yarn test:unit --watch",
-    "test:unit": "mocha test/**/*Test.js",
+    "test:unit": "mocha test/**/*Test.js test/**/*.test.js",
     "test:coverage": "nyc yarn test:unit",
     "test:coverage:report": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint -c ./eslint.config.js ./app ./lib ./server ./test"
@@ -58,6 +58,7 @@
   ],
   "devDependencies": {
     "chai": "^3.4.1",
+    "clear-require": "^2.0.0",
     "coveralls": "^3.0.0",
     "dateformat": "^1.0.12",
     "gitbook-plugin-github": "2.0.0",

@@ -45,7 +45,10 @@ const withName = (env, name, options = {}) => {
           request.get(`${adminUrl}/record-stop`, () => {});
         } else {
           // eslint-disable-next-line global-require, import/no-dynamic-require
-          require(env.modulePath).recordStop();
+          require(env.modulePath).recordStop(err => {
+            if (err) console.error(err);
+            process.exit(err ? 1 : 0);
+          });
         }
       }
     );
