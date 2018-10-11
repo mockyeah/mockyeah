@@ -170,6 +170,46 @@ describe('Route Patterns', () => {
     });
   });
 
+  it('should work with actual regular expression', done => {
+    mockyeah.get(/\/service\/(.{0,})/);
+
+    request.get('/service/exists').expect(200, done);
+  });
+
+  it('should work with actual regular expression in object', done => {
+    mockyeah.get({
+      path: /\/service\/(.{0,})/
+    });
+
+    request.get('/service/exists').expect(200, done);
+  });
+
+  it('should work with actual regular expression and absolute url', done => {
+    mockyeah.get(/\/https:\/\/example.com\/service\/(.{0,})/);
+
+    request.get('/https://example.com/service/exists').expect(200, done);
+  });
+
+  it('should work with actual regular expression and absolute url without slash prefix', done => {
+    mockyeah.get(/https:\/\/example.com\/service\/(.{0,})/);
+
+    request.get('/https://example.com/service/exists').expect(200, done);
+  });
+
+  it('should not match with actual regular expression and absolute url with caret without slash prefix', done => {
+    mockyeah.get(/^https:\/\/example.com\/service\/(.{0,})/);
+
+    request.get('/https://example.com/service/exists').expect(404, done);
+  });
+
+  it('should work with actual regular expression and absolute url in object', done => {
+    mockyeah.get({
+      path: /\/https:\/\/example.com\/service\/(.{0,})/
+    });
+
+    request.get('/https://example.com/service/exists').expect(200, done);
+  });
+
   it('should work with regular expression slash any count', done => {
     mockyeah.get('/service/(.{0,})');
 

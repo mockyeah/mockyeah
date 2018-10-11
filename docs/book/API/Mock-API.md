@@ -22,6 +22,9 @@ mockyeah.get('/say-hello', { text: 'hello' });
 mockyeah.get('/say-hello/:person', { text: 'hello, person' });
 
 mockyeah.get('/say-hello?to=someone', { text: 'hello, someone' });
+
+// or regex path match:
+mockyeah.get(/say-[a-z]+/, { text: 'something, someone' });
 ```
 
 If you want the mock to match only for specific headers, query parameters, or request body,
@@ -31,7 +34,7 @@ then use the object syntax. All keys but `path` are optional. Its structure is:
 <!-- prettier-ignore -->
 ```js
 {
-  path: string,
+  path: string | RegExp,
   query?: {
     [name: string]: MatchString
   },

@@ -49,7 +49,7 @@ function isRouteForRequest(route, req) {
 
   const pathname = normalizePathname(parse(req.url, true).pathname);
 
-  const routePathnameIsAbsoluteUrl = isAbsoluteUrl(route.pathname.replace(/^\//, ''));
+  const routePathnameIsAbsoluteUrl = isAbsoluteUrl(pathname.toString().replace(/^\//, ''));
 
   if (routePathnameIsAbsoluteUrl) {
     // eslint-disable-next-line no-lonely-if
@@ -135,35 +135,38 @@ function RouteResolver(app) {
   listen.call(this);
 }
 
-const relativizePath = path => (isAbsoluteUrl(path) ? `/${path}` : path);
+const relativizePath = path =>
+  typeof path === 'string' && isAbsoluteUrl(path) ? `/${path}` : path;
 
 RouteResolver.prototype.register = function register(method, _path, response) {
   const route = {};
 
-  if (typeof _path === 'string') {
+  if (typeof _path === 'string' || _path instanceof RegExp) {
     const path = relativizePath(_path);
-    const url = parse(path, true);
+    const url = typeof path === 'string' && parse(path, true);
     route.method = method;
     route.response = response;
     route.path = path;
-    route.pathname = normalizePathname(url.pathname);
+    route.pathname = typeof path === 'string' ? normalizePathname(url.pathname) : path;
     route.query = url.query;
   } else {
     const object = _path;
     const path = relativizePath(object.path || object.url); // support `url` alias of `path`
     route.method = method;
     route.response = response;
-    const url = parse(path, true);
+    const url = typeof path === 'string' && parse(path, true);
     route.path = path;
-    route.pathname = normalizePathname(url.pathname);
-    route.query = object.query || url.query || null; // because `url.parse` returns `null`
+    route.pathname = typeof path === 'string' ? normalizePathname(url.pathname) : path;
+    route.query = object.query || (url && url.query) || null; // because `url.parse` returns `null`
     route.body = object.body;
     route.headers = _.mapKeys(object.headers, (value, key) => key.toLowerCase());
   }
 
   const matchKeys = [];
   // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
-  route.pathRegExp = pathToRegExp(route.pathname, matchKeys);
+  route.pathRegExp =
+    typeof route.pathname === 'string' ? pathToRegExp(route.pathname, matchKeys) : route.pathname;
+  // TODO: Maybe support match keys with index of match or maybe even named capture groups?
   route.matchKeys = matchKeys;
 
   if (!_.isFunction(route.response)) {
