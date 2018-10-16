@@ -85,7 +85,7 @@ module.exports = function Server(config, onStart) {
     });
   }
 
-  const { proxy, reset, play, record, recordStop } = app;
+  const { proxy, reset, play, playAll, record, recordStop } = app;
 
   // Construct and return mockyeah API
   return Object.assign({}, app.routeManager, {
@@ -97,6 +97,7 @@ module.exports = function Server(config, onStart) {
     proxy,
     reset,
     play,
+    playAll,
     record,
     recordStop
   });

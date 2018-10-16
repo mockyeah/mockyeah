@@ -41,7 +41,6 @@ const makeRequestOptions = req => {
 
 const proxyRoute = (req, res, next) => {
   const { app } = req;
-  const { only } = app.locals.recordMeta;
 
   if (!app.locals.proxying) {
     next();
@@ -64,6 +63,8 @@ const proxyRoute = (req, res, next) => {
       if (err) app.log(['proxy', 'error'], err.message);
       return;
     }
+
+    const { only } = app.locals.recordMeta;
 
     if (app.locals.recording && (!only || only(reqUrl))) {
       const { method, body: reqBody } = req;
