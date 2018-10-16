@@ -14,6 +14,7 @@ module.exports = app => (name, options = {}) => {
   }
 
   app.locals.recordMeta = {
+    headers: options.headers,
     name,
     options,
     only,

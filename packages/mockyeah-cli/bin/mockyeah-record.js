@@ -13,8 +13,12 @@ const chalk = require('chalk');
 const request = require('request');
 const querystring = require('querystring');
 
+// TODO: write tests for this
 const collect = (val, memo) => {
-  memo.push(val);
+  const pair = val.split(/\s*:\s*/);
+  const key = pair[0];
+  const value = pair[1];
+  memo[key] = value;
   return memo;
 };
 
