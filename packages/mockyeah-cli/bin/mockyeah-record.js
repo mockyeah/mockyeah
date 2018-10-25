@@ -11,17 +11,38 @@ const boot = require('../lib/boot');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const request = require('request');
+const querystring = require('querystring');
+
+// TODO: write tests for this
+const collect = (val, memo) => {
+  const pair = val.split(/\s*:\s*/);
+  const key = pair[0];
+  const value = pair[1];
+  memo[key] = value;
+  return memo;
+};
 
 program
-  .option('-o, --only [regex]', 'only record calls to URLs matching given regex pattern')
+  .option('-o, --only <regex>', 'only record calls to URLs matching given regex pattern')
+  .option(
+    '-h, --header <line>',
+    'record matches will require these headers ("Name: Value")',
+    collect,
+    []
+  )
   .option('-v, --verbose', 'verbose output')
   .parse(process.argv);
 
 const withName = (env, name, options = {}) => {
   const { adminUrl } = env;
 
+  const qs = querystring.stringify({
+    name,
+    options: JSON.stringify(options)
+  });
+
   let remote;
-  request.get(`${adminUrl}/record?name=${name}&options=${JSON.stringify(options)}`, err => {
+  request.get(`${adminUrl}/record?${qs}`, err => {
     if (err) {
       remote = false;
 
@@ -60,9 +81,14 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
   const [name] = program.args;
-  const { only } = program;
+  const { only, header } = program;
 
   env.program = program;
+
+  const options = {
+    only,
+    headers: header
+  };
 
   if (!name) {
     inquirer.prompt(
@@ -79,10 +105,10 @@ boot(env => {
           process.exit(1);
         }
 
-        withName(env, answers.name, { only });
+        withName(env, answers.name, options);
       }
     );
   } else {
-    withName(env, name, { only });
+    withName(env, name, options);
   }
 });
