@@ -36,7 +36,6 @@ describe('Route proxy', () => {
           proxiedApp.use(bodyParser.json());
           proxiedApp.all('/foo', (req, res) => {
             receivedHeaders = Object.assign(receivedHeaders, req.headers);
-            console.log('req.body', req.body);
             receivedBody = req.body;
             res.sendStatus(200);
           });
