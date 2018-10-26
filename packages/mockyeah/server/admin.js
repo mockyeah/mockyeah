@@ -61,5 +61,17 @@ module.exports = function AdminServer(config, app) {
     res.status(204).end();
   });
 
+  // `/playAll`
+  admin.use('/playAll', (req, res, next) => {
+    try {
+      app.playAll();
+    } catch (err) {
+      next(err);
+      return;
+    }
+
+    res.status(204).end();
+  });
+
   return admin;
 };

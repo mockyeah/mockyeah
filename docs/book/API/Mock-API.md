@@ -11,7 +11,7 @@ Each method creates a mock service with a HTTP verb matching its respective meth
 
 Specifies how to match requests to this mock.
 In the simplest case, it can be a string specifying the `path` to match.
-The can include query parameters as a shorthand for `query` below.
+This can include query parameters as a shorthand for `query` below.
 This fully supports all Express path matching options.
 
 Examples:
@@ -28,13 +28,16 @@ mockyeah.get(/say-[a-z]+/, { text: 'something, someone' });
 ```
 
 If you want the mock to match only for specific headers, query parameters, or request body,
-or use some of the more advanced matching features like regular expressions or functions,
-then use the object syntax. All keys but `path` are optional. Its structure is:
+or use some of the more advanced matching features like regular expressions or functions
+in place of string matches, then you can use the object syntax.
+All keys but `path` (also aliased as `url`) are optional.
+Its structure is:
 
 <!-- prettier-ignore -->
 ```js
 {
-  path: string | RegExp,
+  path?: MatchString,
+  url?: MatchString,
   query?: {
     [name: string]: MatchString
   },
@@ -58,6 +61,9 @@ type MatchBody = {
 
 type Method = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'all'
 ```
+
+If using query parameters in both the `path`/`url` and in a `query` object, then the key/value
+pairs are merged, with the values in `query` taking precedence.
 
 Body matching is currently only supported for JSON payloads.
 

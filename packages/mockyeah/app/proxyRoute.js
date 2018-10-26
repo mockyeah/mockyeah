@@ -41,7 +41,7 @@ const makeRequestOptions = req => {
 
 const proxyRoute = (req, res, next) => {
   const { app } = req;
-  const { only } = app.locals.recordMeta;
+  const { recordMeta } = app.locals;
 
   if (!app.locals.proxying) {
     next();
@@ -65,43 +65,47 @@ const proxyRoute = (req, res, next) => {
       return;
     }
 
-    if (app.locals.recording && (!only || only(reqUrl))) {
-      const { method: _method = 'get', body: reqBody } = req;
+    if (!app.locals.recording) return;
 
-      const method = _method.toLowerCase();
+    const { only } = recordMeta;
 
-      const latency = now() - startTime;
+    if (only && !only(reqUrl)) return;
 
-      let match = {
-        url: reqUrl
-      };
+    const { method, body: reqBody } = req;
 
-      if (method !== 'get') {
-        match.method = method;
-      }
+    const { statusCode: status, _headers: headers } = res;
 
-      // TODO: Consider also not recording an empty body.
-      if (reqBody) {
-        match.body = reqBody;
-      }
+    const latency = now() - startTime;
 
-      // If the match has only `url`, we can just serialize that as string.
-      if (Object.keys(match).length === 1) {
-        match = match.url;
-      }
+    let match = {
+      url: reqUrl
+    };
 
-      const { statusCode: status, _headers: headers } = res;
-
-      app.locals.recordMeta.set.push([
-        match,
-        {
-          headers,
-          status,
-          raw: _body, // TODO: Support JSON response deserialized
-          latency
-        }
-      ]);
+    if (method !== 'get') {
+      match.method = method;
     }
+
+    // TODO: Consider also not recording an empty body.
+    if (reqBody) {
+      match.body = reqBody;
+    }
+
+    // If the match has only `url`, we can just serialize that as string.
+    if (Object.keys(match).length === 1) {
+      match = match.url;
+    }
+
+    const { statusCode: status, _headers: headers } = res;
+
+    recordMeta.set.push([
+      match,
+      {
+        headers,
+        status,
+        raw: _body, // TODO: Support JSON response deserialized
+        latency
+      }
+    ]);
   }).pipe(res);
 };
 
