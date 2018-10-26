@@ -9,6 +9,7 @@ const proxyRoute = require('./proxyRoute');
 const recorder = require('./recorder');
 const recordStopper = require('./recordStopper');
 const player = require('./player');
+const playAller = require('./playAller');
 
 /**
  * App module
@@ -71,6 +72,7 @@ module.exports = function App(config) {
   app.record = recorder(app);
   app.recordStop = recordStopper(app);
   app.play = player(app);
+  app.playAll = playAller(app);
 
   app.reset = () => {
     app.routeManager.reset();
