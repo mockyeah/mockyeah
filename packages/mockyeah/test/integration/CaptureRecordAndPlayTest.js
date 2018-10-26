@@ -241,10 +241,95 @@ describe('Capture Record and Playback', function() {
 
         // Assert paths are routed the correct responses
         // e.g. http://localhost:4041/some/service
-        cb => proxyReq.get(path1).expect(500, cb),
-        cb => proxyReq.get(path2).expect(500, cb),
+        cb => proxyReq.get(path1).expect(404, cb),
+        cb => proxyReq.get(path2).expect(404, cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, 'fourth', cb)
+      ],
+      done
+    );
+  });
+
+  it('should record and playback calls matching `headers` option', function(done) {
+    this.timeout = 10000;
+
+    const captureName = 'some-fancy-capture-3';
+
+    // Construct remote service urls
+    // e.g. http://localhost:4041/http://example.com/some/service
+    const path1 = '/some/service/one';
+
+    // Mount remote service end points
+    remote.get('/some/service/one', { text: 'first' });
+
+    // Initiate recording and playback series
+    async.series(
+      [
+        // Initiate recording
+        cb => {
+          proxy.record(captureName, {
+            headers: {
+              'X-My-Header': 'My-Value',
+              'X-My-Header-2': 'My-Value-2'
+            }
+          });
+          cb();
+        },
+
+        // Invoke requests to remote services through proxy
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => proxyReq.get(path1).expect(200, 'first', cb),
+
+        // Stop recording but pretend there's a file write error.
+        cb => {
+          const { writeFile } = fs;
+          fs.writeFile = (filePath, js, _cb) => _cb(new Error('fake fs error'));
+          proxy.recordStop(err => {
+            fs.writeFile = writeFile;
+            if (err) {
+              cb();
+              return;
+            }
+            cb(new Error('expected error'));
+          });
+        },
+
+        // Stop recording
+        cb => {
+          proxy.recordStop(cb);
+        },
+
+        // Assert capture file exists
+        cb => {
+          fs.statSync(getCaptureFilePath(captureName));
+          cb();
+        },
+
+        // Reset proxy services and play captured capture
+        cb => {
+          proxy.reset();
+          cb();
+        },
+
+        cb => {
+          proxy.play(captureName);
+          cb();
+        },
+
+        // Test remote url paths and their sub paths route to the same services
+        // Assert remote url paths are routed the correct responses
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => remoteReq.get(path1).expect(200, 'first', cb),
+
+        // Assert paths are routed the correct responses
+        // e.g. http://localhost:4041/some/service
+        cb => proxyReq.get(path1).expect(404, cb),
+        cb =>
+          proxyReq
+            .get(path1)
+            .set('X-My-Header', 'My-Value')
+            .set('X-My-Header-2', 'My-Value-2')
+            .expect(200, cb)
       ],
       done
     );
