@@ -308,7 +308,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.1.3" data-path="../API/play.html">
+        <li class="chapter " data-level="1.4.1.3" data-path="../API/recordStop.html">
+            
+                <a href="../API/recordStop.html">
+            
+                    
+                    recordStop()
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.1.4" data-path="../API/play.html">
             
                 <a href="../API/play.html">
             
@@ -321,7 +334,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.1.4" data-path="../API/reset.html">
+        <li class="chapter " data-level="1.4.1.5" data-path="../API/reset.html">
             
                 <a href="../API/reset.html">
             
@@ -334,7 +347,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.1.5" data-path="../API/close.html">
+        <li class="chapter " data-level="1.4.1.6" data-path="../API/close.html">
             
                 <a href="../API/close.html">
             
@@ -347,7 +360,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.1.6" data-path="../API/proxy.html">
+        <li class="chapter " data-level="1.4.1.7" data-path="../API/proxy.html">
             
                 <a href="../API/proxy.html">
             
@@ -604,9 +617,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.3" data-path="CLI.html">
+        <li class="chapter " data-level="1.5.3" data-path="CLI.md">
             
-                <a href="CLI.html">
+                <span>
             
                     
                     CLI
@@ -710,29 +723,36 @@
 <p>mockyeah provides the ability to capture service snapshots from real services and playing them back later as mock services.
 While recording, mockyeah proxies all received requests to configured hosts and captures their responses as snapshots.
 Snapshots include: response body, method, headers, status code, latency, and path.</p>
-<p>See <a href="API/record.md"><code>record</code></a> and <a href="API/play.md"><code>play</code></a>.</p>
+<p>See <a href="API/record.md"><code>record</code></a>, <a href="API/recordStop.md"><code>recordStop</code></a>, and <a href="API/play.md"><code>play</code></a>.</p>
+<p>See also our section on the <a href="CLI/CLI.md">CLI</a>
+for another way to record and play.</p>
 <h2 id="ad-hoc-snapshots">Ad Hoc Snapshots</h2>
 <p>Snapshots can be created manually. This can ease the repetitive setup of multiple
 services. Here are the steps to creating ad hoc snapshots:</p>
 <ol>
-<li>Create a snapshot directory (e.g. <code>./mockyeah/snapshot-example</code>)</li>
-<li><p>Add one or more JSON files containing, at minimum, the following properties:</p>
-<pre><code class="lang-json">{
-  <span class="hljs-string">&quot;method&quot;</span>: <span class="hljs-string">&quot;GET&quot;</span>,
-  <span class="hljs-string">&quot;path&quot;</span>: <span class="hljs-string">&quot;/some/service&quot;</span>,
-  <span class="hljs-string">&quot;options&quot;</span>: {
-    <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Hello world!&quot;</span>
-  }
-}
-</code></pre>
+<li><p>Create a snapshot directory (e.g. <code>./mockyeah/snapshot-example</code>)</p>
 </li>
-<li><p>Play your ad hoc snapshots.</p>
-<pre><code class="lang-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;mockyeah&apos;</span>).play(<span class="hljs-string">&apos;snapshot-example&apos;</span>);
-</code></pre>
-</li>
-<li><p>That&apos;s it!</p>
+<li><p>Add one or more files containing, at minimum, the following:</p>
 </li>
 </ol>
+<pre><code class="lang-json"><span class="hljs-built_in">module</span>.exports = [
+  [
+    <span class="hljs-string">&quot;/some/service&quot;</span>,
+    {
+      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Hello world!&quot;</span>
+    }
+  ]
+];
+</code></pre>
+<ol>
+<li>Play your ad hoc snapshots.</li>
+</ol>
+<pre><code class="lang-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;mockyeah&quot;</span>).play(<span class="hljs-string">&quot;snapshot-example&quot;</span>);
+</code></pre>
+<p>Or play all:</p>
+<pre><code class="lang-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;mockyeah&quot;</span>).playAll();
+</code></pre>
+<p>That&apos;s it!</p>
 
                                 
                                 </section>
@@ -776,7 +796,7 @@ services. Here are the steps to creating ad hoc snapshots:</p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Snapshots","level":"1.5","depth":1,"next":{"title":"Snapshots Overview","level":"1.5.1","depth":2,"anchor":"#snapshots-overview","path":"Snapshots/Overview.md","ref":"Snapshots/Overview.md#snapshots-overview","articles":[]},"previous":{"title":"Server","level":"1.4.3.1","depth":3,"path":"API/Server.md","ref":"API/Server.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"Snapshots/Overview.md","mtime":"2018-06-10T16:18:23.841Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-06-10T17:56:56.640Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Snapshots","level":"1.5","depth":1,"next":{"title":"Snapshots Overview","level":"1.5.1","depth":2,"anchor":"#snapshots-overview","path":"Snapshots/Overview.md","ref":"Snapshots/Overview.md#snapshots-overview","articles":[]},"previous":{"title":"Server","level":"1.4.3.1","depth":3,"path":"API/Server.md","ref":"API/Server.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"Snapshots/Overview.md","mtime":"2018-10-26T15:59:22.620Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-10-26T20:16:01.489Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
