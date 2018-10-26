@@ -15,5 +15,6 @@ program
   .version(version)
   .command('ls', 'list service captures')
   .command('play [name]', 'play service capture')
+  .command('playAll', 'play all service captures')
   .command('record [name]', 'record service capture')
   .parse(process.argv);
