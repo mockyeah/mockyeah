@@ -14,12 +14,6 @@ module.exports = app => () => {
       fs.statSync(path.join(capturesDir, file)).isDirectory()
     );
 
-    // if (!captureNames.length) {
-    //   console.log(chalk.red('No captures available to start'));
-    //   console.log(chalk.red('Record one by running: mockyeah record [name]'));
-    //   throw new Error('');
-    // }
-
     dirs.forEach(file => {
       app.play(file);
     });
