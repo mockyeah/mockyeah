@@ -170,6 +170,20 @@ describe('Route Patterns', () => {
     });
   });
 
+  it('should match path as function', done => {
+    mockyeah.get(p => p === '/service/exists');
+
+    request.get('/service/exists').expect(200, done);
+  });
+
+  it('should match path as function in object', done => {
+    mockyeah.get({
+      path: p => p === '/service/exists'
+    });
+
+    request.get('/service/exists').expect(200, done);
+  });
+
   it('should work with actual regular expression', done => {
     mockyeah.get(/\/service\/(.{0,})/);
 
@@ -282,6 +296,28 @@ describe('Route Patterns', () => {
     });
 
     request.get('/foo?bar=1').expect(200, done);
+  });
+
+  it('should match merging query parameter in string and object', done => {
+    mockyeah.get({
+      path: '/foo?bar=yes',
+      query: {
+        baz: 'ok'
+      }
+    });
+
+    request.get('/foo?bar=yes&baz=ok').expect(200, done);
+  });
+
+  it('should match merging query parameter in object and string', done => {
+    mockyeah.get({
+      path: '/foo?baz=ok',
+      query: {
+        bar: 'yes'
+      }
+    });
+
+    request.get('/foo?bar=yes&baz=ok').expect(200, done);
   });
 
   it('should match single query parameter in path with object', done => {

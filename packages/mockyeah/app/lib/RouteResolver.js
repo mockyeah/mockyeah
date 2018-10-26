@@ -53,10 +53,10 @@ function isRouteForRequest(route, req) {
 
   if (routePathnameIsAbsoluteUrl) {
     // eslint-disable-next-line no-lonely-if
-    if (!route.pathRegExp.test(pathname)) return false;
+    if (!route.pathFn(pathname)) return false;
   } else {
     // eslint-disable-next-line no-lonely-if
-    if (route.pathname !== '*' && !route.pathRegExp.test(pathname)) return false;
+    if (route.pathname !== '*' && !route.pathFn(pathname)) return false;
   }
 
   const matchesParams = _.every(route.query, (value, key) =>
@@ -104,16 +104,20 @@ function listen() {
         return;
       }
 
-      const match = req.path.match(route.pathRegExp);
+      // If we have `pathRegExp`, it means we parsed a path string in Express style,
+      //  so we can collect the Express-style parameters via `matchKeys`.
+      if (route.pathRegExp) {
+        const match = req.path.match(route.pathRegExp);
 
-      const params = {};
+        const params = {};
 
-      route.matchKeys.forEach((key, i) => {
-        params[key.name] = match[i + 1];
-        params[i] = match[i + 1];
-      });
+        route.matchKeys.forEach((key, i) => {
+          params[key.name] = match[i + 1];
+          params[i] = match[i + 1];
+        });
 
-      req.params = params;
+        req.params = params;
+      }
 
       route.response(req, res);
     };
@@ -135,39 +139,68 @@ function RouteResolver(app) {
   listen.call(this);
 }
 
-const relativizePath = path =>
-  typeof path === 'string' && isAbsoluteUrl(path) ? `/${path}` : path;
+const relativizePath = path => (isAbsoluteUrl(path) ? `/${path}` : path);
 
-RouteResolver.prototype.register = function register(method, _path, response) {
-  const route = {};
-
-  if (typeof _path === 'string' || _path instanceof RegExp) {
+const handlePathTypes = (_path, _query) => {
+  if (typeof _path === 'string') {
     const path = relativizePath(_path);
-    const url = typeof path === 'string' && parse(path, true);
-    route.method = method;
-    route.response = response;
-    route.path = path;
-    route.pathname = typeof path === 'string' ? normalizePathname(url.pathname) : path;
-    route.query = url.query;
-  } else {
-    const object = _path;
-    const path = relativizePath(object.path || object.url); // support `url` alias of `path`
-    route.method = method;
-    route.response = response;
-    const url = typeof path === 'string' && parse(path, true);
-    route.path = path;
-    route.pathname = typeof path === 'string' ? normalizePathname(url.pathname) : path;
-    route.query = object.query || (url && url.query) || null; // because `url.parse` returns `null`
-    route.body = object.body;
-    route.headers = _.mapKeys(object.headers, (value, key) => key.toLowerCase());
+    const url = parse(path, true);
+    const pathname = normalizePathname(url.pathname);
+
+    const matchKeys = [];
+    // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
+    const pathRegExp = pathToRegExp(pathname, matchKeys);
+
+    const query = Object.assign({}, url.query, _query);
+
+    return {
+      matchKeys,
+      path,
+      pathFn: p => pathRegExp.test(p),
+      pathname,
+      pathRegExp,
+      query
+    };
   }
 
-  const matchKeys = [];
-  // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
-  route.pathRegExp =
-    typeof route.pathname === 'string' ? pathToRegExp(route.pathname, matchKeys) : route.pathname;
-  // TODO: Maybe support match keys with index of match or maybe even named capture groups?
-  route.matchKeys = matchKeys;
+  if (_path instanceof RegExp) {
+    // TODO: Maybe support `matchKeys` with index of match or maybe even named capture groups?
+
+    return {
+      path: _path,
+      pathFn: p => _path.test(p),
+      pathname: _path
+    };
+  }
+
+  if (typeof _path === 'function') {
+    return {
+      path: _path,
+      pathFn: _path,
+      pathname: _path
+    };
+  }
+
+  throw new Error(`Unsupported path type ${typeof _path}: ${_path}`);
+};
+
+RouteResolver.prototype.register = function register(method, _path, response) {
+  const route = {
+    method,
+    response
+  };
+
+  if (!_.isPlainObject(_path)) {
+    Object.assign(route, handlePathTypes(_path));
+  } else {
+    const object = _path;
+    const headers = _.mapKeys(object.headers, (value, key) => key.toLowerCase());
+
+    Object.assign(route, handlePathTypes(object.path || object.url, object.query), {
+      body: object.body,
+      headers
+    });
+  }
 
   if (!_.isFunction(route.response)) {
     route.response = routeHandler.call(this, route);
