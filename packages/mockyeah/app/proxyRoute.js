@@ -41,6 +41,7 @@ const makeRequestOptions = req => {
 
 const proxyRoute = (req, res, next) => {
   const { app } = req;
+  const { recordMeta } = app.locals;
 
   if (!app.locals.proxying) {
     next();
@@ -64,29 +65,32 @@ const proxyRoute = (req, res, next) => {
       return;
     }
 
-    const { only } = app.locals.recordMeta;
+    if (!app.locals.recording) return;
 
-    if (app.locals.recording && (!only || only(reqUrl))) {
-      const { method, body: reqBody } = req;
+    const { only } = recordMeta;
 
-      const { statusCode: status, _headers: headers } = res;
+    if (only && !only(reqUrl)) return;
 
-      const latency = now() - startTime;
+    const { method, body: reqBody } = req;
 
-      app.locals.recordMeta.set.push([
-        {
-          method: method.toLowerCase(),
-          url: reqUrl,
-          body: reqBody
-        },
-        {
-          headers,
-          status,
-          raw: _body, // TODO: Support JSON response deserialized
-          latency
-        }
-      ]);
-    }
+    const { statusCode: status, _headers: headers } = res;
+
+    const latency = now() - startTime;
+
+    app.locals.recordMeta.set.push([
+      {
+        method: method.toLowerCase(),
+        url: reqUrl,
+        body: reqBody,
+        headers: recordMeta.headers
+      },
+      {
+        headers,
+        status,
+        raw: _body, // TODO: Support JSON response deserialized
+        latency
+      }
+    ]);
   }).pipe(res);
 };
 
