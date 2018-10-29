@@ -85,9 +85,13 @@ const proxyRoute = (req, res, next) => {
       match.method = method;
     }
 
-    // TODO: Consider also not recording an empty body.
+    // TODO: Consider also not recording an empty body (e.g., `{}`).
     if (reqBody) {
       match.body = reqBody;
+    }
+
+    if (recordMeta.headers && Object.keys(recordMeta.headers).length > 0) {
+      match.headers = recordMeta.headers;
     }
 
     // If the match has only `url`, we can just serialize that as string.
