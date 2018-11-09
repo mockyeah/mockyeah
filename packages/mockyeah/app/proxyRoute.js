@@ -73,8 +73,6 @@ const proxyRoute = (req, res, next) => {
 
     const { method, body: reqBody } = req;
 
-    const { statusCode: status, _headers: headers } = res;
-
     const latency = now() - startTime;
 
     let match = {
