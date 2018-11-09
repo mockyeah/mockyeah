@@ -20,7 +20,11 @@ const makeRequestOptions = req => {
 
   // Recording `host` header is bad for proxy behavior.
   delete headers.host;
+
   // TODO: Should we support an option to rewrite `origin` header?
+
+  // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
+  delete headers['transfer-encoding'];
 
   const reqUrl = makeRequestUrl(req);
 
