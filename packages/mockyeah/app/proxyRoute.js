@@ -83,12 +83,11 @@ const proxyRoute = (req, res, next) => {
       url: reqUrl
     };
 
-    if (method !== 'get') {
-      match.method = method;
+    if (method && method.toLowerCase() !== 'get') {
+      match.method = method.toLowerCase();
     }
 
-    // TODO: Consider also not recording an empty body (e.g., `{}`).
-    if (reqBody) {
+    if (reqBody && !isEmpty(reqBody)) {
       match.body = reqBody;
     }
 
