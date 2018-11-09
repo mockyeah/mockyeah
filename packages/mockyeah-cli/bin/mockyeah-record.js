@@ -28,7 +28,7 @@ program
     '-h, --header <line>',
     'record matches will require these headers ("Name: Value")',
     collect,
-    []
+    {}
   )
   .option('-v, --verbose', 'verbose output')
   .parse(process.argv);

@@ -37,7 +37,7 @@
 - [Snapshots](Snapshots/Overview.md)
   - [Snapshots Overview](Snapshots/Overview.md#snapshots-overview)
   - [Ad Hoc Snapshots](Snapshots/Overview.md#ad-hoc-snapshots)
-  - [CLI](Snapshots/CLI.md)
+- [CLI](CLI/CLI.md)
 - [Recipes & Examples](https://github.com/mockyeah/mockyeah/tree/master/examples)
 - [Contributing](Contributing.md)
 - [v0.x docs](https://mockyeah.js.org/archive/0.16)
