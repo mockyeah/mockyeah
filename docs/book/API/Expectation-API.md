@@ -5,21 +5,21 @@ The Expectation API enables you to verify your integration via the perspective o
 Example:
 
 ```js
-const mockyeah = require('mockyeah');
-const request = require('supertest');
+const mockyeah = require("mockyeah");
+const request = require("supertest");
 
-describe('This test', () => {
-  it('should verify service is called once with parameter', done => {
+describe("This test", () => {
+  it("should verify service is called once with parameter", done => {
     const expectation = mockyeah
-      .get('/say-hello', { text: 'hello' })
+      .get("/say-hello", { text: "hello" })
       .expect()
       .params({
-        foo: 'bar'
+        foo: "bar"
       })
       .once();
 
-    request('http://localhost:4040')
-      .get('/say-hello?foo=bar')
+    request("http://localhost:4040")
+      .get("/say-hello?foo=bar")
       .expect(200, () => {
         expectation.verify();
         done();
@@ -29,7 +29,7 @@ describe('This test', () => {
 ```
 
 <div id="expect"></div>
-`.expect()` - Returns an expectation object for a given mock service when chained to a [Mock Services API](Mock-API.md) method call.
+`.expect()` - Returns an expectation object for a given mock service when chained to a [Mock Services API](./Mock-API.md) method call.
 
 <div id="atLeast">
 `.atLeast(Number)` - Adds expectation that a service must be called at least a specified number of times.
@@ -57,10 +57,10 @@ describe('This test', () => {
 
 ```js
 const expectation = mockyeah
-  .get('/say-hello', { text: 'hello' })
+  .get("/say-hello", { text: "hello" })
   .expect()
   .body({
-    foo: 'bar'
+    foo: "bar"
   });
 ```
 
@@ -69,10 +69,10 @@ const expectation = mockyeah
 
 ```js
 const expectation = mockyeah
-  .get('/say-hello', { text: 'hello' })
+  .get("/say-hello", { text: "hello" })
   .expect()
   .params({
-    id: '9999'
+    id: "9999"
   });
 ```
 
@@ -81,9 +81,9 @@ const expectation = mockyeah
 
 ```js
 const expectation = mockyeah
-  .get('/say-hello', { text: 'hello' })
+  .get("/say-hello", { text: "hello" })
   .expect()
-  .header('host', 'example.com');
+  .header("host", "example.com");
 ```
 
 <div id="verify"></div>
@@ -101,21 +101,21 @@ Examples:
 
 ```js
 const expectation = mockyeah
-  .get('/foo', { text: 'bar' })
+  .get("/foo", { text: "bar" })
   .expect()
-  .header('X-API-Key', value => /[0-9A-F]{32}/i.test(value));
+  .header("X-API-Key", value => /[0-9A-F]{32}/i.test(value));
 ```
 
 ```js
 const expectation = mockyeah
-  .get('/foo', { text: 'bar' })
+  .get("/foo", { text: "bar" })
   .expect()
-  .params(params => params.someParam === 'yes');
+  .params(params => params.someParam === "yes");
 ```
 
 ```js
 const expectation = mockyeah
-  .get('/foo', { text: 'bar' })
+  .get("/foo", { text: "bar" })
   .expect()
-  .body(body => body.id === '123');
+  .body(body => body.id === "123");
 ```
