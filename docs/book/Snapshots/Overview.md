@@ -4,9 +4,9 @@ mockyeah provides the ability to capture service snapshots from real services an
 While recording, mockyeah proxies all received requests to configured hosts and captures their responses as snapshots.
 Snapshots include: response body, method, headers, status code, latency, and path.
 
-See [`record`](API/record.md), [`recordStop`](API/recordStop.md), and [`play`](API/play.md).
+See [`record`](../API/record.md), [`recordStop`](../API/recordStop.md), and [`play`](../API/play.md).
 
-See also our section on the [CLI](CLI/CLI.md)
+See also our section on the [CLI](../CLI/CLI.md)
 for another way to record and play.
 
 ## Ad Hoc Snapshots
