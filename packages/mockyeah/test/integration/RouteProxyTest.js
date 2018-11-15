@@ -135,4 +135,8 @@ describe('Route proxy', () => {
 
     request.get(`/http://localhost:${proxiedPort}/foo?ok=yes`).expect(200, done);
   });
+
+  it('should bypass non-mounted, non-absolute URLs', done => {
+    request.get('/bar').expect(404, done);
+  });
 });

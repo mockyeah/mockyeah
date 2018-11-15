@@ -78,18 +78,34 @@ const proxyRoute = (req, res, next) => {
 
     const latency = now() - startTime;
 
+    let match = {
+      url: reqUrl
+    };
+
+    if (method && method.toLowerCase() !== 'get') {
+      match.method = method.toLowerCase();
+    }
+
+    if (reqBody && !isEmpty(reqBody)) {
+      match.body = reqBody;
+    }
+
+    if (recordMeta.headers && Object.keys(recordMeta.headers).length > 0) {
+      match.headers = recordMeta.headers;
+    }
+
+    // If the match has only `url`, we can just serialize that as string.
+    if (Object.keys(match).length === 1) {
+      match = match.url;
+    }
+
     const headers = Object.assign({}, __headers);
 
     // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
     delete headers['transfer-encoding'];
 
-    app.locals.recordMeta.set.push([
-      {
-        method: method.toLowerCase(),
-        url: reqUrl,
-        body: reqBody,
-        headers: recordMeta.headers
-      },
+    recordMeta.set.push([
+      match,
       {
         headers,
         status,
