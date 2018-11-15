@@ -85,9 +85,12 @@ describe('Capture Record and Playback', function() {
     remote.get('/some/service/two', { text: 'second' });
     remote.get('/some/service/three', { text: 'third', headers: {} });
     remote.get('/some/service/four');
-    remote.post('/some/service/five', { text: 'fifth', headers: {
-      'x-foo': 'bar'
-    }});
+    remote.post('/some/service/five', {
+      text: 'fifth',
+      headers: {
+        'x-foo': 'bar'
+      }
+    });
 
     // Initiate recording and playback series
     async.series(
@@ -104,7 +107,11 @@ describe('Capture Record and Playback', function() {
         cb => proxyReq.get(path2).expect(200, 'second', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, cb),
-        cb => proxyReq.post(path5).send({ foo: 'bar' }).expect(200, 'fifth', cb),
+        cb =>
+          proxyReq
+            .post(path5)
+            .send({ foo: 'bar' })
+            .expect(200, 'fifth', cb),
 
         // Stop recording but pretend there's a file write error.
         cb => {
@@ -149,7 +156,11 @@ describe('Capture Record and Playback', function() {
         cb => remoteReq.get(path2).expect(200, 'second', cb),
         cb => remoteReq.get(path3).expect(200, 'third', cb),
         cb => remoteReq.get(path4).expect(200, cb),
-        cb => remoteReq.post(path5).send({ foo: 'bar' }).expect(200, 'fifth', cb),
+        cb =>
+          remoteReq
+            .post(path5)
+            .send({ foo: 'bar' })
+            .expect(200, 'fifth', cb),
 
         // Assert paths are routed the correct responses
         // e.g. http://localhost:4041/some/service
@@ -157,7 +168,11 @@ describe('Capture Record and Playback', function() {
         cb => proxyReq.get(path2).expect(200, 'second', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, cb),
-        cb => proxyReq.post(path5).send({ foo: 'bar' }).expect(200, 'fifth', cb)
+        cb =>
+          proxyReq
+            .post(path5)
+            .send({ foo: 'bar' })
+            .expect(200, 'fifth', cb)
       ],
       done
     );
@@ -407,11 +422,7 @@ describe('Capture Record and Playback', function() {
 
         // Assert paths are routed the correct responses
         // e.g. http://localhost:4041/some/service
-        cb => proxyReq.get(path1).expect(404, cb),
-        cb =>
-          proxyReq
-            .get(path1)
-            .expect(200, cb)
+        cb => proxyReq.get(path1).expect(404, cb)
       ],
       done
     );
