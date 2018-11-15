@@ -1,0 +1,39 @@
+Arguments: 
+  /Users/anders/.nvm/versions/node/v8.9.3/bin/node /Users/anders/.yarn/bin/yarn.js start
+
+PATH: 
+  /Users/anders/.yarn/bin:/Users/anders/.config/yarn/global/node_modules/.bin:/Users/anders/apps/google-cloud-sdk/bin:/Users/anders/.mvbn/bin:/Users/anders/.gem/ruby/2.3.0/bin:/Users/anders/.nvm/versions/node/v8.9.3/bin:/Users/anders/.config/yarn/global/node_modules/.bin:./node_modules/.bin:/usr/local/bin:/Users/anders/.dotfiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  8.9.3
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Command failed.
+  Exit code: 1
+  Command: sh
+  Arguments: -c gitbook serve
+  Directory: /Users/anders/code/mockyeah/docs
+  Output:
+  
+      at ProcessTermError.MessageError (/Users/anders/.yarn/lib/cli.js:186:110)
+      at new ProcessTermError (/Users/anders/.yarn/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/Users/anders/.yarn/lib/cli.js:30281:17)
+      at emitTwo (events.js:126:13)
+      at ChildProcess.emit (events.js:214:7)
+      at maybeClose (internal/child_process.js:925:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)
