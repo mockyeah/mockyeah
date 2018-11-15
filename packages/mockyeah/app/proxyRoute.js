@@ -23,9 +23,6 @@ const makeRequestOptions = req => {
 
   // TODO: Should we support an option to rewrite `origin` header?
 
-  // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
-  delete headers['transfer-encoding'];
-
   const reqUrl = makeRequestUrl(req);
 
   const options = {
@@ -100,7 +97,12 @@ const proxyRoute = (req, res, next) => {
       match = match.url;
     }
 
-    const { statusCode: status, _headers: headers } = res;
+    const { statusCode: status, _headers: __headers } = res;
+
+    const headers = Object.assign({}, __headers);
+
+    // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
+    delete headers['transfer-encoding'];
 
     recordMeta.set.push([
       match,
