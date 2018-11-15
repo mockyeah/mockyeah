@@ -78,12 +78,7 @@ const proxyRoute = (req, res, next) => {
 
     const latency = now() - startTime;
 
-    const headers = Object.assign(
-      {},
-      {
-        __headers
-      }
-    );
+    const headers = Object.assign({}, __headers);
 
     // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
     delete headers['transfer-encoding'];
