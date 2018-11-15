@@ -74,6 +74,8 @@ const proxyRoute = (req, res, next) => {
 
     const { method, body: reqBody } = req;
 
+    const { statusCode: status, _headers: __headers } = res;
+
     const latency = now() - startTime;
 
     let match = {
@@ -96,8 +98,6 @@ const proxyRoute = (req, res, next) => {
     if (Object.keys(match).length === 1) {
       match = match.url;
     }
-
-    const { statusCode: status, _headers: __headers } = res;
 
     const headers = Object.assign({}, __headers);
 
