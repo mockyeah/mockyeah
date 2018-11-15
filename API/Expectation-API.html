@@ -720,21 +720,21 @@
                                 <h1 id="mock-expectations">Mock Expectations</h1>
 <p>The Expectation API enables you to verify your integration via the perspective of mockyeah. Chaining <code>.expect()</code> with any number of supported expectations returns an expectation object that can be verified at the end of your test.</p>
 <p>Example:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">const</span> mockyeah = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;mockyeah&apos;</span>);
-<span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;supertest&apos;</span>);
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> mockyeah = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;mockyeah&quot;</span>);
+<span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;supertest&quot;</span>);
 
-describe(<span class="hljs-string">&apos;This test&apos;</span>, () =&gt; {
-  it(<span class="hljs-string">&apos;should verify service is called once with parameter&apos;</span>, done =&gt; {
+describe(<span class="hljs-string">&quot;This test&quot;</span>, () =&gt; {
+  it(<span class="hljs-string">&quot;should verify service is called once with parameter&quot;</span>, done =&gt; {
     <span class="hljs-keyword">const</span> expectation = mockyeah
-      .get(<span class="hljs-string">&apos;/say-hello&apos;</span>, { text: <span class="hljs-string">&apos;hello&apos;</span> })
+      .get(<span class="hljs-string">&quot;/say-hello&quot;</span>, { text: <span class="hljs-string">&quot;hello&quot;</span> })
       .expect()
       .params({
-        foo: <span class="hljs-string">&apos;bar&apos;</span>
+        foo: <span class="hljs-string">&quot;bar&quot;</span>
       })
       .once();
 
-    request(<span class="hljs-string">&apos;http://localhost:4040&apos;</span>)
-      .get(<span class="hljs-string">&apos;/say-hello?foo=bar&apos;</span>)
+    request(<span class="hljs-string">&quot;http://localhost:4040&quot;</span>)
+      .get(<span class="hljs-string">&quot;/say-hello?foo=bar&quot;</span>)
       .expect(<span class="hljs-number">200</span>, () =&gt; {
         expectation.verify();
         done();
@@ -761,27 +761,27 @@ describe(<span class="hljs-string">&apos;This test&apos;</span>, () =&gt; {
 <p><div id="body"></div>
 <code>.body(Object)</code> - Adds expectation that a service must receive only requests with bodies matching the body specified.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">const</span> expectation = mockyeah
-  .get(<span class="hljs-string">&apos;/say-hello&apos;</span>, { text: <span class="hljs-string">&apos;hello&apos;</span> })
+  .get(<span class="hljs-string">&quot;/say-hello&quot;</span>, { text: <span class="hljs-string">&quot;hello&quot;</span> })
   .expect()
   .body({
-    foo: <span class="hljs-string">&apos;bar&apos;</span>
+    foo: <span class="hljs-string">&quot;bar&quot;</span>
   });
 </code></pre>
 <p><div id="params"></div>
 <code>.params(Object)</code> - Adds expectation that a service must receive only requests with query params matching those specified.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">const</span> expectation = mockyeah
-  .get(<span class="hljs-string">&apos;/say-hello&apos;</span>, { text: <span class="hljs-string">&apos;hello&apos;</span> })
+  .get(<span class="hljs-string">&quot;/say-hello&quot;</span>, { text: <span class="hljs-string">&quot;hello&quot;</span> })
   .expect()
   .params({
-    id: <span class="hljs-string">&apos;9999&apos;</span>
+    id: <span class="hljs-string">&quot;9999&quot;</span>
   });
 </code></pre>
 <p><div id="header"></div>
 <code>.header(Key, Value)</code> - Adds expectation that a service must receive only requests with headers matching those specified.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">const</span> expectation = mockyeah
-  .get(<span class="hljs-string">&apos;/say-hello&apos;</span>, { text: <span class="hljs-string">&apos;hello&apos;</span> })
+  .get(<span class="hljs-string">&quot;/say-hello&quot;</span>, { text: <span class="hljs-string">&quot;hello&quot;</span> })
   .expect()
-  .header(<span class="hljs-string">&apos;host&apos;</span>, <span class="hljs-string">&apos;example.com&apos;</span>);
+  .header(<span class="hljs-string">&quot;host&quot;</span>, <span class="hljs-string">&quot;example.com&quot;</span>);
 </code></pre>
 <p><div id="verify"></div>
 <code>.verify()</code> - Asserts expectation to be correct.</p>
@@ -792,19 +792,19 @@ These functions receive as a first parameter the parsed body, query parameters o
 and should return <code>true</code> or <code>false</code> to indicate a pass or failure of the expectation.</p>
 <p>Examples:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">const</span> expectation = mockyeah
-  .get(<span class="hljs-string">&apos;/foo&apos;</span>, { text: <span class="hljs-string">&apos;bar&apos;</span> })
+  .get(<span class="hljs-string">&quot;/foo&quot;</span>, { text: <span class="hljs-string">&quot;bar&quot;</span> })
   .expect()
-  .header(<span class="hljs-string">&apos;X-API-Key&apos;</span>, value =&gt; <span class="hljs-regexp">/[0-9A-F]{32}/i</span>.test(value));
+  .header(<span class="hljs-string">&quot;X-API-Key&quot;</span>, value =&gt; <span class="hljs-regexp">/[0-9A-F]{32}/i</span>.test(value));
 </code></pre>
 <pre><code class="lang-js"><span class="hljs-keyword">const</span> expectation = mockyeah
-  .get(<span class="hljs-string">&apos;/foo&apos;</span>, { text: <span class="hljs-string">&apos;bar&apos;</span> })
+  .get(<span class="hljs-string">&quot;/foo&quot;</span>, { text: <span class="hljs-string">&quot;bar&quot;</span> })
   .expect()
-  .params(params =&gt; params.someParam === <span class="hljs-string">&apos;yes&apos;</span>);
+  .params(params =&gt; params.someParam === <span class="hljs-string">&quot;yes&quot;</span>);
 </code></pre>
 <pre><code class="lang-js"><span class="hljs-keyword">const</span> expectation = mockyeah
-  .get(<span class="hljs-string">&apos;/foo&apos;</span>, { text: <span class="hljs-string">&apos;bar&apos;</span> })
+  .get(<span class="hljs-string">&quot;/foo&quot;</span>, { text: <span class="hljs-string">&quot;bar&quot;</span> })
   .expect()
-  .body(body =&gt; body.id === <span class="hljs-string">&apos;123&apos;</span>);
+  .body(body =&gt; body.id === <span class="hljs-string">&quot;123&quot;</span>);
 </code></pre>
 
                                 
@@ -845,7 +845,7 @@ and should return <code>true</code> or <code>false</code> to indicate a pass or 
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":".expect()","level":"1.4.2.1","depth":3,"next":{"title":".expect().atLeast()","level":"1.4.2.2","depth":3,"anchor":"#atLeast","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#atLeast","articles":[]},"previous":{"title":"Expectation API","level":"1.4.2","depth":2,"ref":"","articles":[{"title":".expect()","level":"1.4.2.1","depth":3,"anchor":"#expect","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#expect","articles":[]},{"title":".expect().atLeast()","level":"1.4.2.2","depth":3,"anchor":"#atLeast","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#atLeast","articles":[]},{"title":".expect().atMost()","level":"1.4.2.3","depth":3,"anchor":"#atMost","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#atMost","articles":[]},{"title":".expect().never()","level":"1.4.2.4","depth":3,"anchor":"#never","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#never","articles":[]},{"title":".expect().once()","level":"1.4.2.5","depth":3,"anchor":"#once","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#once","articles":[]},{"title":".expect().twice()","level":"1.4.2.6","depth":3,"anchor":"#twice","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#twice","articles":[]},{"title":".expect().thrice()","level":"1.4.2.7","depth":3,"anchor":"#thrice","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#thrice","articles":[]},{"title":".expect().body()","level":"1.4.2.8","depth":3,"anchor":"#body","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#body","articles":[]},{"title":".expect().params()","level":"1.4.2.9","depth":3,"anchor":"#params","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#params","articles":[]},{"title":".expect().header()","level":"1.4.2.10","depth":3,"anchor":"#header","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#header","articles":[]},{"title":".expect().verify()","level":"1.4.2.11","depth":3,"anchor":"#verify","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#verify","articles":[]}]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"API/Expectation-API.md","mtime":"2018-10-26T20:16:22.781Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-15T03:29:09.708Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":".expect()","level":"1.4.2.1","depth":3,"next":{"title":".expect().atLeast()","level":"1.4.2.2","depth":3,"anchor":"#atLeast","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#atLeast","articles":[]},"previous":{"title":"Expectation API","level":"1.4.2","depth":2,"ref":"","articles":[{"title":".expect()","level":"1.4.2.1","depth":3,"anchor":"#expect","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#expect","articles":[]},{"title":".expect().atLeast()","level":"1.4.2.2","depth":3,"anchor":"#atLeast","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#atLeast","articles":[]},{"title":".expect().atMost()","level":"1.4.2.3","depth":3,"anchor":"#atMost","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#atMost","articles":[]},{"title":".expect().never()","level":"1.4.2.4","depth":3,"anchor":"#never","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#never","articles":[]},{"title":".expect().once()","level":"1.4.2.5","depth":3,"anchor":"#once","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#once","articles":[]},{"title":".expect().twice()","level":"1.4.2.6","depth":3,"anchor":"#twice","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#twice","articles":[]},{"title":".expect().thrice()","level":"1.4.2.7","depth":3,"anchor":"#thrice","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#thrice","articles":[]},{"title":".expect().body()","level":"1.4.2.8","depth":3,"anchor":"#body","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#body","articles":[]},{"title":".expect().params()","level":"1.4.2.9","depth":3,"anchor":"#params","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#params","articles":[]},{"title":".expect().header()","level":"1.4.2.10","depth":3,"anchor":"#header","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#header","articles":[]},{"title":".expect().verify()","level":"1.4.2.11","depth":3,"anchor":"#verify","path":"API/Expectation-API.md","ref":"API/Expectation-API.md#verify","articles":[]}]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"API/Expectation-API.md","mtime":"2018-11-15T05:10:14.303Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-15T05:10:22.998Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
