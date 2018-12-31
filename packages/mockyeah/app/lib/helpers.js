@@ -15,7 +15,8 @@ const handleContentType = (body, headers) => {
       return {
         json
       };
-    } catch (err) {} // silence any errors, invalid JSON is ok
+    } // eslint-disable-next-line no-empty
+    catch (err) {} // silence any errors, invalid JSON is ok
   }
 
   return {
