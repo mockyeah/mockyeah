@@ -55,7 +55,7 @@ describe('Capture Record and Playback', function() {
   afterEach(() => {
     proxy.reset();
     remote.reset();
-    // rimraf.sync(PROXY_CAPTURES_DIR);
+    rimraf.sync(PROXY_CAPTURES_DIR);
   });
 
   after(() => {
