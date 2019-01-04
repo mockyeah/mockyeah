@@ -52,9 +52,11 @@ module.exports = app => cb => {
 
         const fixturesPath = path.join(fixturesDir, fixture);
 
+        // TODO: Any easy way to coordinate this asynchronously?
         // eslint-disable-next-line no-sync
         mkdirp.sync(path.join(fixturesDir, name));
 
+        // TODO: Any easy way to coordinate this asynchronously?
         // eslint-disable-next-line no-sync
         fs.writeFileSync(fixturesPath, body);
       }
