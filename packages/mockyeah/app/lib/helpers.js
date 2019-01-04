@@ -10,13 +10,16 @@ const handleContentType = (body, headers) => {
 
   // TODO: More spec-conformant detection of JSON content type.
   if (contentType && contentType.includes('/json')) {
+    /* eslint-disable no-empty */
     try {
       const json = JSON.parse(body);
       return {
         json
       };
-    } // eslint-disable-next-line no-empty
-    catch (err) {} // silence any errors, invalid JSON is ok
+    } catch (err) {
+      // silence any errors, invalid JSON is ok
+    }
+    /* eslint-enable no-empty */
   }
 
   return {

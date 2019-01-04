@@ -23,6 +23,7 @@ const collect = (val, memo) => {
 };
 
 program
+  .option('-f, --fixtures', 'record to fixture files instead of inlining response bodies')
   .option('-o, --only <regex>', 'only record calls to URLs matching given regex pattern')
   .option(
     '-h, --header <line>',
@@ -81,13 +82,14 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
   const [name] = program.args;
-  const { only, header } = program;
+  const { only, header, fixtures } = program;
 
   env.program = program;
 
   const options = {
     only,
-    headers: header
+    headers: header,
+    recordToFixtures: fixtures
   };
 
   if (!name) {
