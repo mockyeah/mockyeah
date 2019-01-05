@@ -18,7 +18,7 @@ const configDefaults = {
   adminProtocol: 'http',
   adminHost: 'localhost',
   adminPort: 4777,
-  recordToFixtures: false,
+  recordToFixtures: true,
   recordToFixturesMode: 'path'
 };
 

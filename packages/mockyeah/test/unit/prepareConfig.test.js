@@ -39,7 +39,7 @@ describe('prepareConfig', () => {
       proxy: false,
       record: false,
       verbose: false,
-      recordToFixtures: false,
+      recordToFixtures: true,
       recordToFixturesMode: 'path'
     });
   });
@@ -63,7 +63,7 @@ describe('prepareConfig', () => {
       proxy: false,
       record: false,
       verbose: false,
-      recordToFixtures: false,
+      recordToFixtures: true,
       recordToFixturesMode: 'path'
     });
   });
