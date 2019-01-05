@@ -1,14 +1,5 @@
 module.exports = app => (name, options = {}) => {
   let only;
-  let recordToFixtures;
-
-  if (typeof options.recordToFixtures !== 'undefined') {
-    // eslint-disable-next-line prefer-destructuring
-    recordToFixtures = options.recordToFixtures;
-  } else {
-    // eslint-disable-next-line prefer-destructuring
-    recordToFixtures = app.config.recordToFixtures;
-  }
 
   app.locals.recording = true;
 
@@ -23,13 +14,14 @@ module.exports = app => (name, options = {}) => {
     app.log(['serve', 'record', 'only'], regex);
   }
 
+  const { headers } = options;
+
   app.locals.recordMeta = {
-    headers: options.headers,
+    headers,
     name,
     options,
     only,
-    set: [],
-    recordToFixtures
+    set: []
   };
 
   // Store whether we're proxying so we can reset it later.

@@ -10,8 +10,10 @@ module.exports = app => cb => {
     return;
   }
 
+  const { recordToFixtures, recordToFixturesMode } = app.config;
+
   const {
-    recordMeta: { name, set, recordToFixtures, recordToFixturesMode }
+    recordMeta: { name, set }
   } = app.locals;
 
   if (!name) throw new Error('Not recording.');

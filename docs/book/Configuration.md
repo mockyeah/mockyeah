@@ -16,7 +16,9 @@
   "record": false,
   "adminServer": true,
   "adminHost": "localhost",
-  "adminPort": 4777
+  "adminPort": 4777,
+  "recordToFixtures": false,
+  "recordToFixturesMode": "path"
 }
 ```
 
@@ -83,6 +85,10 @@ Internally, this mounts with a leading slash, i.e., `'/https://service.example.c
 - `adminServer`: Boolean to enable admin server (for recording, playing, etc.)
 - `adminHost`: Host on which admin server will run.
 - `adminPort`: Port on which admin server will run.
+- `recordToFixtures`: Whether to record captures with response bodies written to separate files in the fixtures directory vs. inlined into the capture files.
+- `recordToFixturesMode`: When `recordToFixtures` is enabled, which mode to use to refer to fixture files
+  - "path" (default): Use the response option of `fixture` with the path to the fixture file as a string.
+  - "require": For JSON fixtures, use the response option of `json` with an inline `require` of the JSON file using a relative path, otherwise fallback to "path" mode (may support custom `require`-able files in the future for users with custom setups, e.g., Webpack loaders).
 
 ### HTTPS
 
