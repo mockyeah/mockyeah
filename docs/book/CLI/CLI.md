@@ -48,7 +48,8 @@ Good work! You've recorded and played back a service snapshot.
 
 ## Options
 
-```
+```console
+$ mockyeah --help
 Usage: mockyeah [options] [command]
 
   Commands:
@@ -63,4 +64,18 @@ Usage: mockyeah [options] [command]
 
     -h, --help     output usage information
     -V, --version  output the version number
+```
+
+For help with specific commands, you can pass `--help` to them, e.g.:
+
+```console
+$ mockyeah record --help
+Usage: mockyeah-record [options]
+
+  Options:
+
+    -h, --help           output usage information
+    -o, --only <regex>   only record calls to URLs matching given regex pattern
+    -h, --header <line>  record matches will require these headers ("Name: Value")
+    -v, --verbose        verbose output
 ```
