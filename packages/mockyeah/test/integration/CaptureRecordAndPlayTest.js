@@ -165,7 +165,7 @@ describe('Capture Record and Playback', function() {
         // Assert paths are routed the correct responses
         // e.g. http://localhost:4041/some/service
         cb => proxyReq.get(path1).expect(200, 'first', cb),
-        cb => proxyReq.get(path2).expect(200, '{"second":true}', cb),
+        cb => proxyReq.get(path2).expect(200, '{\n  "second": true\n}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, cb),
         cb =>
@@ -513,7 +513,7 @@ describe('Capture Record and Playback', function() {
         // Assert paths are routed the correct responses
         // e.g. http://localhost:4041/some/service
         cb => proxyReq.get(path1).expect(200, 'first', cb),
-        cb => proxyReq.get(path2).expect(200, '{"second":true}', cb),
+        cb => proxyReq.get(path2).expect(200, '{\n  "second": true\n}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, 'fourth', cb),
         cb => proxyReq.get(path5).expect(200, 'fifth', cb)
