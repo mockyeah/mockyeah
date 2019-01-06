@@ -17,7 +17,7 @@
   "adminServer": true,
   "adminHost": "localhost",
   "adminPort": 4777,
-  "recordToFixtures": false,
+  "recordToFixtures": true,
   "recordToFixturesMode": "path"
 }
 ```
@@ -72,9 +72,9 @@ Then you can hit your mockyeah server's URLs like:
 and allow the first to pass through to the actual origin by not defining any mocks, but mock the second with:
 
 ```js
-mockyeah.get('https://service.example.com/foo/bar', {
+mockyeah.get("https://service.example.com/foo/bar", {
   json: {
-    hello: 'there'
+    hello: "there"
   }
 });
 ```

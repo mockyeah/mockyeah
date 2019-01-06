@@ -27,5 +27,38 @@ const handleContentType = (body, headers) => {
   };
 };
 
+const replaceFixtureWithRequireInJson = (json, { relativePath }) =>
+  json.replace(
+    /"fixture"(\s*):(\s*)"([^"]+)\.json"/g,
+    `"json"$1:$2require("${relativePath}/$3.json")`
+  );
+
+const getDataForRecordToFixtures = ({ responseOptions, name, index }) => {
+  const newResponseOptions = Object.assign({}, responseOptions);
+
+  const { raw, json } = responseOptions;
+
+  const fixtureName = `${name}/${index}`;
+
+  let body;
+
+  if (raw) {
+    newResponseOptions.fixture = `${fixtureName}.txt`;
+    body = raw;
+    delete newResponseOptions.raw;
+  } else if (json) {
+    newResponseOptions.fixture = `${fixtureName}.json`;
+    body = JSON.stringify(json, null, 2);
+    delete newResponseOptions.json;
+  }
+
+  return {
+    newResponseOptions,
+    body
+  };
+};
+
+exports.getDataForRecordToFixtures = getDataForRecordToFixtures;
+exports.replaceFixtureWithRequireInJson = replaceFixtureWithRequireInJson;
 exports.handleContentType = handleContentType;
 exports.resolveFilePath = resolveFilePath;

@@ -1,7 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
-const { resolveFilePath } = require('./lib/helpers');
+const {
+  resolveFilePath,
+  getDataForRecordToFixtures,
+  replaceFixtureWithRequireInJson
+} = require('./lib/helpers');
 
 module.exports = app => cb => {
   app.locals.recording = false;
@@ -26,32 +30,21 @@ module.exports = app => cb => {
 
   const filePath = resolveFilePath(capturePath, 'index.js');
 
-  set.forEach((capture, index) => {
+  const newSet = set.map((capture, index) => {
     const [match, responseOptions] = capture;
 
     app.log(['serve', 'capture'], match.url || match.path || match);
 
     if (recordToFixtures) {
-      const { raw, json } = responseOptions;
+      const { newResponseOptions, body } = getDataForRecordToFixtures({
+        responseOptions,
+        name,
+        index
+      });
 
-      const fixtureName = `${name}/${index}`;
-
-      let fixture;
-      let body;
-
-      if (raw) {
-        fixture = `${fixtureName}.txt`;
-        body = raw;
-        delete responseOptions.raw;
-      } else if (json) {
-        fixture = `${fixtureName}.json`;
-        body = JSON.stringify(json, null, 2);
-        delete responseOptions.json;
-      }
+      const { fixture } = newResponseOptions;
 
       if (fixture) {
-        responseOptions.fixture = fixture;
-
         const fixturesPath = path.join(fixturesDir, fixture);
 
         // TODO: Any easy way to coordinate this asynchronously?
@@ -62,22 +55,24 @@ module.exports = app => cb => {
         // eslint-disable-next-line no-sync
         fs.writeFileSync(fixturesPath, body);
       }
+
+      return [match, newResponseOptions];
     }
+
+    return [match, responseOptions];
   });
 
-  let json = JSON.stringify(set, null, 2);
+  let js = JSON.stringify(newSet, null, 2);
 
   if (recordToFixturesMode === 'require') {
-    const relativePath = path.relative(capturePath, fixturesDir);
-    json = json.replace(
-      /"fixture"(\s*):(\s*)"([^"]+)\.json"/g,
-      `"json"$1:$2require("${relativePath}/$3.json")`
-    );
+    js = replaceFixtureWithRequireInJson(js, {
+      relativePath: path.relative(capturePath, fixturesDir)
+    });
   }
 
-  const js = `module.exports = ${json};`;
+  const jsModule = `module.exports = ${js};`;
 
-  fs.writeFile(filePath, js, err => {
+  fs.writeFile(filePath, jsModule, err => {
     if (err) {
       app.log(['record', 'response', 'error'], err);
 
