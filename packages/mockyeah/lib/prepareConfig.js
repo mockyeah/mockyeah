@@ -17,7 +17,9 @@ const configDefaults = {
   // TODO: Implement support for HTTPS admin server protocol.
   adminProtocol: 'http',
   adminHost: 'localhost',
-  adminPort: 4777
+  adminPort: 4777,
+  recordToFixtures: true,
+  recordToFixturesMode: 'path'
 };
 
 module.exports = (config = {}) => {

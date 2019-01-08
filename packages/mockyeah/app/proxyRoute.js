@@ -1,6 +1,7 @@
 const request = require('request');
 const isAbsoluteUrl = require('is-absolute-url');
 const { isEmpty } = require('lodash');
+const { handleContentType } = require('./lib/helpers');
 
 const now = () => new Date().getTime();
 
@@ -104,15 +105,16 @@ const proxyRoute = (req, res, next) => {
     // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
     delete headers['transfer-encoding'];
 
-    recordMeta.set.push([
-      match,
+    const options = Object.assign(
       {
         headers,
         status,
-        raw: _body, // TODO: Support JSON response deserialized
         latency
-      }
-    ]);
+      },
+      handleContentType(_body, headers)
+    );
+
+    recordMeta.set.push([match, options]);
   }).pipe(res);
 };
 

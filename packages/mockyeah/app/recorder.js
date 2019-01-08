@@ -2,6 +2,7 @@ module.exports = app => (name, options = {}) => {
   let only;
 
   app.locals.recording = true;
+
   if (!name) throw new Error('Must provide a recording name.');
 
   app.log(['serve', 'record'], name);
@@ -13,8 +14,10 @@ module.exports = app => (name, options = {}) => {
     app.log(['serve', 'record', 'only'], regex);
   }
 
+  const { headers } = options;
+
   app.locals.recordMeta = {
-    headers: options.headers,
+    headers,
     name,
     options,
     only,
