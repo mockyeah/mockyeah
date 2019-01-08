@@ -33,6 +33,11 @@ program
   .option('-v, --verbose', 'verbose output')
   .parse(process.argv);
 
+const recordStopCallback = err => {
+  if (err) console.error(err);
+  process.exit(err ? 1 : 0);
+};
+
 const withName = (env, name, options = {}) => {
   const { adminUrl } = env;
 
@@ -63,13 +68,10 @@ const withName = (env, name, options = {}) => {
       ],
       () => {
         if (remote) {
-          request.get(`${adminUrl}/record-stop`, () => {});
+          request.get(`${adminUrl}/record-stop`, recordStopCallback);
         } else {
           // eslint-disable-next-line global-require, import/no-dynamic-require
-          require(env.modulePath).recordStop(err => {
-            if (err) console.error(err);
-            process.exit(err ? 1 : 0);
-          });
+          require(env.modulePath).recordStop(recordStopCallback);
         }
       }
     );

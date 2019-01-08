@@ -82,7 +82,7 @@ module.exports = app => cb => {
     }
 
     set.forEach(capture => {
-      app.log(['record', 'response', 'saved'], capture[0].url);
+      app.log(['record', 'response', 'saved'], capture[0].path || capture[0].url || capture[0]);
     });
 
     if (typeof app.locals.proxyingBeforeRecording !== 'undefined') {
