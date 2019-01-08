@@ -25,7 +25,7 @@ const collect = (val, memo) => {
 program
   .option('-o, --only <regex>', 'only record calls to URLs matching given regex pattern')
   .option(
-    '-h, --header <line>',
+    '-H, --header <line>',
     'record matches will require these headers ("Name: Value")',
     collect,
     {}
