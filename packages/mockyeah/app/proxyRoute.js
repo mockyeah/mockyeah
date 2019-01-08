@@ -69,7 +69,7 @@ const proxyRoute = (req, res, next) => {
 
     if (!app.locals.recording) return;
 
-    const { only, useHeaders, useLatency } = recordMeta;
+    const { only, options: { headers: optionsHeaders, useHeaders, useLatency } = {} } = recordMeta;
 
     if (only && !only(reqUrl)) return;
 
@@ -91,8 +91,8 @@ const proxyRoute = (req, res, next) => {
       match.body = reqBody;
     }
 
-    if (recordMeta.headers && Object.keys(recordMeta.headers).length > 0) {
-      match.headers = recordMeta.headers;
+    if (optionsHeaders && Object.keys(optionsHeaders).length > 0) {
+      match.headers = Object.assign({}, optionsHeaders);
     }
 
     // If the match has only `url`, we can just serialize that as string.
