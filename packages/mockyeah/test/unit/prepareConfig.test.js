@@ -38,9 +38,12 @@ describe('prepareConfig', () => {
       port: 4001,
       proxy: false,
       record: false,
-      verbose: false
+      verbose: false,
+      recordToFixtures: true,
+      recordToFixturesMode: 'path'
     });
   });
+
   it('should work and use defaults with empty config input', () => {
     const config = prepareConfig({});
     expect(config).to.deep.equal({
@@ -59,7 +62,9 @@ describe('prepareConfig', () => {
       port: 4001,
       proxy: false,
       record: false,
-      verbose: false
+      verbose: false,
+      recordToFixtures: true,
+      recordToFixturesMode: 'path'
     });
   });
 });
