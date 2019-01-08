@@ -14,13 +14,15 @@ module.exports = app => (name, options = {}) => {
     app.log(['serve', 'record', 'only'], regex);
   }
 
-  const { headers } = options;
+  const { headers, useHeaders, useLatency } = options;
 
   app.locals.recordMeta = {
     headers,
     name,
     options,
     only,
+    useHeaders,
+    useLatency,
     set: []
   };
 

@@ -69,7 +69,7 @@ const proxyRoute = (req, res, next) => {
 
     if (!app.locals.recording) return;
 
-    const { only } = recordMeta;
+    const { only, useHeaders, useLatency } = recordMeta;
 
     if (only && !only(reqUrl)) return;
 
@@ -105,16 +105,22 @@ const proxyRoute = (req, res, next) => {
     // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
     delete headers['transfer-encoding'];
 
-    const options = Object.assign(
+    const responseOptions = Object.assign(
       {
-        headers,
-        status,
-        latency
+        status
       },
       handleContentType(_body, headers)
     );
 
-    recordMeta.set.push([match, options]);
+    if (useHeaders) {
+      responseOptions.headers = headers;
+    }
+
+    if (useLatency) {
+      responseOptions.latency = latency;
+    }
+
+    recordMeta.set.push([match, responseOptions]);
   }).pipe(res);
 };
 

@@ -50,6 +50,7 @@ Good work! You've recorded and played back a service snapshot.
 
 ```console
 $ mockyeah --help
+
 Usage: mockyeah [options] [command]
 
   Commands:
@@ -70,12 +71,15 @@ For help with specific commands, you can pass `--help` to them, e.g.:
 
 ```console
 $ mockyeah record --help
+
 Usage: mockyeah-record [options]
 
   Options:
 
-    -h, --help           output usage information
     -o, --only <regex>   only record calls to URLs matching given regex pattern
-    -h, --header <line>  record matches will require these headers ("Name: Value")
+    -h, --use-headers    record headers to response options
+    -l, --use-latency    record latency to response options
+    -H, --header <line>  record matches will require these headers ("Name: Value") (default: [object Object])
     -v, --verbose        verbose output
+    -h, --help           output usage information
 ```

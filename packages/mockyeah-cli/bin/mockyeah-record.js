@@ -24,6 +24,8 @@ const collect = (val, memo) => {
 
 program
   .option('-o, --only <regex>', 'only record calls to URLs matching given regex pattern')
+  .option('-h, --use-headers', 'record headers to response options')
+  .option('-l, --use-latency', 'record latency to response options')
   .option(
     '-H, --header <line>',
     'record matches will require these headers ("Name: Value")',
@@ -83,13 +85,15 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
   const [name] = program.args;
-  const { only, header } = program;
+  const { only, header, useHeaders, useLatency } = program;
 
   env.program = program;
 
   const options = {
     only,
-    headers: header
+    headers: header,
+    useHeaders,
+    useLatency
   };
 
   if (!name) {
