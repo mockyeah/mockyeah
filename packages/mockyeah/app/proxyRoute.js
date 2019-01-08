@@ -69,7 +69,7 @@ const proxyRoute = (req, res, next) => {
 
     if (!app.locals.recording) return;
 
-    const { only } = recordMeta;
+    const { options: { headers: optionsHeaders, only, useHeaders, useLatency } = {} } = recordMeta;
 
     if (only && !only(reqUrl)) return;
 
@@ -91,8 +91,8 @@ const proxyRoute = (req, res, next) => {
       match.body = reqBody;
     }
 
-    if (recordMeta.headers && Object.keys(recordMeta.headers).length > 0) {
-      match.headers = recordMeta.headers;
+    if (optionsHeaders && Object.keys(optionsHeaders).length > 0) {
+      match.headers = Object.assign({}, optionsHeaders);
     }
 
     // If the match has only `url`, we can just serialize that as string.
@@ -105,16 +105,22 @@ const proxyRoute = (req, res, next) => {
     // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
     delete headers['transfer-encoding'];
 
-    const options = Object.assign(
+    const responseOptions = Object.assign(
       {
-        headers,
-        status,
-        latency
+        status
       },
       handleContentType(_body, headers)
     );
 
-    recordMeta.set.push([match, options]);
+    if (useHeaders) {
+      responseOptions.headers = headers;
+    }
+
+    if (useLatency) {
+      responseOptions.latency = latency;
+    }
+
+    recordMeta.set.push([match, responseOptions]);
   }).pipe(res);
 };
 

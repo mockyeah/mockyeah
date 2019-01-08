@@ -428,6 +428,131 @@ describe('Capture Record and Playback', function() {
     );
   });
 
+  it('should record and playback call headers with `useHeaders` option', function(done) {
+    this.timeout = 10000;
+
+    const captureName = 'test-some-fancy-capture-using-headers';
+
+    // Construct remote service urls
+    // e.g. http://localhost:4041/http://example.com/some/service
+    const path1 = '/some/service/one';
+
+    // Mount remote service end points
+    remote.get('/some/service/one', {
+      headers: {
+        'x-my-header': 'My-Value'
+      }
+    });
+
+    // Initiate recording and playback series
+    async.series(
+      [
+        // Initiate recording
+        cb => {
+          proxy.record(captureName, {
+            useHeaders: true
+          });
+          cb();
+        },
+
+        // Invoke requests to remote services through proxy
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => proxyReq.get(path1).expect('x-my-header', 'My-Value', cb),
+
+        // Stop recording
+        cb => {
+          proxy.recordStop(cb);
+        },
+
+        // Assert capture file exists
+        cb => {
+          fs.statSync(getCaptureFilePath(captureName));
+          cb();
+        },
+
+        // Reset proxy services and play captured capture
+        cb => {
+          proxy.reset();
+          cb();
+        },
+
+        cb => {
+          proxy.play(captureName);
+          cb();
+        },
+
+        // Test remote url paths and their sub paths route to the same services
+        // Assert remote url paths are routed the correct responses
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => remoteReq.get(path1).expect('x-my-header', 'My-Value', cb),
+
+        // Assert paths are routed the correct responses
+        cb => proxyReq.get(path1).expect('x-my-header', 'My-Value', cb)
+      ],
+      done
+    );
+  });
+
+  it('should record and playback call latency with `useLatency` option', function(done) {
+    this.timeout = 10000;
+
+    const captureName = 'test-some-fancy-capture-using-latency';
+
+    // Construct remote service urls
+    // e.g. http://localhost:4041/http://example.com/some/service
+    const path1 = '/some/service/one';
+
+    // Mount remote service end points
+    remote.get('/some/service/one', {
+      latency: 200
+    });
+
+    // Initiate recording and playback series
+    async.series(
+      [
+        // Initiate recording
+        cb => {
+          proxy.record(captureName, {
+            useLatency: true
+          });
+          cb();
+        },
+
+        // Invoke requests to remote services through proxy
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => proxyReq.get(path1).expect(200, cb),
+
+        // Stop recording
+        cb => {
+          proxy.recordStop(cb);
+        },
+
+        // Assert capture file exists
+        cb => {
+          fs.statSync(getCaptureFilePath(captureName));
+          cb();
+        },
+
+        // Reset proxy services and play captured capture
+        cb => {
+          proxy.reset();
+          cb();
+        },
+
+        cb => {
+          proxy.play(captureName);
+          cb();
+        },
+
+        // Test remote url paths and their sub paths route to the same services
+        // Assert remote url paths are routed the correct responses
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => remoteReq.get(path1).expect(200, cb)
+      ],
+      done
+    );
+  });
+
   it('should record and playback call with playAll', function(done) {
     this.timeout = 10000;
 
