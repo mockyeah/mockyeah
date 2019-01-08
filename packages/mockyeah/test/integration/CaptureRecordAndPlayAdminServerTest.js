@@ -72,7 +72,7 @@ describe('Capture Record and Playback Admin Server', function() {
   it('should record and playback capture over admin server', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'some-fancy-capture';
+    const captureName = 'test-some-fancy-admin-server-capture';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -160,7 +160,7 @@ describe('Capture Record and Playback Admin Server', function() {
   it('should record and playback calls matching `headers` option over admin server', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'some-fancy-capture-3';
+    const captureName = 'test-some-fancy-admin-server-capture-3';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -249,7 +249,7 @@ describe('Capture Record and Playback Admin Server', function() {
   it('should record and playback capture with playAll over admin server', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'some-fancy-capture-all';
+    const captureName = 'test-some-fancy-admin-server-capture-all';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service

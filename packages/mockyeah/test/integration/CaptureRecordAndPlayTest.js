@@ -70,7 +70,7 @@ describe('Capture Record and Playback', function() {
   it('should record and playback capture', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'some-fancy-capture';
+    const captureName = 'test-some-fancy-capture';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -82,7 +82,7 @@ describe('Capture Record and Playback', function() {
 
     // Mount remote service end points
     remote.get('/some/service/one', { text: 'first' });
-    remote.get('/some/service/two', { text: 'second' });
+    remote.get('/some/service/two', { json: { second: true } });
     remote.get('/some/service/three', { text: 'third', headers: {} });
     remote.get('/some/service/four');
     remote.post('/some/service/five', {
@@ -104,7 +104,7 @@ describe('Capture Record and Playback', function() {
         // Invoke requests to remote services through proxy
         // e.g. http://localhost:4041/http://example.com/some/service
         cb => proxyReq.get(path1).expect(200, 'first', cb),
-        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path2).expect(200, '{"second":true}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, cb),
         cb =>
@@ -153,7 +153,7 @@ describe('Capture Record and Playback', function() {
         // Assert remote url paths are routed the correct responses
         // e.g. http://localhost:4041/http://example.com/some/service
         cb => remoteReq.get(path1).expect(200, 'first', cb),
-        cb => remoteReq.get(path2).expect(200, 'second', cb),
+        cb => remoteReq.get(path2).expect(200, '{"second":true}', cb),
         cb => remoteReq.get(path3).expect(200, 'third', cb),
         cb => remoteReq.get(path4).expect(200, cb),
         cb =>
@@ -165,7 +165,7 @@ describe('Capture Record and Playback', function() {
         // Assert paths are routed the correct responses
         // e.g. http://localhost:4041/some/service
         cb => proxyReq.get(path1).expect(200, 'first', cb),
-        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path2).expect(200, '{\n  "second": true\n}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, cb),
         cb =>
@@ -181,7 +181,7 @@ describe('Capture Record and Playback', function() {
   it('should record and playback calls matching `only` option', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'some-fancy-capture-2';
+    const captureName = 'test-some-fancy-capture-2';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -192,7 +192,7 @@ describe('Capture Record and Playback', function() {
 
     // Mount remote service end points
     remote.get('/some/service/one', { text: 'first' });
-    remote.get('/some/service/two', { text: 'second' });
+    remote.get('/some/service/two', { json: { second: true } });
     remote.get('/some/service/three', { text: 'third' });
     remote.get('/some/service/three/:id', { text: 'fourth' });
 
@@ -208,7 +208,7 @@ describe('Capture Record and Playback', function() {
         // Invoke requests to remote services through proxy
         // e.g. http://localhost:4041/http://example.com/some/service
         cb => proxyReq.get(path1).expect(200, 'first', cb),
-        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path2).expect(200, '{"second":true}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, 'fourth', cb),
 
@@ -252,7 +252,7 @@ describe('Capture Record and Playback', function() {
         // Assert remote url paths are routed the correct responses
         // e.g. http://localhost:4041/http://example.com/some/service
         cb => remoteReq.get(path1).expect(200, 'first', cb),
-        cb => remoteReq.get(path2).expect(200, 'second', cb),
+        cb => remoteReq.get(path2).expect(200, '{"second":true}', cb),
         cb => remoteReq.get(path3).expect(200, 'third', cb),
         cb => remoteReq.get(path4).expect(200, 'fourth', cb),
 
@@ -270,7 +270,7 @@ describe('Capture Record and Playback', function() {
   it('should record and playback calls matching `headers` option', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'some-fancy-capture-3';
+    const captureName = 'test-some-fancy-capture-3';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -355,7 +355,7 @@ describe('Capture Record and Playback', function() {
   it('should record and playback calls with empty `headers` option', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'some-fancy-capture-3';
+    const captureName = 'test-some-fancy-capture-3';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -431,7 +431,7 @@ describe('Capture Record and Playback', function() {
   it('should record and playback call with playAll', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'some-fancy-capture-all';
+    const captureName = 'test-some-fancy-capture-all';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -443,7 +443,7 @@ describe('Capture Record and Playback', function() {
 
     // Mount remote service end points
     remote.get('/some/service/one', { text: 'first' });
-    remote.get('/some/service/two', { text: 'second' });
+    remote.get('/some/service/two', { json: { second: true } });
     remote.get('/some/service/three', { text: 'third' });
     remote.get('/some/service/four', { text: 'fourth' });
     remote.get('/some/service/five', { text: 'fifth' });
@@ -460,7 +460,7 @@ describe('Capture Record and Playback', function() {
         // Invoke requests to remote services through proxy
         // e.g. http://localhost:4041/http://example.com/some/service
         cb => proxyReq.get(path1).expect(200, 'first', cb),
-        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path2).expect(200, '{"second":true}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, 'fourth', cb),
         cb => proxyReq.get(path5).expect(200, 'fifth', cb),
@@ -505,7 +505,7 @@ describe('Capture Record and Playback', function() {
         // Assert remote url paths are routed the correct responses
         // e.g. http://localhost:4041/http://example.com/some/service
         cb => remoteReq.get(path1).expect(200, 'first', cb),
-        cb => remoteReq.get(path2).expect(200, 'second', cb),
+        cb => remoteReq.get(path2).expect(200, '{"second":true}', cb),
         cb => remoteReq.get(path3).expect(200, 'third', cb),
         cb => remoteReq.get(path4).expect(200, 'fourth', cb),
         cb => remoteReq.get(path5).expect(200, 'fifth', cb),
@@ -513,7 +513,7 @@ describe('Capture Record and Playback', function() {
         // Assert paths are routed the correct responses
         // e.g. http://localhost:4041/some/service
         cb => proxyReq.get(path1).expect(200, 'first', cb),
-        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path2).expect(200, '{\n  "second": true\n}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, 'fourth', cb),
         cb => proxyReq.get(path5).expect(200, 'fifth', cb)
