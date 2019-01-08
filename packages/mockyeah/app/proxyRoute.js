@@ -69,7 +69,7 @@ const proxyRoute = (req, res, next) => {
 
     if (!app.locals.recording) return;
 
-    const { only, options: { headers: optionsHeaders, useHeaders, useLatency } = {} } = recordMeta;
+    const { options: { headers: optionsHeaders, only, useHeaders, useLatency } = {} } = recordMeta;
 
     if (only && !only(reqUrl)) return;
 
