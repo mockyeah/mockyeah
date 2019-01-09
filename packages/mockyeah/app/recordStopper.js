@@ -71,6 +71,8 @@ module.exports = app => cb => {
     });
   }
 
+  let jsModule = `module.exports = ${js};`;
+
   if (formatScript) {
     let formatFunction;
 
@@ -83,11 +85,9 @@ module.exports = app => cb => {
     }
 
     if (formatFunction) {
-      js = formatFunction(js);
+      jsModule = formatFunction(jsModule);
     }
   }
-
-  const jsModule = `module.exports = ${js};`;
 
   fs.writeFile(filePath, jsModule, err => {
     if (err) {
