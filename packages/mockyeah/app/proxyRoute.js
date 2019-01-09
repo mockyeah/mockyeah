@@ -1,17 +1,19 @@
 const request = require('request');
 const isAbsoluteUrl = require('is-absolute-url');
 const { isEmpty } = require('lodash');
-const { handleContentType } = require('./lib/helpers');
+const { decodeProtocolAndPort, handleContentType } = require('./lib/helpers');
 
 const now = () => new Date().getTime();
 
 const openingSlashRegex = /^\//;
-const leadProtocolRegex = /^(https?)%3A%2F%2F/;
+const leadUrlEncodedProtocolRegex = /^(https?)%3A%2F%2F/;
 
 const makeRequestUrl = req =>
-  req.originalUrl
-    .replace(openingSlashRegex, '')
-    .replace(leadProtocolRegex, (match, p1) => `${p1}://`);
+  decodeProtocolAndPort(
+    req.originalUrl
+      .replace(openingSlashRegex, '')
+      .replace(leadUrlEncodedProtocolRegex, (match, p1) => `${p1}://`)
+  );
 
 const makeRequestOptions = req => {
   const { headers: _headers, method: _method } = req;
