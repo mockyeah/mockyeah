@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
+const relativeRoot = require('../lib/relativeRoot');
 const {
   resolveFilePath,
   getDataForRecordToFixtures,
@@ -14,7 +15,7 @@ module.exports = app => cb => {
     return;
   }
 
-  const { recordToFixtures, recordToFixturesMode } = app.config;
+  const { recordToFixtures, recordToFixturesMode, formatScript } = app.config;
 
   const {
     recordMeta: { name, set }
@@ -68,6 +69,22 @@ module.exports = app => cb => {
     js = replaceFixtureWithRequireInJson(js, {
       relativePath: path.relative(capturePath, fixturesDir)
     });
+  }
+
+  if (formatScript) {
+    let formatFunction;
+
+    if (typeof formatScript === 'string') {
+      const formatScriptModulePath = path.resolve(relativeRoot, formatScript);
+      // eslint-disable-next-line global-require, import/no-dynamic-require
+      formatFunction = require(formatScriptModulePath);
+    } else {
+      formatFunction = formatScript;
+    }
+
+    if (formatFunction) {
+      js = formatFunction(js);
+    }
   }
 
   const jsModule = `module.exports = ${js};`;

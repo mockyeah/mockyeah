@@ -19,7 +19,8 @@ const configDefaults = {
   adminHost: 'localhost',
   adminPort: 4777,
   recordToFixtures: true,
-  recordToFixturesMode: 'path'
+  recordToFixturesMode: 'path',
+  formatScript: undefined
 };
 
 module.exports = (config = {}) => {
