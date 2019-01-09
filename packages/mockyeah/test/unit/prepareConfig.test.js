@@ -40,7 +40,8 @@ describe('prepareConfig', () => {
       record: false,
       verbose: false,
       recordToFixtures: true,
-      recordToFixturesMode: 'path'
+      recordToFixturesMode: 'path',
+      formatScript: undefined
     });
   });
 
@@ -64,7 +65,8 @@ describe('prepareConfig', () => {
       record: false,
       verbose: false,
       recordToFixtures: true,
-      recordToFixturesMode: 'path'
+      recordToFixturesMode: 'path',
+      formatScript: undefined
     });
   });
 });
