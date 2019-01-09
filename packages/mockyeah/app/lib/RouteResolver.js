@@ -6,6 +6,7 @@ const pathToRegExp = require('path-to-regexp');
 const isAbsoluteUrl = require('is-absolute-url');
 const Expectation = require('./Expectation');
 const routeHandler = require('./routeHandler');
+const { decodeProtocolAndPort, encodeProtocolAndPort } = require('./helpers');
 
 function isEqualMethod(method1, method2) {
   const m1 = method1.toLowerCase();
@@ -49,9 +50,11 @@ function isRouteForRequest(route, req) {
 
   const pathname = normalizePathname(parse(req.url, true).pathname);
 
-  const routePathnameIsAbsoluteUrl = isAbsoluteUrl(pathname.toString().replace(/^\//, ''));
+  const decodedPathname = decodeProtocolAndPort(pathname);
 
-  if (routePathnameIsAbsoluteUrl) {
+  const reqPathnameIsAbsoluteUrl = isAbsoluteUrl(decodedPathname.toString().replace(/^\//, ''));
+
+  if (reqPathnameIsAbsoluteUrl) {
     // eslint-disable-next-line no-lonely-if
     if (!route.pathFn(pathname)) return false;
   } else {
@@ -106,17 +109,19 @@ function listen() {
 
       // If we have `pathRegExp`, it means we parsed a path string in Express style,
       //  so we can collect the Express-style parameters via `matchKeys`.
-      if (route.pathRegExp) {
+      if (route.pathRegExp && route.matchKeys) {
         const match = req.path.match(route.pathRegExp);
 
-        const params = {};
+        if (match) {
+          const params = {};
 
-        route.matchKeys.forEach((key, i) => {
-          params[key.name] = match[i + 1];
-          params[i] = match[i + 1];
-        });
+          route.matchKeys.forEach((key, i) => {
+            params[key.name] = match[i + 1];
+            params[i] = match[i + 1];
+          });
 
-        req.params = params;
+          req.params = params;
+        }
       }
 
       route.response(req, res);
@@ -147,16 +152,19 @@ const handlePathTypes = (_path, _query) => {
     const url = parse(path, true);
     const pathname = normalizePathname(url.pathname);
 
+    // Encode absolute URL protocol and port characters to tildes to prevent colons from being interpreted as Express parameters.
+    const paramEncodedPathname = encodeProtocolAndPort(pathname);
+
     const matchKeys = [];
     // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
-    const pathRegExp = pathToRegExp(pathname, matchKeys);
+    const pathRegExp = pathToRegExp(paramEncodedPathname, matchKeys);
 
     const query = Object.assign({}, url.query, _query);
 
     return {
       matchKeys,
       path,
-      pathFn: p => pathRegExp.test(p),
+      pathFn: p => pathRegExp.test(encodeProtocolAndPort(p)),
       pathname,
       pathRegExp,
       query

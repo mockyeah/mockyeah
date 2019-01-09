@@ -1,5 +1,12 @@
 const path = require('path');
 
+const {
+  decodedPortRegex,
+  decodedProtocolRegex,
+  encodedPortRegex,
+  encodedProtocolRegex
+} = require('./constants');
+
 function resolveFilePath(capturePath, url) {
   const fileName = url.replace(/\//g, '|');
   return path.resolve(capturePath, fileName);
@@ -58,6 +65,15 @@ const getDataForRecordToFixtures = ({ responseOptions, name, index }) => {
   };
 };
 
+// Restore any special protocol or port characters that were possibly tilde-replaced.
+const decodeProtocolAndPort = str =>
+  str.replace(encodedProtocolRegex, '$1://').replace(encodedPortRegex, '$1:');
+
+const encodeProtocolAndPort = str =>
+  str.replace(decodedPortRegex, '$1~').replace(decodedProtocolRegex, '$1~~~');
+
+exports.decodeProtocolAndPort = decodeProtocolAndPort;
+exports.encodeProtocolAndPort = encodeProtocolAndPort;
 exports.getDataForRecordToFixtures = getDataForRecordToFixtures;
 exports.replaceFixtureWithRequireInJson = replaceFixtureWithRequireInJson;
 exports.handleContentType = handleContentType;

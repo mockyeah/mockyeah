@@ -547,7 +547,90 @@ describe('Capture Record and Playback', function() {
         // Test remote url paths and their sub paths route to the same services
         // Assert remote url paths are routed the correct responses
         // e.g. http://localhost:4041/http://example.com/some/service
-        cb => remoteReq.get(path1).expect(200, cb)
+        cb => remoteReq.get(path1).expect(200, cb),
+
+        // Assert paths are routed the correct responses
+        cb => proxyReq.get(path1).expect(200, cb)
+      ],
+      done
+    );
+  });
+
+  it('should record and playback call using full URLs, including custom-encoded', function(done) {
+    this.timeout = 10000;
+
+    const captureName = 'test-some-fancy-capture-full-urls';
+
+    // Construct remote service urls
+    const path1 = '/http://example.com/some/service/one';
+    const path2 = '/http://www.example.com/some/service/one';
+    const path3 = '/http://www.example.com:80/some/service/one';
+
+    const path1encoded = '/http~~~example.com/some/service/one';
+    const path2encoded = '/http~~~www.example.com/some/service/one';
+    const path3encoded = '/http~~~www.example.com~80/some/service/one';
+
+    // Mount remote service end points
+    remote.get(path1, { text: 'first' });
+    remote.get(path2, { text: 'second' });
+    remote.get(path3, { text: 'third' });
+
+    // Initiate recording and playback series
+    async.series(
+      [
+        // Initiate recording
+        cb => {
+          proxy.record(captureName);
+          cb();
+        },
+
+        // Invoke requests to remote services through proxy
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => proxyReq.get(path1).expect(200, 'first', cb),
+        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path3).expect(200, 'third', cb),
+
+        cb => proxyReq.get(path1encoded).expect(200, 'first', cb),
+        cb => proxyReq.get(path2encoded).expect(200, 'second', cb),
+        cb => proxyReq.get(path3encoded).expect(200, 'third', cb),
+
+        // Stop recording
+        cb => {
+          proxy.recordStop(cb);
+        },
+
+        // Assert capture file exists
+        cb => {
+          fs.statSync(getCaptureFilePath(captureName));
+          cb();
+        },
+
+        // Reset proxy services and play captured capture
+        cb => {
+          proxy.reset();
+          cb();
+        },
+
+        cb => {
+          proxy.play(captureName);
+          cb();
+        },
+
+        // Test remote url paths and their sub paths route to the same services
+        // Assert remote url paths are routed the correct responses
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => remoteReq.get(path1).expect(200, 'first', cb),
+        cb => remoteReq.get(path2).expect(200, 'second', cb),
+        cb => remoteReq.get(path3).expect(200, 'third', cb),
+
+        // Assert paths are routed the correct responses
+        cb => proxyReq.get(path1).expect(200, 'first', cb),
+        cb => proxyReq.get(path2).expect(200, 'second', cb),
+        cb => proxyReq.get(path3).expect(200, 'third', cb),
+
+        cb => proxyReq.get(path1encoded).expect(200, 'first', cb),
+        cb => proxyReq.get(path2encoded).expect(200, 'second', cb),
+        cb => proxyReq.get(path3encoded).expect(200, 'third', cb)
       ],
       done
     );
