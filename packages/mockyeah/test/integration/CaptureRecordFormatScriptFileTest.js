@@ -72,7 +72,7 @@ describe('Capture Record Format Script File Test', function() {
   it('should record and format script', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'test-some-fancy-capture-using-latency';
+    const captureName = 'test-some-fancy-capture-format-script-file';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
