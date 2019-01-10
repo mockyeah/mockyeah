@@ -176,7 +176,7 @@ const handlePathTypes = (_path, _query) => {
 
     return {
       path: _path,
-      pathFn: p => _path.test(p),
+      pathFn: p => _path.test(decodeProtocolAndPort(p)),
       pathname: _path
     };
   }
@@ -184,7 +184,7 @@ const handlePathTypes = (_path, _query) => {
   if (typeof _path === 'function') {
     return {
       path: _path,
-      pathFn: _path,
+      pathFn: p => _path(decodeProtocolAndPort(p)),
       pathname: _path
     };
   }

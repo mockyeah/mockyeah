@@ -110,6 +110,39 @@ describe('Route proxy method', () => {
       );
     });
 
+    it('should support registering full URLs and matching request with custom-encoded URLs with regex', done => {
+      mockyeah.get(new RegExp(`http://localhost:${proxiedPort}`), { text: 'bar', status: 500 });
+
+      async.series(
+        [
+          cb =>
+            supertest(proxiedApp)
+              .get('/foo')
+              .expect(200, cb),
+          cb => request.get(`/http~~~localhost~${proxiedPort}/foo?ok=yes`).expect(500, 'bar', cb)
+        ],
+        done
+      );
+    });
+
+    it('should support registering full URLs and matching request with custom-encoded URLs with function', done => {
+      mockyeah.get(p => p === `/http://localhost:${proxiedPort}/foo`, {
+        text: 'bar',
+        status: 500
+      });
+
+      async.series(
+        [
+          cb =>
+            supertest(proxiedApp)
+              .get('/foo')
+              .expect(200, cb),
+          cb => request.get(`/http~~~localhost~${proxiedPort}/foo?ok=yes`).expect(500, 'bar', cb)
+        ],
+        done
+      );
+    });
+
     it('should support proxying custom-encoded URLs', done => {
       request.get(`/http~~~localhost~${proxiedPort}/foo`).expect(200, done);
     });
