@@ -111,7 +111,7 @@ describe('Route proxy method', () => {
     });
 
     it('should support registering full URLs and matching request with custom-encoded URLs with regex', done => {
-      mockyeah.get(new RegExp(`http:\/\/localhost:${proxiedPort}`), { text: 'bar', status: 500 });
+      mockyeah.get(new RegExp(`http://localhost:${proxiedPort}`), { text: 'bar', status: 500 });
 
       async.series(
         [
