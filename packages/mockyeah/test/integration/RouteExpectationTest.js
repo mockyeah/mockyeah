@@ -528,6 +528,7 @@ describe('Route expectation', () => {
       .post('/foo', { text: 'bar' })
       .expect()
       .params(() => {
+        // eslint-disable-next-line no-throw-literal
         throw null;
       })
       .once();
@@ -549,6 +550,7 @@ describe('Route expectation', () => {
       .post('/foo', { text: 'bar' })
       .expect()
       .params(() => {
+        // eslint-disable-next-line no-throw-literal
         throw {};
       })
       .once();
