@@ -165,8 +165,19 @@ Expectation.prototype.api = function api() {
       });
       return this;
     },
-    verify: function verify() {
-      internal.assertions.forEach(_assertion => _assertion());
+    verify: function verify(callback) {
+      try {
+        internal.assertions.forEach(_assertion => _assertion());
+        if (callback) {
+          callback();
+        }
+      } catch (err) {
+        if (callback) {
+          callback(err);
+        } else {
+          throw err;
+        }
+      }
     }
   };
 };

@@ -431,6 +431,50 @@ describe('Route expectation', () => {
     );
   });
 
+  it('should support expectation callback', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .header('host', 'example.com')
+      .params({
+        id: '9999'
+      })
+      .body({
+        foo: 'bar'
+      })
+      .once();
+
+    request
+      .post('/foo?id=9999')
+      .set('HOST', 'example.com')
+      .send({ foo: 'bar' })
+      .end(() => {
+        expectation.verify(done);
+      });
+  });
+
+  it('should support expectation callback with error', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .header('host', 'example.com')
+      .params({
+        id: '9999'
+      })
+      .body({
+        foo: 'bar'
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(err).to.exist;
+        done();
+      });
+    });
+  });
+
   it('should allow composable expectations', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })

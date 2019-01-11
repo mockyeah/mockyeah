@@ -21,8 +21,7 @@ describe("This test", () => {
     request("http://localhost:4040")
       .get("/say-hello?foo=bar")
       .expect(200, () => {
-        expectation.verify();
-        done();
+        expectation.verify(done);
       });
   });
 });
@@ -87,7 +86,7 @@ const expectation = mockyeah
 ```
 
 <div id="verify"></div>
-`.verify()` - Asserts expectation to be correct.
+`.verify(callback)` - Asserts expectation to be correct, and if optional callback is provided, using that to pass up assertion errors instead of throwing inline.
 
 ```js
 expectation.verify();
