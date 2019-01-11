@@ -475,6 +475,98 @@ describe('Route expectation', () => {
     });
   });
 
+  it('should handle custom error in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(params => {
+        expect(params).to.equal({
+          id: '9999'
+        });
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        try {
+          expect(err.message).to.equal(
+            "[post] /foo -- Params did not match expectation callback: expected { id: '9999' } to equal { id: '9999' }"
+          );
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
+  it('should render custom error in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(() => {
+        throw new Error('my custom assertion error');
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        try {
+          expect(err.message).to.equal(
+            '[post] /foo -- Params did not match expectation callback: my custom assertion error'
+          );
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
+  it('should not render custom error if null in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(() => {
+        // eslint-disable-next-line no-throw-literal
+        throw null;
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        try {
+          expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
+  it('should not render custom error if no message in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(() => {
+        // eslint-disable-next-line no-throw-literal
+        throw {};
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        try {
+          expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
   it('should allow composable expectations', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
