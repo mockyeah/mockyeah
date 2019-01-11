@@ -31,7 +31,7 @@ const assertion = function assertion(value, actualValue, message) {
       assert(result, message);
     }
   } catch (err) {
-    assert(false, message);
+    assert(false, message + (err && err.message ? `: ${err.message}` : ''));
   }
 };
 
