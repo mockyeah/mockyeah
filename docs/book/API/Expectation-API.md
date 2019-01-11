@@ -28,30 +28,39 @@ describe("This test", () => {
 ```
 
 <div id="expect"></div>
+
 `.expect()` - Returns an expectation object for a given mock service when chained to a [Mock Services API](./Mock-API.md) method call.
 
 <div id="atLeast">
+
 `.atLeast(Number)` - Adds expectation that a service must be called at least a specified number of times.
 
 <div id="atMost"></div>
+
 `.atMost(Number)` - Adds expectation that a service must be called at most a specified number of times.
 
 <div id="never"></div>
+
 `.never()` - Adds expectation that a service must never be called.
 
 <div id="once"></div>
+
 `.once()` - Adds expectation that a service must be called only once.
 
 <div id="twice"></div>
+
 `.twice()` - Adds expectation that a service must be called only twice.
 
 <div id="thrice"></div>
+
 `.thrice()` - Adds expectation that a service must be called only thrice.
 
 <div id="exactly"></div>
+
 `.exactly(Number)` - Adds expectation that a service must be called exactly a specified number of times.
 
 <div id="body"></div>
+
 `.body(Object)` - Adds expectation that a service must receive only requests with bodies matching the body specified.
 
 ```js
@@ -64,6 +73,7 @@ const expectation = mockyeah
 ```
 
 <div id="params"></div>
+
 `.params(Object)` - Adds expectation that a service must receive only requests with query params matching those specified.
 
 ```js
@@ -75,7 +85,12 @@ const expectation = mockyeah
   });
 ```
 
+<div id="query"></div>
+
+`.query(Object)` - An alias of <a href="#params">`.params(Object)`</a>.
+
 <div id="header"></div>
+
 `.header(Key, Value)` - Adds expectation that a service must receive only requests with headers matching those specified.
 
 ```js
@@ -86,6 +101,7 @@ const expectation = mockyeah
 ```
 
 <div id="verify"></div>
+
 `.verify(callback)` - Asserts expectation to be correct, and if optional callback is provided, using that to pass up assertion errors instead of throwing inline.
 
 ```js

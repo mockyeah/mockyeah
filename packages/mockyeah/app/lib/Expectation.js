@@ -155,6 +155,9 @@ Expectation.prototype.api = function api() {
       });
       return this;
     },
+    query: function query(value) {
+      return this.params(value);
+    },
     body: function body(value) {
       internal.handlers.push(req => {
         if (typeof value === 'function') {

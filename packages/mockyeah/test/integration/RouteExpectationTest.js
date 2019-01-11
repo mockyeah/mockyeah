@@ -585,8 +585,29 @@ describe('Route expectation', () => {
       .set('HOST', 'example.com')
       .send({ foo: 'bar' })
       .end(() => {
-        expectation.verify();
-        done();
+        expectation.verify(done);
+      });
+  });
+
+  it('should support query alias to params for expectations', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .header('host', 'example.com')
+      .query({
+        id: '9999'
+      })
+      .body({
+        foo: 'bar'
+      })
+      .once();
+
+    request
+      .post('/foo?id=9999')
+      .set('HOST', 'example.com')
+      .send({ foo: 'bar' })
+      .end(() => {
+        expectation.verify(done);
       });
   });
 });
