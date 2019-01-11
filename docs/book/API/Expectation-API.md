@@ -94,7 +94,7 @@ expectation.verify();
 
 The `body`, `params`, and `header` methods also accept a function instead of an object, for custom validations.
 These functions receive as a first parameter the parsed body, query parameters object, or header value, respectively,
-and should return `true` or `false` to indicate a pass or failure of the expectation.
+and should return `true` to indicate a pass, or return `false` or throw an error (like many assertion libraries) to indicate a failure.
 
 Examples:
 
@@ -103,6 +103,19 @@ const expectation = mockyeah
   .get("/foo", { text: "bar" })
   .expect()
   .header("X-API-Key", value => /[0-9A-F]{32}/i.test(value));
+```
+
+```js
+const { expect } = require("chai");
+
+const expectation = mockyeah
+  .get("/foo", { text: "bar" })
+  .expect()
+  .params(params =>
+    expect(params).to.equal({
+      some: "value"
+    })
+  );
 ```
 
 ```js
