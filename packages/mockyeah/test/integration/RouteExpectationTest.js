@@ -468,6 +468,7 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        // eslint-disable-next-line no-unused-expressions
         expect(err).to.exist;
         done();
       });
