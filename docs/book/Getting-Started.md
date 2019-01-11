@@ -99,8 +99,7 @@ describe('Wondrous service', () => {
       .get('/wondrous?foo=bar')
       .expect(200, 'it worked')
       .then(() => {
-        expectation.verify();
-        done();
+        expectation.verify(done);
       });
   });
 });
