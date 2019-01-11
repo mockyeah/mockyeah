@@ -523,6 +523,48 @@ describe('Route expectation', () => {
     });
   });
 
+  it('should not render custom error if null in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(() => {
+        throw null;
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        try {
+          expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
+  it('should not render custom error if no message in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(() => {
+        throw {};
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        try {
+          expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
   it('should allow composable expectations', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
