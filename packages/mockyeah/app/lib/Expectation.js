@@ -25,19 +25,48 @@ Expectation.prototype.middleware = function middleware(req, res, next) {
   next();
 };
 
-const assertion = function assertion(value, actualValue, message) {
+const assertion = function assertion(fn, actualValue, message) {
+  let result;
+
   try {
-    const result = value(actualValue);
-    if (result !== undefined) {
-      assert(result, message);
-    }
+    result = fn(actualValue);
   } catch (err) {
     assert(false, message + (err && err.message ? `: ${err.message}` : ''));
   }
+
+  if (result !== undefined) {
+    assert(result, `${message}: function returned false`);
+  }
 };
 
-Expectation.prototype.api = function api() {
+Expectation.prototype.api = function api(predicate) {
   const internal = this;
+
+  if (predicate) {
+    internal.handlers.push(req => {
+      try {
+        const { headers, query, body, _parsedUrl } = req;
+        const { pathname: path } = _parsedUrl;
+
+        const result = predicate({
+          path,
+          query,
+          headers,
+          body,
+          req
+        });
+
+        if (typeof result !== 'undefined' && !result) {
+          throw new Error('function returned false');
+        }
+      } catch (err) {
+        const message = `${internal.prefix} Expect function did not match${
+          err && err.message ? `: ${err.message}` : ''
+        }`;
+        assert(false, message);
+      }
+    });
+  }
 
   return {
     atLeast: function atLeast(number) {

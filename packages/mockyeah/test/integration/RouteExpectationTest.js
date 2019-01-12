@@ -480,17 +480,21 @@ describe('Route expectation', () => {
       .post('/foo', { text: 'bar' })
       .expect()
       .params(params => {
-        expect(params).to.equal({
-          id: '9999'
+        expect(params).to.deep.equal({
+          id: '1234'
         });
       })
       .once();
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal(
-            "[post] /foo -- Params did not match expectation callback: expected { id: '9999' } to equal { id: '9999' }"
+            "[post] /foo -- Params did not match expectation callback: expected { id: '9999' } to deeply equal { id: '1234' }"
           );
           done();
         } catch (err2) {
@@ -511,6 +515,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal(
             '[post] /foo -- Params did not match expectation callback: my custom assertion error'
@@ -535,6 +543,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
           done();
@@ -557,8 +569,49 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
+  it('should handle return true in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(params => params.id === '9999')
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(done);
+    });
+  });
+
+  it('should handle return false in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(params => params.id === '1234')
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
+        try {
+          expect(err.message).to.equal(
+            '[post] /foo -- Params did not match expectation callback: function returned false'
+          );
           done();
         } catch (err2) {
           done(err2);
@@ -609,5 +662,118 @@ describe('Route expectation', () => {
       .end(() => {
         expectation.verify(done);
       });
+  });
+
+  it('should support custom generic expect handler', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect(data => {
+        expect(data).to.exist;
+
+        expect(data.headers).to.be.object;
+        expect(data.query).to.be.object;
+        expect(data.body).to.be.object;
+        expect(data.req).to.be.object;
+
+        expect(data.path).to.equal('/foo');
+        expect(data.query.id).to.equal('9999');
+        expect(data.headers.host).to.equal('example.com');
+        expect(data.body.foo).to.equal('bar');
+        expect(data.req.originalUrl).to.equal('/foo?id=9999');
+      })
+      .once();
+
+    request
+      .post('/foo?id=9999')
+      .set('HOST', 'example.com')
+      .send({ foo: 'bar' })
+      .end(() => {
+        expectation.verify(done);
+      });
+  });
+
+  it('should support custom generic expect handler', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect(data => {
+        expect(data).to.exist;
+
+        expect(data.headers).to.be.object;
+        expect(data.query).to.be.object;
+        expect(data.body).to.be.object;
+        expect(data.req).to.be.object;
+
+        expect(data.path).to.equal('/foo');
+        expect(data.query.id).to.equal('9999');
+        expect(data.headers.host).to.equal('example.com');
+        expect(data.body.foo).to.equal('bar');
+        expect(data.req.originalUrl).to.equal('/foo?id=9999');
+      })
+      .once();
+
+    request
+      .post('/foo?id=9999')
+      .set('HOST', 'example.com')
+      .send({ foo: 'bar' })
+      .end(() => {
+        expectation.verify(done);
+      });
+  });
+
+  it('should support custom generic expect handler returning true', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect(data => data.path === '/foo')
+      .once();
+
+    request
+      .post('/foo?id=9999')
+      .set('HOST', 'example.com')
+      .send({ foo: 'bar' })
+      .end(() => {
+        expectation.verify(done);
+      });
+  });
+
+  it('should render custom error in expectation functions returning false', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect(data => data.path === '/what')
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        try {
+          expect(err.message).to.equal(
+            '[post] /foo -- Expect function did not match: function returned false'
+          );
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
+  it('should render custom error in expectation functions with error', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect(() => {
+        throw new Error('my custom assertion error');
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        try {
+          expect(err.message).to.equal(
+            '[post] /foo -- Expect function did not match: my custom assertion error'
+          );
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
   });
 });

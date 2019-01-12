@@ -29,7 +29,15 @@ describe("This test", () => {
 
 <div id="expect"></div>
 
-`.expect()` - Returns an expectation object for a given mock service when chained to a [Mock Services API](./Mock-API.md) method call.
+`.expect(optionalPredicate)` - Returns an expectation object for a given mock service when chained to a [Mock Services API](./Mock-API.md) method call. If provided an optional predicate function, it will call this function on `.verify()`
+where we can throw errors or return true/false to make assertions.
+It receives one argument - an object with the following fields:
+
+- `path` (String): the request path.
+- `query` (Object): a key/value map of query parameters.
+- `headers` (Object): a key/value map of headers. Header names are all lowercase.
+- `body` (Object|String): the parsed response body. If JSON, then a JS objec, otherwise a string.
+- `req` (Object): the raw Express request object for additional custom assertions.
 
 <div id="atLeast">
 
@@ -91,7 +99,7 @@ const expectation = mockyeah
 
 <div id="header"></div>
 
-`.header(Key, Value)` - Adds expectation that a service must receive only requests with headers matching those specified.
+`.header(key, value)` - Adds expectation that a service must receive only requests with headers matching those specified.
 
 ```js
 const expectation = mockyeah
