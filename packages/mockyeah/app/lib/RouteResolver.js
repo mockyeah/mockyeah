@@ -223,7 +223,7 @@ RouteResolver.prototype.register = function register(method, _path, response) {
   this.routes.push(route);
 
   return {
-    expect: () => expectation.api()
+    expect: predicate => expectation.api(predicate)
   };
 };
 
