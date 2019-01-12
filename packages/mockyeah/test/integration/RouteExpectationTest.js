@@ -488,7 +488,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
-        if (!err) return done(new Error('expected error'));
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal(
             "[post] /foo -- Params did not match expectation callback: expected { id: '9999' } to deeply equal { id: '1234' }"
@@ -512,7 +515,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
-        if (!err) return done(new Error('expected error'));
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal(
             '[post] /foo -- Params did not match expectation callback: my custom assertion error'
@@ -537,7 +543,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
-        if (!err) return done(new Error('expected error'));
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
           done();
@@ -560,7 +569,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
-        if (!err) return done(new Error('expected error'));
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
           done();
@@ -592,7 +604,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
-        if (!err) return done(new Error('expected error'));
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal(
             '[post] /foo -- Params did not match expectation callback: function returned false'

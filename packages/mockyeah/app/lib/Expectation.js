@@ -31,11 +31,10 @@ const assertion = function assertion(fn, actualValue, message) {
     result = fn(actualValue);
   } catch (err) {
     assert(false, message + (err && err.message ? `: ${err.message}` : ''));
-    return;
   }
 
-  if (result !== undefined && !result) {
-    assert(false, `${message}: function returned false`);
+  if (result !== undefined) {
+    assert(result, `${message}: function returned false`);
   }
 };
 
