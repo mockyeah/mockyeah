@@ -670,9 +670,7 @@ describe('Route expectation', () => {
   it('should support custom generic expect handler returning true', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
-      .expect(data => {
-        return data.path === '/foo';
-      })
+      .expect(data => data.path === '/foo')
       .once();
 
     request
@@ -687,9 +685,7 @@ describe('Route expectation', () => {
   it('should render custom error in expectation functions returning false', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
-      .expect(data => {
-        return data.path === '/what';
-      })
+      .expect(data => data.path === '/what')
       .once();
 
     request.post('/foo?id=9999').end(() => {

@@ -41,10 +41,11 @@ Expectation.prototype.api = function api(predicate) {
   if (predicate) {
     internal.handlers.push(req => {
       try {
-        const { headers, query, body } = req;
+        const { headers, query, body, _parsedUrl } = req;
+        const { pathname: path } = _parsedUrl;
 
         const result = predicate({
-          path: req._parsedUrl.pathname,
+          path,
           query,
           headers,
           body,
@@ -55,9 +56,9 @@ Expectation.prototype.api = function api(predicate) {
           throw new Error('function returned false');
         }
       } catch (err) {
-        const message =
-          `${internal.prefix} Expect function did not match` +
-          (err && err.message ? `: ${err.message}` : '');
+        const message = `${internal.prefix} Expect function did not match${
+          err && err.message ? `: ${err.message}` : ''
+        }`;
         assert(false, message);
       }
     });
