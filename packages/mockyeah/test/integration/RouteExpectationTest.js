@@ -452,7 +452,7 @@ describe('Route expectation', () => {
       .end(expectation.verify);
   });
 
-  it.only('should support expectation callback with error', done => {
+  it('should support expectation callback with error', done => {
     const wrappedDone = err => {
       // eslint-disable-next-line no-unused-expressions
       expect(err).to.exist;
