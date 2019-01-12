@@ -452,10 +452,35 @@ describe('Route expectation', () => {
       .end(expectation.verify);
   });
 
+  it('should support expectation callback with request failure', done => {
+    const wrappedDone = err => {
+      expect(err).to.exist;
+      expect(err.message).to.match(/fake error/);
+      done();
+    };
+
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar', status: 500 })
+      .expect()
+      .header('host', 'example.com')
+      .params({
+        id: '9999'
+      })
+      .body({
+        foo: 'bar'
+      })
+      .once()
+      .done(wrappedDone);
+
+    expectation.verify(new Error('fake error'));
+  });
+
   it('should support expectation callback with error', done => {
     const wrappedDone = err => {
-      // eslint-disable-next-line no-unused-expressions
       expect(err).to.exist;
+      expect(err.message).to.match(
+        /\[post\] \/foo -- Header "host: example.com" expected, but got/
+      );
       done();
     };
 
