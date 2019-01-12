@@ -480,17 +480,21 @@ describe('Route expectation', () => {
       .post('/foo', { text: 'bar' })
       .expect()
       .params(params => {
-        expect(params).to.equal({
-          id: '9999'
+        expect(params).to.deep.equal({
+          id: '1234'
         });
       })
       .once();
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal(
-            "[post] /foo -- Params did not match expectation callback: expected { id: '9999' } to equal { id: '9999' }"
+            "[post] /foo -- Params did not match expectation callback: expected { id: '9999' } to deeply equal { id: '1234' }"
           );
           done();
         } catch (err2) {
@@ -511,6 +515,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal(
             '[post] /foo -- Params did not match expectation callback: my custom assertion error'
@@ -535,6 +543,10 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
           done();
@@ -557,8 +569,49 @@ describe('Route expectation', () => {
 
     request.post('/foo?id=9999').end(() => {
       expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
         try {
           expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
+  it('should handle return true in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(params => params.id === '9999')
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(done);
+    });
+  });
+
+  it('should handle return false in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(params => params.id === '1234')
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
+        try {
+          expect(err.message).to.equal(
+            '[post] /foo -- Params did not match expectation callback: function returned false'
+          );
           done();
         } catch (err2) {
           done(err2);
