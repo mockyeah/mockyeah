@@ -24,14 +24,18 @@ Expectation.prototype.middleware = function middleware(req, res, next) {
   next();
 };
 
-const assertion = function assertion(value, actualValue, message) {
+const assertion = function assertion(fn, actualValue, message) {
+  let result;
+
   try {
-    const result = value(actualValue);
-    if (result !== undefined) {
-      assert(result, message);
-    }
+    result = fn(actualValue);
   } catch (err) {
     assert(false, message + (err && err.message ? `: ${err.message}` : ''));
+    return;
+  }
+
+  if (result !== undefined && !result) {
+    assert(false, `${message}: function returned false`);
   }
 };
 
