@@ -12,6 +12,7 @@ function Expectation(route) {
   this.called = 0;
   this.assertions = [];
   this.handlers = [];
+  this.callback = undefined;
   return this;
 }
 
@@ -37,6 +38,7 @@ const assertion = function assertion(value, actualValue, message) {
 
 Expectation.prototype.api = function api() {
   const internal = this;
+
   return {
     atLeast: function atLeast(number) {
       internal.assertions.push(() => {
@@ -168,7 +170,21 @@ Expectation.prototype.api = function api() {
       });
       return this;
     },
-    verify: function verify(callback) {
+    done: function done(callback) {
+      internal.callback = callback;
+      return this;
+    },
+    verify: function verify(callbackOrErr) {
+      // Detect if we're using it like `.done(expectation.verify)` (not `expectation.verify(err => {})`),
+      //  where it will be called like a Node callback with optional error argument.
+      if (callbackOrErr && typeof callbackOrErr !== 'function' && internal.callback) {
+        internal.callback(callbackOrErr);
+        return;
+      }
+
+      const argCallback = typeof callbackOrErr === 'function' ? callbackOrErr : undefined;
+      const callback = internal.callback ? internal.callback : argCallback;
+
       try {
         internal.assertions.forEach(_assertion => _assertion());
         if (callback) {
