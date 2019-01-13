@@ -431,6 +431,170 @@ describe('Route expectation', () => {
     );
   });
 
+  it('should support after callback', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .after(cb => request.get('/foo?id=9999').end(cb))
+      .done(done);
+  });
+
+  it('should support after callback with error', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .after(cb => cb(new Error('failure in after callback')))
+      .done(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
+        try {
+          expect(err.message).to.equal('failure in after callback');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+  });
+
+  it('should support after callback with expectation error', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '123'
+      })
+      .once()
+      .after(cb => request.get('/foo?id=9999').end(cb))
+      .done(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
+        try {
+          expect(err.message).to.equal('[get] /foo -- Params did not match expected');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+  });
+
+  it('should support after promise', done => {
+    const promise = new Promise((resolve, reject) => {
+      request.get('/foo?id=9999').end((err, res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(res);
+      });
+    });
+
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .after(promise)
+      .done(done);
+  });
+
+  it('should support after promise with error', done => {
+    const promise = new Promise((resolve, reject) => {
+      reject(new Error('failure in after promise'));
+    });
+
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .after(promise)
+      .done(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
+        try {
+          expect(err.message).to.equal('failure in after promise');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+  });
+
+  it('should support after promise with error and no done', done => {
+    const promise = new Promise((resolve, reject) => {
+      reject(new Error('failure in after promise'));
+    });
+
+    const expecation = mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .after(promise);
+
+    // eslint-disable-next-line no-underscore-dangle
+    expecation.__afterPromise
+      .then(() => {
+        done(new Error('expected error'));
+      })
+      .catch(() => {
+        done();
+      });
+  });
+
+  it('should support after promise with expectation error', done => {
+    const promise = new Promise((resolve, reject) => {
+      request.get('/foo?id=9999').end((err, res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(res);
+      });
+    });
+
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '123'
+      })
+      .once()
+      .after(promise)
+      .done(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
+        try {
+          expect(err.message).to.equal('[get] /foo -- Params did not match expected');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+  });
+
   it('should support expectation callback', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })

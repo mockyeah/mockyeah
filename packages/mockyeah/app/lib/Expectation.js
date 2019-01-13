@@ -93,7 +93,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
     });
   }
 
-  return {
+  const apiInstance = {
     atLeast: function atLeast(number) {
       internal.assertions.push(() => {
         assert(
@@ -228,6 +228,30 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.callback = callback;
       return this;
     },
+    after: function after(handlerOrPromise) {
+      if (
+        handlerOrPromise instanceof Promise ||
+        (handlerOrPromise.then && handlerOrPromise.catch)
+      ) {
+        // exposed only for testing
+        // eslint-disable-next-line no-underscore-dangle
+        apiInstance.__afterPromise = handlerOrPromise
+          .then(() => {
+            apiInstance.verify();
+          })
+          .catch(err => {
+            if (internal.callback) {
+              internal.callback(err);
+            } else {
+              throw err;
+            }
+          });
+      } else {
+        setTimeout(() => handlerOrPromise(apiInstance.verify));
+      }
+
+      return this;
+    },
     verify: function verify(callbackOrErr) {
       // Detect if we're using it like `.done(expectation.verify)` (not `expectation.verify(err => {})`),
       //  where it will be called like a Node callback with optional error argument.
@@ -253,6 +277,8 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       }
     }
   };
+
+  return apiInstance;
 };
 
 module.exports = Expectation;
