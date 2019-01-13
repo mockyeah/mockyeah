@@ -10,7 +10,7 @@
     "test:unit": "mocha test/**/*Test.js test/**/*.test.js",
     "test:coverage": "nyc yarn test:unit",
     "test:coverage:report:html": "nyc yarn test:unit && nyc report --reporter=html",
-    "test:coverage:report": "nyc report --reporter=text-lcov | coveralls",
+    "test:coverage:report": "nyc report --reporter=text-lcov | coveralls ../..",
     "lint": "eslint -c ./eslint.config.js ./app ./lib ./server ./test"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
