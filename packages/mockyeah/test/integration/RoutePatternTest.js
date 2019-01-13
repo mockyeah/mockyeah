@@ -395,7 +395,7 @@ describe('Route Patterns', () => {
     request.get('/foo?bar=yes&list=a&list=b').expect(200, done);
   });
 
-  it('should match request body', done => {
+  it('should match request body as json', done => {
     mockyeah.post({
       path: '/foo',
       body: {
@@ -409,7 +409,45 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
-  it('should match request body with regex', done => {
+  it('should match request body as string', done => {
+    mockyeah.post({
+      path: '/foo',
+      body: 'test'
+    });
+
+    request
+      .post('/foo')
+      .set('Content-Type', 'text/plain')
+      .send('test')
+      .expect(200, done);
+  });
+
+  it('should match request body as regex', done => {
+    mockyeah.post({
+      path: '/foo',
+      body: /es/
+    });
+
+    request
+      .post('/foo')
+      .set('Content-Type', 'text/plain')
+      .send('test')
+      .expect(200, done);
+  });
+
+  it('should match request body as function', done => {
+    mockyeah.post({
+      path: '/foo',
+      body: value => value === 'test'
+    });
+
+    request
+      .post('/foo')
+      .send('test')
+      .expect(200, done);
+  });
+
+  it('should match request body with nested regex', done => {
     mockyeah.post({
       path: '/foo',
       body: {
@@ -423,7 +461,7 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
-  it('should match request body with function', done => {
+  it('should match request body with nested function', done => {
     mockyeah.post({
       path: '/foo',
       body: {
@@ -460,7 +498,7 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
-  it('should match with partial request body and regex', done => {
+  it('should match with partial request body and deep nested regex', done => {
     mockyeah.post({
       path: '/foo',
       body: {
@@ -578,7 +616,7 @@ describe('Route Patterns', () => {
       .expect(200, done);
   });
 
-  it('should match request headers with function', done => {
+  it('should match request headers with nested function', done => {
     mockyeah.get({
       path: '/foo',
       headers: {
@@ -623,6 +661,19 @@ describe('Route Patterns', () => {
   });
 
   it('should match with partial request headers with function', done => {
+    mockyeah.get({
+      path: '/foo',
+      headers: value => value.bar === 'yes' && value.and === 'this'
+    });
+
+    request
+      .get('/foo')
+      .set('bar', 'yes')
+      .set('and', 'this')
+      .expect(200, done);
+  });
+
+  it('should match with partial request headers with nested function', done => {
     mockyeah.get({
       path: '/foo',
       headers: {

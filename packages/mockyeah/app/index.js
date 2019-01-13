@@ -45,6 +45,8 @@ module.exports = function App(config) {
   app.log('info', 'verbose output enabled', true);
 
   app.use(bodyParser.json());
+  app.use(bodyParser.text());
+  app.use(bodyParser.urlencoded({ extended: false }));
 
   app.middlewares = [];
 
