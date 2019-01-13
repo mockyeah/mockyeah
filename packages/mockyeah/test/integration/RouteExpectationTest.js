@@ -701,7 +701,7 @@ describe('Route expectation', () => {
       .end(expectation.verify);
   });
 
-  it('should support expected with request failure', done => {
+  it('should support expectation callback with request failure', done => {
     const wrappedDone = err => {
       expect(err).to.exist;
       expect(err.message).to.match(/fake error/);
@@ -724,7 +724,7 @@ describe('Route expectation', () => {
     expectation.verify(new Error('fake error'));
   });
 
-  it('should support expected with error', done => {
+  it('should support expectation callback with error', done => {
     const wrappedDone = err => {
       expect(err).to.exist;
       expect(err.message).to.match(/\[post\] \/foo -- Header "host" did not match expected/);
