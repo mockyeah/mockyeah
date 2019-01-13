@@ -14,6 +14,12 @@ function customizer(object, source) {
   // else return undefined to fallback to default equality check
 }
 
-const matches = (object, source) => isMatchWith(object, source, customizer);
+const matches = (object, source) => {
+  const result = customizer(object, source);
+
+  if (result !== undefined) return result;
+
+  return isMatchWith(object, source, customizer);
+};
 
 module.exports = matches;

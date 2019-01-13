@@ -26,18 +26,14 @@ Expectation.prototype.middleware = function middleware(req, res, next) {
   next();
 };
 
-const assertion = function assertion(fn, actualValue, message) {
+const matchAssertion = (tryer, message) => {
   let result;
-
   try {
-    result = fn(actualValue);
+    result = tryer();
   } catch (err) {
     assert(false, message + (err && err.message ? `: ${err.message}` : ''));
   }
-
-  if (result !== undefined) {
-    assert(result, `${message}: function returned false`);
-  }
+  assert(result, message);
 };
 
 Expectation.prototype.api = function api(predicateOrMatchObject) {
@@ -176,52 +172,33 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       return this;
     },
     header: function header(name, value) {
+      const message = `${internal.prefix} Header "${name}" did not match expected`;
+
       internal.handlers.push(req => {
-        const actualValue = req.get(name);
-        if (typeof value === 'function') {
-          const message = `${
-            internal.prefix
-          } Header "${name}: ${actualValue}" did not match expectation callback`;
-          assertion(value, actualValue, message);
-        } else {
-          assert.equal(
-            actualValue,
-            value,
-            `${internal.prefix} Header "${name}: ${value}" expected, but got "${actualValue}"`
-          );
-        }
+        matchAssertion(() => matches(req.get(name), value), message);
       });
+
       return this;
     },
     params: function params(value) {
+      const message = `${internal.prefix} Params did not match expected`;
+
       internal.handlers.push(req => {
-        if (typeof value === 'function') {
-          assertion(
-            value,
-            req.query,
-            `${internal.prefix} Params did not match expectation callback`
-          );
-        } else {
-          assert.deepStrictEqual(
-            req.query,
-            value,
-            `${internal.prefix} Params did not match expected`
-          );
-        }
+        matchAssertion(() => matches(req.query, value), message);
       });
+
       return this;
     },
     query: function query(value) {
       return this.params(value);
     },
     body: function body(value) {
+      const message = `${internal.prefix} Body did not match expected`;
+
       internal.handlers.push(req => {
-        if (typeof value === 'function') {
-          assertion(value, req.body, `${internal.prefix} Body did not match expectation callback`);
-        } else {
-          assert.deepStrictEqual(req.body, value, `${internal.prefix} Body did not match expected`);
-        }
+        matchAssertion(() => matches(req.body, value), message);
       });
+
       return this;
     },
     done: function done(callback) {

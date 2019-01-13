@@ -443,6 +443,7 @@ describe('Route Patterns', () => {
 
     request
       .post('/foo')
+      .set('Content-Type', 'text/plain')
       .send('test')
       .expect(200, done);
   });
