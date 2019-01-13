@@ -270,6 +270,31 @@ describe('Route expectation', () => {
     );
   });
 
+  it('should implement params() expectation with nested regex', done => {
+    const expectation = mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: /99/
+      });
+
+    async.series(
+      [
+        cb => request.get('/foo?id=9999').end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb => request.get('/foo').end(cb),
+        cb => {
+          expect(expectation.verify).to.throw('Params did not match expected');
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
   it('should implement params() function expectation', done => {
     const expectation = mockyeah
       .get('/foo', { text: 'bar' })
@@ -289,7 +314,7 @@ describe('Route expectation', () => {
         },
         cb => request.get('/foo').end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Params did not match expectation callback');
+          expect(expectation.verify).to.throw('Params did not match expected');
           cb();
         }
       ],
@@ -303,6 +328,39 @@ describe('Route expectation', () => {
       .expect()
       .body({
         foo: 'bar'
+      });
+
+    async.series(
+      [
+        cb =>
+          request
+            .post('/foo')
+            .send({ foo: 'bar' })
+            .end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb =>
+          request
+            .post('/foo')
+            .send({ some: 'value' })
+            .end(cb),
+        cb => {
+          expect(expectation.verify).to.throw('Body did not match expected');
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should implement body() regex expectation', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .body({
+        foo: /ar/
       });
 
     async.series(
@@ -357,7 +415,7 @@ describe('Route expectation', () => {
             .send({ some: 'value' })
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Body did not match expectation callback');
+          expect(expectation.verify).to.throw('Body did not match expected');
           cb();
         }
       ],
@@ -388,9 +446,38 @@ describe('Route expectation', () => {
             .set('HOST', 'unknown.com')
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw(
-            'Header "host: example.com" expected, but got "unknown.com"'
-          );
+          expect(expectation.verify).to.throw('Header "host" did not match expected');
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should implement header() regex expectation', done => {
+    const expectation = mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .header('host', /ample/);
+
+    async.series(
+      [
+        cb =>
+          request
+            .get('/foo')
+            .set('HOST', 'example.com')
+            .end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb =>
+          request
+            .get('/foo')
+            .set('HOST', 'unknown.com')
+            .end(cb),
+        cb => {
+          expect(expectation.verify).to.throw('Header "host" did not match expected');
           cb();
         }
       ],
@@ -421,9 +508,7 @@ describe('Route expectation', () => {
             .set('HOST', 'unknown.com')
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw(
-            'Header "host: unknown.com" did not match expectation callback'
-          );
+          expect(expectation.verify).to.throw('Header "host" did not match expected');
           cb();
         }
       ],
@@ -431,7 +516,7 @@ describe('Route expectation', () => {
     );
   });
 
-  it('should support expectation callback', done => {
+  it('should support expected', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
@@ -452,7 +537,7 @@ describe('Route expectation', () => {
       .end(expectation.verify);
   });
 
-  it('should support expectation callback with request failure', done => {
+  it('should support expected with request failure', done => {
     const wrappedDone = err => {
       expect(err).to.exist;
       expect(err.message).to.match(/fake error/);
@@ -475,12 +560,10 @@ describe('Route expectation', () => {
     expectation.verify(new Error('fake error'));
   });
 
-  it('should support expectation callback with error', done => {
+  it('should support expected with error', done => {
     const wrappedDone = err => {
       expect(err).to.exist;
-      expect(err.message).to.match(
-        /\[post\] \/foo -- Header "host: example.com" expected, but got/
-      );
+      expect(err.message).to.match(/\[post\] \/foo -- Header "host" did not match expected/);
       done();
     };
 
@@ -519,7 +602,7 @@ describe('Route expectation', () => {
         }
         try {
           expect(err.message).to.equal(
-            "[post] /foo -- Params did not match expectation callback: expected { id: '9999' } to deeply equal { id: '1234' }"
+            "[post] /foo -- Params did not match expected: expected { id: '9999' } to deeply equal { id: '1234' }"
           );
           done();
         } catch (err2) {
@@ -546,7 +629,7 @@ describe('Route expectation', () => {
         }
         try {
           expect(err.message).to.equal(
-            '[post] /foo -- Params did not match expectation callback: my custom assertion error'
+            '[post] /foo -- Params did not match expected: my custom assertion error'
           );
           done();
         } catch (err2) {
@@ -573,7 +656,7 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
+          expect(err.message).to.equal('[post] /foo -- Params did not match expected');
           done();
         } catch (err2) {
           done(err2);
@@ -599,7 +682,7 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal('[post] /foo -- Params did not match expectation callback');
+          expect(err.message).to.equal('[post] /foo -- Params did not match expected');
           done();
         } catch (err2) {
           done(err2);
@@ -634,9 +717,7 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal(
-            '[post] /foo -- Params did not match expectation callback: function returned false'
-          );
+          expect(err.message).to.equal('[post] /foo -- Params did not match expected');
           done();
         } catch (err2) {
           done(err2);
