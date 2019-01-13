@@ -65,7 +65,7 @@ type Method = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'all'
 If using query parameters in both the `path`/`url` and in a `query` object, then the key/value
 pairs are merged, with the values in `query` taking precedence.
 
-Body matching is currently only supported for JSON payloads.
+Body matching supports parsed JSON payloads, raw strings, or regular expressions.
 
 Objects like `headers` and `body` can be partial, deep object matches - they do not need to match the entire set of headers or the entire body of the request.
 
