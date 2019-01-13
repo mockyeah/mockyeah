@@ -29,15 +29,58 @@ describe("This test", () => {
 
 <div id="expect"></div>
 
-`.expect(optionalPredicate)` - Returns an expectation object for a given mock service when chained to a [Mock Services API](./Mock-API.md) method call. If provided an optional predicate function, it will call this function on `.verify()`
-where we can throw errors or return true/false to make assertions.
+`.expect(optionalPredicateOrMatchObject)` -
+Returns an expectation object for a given mock service when chained to a [Mock Services API](./Mock-API.md) method call.
+If provided an optional predicate function, it will call this function when `.verify()` is called.
+In this function we can throw errors or return true/false to make assertions.
 It receives one argument - an object with the following fields:
 
+- `method` (String): the request method (lowercase).
 - `path` (String): the request path.
 - `query` (Object): a key/value map of query parameters.
 - `headers` (Object): a key/value map of headers. Header names are all lowercase.
 - `body` (Object|String): the parsed response body. If JSON, then a JS objec, otherwise a string.
 - `req` (Object): the raw Express request object for additional custom assertions.
+
+```js
+const { expect } = reuqire("chai");
+
+const expectation = mockyeah
+  .post("/foo", {
+    text: "bar"
+  })
+  .expect(data => {
+    expect(data.method).to.equal("post");
+    expect(data.path).to.equal("/foo");
+    expect(data.query.id).to.equal("9999");
+    expect(data.headers.host).to.equal("example.com");
+    expect(data.body.foo).to.equal("bar");
+    expect(data.req.originalUrl).to.equal("/foo?id=9999");
+  });
+```
+
+If instead an object is provided, it is a match object with the same power as when mounting mocks.
+It will deep partial match against a view into the request that has the fields above (except `req`),
+and supports matching with string equality, number stringification, regular expressions, functions, etc.
+
+```js
+const expectation = mockyeah
+  .post("/foo", {
+    text: "bar"
+  })
+  .expect({
+    method: "post",
+    path: "/foo",
+    query: {
+      id: /99/,
+      int: 3
+    },
+    headers: value => value.host.includes("example"),
+    body: {
+      foo: "bar"
+    }
+  });
+```
 
 <div id="atLeast">
 

@@ -7,6 +7,7 @@ const isAbsoluteUrl = require('is-absolute-url');
 const Expectation = require('./Expectation');
 const routeHandler = require('./routeHandler');
 const { decodeProtocolAndPort, encodeProtocolAndPort } = require('./helpers');
+const matches = require('./matches');
 
 function isEqualMethod(method1, method2) {
   const m1 = method1.toLowerCase();
@@ -21,28 +22,6 @@ function normalizePathname(pathname) {
   if (!pathname || justSlashes.test(pathname)) return '/';
   // remove any trailing slashes
   return pathname.replace(trailingSlashes, '');
-}
-
-// eslint-disable-next-line consistent-return
-function customizer(object, source) {
-  if (_.isRegExp(source)) {
-    return source.test(object);
-  } else if (typeof source === 'number') {
-    return source.toString() === object;
-  } else if (typeof source === 'function') {
-    const result = source(object);
-    // if the function returns undefined, we'll skip this to fallback
-    if (result !== undefined) return result;
-  }
-  // else return undefined to fallback to default equality check
-}
-
-function isMatchWithCustomizer(object, source) {
-  return _.isMatchWith(object, source, customizer);
-}
-
-function isEqualWithCustomizer(value, other) {
-  return _.isEqualWith(value, other, customizer);
 }
 
 function isRouteForRequest(route, req) {
@@ -62,16 +41,11 @@ function isRouteForRequest(route, req) {
     if (route.pathname !== '*' && !route.pathFn(pathname)) return false;
   }
 
-  const matchesParams = _.every(route.query, (value, key) =>
-    isEqualWithCustomizer(_.get(req.query, key), value)
-  );
+  if (route.query && !matches(req.query, route.query)) return false;
 
-  if (!matchesParams) return false;
+  if (route.body && !matches(req.body, route.body)) return false;
 
-  // TODO: See what `req.body` looks like with different request content types.
-  if (route.body && !isMatchWithCustomizer(req.body, route.body)) return false;
-
-  if (route.headers && !isMatchWithCustomizer(req.headers, route.headers)) return false;
+  if (route.headers && !matches(req.headers, route.headers)) return false;
 
   // TODO: Later add features to match other things, like cookies, or with other types, etc.
 

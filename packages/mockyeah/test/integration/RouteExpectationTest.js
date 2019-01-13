@@ -689,7 +689,60 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support custom generic expect handler', done => {
+  it('should support custom generic expect object', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect({
+        method: 'post',
+        path: '/foo',
+        query: {
+          id: /99/,
+          int: 3
+        },
+        headers: value => value.host.includes('mple'),
+        body: {
+          foo: 'bar'
+        }
+      })
+      .once()
+      .done(done);
+
+    request
+      .post('/foo?id=9999&int=3')
+      .set('HOST', 'example.com')
+      .send({ foo: 'bar' })
+      .end(expectation.verify);
+  });
+
+  it('should support custom generic expect function', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect(data => {
+        expect(data).to.exist;
+
+        expect(data.headers).to.be.object;
+        expect(data.query).to.be.object;
+        expect(data.body).to.be.object;
+        expect(data.req).to.be.object;
+
+        expect(data.method).to.equal('post');
+        expect(data.path).to.equal('/foo');
+        expect(data.query.id).to.equal('9999');
+        expect(data.headers.host).to.equal('example.com');
+        expect(data.body.foo).to.equal('bar');
+        expect(data.req.originalUrl).to.equal('/foo?id=9999');
+      })
+      .once()
+      .done(done);
+
+    request
+      .post('/foo?id=9999')
+      .set('HOST', 'example.com')
+      .send({ foo: 'bar' })
+      .end(expectation.verify);
+  });
+
+  it('should support custom generic expect function', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect(data => {
@@ -717,35 +770,7 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support custom generic expect handler', done => {
-    const expectation = mockyeah
-      .post('/foo', { text: 'bar' })
-      .expect(data => {
-        expect(data).to.exist;
-
-        expect(data.headers).to.be.object;
-        expect(data.query).to.be.object;
-        expect(data.body).to.be.object;
-        expect(data.req).to.be.object;
-
-        expect(data.path).to.equal('/foo');
-        expect(data.query.id).to.equal('9999');
-        expect(data.headers.host).to.equal('example.com');
-        expect(data.body.foo).to.equal('bar');
-        expect(data.req.originalUrl).to.equal('/foo?id=9999');
-      })
-      .once();
-
-    request
-      .post('/foo?id=9999')
-      .set('HOST', 'example.com')
-      .send({ foo: 'bar' })
-      .end(() => {
-        expectation.verify(done);
-      });
-  });
-
-  it('should support custom generic expect handler returning true', done => {
+  it('should support custom generic expect function returning true', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect(data => data.path === '/foo')
@@ -760,7 +785,7 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should render custom error in expectation functions returning false', done => {
+  it('should render custom error in expect functions returning false', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect(data => data.path === '/what')
@@ -780,7 +805,7 @@ describe('Route expectation', () => {
     });
   });
 
-  it('should render custom error in expectation functions with error', done => {
+  it('should render custom error in expect functions with error', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect(() => {

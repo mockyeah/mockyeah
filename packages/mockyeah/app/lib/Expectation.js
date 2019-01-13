@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const matches = require('./matches');
 
 /**
  * Expectation
@@ -39,16 +40,19 @@ const assertion = function assertion(fn, actualValue, message) {
   }
 };
 
-Expectation.prototype.api = function api(predicate) {
+Expectation.prototype.api = function api(predicateOrMatchObject) {
   const internal = this;
 
-  if (predicate) {
+  if (typeof predicateOrMatchObject === 'function') {
+    const predicate = predicateOrMatchObject;
     internal.handlers.push(req => {
       try {
-        const { headers, query, body, _parsedUrl } = req;
+        const { headers, query, body, _parsedUrl, method: _method } = req;
         const { pathname: path } = _parsedUrl;
+        const method = _method.toLowerCase();
 
         const result = predicate({
+          method,
           path,
           query,
           headers,
@@ -65,6 +69,27 @@ Expectation.prototype.api = function api(predicate) {
         }`;
         assert(false, message);
       }
+    });
+  } else if (typeof predicateOrMatchObject === 'object') {
+    const matchObject = predicateOrMatchObject;
+    internal.handlers.push(req => {
+      const { headers, query, body, _parsedUrl, method: _method } = req;
+      const { pathname: path } = _parsedUrl;
+      const method = _method.toLowerCase();
+
+      assert(
+        matches(
+          {
+            method,
+            path,
+            query,
+            headers,
+            body
+          },
+          matchObject
+        ),
+        'Expect object not match.'
+      );
     });
   }
 
