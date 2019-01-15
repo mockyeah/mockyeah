@@ -516,7 +516,7 @@ describe('Route expectation', () => {
     );
   });
 
-  it('should support after callback', done => {
+  it('should support run callback', done => {
     mockyeah
       .get('/foo', { text: 'bar' })
       .expect()
@@ -528,7 +528,7 @@ describe('Route expectation', () => {
       .done(done);
   });
 
-  it('should support after callback with error', done => {
+  it('should support run callback with error', done => {
     mockyeah
       .get('/foo', { text: 'bar' })
       .expect()
@@ -536,14 +536,14 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .run(cb => cb(new Error('failure in after callback')))
+      .run(cb => cb(new Error('failure in run callback')))
       .done(err => {
         if (!err) {
           done(new Error('expected error'));
           return;
         }
         try {
-          expect(err.message).to.equal('failure in after callback');
+          expect(err.message).to.equal('failure in run callback');
           done();
         } catch (err2) {
           done(err2);
@@ -551,7 +551,7 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support after callback with expectation error', done => {
+  it('should support run callback with expectation error', done => {
     mockyeah
       .get('/foo', { text: 'bar' })
       .expect()
@@ -574,7 +574,19 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support after promise', done => {
+  it('should support run callback returning promise', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(() => request.get('/foo?id=9999'))
+      .done(done);
+  });
+
+  it('should support run promise', done => {
     const promise = new Promise((resolve, reject) => {
       request.get('/foo?id=9999').end((err, res) => {
         if (err) {
@@ -596,9 +608,9 @@ describe('Route expectation', () => {
       .done(done);
   });
 
-  it('should support after promise with error', done => {
+  it('should support run promise with error', done => {
     const promise = new Promise((resolve, reject) => {
-      reject(new Error('failure in after promise'));
+      reject(new Error('failure in run promise'));
     });
 
     mockyeah
@@ -615,7 +627,7 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal('failure in after promise');
+          expect(err.message).to.equal('failure in run promise');
           done();
         } catch (err2) {
           done(err2);
@@ -623,9 +635,9 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support after promise with error and no done', done => {
+  it('should support run promise with error and no done', done => {
     const promise = new Promise((resolve, reject) => {
-      reject(new Error('failure in after promise'));
+      reject(new Error('failure in run promise'));
     });
 
     const expecation = mockyeah
@@ -638,7 +650,7 @@ describe('Route expectation', () => {
       .run(promise);
 
     // eslint-disable-next-line no-underscore-dangle
-    expecation.__afterPromise
+    expecation.__runPromise
       .then(() => {
         done(new Error('expected error'));
       })
@@ -647,7 +659,7 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support after promise with expectation error', done => {
+  it('should support run promise with expectation error', done => {
     const promise = new Promise((resolve, reject) => {
       request.get('/foo?id=9999').end((err, res) => {
         if (err) {

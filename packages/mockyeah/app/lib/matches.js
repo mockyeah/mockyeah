@@ -28,7 +28,7 @@ const matches = (object, source, options = {}) => {
   const { throws } = options;
 
   try {
-    const result = customizer(object, source, skip);
+    const result = customizer(object, source, SKIP);
 
     if (!throws && result === SKIP) return true;
 
