@@ -206,11 +206,11 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.callback = callback;
       return this;
     },
-    after: function after(handlerOrPromise) {
+    run: function run(handlerOrPromise) {
       if (isPromise(handlerOrPromise)) {
         // exposed only for testing
         // eslint-disable-next-line no-underscore-dangle
-        apiInstance.__afterPromise = handlerOrPromise
+        apiInstance.__runPromise = handlerOrPromise
           .then(() => {
             apiInstance.verify();
           })
