@@ -574,6 +574,29 @@ describe('Route expectation', () => {
       });
   });
 
+  it.only('should support run callback returning promise', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .after(
+        () =>
+          new Promise((resolve, reject) => {
+            request.get('/foo?id=9999').end((err, res) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+              resolve(res);
+            });
+          })
+      )
+      .done(done);
+  });
+
   it('should support after promise', done => {
     const promise = new Promise((resolve, reject) => {
       request.get('/foo?id=9999').end((err, res) => {
