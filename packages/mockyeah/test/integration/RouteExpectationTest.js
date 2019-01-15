@@ -524,7 +524,7 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .after(cb => request.get('/foo?id=9999').end(cb))
+      .run(cb => request.get('/foo?id=9999').end(cb))
       .done(done);
   });
 
@@ -536,7 +536,7 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .after(cb => cb(new Error('failure in after callback')))
+      .run(cb => cb(new Error('failure in after callback')))
       .done(err => {
         if (!err) {
           done(new Error('expected error'));
@@ -559,7 +559,7 @@ describe('Route expectation', () => {
         id: '123'
       })
       .once()
-      .after(cb => request.get('/foo?id=9999').end(cb))
+      .run(cb => request.get('/foo?id=9999').end(cb))
       .done(err => {
         if (!err) {
           done(new Error('expected error'));
@@ -592,7 +592,7 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .after(promise)
+      .run(promise)
       .done(done);
   });
 
@@ -608,7 +608,7 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .after(promise)
+      .run(promise)
       .done(err => {
         if (!err) {
           done(new Error('expected error'));
@@ -635,7 +635,7 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .after(promise);
+      .run(promise);
 
     // eslint-disable-next-line no-underscore-dangle
     expecation.__afterPromise
@@ -665,7 +665,7 @@ describe('Route expectation', () => {
         id: '123'
       })
       .once()
-      .after(promise)
+      .run(promise)
       .done(err => {
         if (!err) {
           done(new Error('expected error'));

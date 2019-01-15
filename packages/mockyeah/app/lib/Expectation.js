@@ -205,7 +205,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.callback = callback;
       return this;
     },
-    after: function after(handlerOrPromise) {
+    run: function run(handlerOrPromise) {
       if (
         handlerOrPromise instanceof Promise ||
         (handlerOrPromise.then && handlerOrPromise.catch)
