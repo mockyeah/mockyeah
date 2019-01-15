@@ -153,17 +153,29 @@ const expectation = mockyeah
 
 <div id="after"></div>
 
-`.after(functionOrPromise)` - This will schedule a call to `.verify()`, e.g., after a network call.
+`.run(functionOrPromise)` - This will schedule a call to `.verify()`, e.g., after a network call.
 Pass a function which will be called with an argument that is a Node-style callback function reference
 to be executed by you when you're ready for `.verify()` to be called.
 Or pass a promise, which mockyeah will wait for to be settled until calling `.verify()`.
 This is a fluent shorthand so you don't have to assign to an intermediary variable, e.g., `expectation`
 just to be able to call `verify()` later.
 
+```js
+mockyeah
+  .get("/foo", { text: "bar" })
+  .expect()
+  .params({
+    id: "9999"
+  })
+  .once()
+  .run(cb => request.get("/foo?id=9999").end(cb))
+  .done(done);
+```
+
 <div id="done"></div>
 
 `.done(callback)` - Register a Node-style callback to be called when verification has completed
-after `.verify()` is called, e.g., manually or by having registered with `.after()`.
+after `.verify()` is called, e.g., manually or by having registered with `.run()`.
 Any verification error will be passed to the callback. This is useful for async unit tests.
 
 <div id="verify"></div>
