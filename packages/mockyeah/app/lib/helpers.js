@@ -7,8 +7,6 @@ const {
   encodedProtocolRegex
 } = require('./constants');
 
-const isPromise = value => value instanceof Promise || (value.then && value.catch);
-
 function resolveFilePath(capturePath, url) {
   const fileName = url.replace(/\//g, '|');
   return path.resolve(capturePath, fileName);
@@ -74,7 +72,6 @@ const decodeProtocolAndPort = str =>
 const encodeProtocolAndPort = str =>
   str.replace(decodedPortRegex, '$1~').replace(decodedProtocolRegex, '$1~~~');
 
-exports.isPromise = isPromise;
 exports.decodeProtocolAndPort = decodeProtocolAndPort;
 exports.encodeProtocolAndPort = encodeProtocolAndPort;
 exports.getDataForRecordToFixtures = getDataForRecordToFixtures;

@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 const matches = require('./matches');
-const { isPromise } = require('./helpers');
 
 /**
  * Expectation
@@ -207,7 +206,10 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       return this;
     },
     run: function run(handlerOrPromise) {
-      if (isPromise(handlerOrPromise)) {
+      if (
+        handlerOrPromise instanceof Promise ||
+        (handlerOrPromise.then && handlerOrPromise.catch)
+      ) {
         // exposed only for testing
         // eslint-disable-next-line no-underscore-dangle
         apiInstance.__runPromise = handlerOrPromise
