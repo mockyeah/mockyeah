@@ -582,7 +582,7 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .after(
+      .run(
         () =>
           new Promise((resolve, reject) => {
             request.get('/foo?id=9999').end((err, res) => {
