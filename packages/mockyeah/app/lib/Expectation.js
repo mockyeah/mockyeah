@@ -222,22 +222,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
             }
           });
       } else {
-        setTimeout(() => {
-          const result = handlerOrPromise(apiInstance.verify);
-          if (isPromise(result)) {
-            result
-              .then(() => {
-                apiInstance.verify();
-              })
-              .catch(err => {
-                if (internal.callback) {
-                  internal.callback(err);
-                } else {
-                  throw err;
-                }
-              });
-          }
-        });
+        setTimeout(() => handlerOrPromise(apiInstance.verify));
       }
 
       return this;

@@ -574,18 +574,6 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support run callback returning promise', done => {
-    mockyeah
-      .get('/foo', { text: 'bar' })
-      .expect()
-      .params({
-        id: '9999'
-      })
-      .once()
-      .run(() => request.get('/foo?id=9999'))
-      .done(done);
-  });
-
   it('should support run promise', done => {
     const promise = new Promise((resolve, reject) => {
       request.get('/foo?id=9999').end((err, res) => {
