@@ -1,14 +1,11 @@
-const path = require('path');
-const { resolveFilePath } = require('./lib/helpers');
+const { requireSuite } = require('./lib/helpers');
 
 module.exports = app => name => {
-  const { capturesDir } = app.config;
-  const capturePath = path.join(capturesDir, name);
-  const filePath = resolveFilePath(capturePath, 'index.js');
-  // eslint-disable-next-line import/no-dynamic-require, global-require
-  const captures = require(filePath);
+  const capture = requireSuite(app, name);
+
+  if (!capture) return;
 
   app.log(['serve', 'play'], name);
 
-  captures.map(capture => app.routeManager.all(...capture));
+  capture.map(c => app.routeManager.all(...c));
 };
