@@ -101,13 +101,13 @@ function validateResponse(response) {
   }
 }
 
-function verifyFile(filePath, message) {
+function verifyFile(app, filePath, message) {
   fs.lstat(filePath, err => {
-    if (err) this.app.log(['handler', 'error'], message);
+    if (err) app.log(['handler', 'error'], message);
   });
 }
 
-module.exports = function handler(route) {
+module.exports = function handler(app, route) {
   const response = route.response || {};
 
   validateResponse(response);
@@ -116,8 +116,8 @@ module.exports = function handler(route) {
     const start = new Date().getTime();
     let send;
 
-    if (this.app.config.journal) {
-      this.app.log(
+    if (app.config.journal) {
+      app.log(
         ['request', 'journal'],
         JSON.stringify(
           {
@@ -152,20 +152,16 @@ module.exports = function handler(route) {
       // if filePath, send file
       const filePath = expandPath(response.filePath);
       if (response.type) res.type(response.type);
-      verifyFile.call(this, filePath, '`filePath` option invalid, file not found at ' + filePath);
+      verifyFile(app, filePath, '`filePath` option invalid, file not found at ' + filePath);
       send = res.sendFile.bind(res, filePath);
     } else if (response.fixture) {
       // if fixture, send fixture file
-      const fixturePath = this.app.config.fixturesDir + '/' + response.fixture;
+      const fixturePath = app.config.fixturesDir + '/' + response.fixture;
       if (response.type) res.type(response.type);
-      verifyFile.call(
-        this,
-        fixturePath,
-        '`fixture` option invalid, fixture not found at ' + fixturePath
-      );
+      verifyFile(app, fixturePath, '`fixture` option invalid, fixture not found at ' + fixturePath);
       send = res.sendFile.bind(
         res,
-        path.normalize(this.app.config.fixturesDir + '/' + response.fixture)
+        path.normalize(app.config.fixturesDir + '/' + response.fixture)
       );
     } else if (response.html) {
       // if html, set Content-Type to application/html and send
@@ -191,7 +187,7 @@ module.exports = function handler(route) {
     setTimeout(() => {
       const duration = new Date().getTime() - start;
       send();
-      this.app.log(['request', req.method], `${req.url} (${duration}ms)`);
+      app.log(['request', req.method], `${req.url} (${duration}ms)`);
     }, response.latency);
   };
 };
