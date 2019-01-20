@@ -5,6 +5,8 @@ module.exports = app => name => {
 
   if (!capture) return;
 
+  app.locals.playingSuites.push(name);
+
   app.log(['serve', 'play'], name);
 
   capture.map(c => app.routeManager.all(...c));

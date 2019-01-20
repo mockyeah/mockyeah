@@ -10,6 +10,7 @@ const recorder = require('./recorder');
 const recordStopper = require('./recordStopper');
 const player = require('./player');
 const playAller = require('./playAller');
+const watcher = require('./watcher');
 
 /**
  * App module
@@ -62,6 +63,9 @@ module.exports = function App(config) {
 
   app.locals.proxying = app.config.proxy;
 
+  app.locals.playingSuites = [];
+  app.locals.playingAll = false;
+
   app.locals.recording = app.config.record;
   app.locals.recordMeta = {};
 
@@ -78,6 +82,8 @@ module.exports = function App(config) {
 
   app.reset = () => {
     app.routeManager.reset();
+    app.locals.playingSuites = [];
+    app.locals.playingAll = false;
     app.locals.proxying = app.config.proxy;
     app.middlewares = [];
   };
@@ -85,6 +91,8 @@ module.exports = function App(config) {
   app.use = middleware => {
     app.middlewares.push(middleware);
   };
+
+  app.watch = watcher(app);
 
   return app;
 };
