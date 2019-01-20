@@ -1,27 +1,21 @@
 'use strict';
 
-const { parse } = require('url');
 const _ = require('lodash');
-const pathToRegExp = require('path-to-regexp');
+const { parse } = require('url');
 const isAbsoluteUrl = require('is-absolute-url');
 const Expectation = require('./Expectation');
-const routeHandler = require('./routeHandler');
-const { decodeProtocolAndPort, encodeProtocolAndPort } = require('./helpers');
+const {
+  compileRoute,
+  decodeProtocolAndPort,
+  normalizePathname,
+  requireSuite
+} = require('./helpers');
 const matches = require('./matches');
 
 function isEqualMethod(method1, method2) {
   const m1 = method1.toLowerCase();
   const m2 = method2.toLowerCase();
   return m1 === 'all' || m2 === 'all' || m1 === m2;
-}
-
-const justSlashes = /^\/+$/;
-const trailingSlashes = /\/+$/;
-
-function normalizePathname(pathname) {
-  if (!pathname || justSlashes.test(pathname)) return '/';
-  // remove any trailing slashes
-  return pathname.replace(trailingSlashes, '');
 }
 
 function isRouteForRequest(route, req) {
@@ -66,7 +60,31 @@ function isRouteMatch(route1, route2) {
 }
 
 function listen() {
+  // Check for an unmounted route dynamically based on header.
+  const handleDynamicSuite = (app, req, res) => {
+    const dynamicSuite = req.headers['x-mockyeah-suite'];
+
+    if (!dynamicSuite) return false;
+
+    const suite = requireSuite(app, dynamicSuite);
+
+    if (!suite) return false;
+
+    const route = suite.find(r => isRouteForRequest(compileRoute(app, r[0], r[1]), req));
+
+    if (!route) return false;
+
+    // TODO: Do we need to re-compute this?
+    const compiledRoute = compileRoute(app, route[0], route[1]);
+
+    compiledRoute.response(req, res);
+
+    return true;
+  };
+
   this.app.all('*', (req, res, next) => {
+    if (handleDynamicSuite(this.app, req, res)) return;
+
     const route = this.routes.find(r => isRouteForRequest(r, req));
 
     if (!route) {
@@ -118,75 +136,15 @@ function RouteResolver(app) {
   listen.call(this);
 }
 
-const relativizePath = path => (isAbsoluteUrl(path) ? `/${path}` : path);
-
-const handlePathTypes = (_path, _query) => {
-  if (typeof _path === 'string') {
-    const path = relativizePath(_path);
-    const url = parse(path, true);
-    const pathname = normalizePathname(url.pathname);
-
-    // Encode absolute URL protocol and port characters to tildes to prevent colons from being interpreted as Express parameters.
-    const paramEncodedPathname = encodeProtocolAndPort(pathname);
-
-    const matchKeys = [];
-    // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
-    const pathRegExp = pathToRegExp(paramEncodedPathname, matchKeys);
-
-    const query = Object.assign({}, url.query, _query);
-
-    return {
-      matchKeys,
-      path,
-      pathFn: p => pathRegExp.test(encodeProtocolAndPort(p)),
-      pathname,
-      pathRegExp,
-      query
-    };
-  }
-
-  if (_path instanceof RegExp) {
-    // TODO: Maybe support `matchKeys` with index of match or maybe even named capture groups?
-
-    return {
-      path: _path,
-      pathFn: p => _path.test(decodeProtocolAndPort(p)),
-      pathname: _path
-    };
-  }
-
-  if (typeof _path === 'function') {
-    return {
-      path: _path,
-      pathFn: p => _path(decodeProtocolAndPort(p)),
-      pathname: _path
-    };
-  }
-
-  throw new Error(`Unsupported path type ${typeof _path}: ${_path}`);
-};
-
 RouteResolver.prototype.register = function register(method, _path, response) {
-  const route = {
-    method,
-    response
-  };
+  const match = _.isPlainObject(_path)
+    ? Object.assign({ method }, _path)
+    : {
+        method,
+        path: _path
+      };
 
-  if (!_.isPlainObject(_path)) {
-    Object.assign(route, handlePathTypes(_path));
-  } else {
-    const object = _path;
-    const headers = _.mapKeys(object.headers, (value, key) => key.toLowerCase());
-
-    Object.assign(route, handlePathTypes(object.path || object.url, object.query), {
-      body: object.body,
-      headers
-    });
-  }
-
-  if (!_.isFunction(route.response)) {
-    route.response = routeHandler.call(this, route);
-  }
+  const route = compileRoute(this.app, match, response);
 
   const expectation = new Expectation(route);
   route.expectation = expectation;
