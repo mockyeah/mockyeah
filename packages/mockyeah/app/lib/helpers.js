@@ -189,5 +189,6 @@ module.exports = {
   normalizePathname,
   replaceFixtureWithRequireInJson,
   handleContentType,
+  handlePathTypes,
   resolveFilePath
 };

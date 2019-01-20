@@ -3,7 +3,9 @@
 const { expect } = require('chai');
 
 const {
+  compileRoute,
   handleContentType,
+  handlePathTypes,
   replaceFixtureWithRequireInJson,
   getDataForRecordToFixtures
 } = require('../../app/lib/helpers');
@@ -38,6 +40,22 @@ describe('app helpers', () => {
           foo: 'bar'
         }
       });
+    });
+  });
+
+  describe('compileRoute', () => {
+    it('works for strings', () => {
+      const app = {};
+      const match = {
+        path: '/'
+      };
+      expect(compileRoute(app, match).path).to.equal('/');
+    });
+  });
+
+  describe('handlePathTypes', () => {
+    it('throws for unknown type', () => {
+      expect(handlePathTypes.bind(1)).to.throw();
     });
   });
 
