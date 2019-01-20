@@ -11,6 +11,8 @@ const {
 } = require('./constants');
 const routeHandler = require('./routeHandler');
 
+const isPromise = value => value instanceof Promise || !!(value.then && value.catch);
+
 function resolveFilePath(capturePath, url) {
   const fileName = url.replace(/\//g, '|');
   return nodePath.resolve(capturePath, fileName);
@@ -181,6 +183,7 @@ const compileRoute = (app, match, response) => {
 };
 
 module.exports = {
+  isPromise,
   compileRoute,
   requireSuite,
   decodeProtocolAndPort,
