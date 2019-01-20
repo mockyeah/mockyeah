@@ -23,6 +23,8 @@ const restart = app => {
 };
 
 const watcher = app => {
+  const { capturesDir, fixturesDir } = app.config;
+
   let first = true;
 
   const debounced = _.debounce(() => {
