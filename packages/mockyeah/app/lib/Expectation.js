@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const matches = require('./matches');
+const { isPromise } = require('./helpers');
 
 /**
  * Expectation
@@ -206,10 +207,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       return this;
     },
     run: function run(handlerOrPromise) {
-      if (
-        handlerOrPromise instanceof Promise ||
-        (handlerOrPromise.then && handlerOrPromise.catch)
-      ) {
+      if (isPromise(handlerOrPromise)) {
         // exposed only for testing
         // eslint-disable-next-line no-underscore-dangle
         apiInstance.__runPromise = handlerOrPromise
@@ -224,7 +222,23 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
             }
           });
       } else {
-        setTimeout(() => handlerOrPromise(apiInstance.verify));
+        setTimeout(() => {
+          const result = handlerOrPromise(apiInstance.verify);
+
+          if (isPromise(result)) {
+            result
+              .then(() => {
+                apiInstance.verify();
+              })
+              .catch(err => {
+                if (internal.callback) {
+                  internal.callback(err);
+                } else {
+                  throw err;
+                }
+              });
+          }
+        });
       }
 
       return this;

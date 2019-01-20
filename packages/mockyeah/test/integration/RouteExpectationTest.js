@@ -574,6 +574,82 @@ describe('Route expectation', () => {
       });
   });
 
+  it('should support run callback returning promise', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(
+        () =>
+          new Promise((resolve, reject) => {
+            request.get('/foo?id=9999').end((err, res) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+              resolve(res);
+            });
+          })
+      )
+      .done(done);
+  });
+
+  it('should support run callback returning promise with error', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(
+        () =>
+          new Promise((resolve, reject) => {
+            reject(new Error('failure in run promise'));
+          })
+      )
+      .done(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
+        try {
+          expect(err.message).to.equal('failure in run promise');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+  });
+
+  it('should support run callback returning promise with uncaught error', done => {
+    process.once('unhandledRejection', err => {
+      try {
+        expect(err.message).to.equal('failure in run promise');
+        done();
+      } catch (err2) {
+        done(err2);
+      }
+    });
+
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(
+        () =>
+          new Promise((resolve, reject) => {
+            reject(new Error('failure in run promise'));
+          })
+      );
+  });
+
   it('should support run promise', done => {
     const promise = new Promise((resolve, reject) => {
       request.get('/foo?id=9999').end((err, res) => {

@@ -157,6 +157,7 @@ const expectation = mockyeah
 Pass a function which will be called with an argument that is a Node-style callback function reference
 to be executed by you when you're ready for `.verify()` to be called.
 Or pass a promise, which mockyeah will wait for to be settled until calling `.verify()`.
+Or pass a function that returns a promise, with the same effect.
 This is a fluent shorthand so you don't have to assign to an intermediary variable, e.g., `expectation`
 just to be able to call `verify()` later.
 
