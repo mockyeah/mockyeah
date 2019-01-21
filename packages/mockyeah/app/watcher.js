@@ -5,6 +5,8 @@ const clearModule = require('clear-module');
 const restart = app => {
   const { capturesDir, fixturesDir } = app.config;
 
+  app.log(['watch'], 'restarting');
+
   clearModule.match(new RegExp(capturesDir));
   clearModule.match(new RegExp(fixturesDir));
 
