@@ -41,7 +41,7 @@ const requireSuite = (app, name) => {
 
     return captures;
   } catch (err) {
-    app.log(['capture', 'error'], `No such capture ${name} found.`);
+    app.log(['capture', 'error'], `Error reading capture: ${err.message}`);
   }
 };
 
