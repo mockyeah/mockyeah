@@ -152,10 +152,8 @@ const handlePathTypes = (_path, _query) => {
 };
 
 const compileRoute = (app, match, response) => {
-  const { method } = match;
-
   const route = {
-    method,
+    method: match.method || 'get',
     response
   };
 
