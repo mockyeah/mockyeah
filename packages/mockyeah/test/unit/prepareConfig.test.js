@@ -41,7 +41,8 @@ describe('prepareConfig', () => {
       verbose: false,
       recordToFixtures: true,
       recordToFixturesMode: 'path',
-      formatScript: undefined
+      formatScript: undefined,
+      watch: false
     });
   });
 
@@ -66,7 +67,8 @@ describe('prepareConfig', () => {
       verbose: false,
       recordToFixtures: true,
       recordToFixturesMode: 'path',
-      formatScript: undefined
+      formatScript: undefined,
+      watch: false
     });
   });
 });

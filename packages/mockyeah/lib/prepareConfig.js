@@ -20,7 +20,8 @@ const configDefaults = {
   adminPort: 4777,
   recordToFixtures: true,
   recordToFixturesMode: 'path',
-  formatScript: undefined
+  formatScript: undefined,
+  watch: false
 };
 
 module.exports = (config = {}) => {

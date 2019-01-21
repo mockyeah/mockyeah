@@ -17,5 +17,7 @@ module.exports = app => () => {
     dirs.forEach(file => {
       app.play(file);
     });
+
+    app.locals.playingAll = true;
   });
 };

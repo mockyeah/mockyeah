@@ -10,6 +10,7 @@
 /packages/mockyeah/mockyeah
 /packages/mockyeah/fixtures
 /packages/mockyeah/test/fixtures/test-*
+/packages/mockyeah/test/mockyeah/test-*
 
 docs/_book
 
