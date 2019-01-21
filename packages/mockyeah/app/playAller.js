@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = app => () => {
   const { capturesDir } = app.config;
 
-  app.log(['serve', 'play all']);
+  app.log(['serve'], 'play all');
 
   fs.readdir(capturesDir, (err, files) => {
     if (err) throw err;
