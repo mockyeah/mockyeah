@@ -18,6 +18,7 @@ const mockApp = playingNames => {
       playingSuites: playingNames ? [...playingNames] : [],
       playingAll: !playingNames
     },
+    log: () => {},
     reset: () => {
       called.reset = true;
     },
