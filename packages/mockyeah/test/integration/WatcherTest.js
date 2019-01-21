@@ -10,10 +10,12 @@ const watchedSuiteFile = `${watchedSuiteDir}/index.js`;
 
 describe('Watcher Test', () => {
   beforeEach(() => {
+    // eslint-disable-next-line no-sync
     fs.removeSync(watchedSuiteDir);
   });
 
   afterEach(() => {
+    // eslint-disable-next-line no-sync
     fs.removeSync(watchedSuiteDir);
   });
 
@@ -26,6 +28,7 @@ describe('Watcher Test', () => {
     mockyeah.watch();
 
     setTimeout(() => {
+      // eslint-disable-next-line no-sync
       fs.outputFileSync(
         watchedSuiteFile,
         `
@@ -62,6 +65,7 @@ describe('Watcher Test', () => {
     mockyeah.playAll();
 
     setTimeout(() => {
+      // eslint-disable-next-line no-sync
       fs.outputFileSync(
         watchedSuiteFile,
         `
