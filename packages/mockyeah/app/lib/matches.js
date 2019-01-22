@@ -5,7 +5,7 @@ function customizer(object, source) {
   if (isRegExp(source)) {
     return source.test(object);
   } else if (typeof source === 'number') {
-    return source.toString() === object;
+    return (source && source.toString()) === (object && object.toString());
   } else if (typeof source === 'function') {
     const result = source(object);
     // if the function returns undefined, we'll skip this to fallback

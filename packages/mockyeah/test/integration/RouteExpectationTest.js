@@ -270,6 +270,31 @@ describe('Route expectation', () => {
     );
   });
 
+  it('should implement params() expectation with number', done => {
+    const expectation = mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: 9999
+      });
+
+    async.series(
+      [
+        cb => request.get('/foo?id=9999').end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb => request.get('/foo').end(cb),
+        cb => {
+          expect(expectation.verify).to.throw('Params did not match expected');
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
   it('should implement params() expectation with nested regex', done => {
     const expectation = mockyeah
       .get('/foo', { text: 'bar' })
