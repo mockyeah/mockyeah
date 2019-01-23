@@ -146,6 +146,10 @@ module.exports = function handler(app, route) {
     // set response headers, if received
     if (response.headers) res.set(response.headers);
 
+    if (app.config.responseHeaders) {
+      res.set('x-mockyeah-mocked', 'true');
+    }
+
     const handleDataBound = handleData.bind(null, req, res, next);
 
     if (response.filePath) {

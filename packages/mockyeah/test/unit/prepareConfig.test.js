@@ -42,7 +42,8 @@ describe('prepareConfig', () => {
       recordToFixtures: true,
       recordToFixturesMode: 'path',
       formatScript: undefined,
-      watch: false
+      watch: false,
+      responseHeaders: true
     });
   });
 
@@ -68,7 +69,8 @@ describe('prepareConfig', () => {
       recordToFixtures: true,
       recordToFixturesMode: 'path',
       formatScript: undefined,
-      watch: false
+      watch: false,
+      responseHeaders: true
     });
   });
 });
