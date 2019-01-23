@@ -654,7 +654,7 @@ describe('Capture Record and Playback', function() {
     remote.get('/some/service/two', { json: { second: true } });
     remote.get('/some/service/three', { text: 'third' });
     remote.get('/some/service/four', { text: 'fourth' });
-    remote.get('/some/service/five', { text: 'fifth' });
+    remote.get('/some/service/five', { text: 'fifth', status: 206 });
 
     // Initiate recording and playback series
     async.series(
@@ -671,7 +671,7 @@ describe('Capture Record and Playback', function() {
         cb => proxyReq.get(path2).expect(200, '{"second":true}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, 'fourth', cb),
-        cb => proxyReq.get(path5).expect(200, 'fifth', cb),
+        cb => proxyReq.get(path5).expect(206, 'fifth', cb),
 
         // Stop recording but pretend there's a file write error.
         cb => {
@@ -716,7 +716,7 @@ describe('Capture Record and Playback', function() {
         cb => remoteReq.get(path2).expect(200, '{"second":true}', cb),
         cb => remoteReq.get(path3).expect(200, 'third', cb),
         cb => remoteReq.get(path4).expect(200, 'fourth', cb),
-        cb => remoteReq.get(path5).expect(200, 'fifth', cb),
+        cb => remoteReq.get(path5).expect(206, 'fifth', cb),
 
         // Assert paths are routed the correct responses
         // e.g. http://localhost:4041/some/service
@@ -724,7 +724,7 @@ describe('Capture Record and Playback', function() {
         cb => proxyReq.get(path2).expect(200, '{\n  "second": true\n}', cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
         cb => proxyReq.get(path4).expect(200, 'fourth', cb),
-        cb => proxyReq.get(path5).expect(200, 'fifth', cb)
+        cb => proxyReq.get(path5).expect(206, 'fifth', cb)
       ],
       done
     );
