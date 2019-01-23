@@ -107,12 +107,13 @@ const proxyRoute = (req, res, next) => {
     // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
     delete headers['transfer-encoding'];
 
-    const responseOptions = Object.assign(
-      {
-        status
-      },
-      handleContentType(_body, headers)
-    );
+    let responseOptions = {};
+
+    if (status !== 200) {
+      responseOptions.status = status;
+    }
+
+    responseOptions = Object.assign(responseOptions, handleContentType(_body, headers));
 
     if (useHeaders) {
       responseOptions.headers = headers;

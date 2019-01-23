@@ -105,7 +105,7 @@ describe('Capture Record Format Script Function Test', function() {
           const contents = fs.readFileSync(getCaptureFilePath(captureName), 'utf8');
           expect(contents).to.match(
             // eslint-disable-next-line no-regex-spaces
-            /module\.exports = \[   \[     ".*\/some\/service\/one",     {       "status": 200,       "raw": ""     }   \] ];/
+            /module\.exports = \[   \[     ".*\/some\/service\/one",     {       "raw": ""     }   \] ];/
           );
           cb();
         },
