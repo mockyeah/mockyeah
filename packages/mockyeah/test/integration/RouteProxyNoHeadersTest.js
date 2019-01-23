@@ -25,7 +25,8 @@ describe('Route proxy', () => {
             {
               port: 0,
               adminPort: 0,
-              proxy: true
+              proxy: true,
+              responseHeaders: false
             },
             cb
           );
@@ -88,8 +89,17 @@ describe('Route proxy', () => {
         cb =>
           request
             .get(`/http://localhost:${proxiedPort}/foo?ok=yes`)
-            .expect('x-mockyeah-mocked', 'true')
-            .expect(500, 'bar', cb)
+            .expect(500, 'bar')
+            .end((err, res) => {
+              if (err) {
+                cb(err);
+                return;
+              }
+
+              expect(res.headers).to.not.have.key('x-mockyeah-mocked');
+
+              cb();
+            })
       ],
       done
     );
@@ -139,8 +149,17 @@ describe('Route proxy', () => {
 
     request
       .get(`/http://localhost:${proxiedPort}/foo?ok=yes`)
-      .expect('x-mockyeah-proxied', 'true')
-      .expect(200, done);
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          done(err);
+          return;
+        }
+
+        expect(res.headers).to.not.have.key('x-mockyeah-proxied');
+
+        done();
+      });
   });
 
   it('should bypass non-mounted, non-absolute URLs', done => {

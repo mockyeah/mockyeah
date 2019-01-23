@@ -124,7 +124,13 @@ const proxyRoute = (req, res, next) => {
     }
 
     recordMeta.set.push([match, responseOptions]);
-  }).pipe(res);
+  })
+    .on('response', _res => {
+      if (app.config.responseHeaders) {
+        _res.headers['x-mockyeah-proxied'] = 'true';
+      }
+    })
+    .pipe(res);
 };
 
 // Export for testing purposes.
