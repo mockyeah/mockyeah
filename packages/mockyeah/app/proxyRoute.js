@@ -104,6 +104,9 @@ const proxyRoute = (req, res, next) => {
 
     const headers = Object.assign({}, __headers);
 
+    // Don't forward the suite header onto the proxied service.
+    delete headers['x-mockyeah-suite'];
+
     // Don't record the `transfer-encoding` header since `chunked` value can cause `ParseError`s with `request`.
     delete headers['transfer-encoding'];
 
