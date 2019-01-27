@@ -9,7 +9,7 @@
   "preferGlobal": true,
   "scripts": {
     "test": "yarn lint",
-    "lint": "eslint -c eslint.config.js ./bin ./lib"
+    "lint": "eslint .js ./bin ./lib"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
