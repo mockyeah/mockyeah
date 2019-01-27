@@ -1,4 +1,4 @@
-const tools = require('tools/eslint.config.js');
+const tools = require('tools/.eslintrc.js');
 
 module.exports = Object.assign({}, tools, {
   overrides: [
