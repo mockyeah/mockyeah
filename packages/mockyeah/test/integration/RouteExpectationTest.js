@@ -591,7 +591,9 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal('[get] /foo -- Params did not match expected');
+          expect(err.message).to.equal(
+            '[get] /foo -- Params did not match expected: Expected `"123"` and value `"9999"` not equal for "id"'
+          );
           done();
         } catch (err2) {
           done(err2);
@@ -773,7 +775,9 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal('[get] /foo -- Params did not match expected');
+          expect(err.message).to.equal(
+            '[get] /foo -- Params did not match expected: Expected `"123"` and value `"9999"` not equal for "id"'
+          );
           done();
         } catch (err2) {
           done(err2);
@@ -904,6 +908,34 @@ describe('Route expectation', () => {
     });
   });
 
+  it('should not render custom error if undefined in expectation functions', done => {
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .params(() => {
+        // eslint-disable-next-line no-throw-literal
+        throw undefined;
+      })
+      .once();
+
+    request.post('/foo?id=9999').end(() => {
+      expectation.verify(err => {
+        if (!err) {
+          done(new Error('expected error'));
+          return;
+        }
+        try {
+          expect(err.message).to.equal(
+            '[post] /foo -- Params did not match expected: Threw error without message `undefined`'
+          );
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+    });
+  });
+
   it('should not render custom error if null in expectation functions', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
@@ -921,7 +953,9 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal('[post] /foo -- Params did not match expected');
+          expect(err.message).to.equal(
+            '[post] /foo -- Params did not match expected: Threw error without message `null`'
+          );
           done();
         } catch (err2) {
           done(err2);
@@ -947,7 +981,9 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal('[post] /foo -- Params did not match expected');
+          expect(err.message).to.equal(
+            '[post] /foo -- Params did not match expected: Threw error without message `{}`'
+          );
           done();
         } catch (err2) {
           done(err2);
@@ -982,7 +1018,9 @@ describe('Route expectation', () => {
           return;
         }
         try {
-          expect(err.message).to.equal('[post] /foo -- Params did not match expected');
+          expect(err.message).to.equal(
+            '[post] /foo -- Params did not match expected: Value `{"id":"9999"}` does not pass function'
+          );
           done();
         } catch (err2) {
           done(err2);

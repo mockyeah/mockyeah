@@ -27,14 +27,9 @@ Expectation.prototype.middleware = function middleware(req, res, next) {
   next();
 };
 
-const matchAssertion = (tryer, message) => {
-  let result;
-  try {
-    result = tryer();
-  } catch (err) {
-    assert(false, message + (err && err.message ? `: ${err.message}` : ''));
-  }
-  assert(result, message);
+const matchesAssertion = (value, source, prefixMessage) => {
+  const { result, message } = matches(value, source);
+  assert(result, `${prefixMessage}: ${message}`);
 };
 
 Expectation.prototype.api = function api(predicateOrMatchObject) {
@@ -74,19 +69,17 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       const { pathname: path } = _parsedUrl;
       const method = _method.toLowerCase();
 
-      assert(
-        matches(
-          {
-            method,
-            path,
-            query,
-            headers,
-            body
-          },
-          matchObject
-        ),
-        'Expect object not match.'
+      const { result, message } = matches(
+        {
+          method,
+          path,
+          query,
+          headers,
+          body
+        },
+        matchObject
       );
+      assert(result, `Expect object did not match: ${message}`);
     });
   }
 
@@ -176,7 +169,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       const message = `${internal.prefix} Header "${name}" did not match expected`;
 
       internal.handlers.push(req => {
-        matchAssertion(() => matches(req.get(name), value), message);
+        matchesAssertion(req.get(name), value, message);
       });
 
       return this;
@@ -185,7 +178,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       const message = `${internal.prefix} Params did not match expected`;
 
       internal.handlers.push(req => {
-        matchAssertion(() => matches(req.query, value), message);
+        matchesAssertion(req.query, value, message);
       });
 
       return this;
@@ -197,7 +190,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       const message = `${internal.prefix} Body did not match expected`;
 
       internal.handlers.push(req => {
-        matchAssertion(() => matches(req.body, value), message);
+        matchesAssertion(req.body, value, message);
       });
 
       return this;

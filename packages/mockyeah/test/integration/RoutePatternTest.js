@@ -573,6 +573,30 @@ describe('Route Patterns', () => {
     request.post('/nope').expect(404, done);
   });
 
+  it('should fail to match with partial different request body and deep nested regex', done => {
+    mockyeah.post({
+      path: '/foo',
+      body: {
+        bar: 'yes',
+        nest: {
+          deep: /oo/
+        }
+      }
+    });
+
+    request
+      .post('/foo')
+      .send({
+        bar: 'yes',
+        nest: {
+          deep: 'nope',
+          also: 'more'
+        },
+        and: 'this'
+      })
+      .expect(404, done);
+  });
+
   it('should match request headers', done => {
     mockyeah.get({
       path: '/foo',
