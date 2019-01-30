@@ -5,6 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const createCertFiles = require('create-cert-files');
 const { partial } = require('lodash');
+const async = require('async');
 const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
 const AdminServer = require('./admin');
@@ -62,14 +63,6 @@ module.exports = function Server(config, onStart) {
     server = app.listen(config.port, config.host, partial(listen, false));
   }
 
-  // Expose ability to stop server via API
-  const close = function close(cb) {
-    server.close(function callback() {
-      app.log(['serve', 'exit'], 'Goodbye.');
-      if (cb) cb();
-    });
-  };
-
   // Expose ability to implement middleware via API
   const use = function use() {
     app.use.apply(app, arguments);
@@ -84,6 +77,25 @@ module.exports = function Server(config, onStart) {
       app.log(['serve', 'admin'], `Admin server listening at ${adminServer.rootUrl}`);
     });
   }
+
+  // Expose ability to stop server via API
+  const close = function close(done) {
+    const tasks = [
+      cb =>
+        server.close(err => {
+          app.log(['serve', 'exit'], 'Goodbye.');
+          cb(err);
+        }),
+      adminServer &&
+        (cb =>
+          adminServer.close(err => {
+            app.log(['admin', 'serve', 'exit'], 'Goodbye.');
+            cb(err);
+          }))
+    ].filter(Boolean);
+
+    async.parallel(tasks, done);
+  };
 
   const { proxy, reset, play, playAll, record, recordStop, watch } = app;
 
