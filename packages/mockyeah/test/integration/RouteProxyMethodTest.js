@@ -17,7 +17,14 @@ describe('Route proxy method', () => {
     async.parallel(
       [
         cb => {
-          mockyeah = MockYeahServer({ port: 0, adminPort: 0 }, cb);
+          mockyeah = MockYeahServer(
+            {
+              port: 0,
+              adminPort: 0,
+              aliases: [['http://localhost', 'http://localhost.alias.com']]
+            },
+            cb
+          );
           request = supertest(mockyeah.server);
         },
         cb => {
@@ -81,6 +88,24 @@ describe('Route proxy method', () => {
 
   it('should support registering full URLs manually without leading slash', done => {
     mockyeah.get(`http://localhost:${proxiedPort}/foo?ok=yes`, { text: 'bar', status: 500 });
+
+    async.series(
+      [
+        cb =>
+          supertest(proxiedApp)
+            .get('/foo')
+            .expect(200, cb),
+        cb => request.get(`/http://localhost:${proxiedPort}/foo?ok=yes`).expect(500, 'bar', cb)
+      ],
+      done
+    );
+  });
+
+  it('should support registering full URLs manually with environment aliases', done => {
+    mockyeah.get(`http://localhost.alias.com:${proxiedPort}/foo?ok=yes`, {
+      text: 'bar',
+      status: 500
+    });
 
     async.series(
       [

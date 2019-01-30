@@ -20,6 +20,15 @@ module.exports = [
   [
     {
       method: 'get',
+      path: 'http://localhost/say-hello'
+    },
+    {
+      text: 'Well, hello absolute.'
+    }
+  ],
+  [
+    {
+      method: 'get',
       path: '/say-oh-noes'
     },
     {
