@@ -69,11 +69,11 @@ function isRouteForRequest(app, route, req) {
     if (route.pathname !== '*' && !route.pathFn(pathname)) return false;
   }
 
-  if (route.query && !matches(req.query, route.query)) return false;
+  if (route.query && !matches(req.query, route.query).result) return false;
 
-  if (route.body && !matches(req.body, route.body)) return false;
+  if (route.body && !matches(req.body, route.body).result) return false;
 
-  if (route.headers && !matches(req.headers, route.headers)) return false;
+  if (route.headers && !matches(req.headers, route.headers).result) return false;
 
   // TODO: Later add features to match other things, like cookies, or with other types, etc.
 

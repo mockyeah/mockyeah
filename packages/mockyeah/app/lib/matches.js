@@ -1,25 +1,89 @@
-const { isMatchWith, isRegExp } = require('lodash');
+const { isEqual, isObject, isRegExp } = require('lodash');
 
-// eslint-disable-next-line consistent-return
-function customizer(object, source) {
-  if (isRegExp(source)) {
-    return source.test(object);
-  } else if (typeof source === 'number') {
-    return (source && source.toString()) === (object && object.toString());
-  } else if (typeof source === 'function') {
-    const result = source(object);
-    // if the function returns undefined, we'll skip this to fallback
-    if (result !== undefined) return result;
+const stringify = value => {
+  if (value === undefined) return 'undefined';
+  try {
+    return JSON.stringify(value);
+  } catch (error) {
+    return value;
   }
-  // else return undefined to fallback to default equality check
-}
+};
+
+const makeMatcher = () => {
+  const errors = [];
+
+  const matcher = (value, source, keyPath = []) => {
+    if (isRegExp(source)) {
+      const result = source.test(value);
+      if (!result)
+        errors.push({
+          message: `Regex \`${source}\` does not match value \`${stringify(value)}\``,
+          keyPath
+        });
+    } else if (typeof source === 'number') {
+      const result = (source && source.toString()) === (value && value.toString());
+      if (!result)
+        errors.push({
+          message: `Number \`${source}\` and value \`${value}\` not equal`,
+          keyPath
+        });
+    } else if (typeof source === 'function') {
+      try {
+        const result = source(value);
+        if (result !== undefined && !result)
+          errors.push({
+            message: `Value \`${stringify(value)}\` does not pass function${
+              source.name ? ` \`${source.name}\`` : ''
+            }`,
+            keyPath
+          });
+      } catch (error) {
+        errors.push({
+          message:
+            error && error.message
+              ? error.message
+              : `Threw error without message \`${stringify(error)}\``,
+          keyPath
+        });
+      }
+    } else if (isObject(value)) {
+      Object.keys(source).forEach(key => {
+        matcher(value[key], source[key], [...keyPath, key]);
+      });
+    } else {
+      const result = isEqual(value, source);
+      if (!result)
+        errors.push({
+          message: `Expected \`${stringify(source)}\` and value \`${stringify(value)}\` not equal`,
+          keyPath
+        });
+    }
+  };
+
+  return { errors, matcher };
+};
 
 const matches = (object, source) => {
-  const result = customizer(object, source);
+  const { errors, matcher } = makeMatcher();
 
-  if (result !== undefined) return result;
+  matcher(object, source);
 
-  return isMatchWith(object, source, customizer);
+  const result = !errors.length;
+
+  const message = errors.length
+    ? errors
+        .map(
+          error =>
+            `${error.message}${error.keyPath.length ? ` for "${error.keyPath.join('.')}"` : ''}`
+        )
+        .join(' ')
+    : undefined;
+
+  return {
+    result,
+    message,
+    errors
+  };
 };
 
 module.exports = matches;
