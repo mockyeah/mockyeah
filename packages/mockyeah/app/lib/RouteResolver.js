@@ -18,18 +18,52 @@ function isEqualMethod(method1, method2) {
   return m1 === 'all' || m2 === 'all' || m1 === m2;
 }
 
-function isRouteForRequest(route, req) {
+// eslint-disable-next-line consistent-return
+const findAliasReplacements = (app, url) => {
+  const {
+    config: { aliases = [] }
+  } = app;
+
+  const aliasReplacements = {};
+
+  aliases.forEach(aliasSet => {
+    aliasSet.forEach(alias => {
+      if (url.startsWith(alias)) {
+        aliasReplacements[alias] = aliasSet;
+      }
+    });
+  });
+
+  if (!_.isEmpty(aliasReplacements)) return aliasReplacements;
+};
+
+function isRouteForRequest(app, route, req) {
   if (!isEqualMethod(req.method, route.method)) return false;
 
   const pathname = normalizePathname(parse(req.url, true).pathname);
 
   const decodedPathname = decodeProtocolAndPort(pathname);
 
-  const reqPathnameIsAbsoluteUrl = isAbsoluteUrl(decodedPathname.toString().replace(/^\//, ''));
+  const url = decodedPathname.toString().replace(/^\//, '');
+
+  const reqPathnameIsAbsoluteUrl = isAbsoluteUrl(url);
 
   if (reqPathnameIsAbsoluteUrl) {
-    // eslint-disable-next-line no-lonely-if
-    if (!route.pathFn(pathname)) return false;
+    const aliasReplacements = findAliasReplacements(app, url);
+
+    if (aliasReplacements) {
+      const matchesAnyAliases = Object.keys(aliasReplacements).some(toReplace => {
+        const aliases = aliasReplacements[toReplace];
+        return aliases.some(alias => {
+          const aliasedPathname = pathname.replace(toReplace, alias);
+          const matchesAlias = route.pathFn(aliasedPathname);
+          return matchesAlias;
+        });
+      });
+
+      // eslint-disable-next-line no-lonely-if
+      if (!matchesAnyAliases) return false;
+    } else if (!route.pathFn(pathname)) return false;
   } else {
     // eslint-disable-next-line no-lonely-if
     if (route.pathname !== '*' && !route.pathFn(pathname)) return false;
@@ -70,7 +104,7 @@ function listen() {
 
     if (!suite) return false;
 
-    const route = suite.find(r => isRouteForRequest(compileRoute(app, r[0], r[1]), req));
+    const route = suite.find(r => isRouteForRequest(app, compileRoute(app, r[0], r[1]), req));
 
     if (!route) return false;
 
@@ -83,9 +117,10 @@ function listen() {
   };
 
   this.app.all('*', (req, res, next) => {
-    if (handleDynamicSuite(this.app, req, res)) return;
+    const { app, routes } = this;
+    if (handleDynamicSuite(app, req, res)) return;
 
-    const route = this.routes.find(r => isRouteForRequest(r, req));
+    const route = routes.find(r => isRouteForRequest(app, r, req));
 
     if (!route) {
       next();
@@ -94,7 +129,7 @@ function listen() {
 
     const expectationNext = err => {
       if (err) {
-        this.app.log(['record', 'expectation', 'error'], err);
+        app.log(['record', 'expectation', 'error'], err);
         res.sendStatus(500);
         return;
       }
