@@ -41,6 +41,13 @@ describe('Dynamic Suites', function() {
       .expect(200, /hello absolute/, done);
   });
 
+  it('should support aliases with encoding', function(done) {
+    request
+      .get('/http~~~localhost.alias.com/say-hello')
+      .set('x-mockyeah-suite', 'some-custom-capture')
+      .expect(200, /hello absolute/, done);
+  });
+
   it('should ignore non-existent dynamic suite', function(done) {
     request
       .get('/say-hello')

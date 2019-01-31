@@ -55,7 +55,7 @@ function isRouteForRequest(app, route, req) {
       const matchesAnyAliases = Object.keys(aliasReplacements).some(toReplace => {
         const aliases = aliasReplacements[toReplace];
         return aliases.some(alias => {
-          const aliasedPathname = pathname.replace(toReplace, alias);
+          const aliasedPathname = decodedPathname.replace(toReplace, alias);
           const matchesAlias = route.pathFn(aliasedPathname);
           return matchesAlias;
         });
