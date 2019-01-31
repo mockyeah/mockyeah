@@ -119,6 +119,24 @@ describe('Route proxy method', () => {
     );
   });
 
+  it('should support registering full URLs manually with environment aliases with encoding', done => {
+    mockyeah.get(`http://localhost.alias.com:${proxiedPort}/foo?ok=yes`, {
+      text: 'bar',
+      status: 500
+    });
+
+    async.series(
+      [
+        cb =>
+          supertest(proxiedApp)
+            .get('/foo')
+            .expect(200, cb),
+        cb => request.get(`/http~~~localhost~${proxiedPort}/foo?ok=yes`).expect(500, 'bar', cb)
+      ],
+      done
+    );
+  });
+
   describe('custom-encoded URLs', () => {
     it('should support registering full URLs and matching request with custom-encoded URLs', done => {
       mockyeah.get(`/http://localhost:${proxiedPort}/foo?ok=yes`, { text: 'bar', status: 500 });
