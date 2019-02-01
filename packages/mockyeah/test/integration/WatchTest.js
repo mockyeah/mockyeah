@@ -50,7 +50,7 @@ describe('Watcher Test', () => {
         supertest(mockyeah.server)
           .get('/watched')
           .expect(200, 'watched!', err => {
-            mockyeah.close();
+            mockyeah.shutdown();
             return err ? done(err) : done();
           });
       }, 1000);
@@ -87,7 +87,7 @@ describe('Watcher Test', () => {
         supertest(mockyeah.server)
           .get('/watched')
           .expect(200, 'watched!', err => {
-            mockyeah.close();
+            mockyeah.shutdown();
             return err ? done(err) : done();
           });
       }, 1000);

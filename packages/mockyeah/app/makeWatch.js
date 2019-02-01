@@ -24,7 +24,7 @@ const restart = app => {
   }
 };
 
-const watcher = app => {
+const makeWatch = app => {
   const { capturesDir, fixturesDir } = app.config;
 
   let first = true;
@@ -39,7 +39,8 @@ const watcher = app => {
   }, 500);
 
   const watch = () => {
-    chokidar.watch([capturesDir, fixturesDir]).on('all', debounced);
+    const watcher = chokidar.watch([capturesDir, fixturesDir]).on('all', debounced);
+    app.locals.watcher = watcher;
   };
 
   if (app.config.watch) {
@@ -49,6 +50,6 @@ const watcher = app => {
   return watch;
 };
 
-watcher.restart = restart;
+makeWatch.restart = restart;
 
-module.exports = watcher;
+module.exports = makeWatch;

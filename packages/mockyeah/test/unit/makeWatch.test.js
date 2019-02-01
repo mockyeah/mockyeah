@@ -2,7 +2,7 @@
 
 const { expect } = require('chai');
 
-const { restart } = require('../../app/watcher');
+const { restart } = require('../../app/makeWatch');
 
 const mockApp = playingNames => {
   const called = {

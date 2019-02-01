@@ -97,7 +97,12 @@ module.exports = function Server(config, onStart) {
     async.parallel(tasks, done);
   };
 
-  const { proxy, reset, play, playAll, record, recordStop, watch } = app;
+  const shutdown = done => {
+    app.unwatch();
+    close(done);
+  };
+
+  const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
 
   // Construct and return mockyeah API
   return Object.assign({}, app.routeManager, {
@@ -112,6 +117,8 @@ module.exports = function Server(config, onStart) {
     playAll,
     record,
     recordStop,
-    watch
+    watch,
+    unwatch,
+    shutdown
   });
 };

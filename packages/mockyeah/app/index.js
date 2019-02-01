@@ -10,7 +10,8 @@ const recorder = require('./recorder');
 const recordStopper = require('./recordStopper');
 const player = require('./player');
 const playAller = require('./playAller');
-const watcher = require('./watcher');
+const makeWatch = require('./makeWatch');
+const makeUnwatch = require('./makeUnwatch');
 
 /**
  * App module
@@ -92,7 +93,9 @@ module.exports = function App(config) {
     app.middlewares.push(middleware);
   };
 
-  app.watch = watcher(app);
+  app.watch = makeWatch(app);
+
+  app.unwatch = makeUnwatch(app);
 
   return app;
 };
