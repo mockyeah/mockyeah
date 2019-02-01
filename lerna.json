@@ -1,4 +1,7 @@
 {
-  "packages": ["packages/mockyeah", "packages/mockyeah-cli"],
-  "version": "0.22.0-alpha.2"
+  "packages": [
+    "packages/mockyeah",
+    "packages/mockyeah-cli"
+  ],
+  "version": "0.22.0-alpha.3"
 }
