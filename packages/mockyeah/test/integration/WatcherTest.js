@@ -57,6 +57,45 @@ describe('Watcher Test', () => {
     }, 1000);
   });
 
+  it('should unwatch', function(done) {
+    this.timeout(10000);
+
+    const mockyeah = new MockYeahServer({ port: 0, adminPort: 0 });
+
+    mockyeah.playAll();
+    mockyeah.watch();
+    mockyeah.unwatch();
+
+    setTimeout(() => {
+      // eslint-disable-next-line no-sync
+      fs.outputFileSync(
+        watchedSuiteFile,
+        `
+      module.exports = [
+        [
+          {
+            method: 'get',
+            path: '/watched'
+          },
+          {
+            text: 'watched!'
+          }
+        ]
+      ];
+      `
+      );
+
+      setTimeout(() => {
+        supertest(mockyeah.server)
+          .get('/watched')
+          .expect(404, err => {
+            mockyeah.close();
+            return err ? done(err) : done();
+          });
+      }, 1000);
+    }, 1000);
+  });
+
   it('should watch based on config', function(done) {
     this.timeout(10000);
 
