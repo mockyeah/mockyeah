@@ -23,28 +23,28 @@ describe('Dynamic Suites', function() {
   it('should dynamically enable a suite per-request', function(done) {
     request
       .get('/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-dynamic-suite')
+      .set('x-mockyeah-suite', 'some-custom-suite')
       .expect(200, /hello there/, done);
   });
 
   it('should support full URL', function(done) {
     request
       .get('/http://localhost/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-dynamic-suite')
+      .set('x-mockyeah-suite', 'some-custom-suite')
       .expect(200, /hello absolute/, done);
   });
 
   it('should support aliases', function(done) {
     request
       .get('/http://localhost.alias.com/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-dynamic-suite')
+      .set('x-mockyeah-suite', 'some-custom-suite')
       .expect(200, /hello absolute/, done);
   });
 
   it('should support aliases with encoding', function(done) {
     request
       .get('/http~~~localhost.alias.com/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-dynamic-suite')
+      .set('x-mockyeah-suite', 'some-custom-suite')
       .expect(200, /hello absolute/, done);
   });
 
