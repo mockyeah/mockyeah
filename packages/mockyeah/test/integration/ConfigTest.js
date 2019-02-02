@@ -9,8 +9,10 @@ describe('Config', () => {
   it('should work without config', function(done) {
     exec(
       `echo "
-      global.MOCKYEAH_ROOT = '~';
-      const mockyeah = new require('./server')({ port: 0, adminPort: 0 }, function() { process.exit() });
+      const mockyeah = require('./index');
+      setTimeout(() => {
+        process.exit();
+      }, 1000)
       " | node`,
       function(err, stdout) {
         expect(stdout).to.include('mockyeah');

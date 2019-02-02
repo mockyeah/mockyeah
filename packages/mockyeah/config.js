@@ -21,19 +21,18 @@ try {
   throw new Error(`Error searching for configuration file: ${error.message}`);
 }
 
-const { filepath } = searchedFor;
+const { filepath } = searchedFor || {};
 
-if (!filepath) {
-  throw new Error(`No configuration file found.`);
+let config;
+
+if (filepath) {
+  try {
+    const loaded = explorer.loadSync(filepath);
+    // eslint-disable-next-line prefer-destructuring
+    config = loaded.config;
+  } catch (error) {
+    throw new Error(`Error loading configuration file "${filepath}": ${error.message}`);
+  }
 }
-
-let loaded;
-try {
-  loaded = explorer.loadSync(filepath);
-} catch (error) {
-  throw new Error(`Error loading configuration file "${filepath}": ${error.message}`);
-}
-
-const { config } = loaded;
 
 module.exports = prepareConfig(config);
