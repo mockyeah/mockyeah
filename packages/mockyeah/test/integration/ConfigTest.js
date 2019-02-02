@@ -9,6 +9,7 @@ describe('Config', () => {
   it('should work without config', function(done) {
     exec(
       `echo "
+      global.MOCKYEAH_ROOT = '~';
       const mockyeah = require('./index');
       setTimeout(() => {
         process.exit();
