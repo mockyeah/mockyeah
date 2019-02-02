@@ -1,4 +1,4 @@
-const tools = require('tools/.eslintrc.js');
+const tools = require('mockyeah-tools/.eslintrc.js');
 
 module.exports = Object.assign({}, tools, {
   overrides: [

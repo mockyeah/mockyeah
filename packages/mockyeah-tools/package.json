@@ -1,5 +1,5 @@
 {
-  "name": "tools",
+  "name": "mockyeah-tools",
   "version": "1.0.0",
   "description": "local package centralizing monorepo tools",
   "private": true,

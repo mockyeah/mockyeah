@@ -1,1 +1,1 @@
-module.exports = require('tools/.eslintrc.js');
+module.exports = require('mockyeah-tools/.eslintrc.js');
