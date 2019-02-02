@@ -10,19 +10,19 @@ Use it to programmatically construct your own instance of mockyeah, perhaps with
 First import it:
 
 ```js
-import { Server } from 'mockyeah';
+import { Server } from "mockyeah";
 ```
 
 or:
 
 ```js
-const { Server } = require('mockyeah');
+const { Server } = require("mockyeah");
 ```
 
 or:
 
 ```js
-const Server = require('mockyeah').Server;
+const Server = require("mockyeah").Server;
 ```
 
 Then use it:
