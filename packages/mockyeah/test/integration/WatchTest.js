@@ -8,6 +8,8 @@ const supertest = require('supertest');
 const watchedSuiteDir = `${__dirname}/../mockyeah/test-some-custom-capture`;
 const watchedSuiteFile = `${watchedSuiteDir}/index.js`;
 
+const root = `${__dirname}/../`;
+
 describe('Watcher Test', () => {
   beforeEach(() => {
     // eslint-disable-next-line no-sync
@@ -22,7 +24,7 @@ describe('Watcher Test', () => {
   it('should watch programmatically', function(done) {
     this.timeout(10000);
 
-    const mockyeah = new MockYeahServer({ port: 0, adminPort: 0 });
+    const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root });
 
     mockyeah.playAll();
     mockyeah.watch();
@@ -60,7 +62,7 @@ describe('Watcher Test', () => {
   it('should watch based on config', function(done) {
     this.timeout(10000);
 
-    const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, watch: true });
+    const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root, watch: true });
 
     mockyeah.playAll();
 
