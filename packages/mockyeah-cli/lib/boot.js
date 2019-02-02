@@ -9,9 +9,7 @@ const chalk = require('chalk');
 const liftoff = new Liftoff({
   name: 'mockyeah',
   configName: '.mockyeah',
-  extensions: {
-    '': null
-  },
+  extensions: {},
   v8flags
 });
 
