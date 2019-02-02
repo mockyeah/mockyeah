@@ -40,9 +40,9 @@ yarn add -D mockyeah
     ```
 
     ```js
-    const mockyeah = require('mockyeah');
+    const mockyeah = require("mockyeah");
 
-    mockyeah.get('/hello-world', { text: 'Hello World' });
+    mockyeah.get("/hello-world", { text: "Hello World" });
     ```
 
 1.  Run the script file with Node
@@ -58,46 +58,46 @@ yarn add -D mockyeah
 ## Testing with mockyeah
 
 ```js
-const request = require('supertest')('http://localhost:4001');
-const mockyeah = require('mockyeah');
+const request = require("supertest")("http://localhost:4001");
+const mockyeah = require("mockyeah");
 
-describe('Wondrous service', () => {
+describe("Wondrous service", () => {
   // remove service mocks after each test
   afterEach(() => mockyeah.reset());
 
   // stop mockyeah server
   after(() => mockyeah.close());
 
-  it('should create a mock service that returns an internal error', done => {
+  it("should create a mock service that returns an internal error", done => {
     // create failing service mock
-    mockyeah.get('/wondrous', { status: 500 });
+    mockyeah.get("/wondrous", { status: 500 });
 
     // assert service mock is working
-    request.get('/wondrous').expect(500, done);
+    request.get("/wondrous").expect(500, done);
   });
 
-  it('should create a mock service that returns JSON', done => {
+  it("should create a mock service that returns JSON", done => {
     // create service mock that returns json data
-    mockyeah.get('/wondrous', { json: { foo: 'bar' } });
+    mockyeah.get("/wondrous", { json: { foo: "bar" } });
 
     // assert service mock is working
-    request.get('/wondrous').expect(200, { foo: 'bar' }, done);
+    request.get("/wondrous").expect(200, { foo: "bar" }, done);
   });
 
-  it('should verify a mock service expectation', done => {
+  it("should verify a mock service expectation", done => {
     // create service mock with expectation
     const expectation = mockyeah
-      .get('/wondrous', { text: 'it worked' })
+      .get("/wondrous", { text: "it worked" })
       .expect()
       .params({
-        foo: 'bar'
+        foo: "bar"
       })
       .once();
 
     // invoke request and verify expectation
     request
-      .get('/wondrous?foo=bar')
-      .expect(200, 'it worked')
+      .get("/wondrous?foo=bar")
+      .expect(200, "it worked")
       .then(() => {
         expectation.verify(done);
       });

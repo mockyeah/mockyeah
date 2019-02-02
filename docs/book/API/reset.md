@@ -10,10 +10,10 @@ afterEach(() => mockyeah.reset());
 You may remove specific services by passing paths matching services to unmount. Example:
 
 ```js
-mockyeah.get('/foo-1', { text: 'bar' });
-mockyeah.get('/foo-2', { text: 'bar' });
-mockyeah.get('/foo-3', { text: 'bar' });
+mockyeah.get("/foo-1", { text: "bar" });
+mockyeah.get("/foo-2", { text: "bar" });
+mockyeah.get("/foo-3", { text: "bar" });
 
 // unmounts only /foo-1 and /foo-2
-mockyeah.reset('/foo-1', '/bar-2');
+mockyeah.reset("/foo-1", "/bar-2");
 ```

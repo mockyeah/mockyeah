@@ -21,4 +21,3 @@ To publish an archive version to a subfolder of `gh-pages` branch, use:
 yarn build
 yarn docs:publish:archive archive/0.16
 ```
-
