@@ -9,11 +9,10 @@ const supertest = require('supertest');
 const rimraf = require('rimraf');
 const MockYeahServer = require('../../server');
 const { expect } = require('chai');
-const formatScript = require('../formatter');
 
-const PROXY_CAPTURES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
+const PROXY_SUITES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Capture Record Format Script Function Test', function() {
+describe('Suite Record Format Script File Test', function() {
   let proxy;
   let remote;
   let proxyReq;
@@ -29,8 +28,8 @@ describe('Capture Record Format Script Function Test', function() {
               name: 'proxy',
               port: 0,
               adminPort: 0,
-              capturesDir: PROXY_CAPTURES_DIR,
-              formatScript
+              suitesDir: PROXY_SUITES_DIR,
+              formatScript: path.resolve(__dirname, '../formatter.js')
             },
             cb
           );
@@ -58,7 +57,7 @@ describe('Capture Record Format Script Function Test', function() {
   afterEach(() => {
     proxy.reset();
     remote.reset();
-    rimraf.sync(PROXY_CAPTURES_DIR);
+    rimraf.sync(PROXY_SUITES_DIR);
   });
 
   after(() => {
@@ -66,14 +65,14 @@ describe('Capture Record Format Script Function Test', function() {
     remote.close();
   });
 
-  function getCaptureFilePath(captureName) {
-    return path.resolve(PROXY_CAPTURES_DIR, captureName, 'index.js');
+  function getSuiteFilePath(suiteName) {
+    return path.resolve(PROXY_SUITES_DIR, suiteName, 'index.js');
   }
 
   it('should record and format script', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'test-some-fancy-capture-format-script-function';
+    const suiteName = 'test-some-fancy-suite-format-script-file';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -87,7 +86,7 @@ describe('Capture Record Format Script Function Test', function() {
       [
         // Initiate recording
         cb => {
-          proxy.record(captureName);
+          proxy.record(suiteName);
           cb();
         },
 
@@ -100,9 +99,9 @@ describe('Capture Record Format Script Function Test', function() {
           proxy.recordStop(cb);
         },
 
-        // Assert capture file exists
+        // Assert suite file exists
         cb => {
-          const contents = fs.readFileSync(getCaptureFilePath(captureName), 'utf8');
+          const contents = fs.readFileSync(getSuiteFilePath(suiteName), 'utf8');
           expect(contents).to.match(
             // eslint-disable-next-line no-regex-spaces
             /module\.exports = \[   \[     ".*\/some\/service\/one",     {       "raw": ""     }   \] ];/
@@ -110,14 +109,14 @@ describe('Capture Record Format Script Function Test', function() {
           cb();
         },
 
-        // Reset proxy services and play captured capture
+        // Reset proxy services and play suited suite
         cb => {
           proxy.reset();
           cb();
         },
 
         cb => {
-          proxy.play(captureName);
+          proxy.play(suiteName);
           cb();
         },
 
@@ -128,6 +127,69 @@ describe('Capture Record Format Script Function Test', function() {
 
         // Assert paths are routed the correct responses
         cb => proxyReq.get(path1).expect(200, cb)
+      ],
+      done
+    );
+  });
+
+  it('should record non-200 status and format script', function(done) {
+    this.timeout = 10000;
+
+    const suiteName = 'test-some-fancy-suite-non-200-format-script-file';
+
+    // Construct remote service urls
+    // e.g. http://localhost:4041/http://example.com/some/service
+    const path1 = '/some/service/one';
+
+    // Mount remote service end points
+    remote.get('/some/service/one', { status: 206 });
+
+    // Initiate recording and playback series
+    async.series(
+      [
+        // Initiate recording
+        cb => {
+          proxy.record(suiteName);
+          cb();
+        },
+
+        // Invoke requests to remote services through proxy
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => proxyReq.get(path1).expect(206, cb),
+
+        // Stop recording
+        cb => {
+          proxy.recordStop(cb);
+        },
+
+        // Assert suite file exists
+        cb => {
+          const contents = fs.readFileSync(getSuiteFilePath(suiteName), 'utf8');
+          expect(contents).to.match(
+            // eslint-disable-next-line no-regex-spaces
+            /module\.exports = \[   \[     ".*\/some\/service\/one",     {\s+"status": 206,\s+"raw": ""     }   \] ];/
+          );
+          cb();
+        },
+
+        // Reset proxy services and play suited suite
+        cb => {
+          proxy.reset();
+          cb();
+        },
+
+        cb => {
+          proxy.play(suiteName);
+          cb();
+        },
+
+        // Test remote url paths and their sub paths route to the same services
+        // Assert remote url paths are routed the correct responses
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => remoteReq.get(path1).expect(206, cb),
+
+        // Assert paths are routed the correct responses
+        cb => proxyReq.get(path1).expect(206, cb)
       ],
       done
     );

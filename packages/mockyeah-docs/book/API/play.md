@@ -6,7 +6,7 @@
 service snapshots (i.e. `./mockyeah/[snapshot name]`).
 
 Mounts each service snapshot. Each snapshot will be mounted with the
-exact same payload, headers, status, and latency as captured during its recording.
+exact same payload, headers, status, and latency as suited during its recording.
 This behavior may be changed by altering the values in the snapshot files.
 
 Here is an example of a service snapshot file:

@@ -6,6 +6,19 @@ const { exec } = require('child_process');
 const { expect } = require('chai');
 
 describe('Config', () => {
+  it('should work without config', function(done) {
+    exec(
+      `echo "
+      global.MOCKYEAH_ROOT = '~';
+      const mockyeah = new require('./server')({ port: 0, adminPort: 0 }, function() { process.exit() });
+      " | node`,
+      function(err, stdout) {
+        expect(stdout).to.include('mockyeah');
+        done();
+      }
+    );
+  });
+
   it('should write output to stdout by default', function(done) {
     exec(
       `echo "

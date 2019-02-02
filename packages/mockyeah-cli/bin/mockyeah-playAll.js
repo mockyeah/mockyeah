@@ -18,13 +18,13 @@ program.option('-v, --verbose', 'verbose output').parse(process.argv);
 global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
-  const { capturesDir } = env.config;
+  const { suitesDir } = env.config;
 
   try {
-    const stat = fs.statSync(capturesDir);
+    const stat = fs.statSync(suitesDir);
     if (!stat.isDirectory()) throw new Error('Not a directory');
   } catch (err) {
-    console.log(chalk.red(`Capture directory not found at ${capturesDir}`));
+    console.log(chalk.red(`Suite directory not found at ${suitesDir}`));
     process.exit(1);
   }
 

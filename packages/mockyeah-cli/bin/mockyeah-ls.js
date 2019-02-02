@@ -13,7 +13,7 @@ const boot = require('../lib/boot');
 program.parse(process.argv);
 
 boot(env => {
-  fs.readdirSync(env.config.capturesDir)
+  fs.readdirSync(env.config.suitesDir)
     .sort()
     .filter(file => console.log(`  ${file}`));
 });
