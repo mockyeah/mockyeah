@@ -9,12 +9,17 @@
  */
 
 const program = require('commander');
+const boot = require('../lib/boot');
 const version = require('../version');
 
-program
-  .version(version)
-  .command('ls', 'list service captures')
-  .command('play [name]', 'play service capture')
-  .command('playAll', 'play all service captures')
-  .command('record [name]', 'record service capture')
-  .parse(process.argv);
+program.parse(process.argv);
+
+boot(() => {
+  program
+    .version(version)
+    .command('ls', 'list service captures')
+    .command('play [name]', 'play service capture')
+    .command('playAll', 'play all service captures')
+    .command('record [name]', 'record service capture')
+    .parse(process.argv);
+});

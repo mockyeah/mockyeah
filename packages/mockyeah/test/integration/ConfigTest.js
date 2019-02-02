@@ -80,7 +80,6 @@ describe('Config', () => {
     exec(
       `echo "
       const request = require('supertest');
-      // const mockyeah = new require('./server')({ port: 0, adminPort: 0, verbose: false });
       const mockyeah = require('./index');
       setTimeout(function() {
         mockyeah.get('/foo', { text: 'bar' });

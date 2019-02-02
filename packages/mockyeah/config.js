@@ -2,32 +2,38 @@
 
 /* eslint-disable no-sync */
 
-const fs = require('fs');
-const path = require('path');
+const cosmiconfig = require('cosmiconfig');
 const prepareConfig = require('./lib/prepareConfig');
 const relativeRoot = require('./lib/relativeRoot');
 
-let config;
+const moduleName = 'mockyeah';
 
+const searchPlaces = ['package.json', `.${moduleName}`, `.${moduleName}.js`, `.${moduleName}.json`];
+
+const explorer = cosmiconfig(moduleName, {
+  searchPlaces
+});
+
+let searchedFor;
 try {
-  config = fs.readFileSync(path.resolve(relativeRoot, '.mockyeah'));
-} catch (err) {
-  // noop
+  searchedFor = explorer.searchSync(relativeRoot);
+} catch (error) {
+  throw new Error(`Error searching for configuration file: ${error.message}`);
 }
 
-// TODO: .mock-yeah file is deprecated. Remove this try-catch at an opportune time.
-try {
-  if (!config) {
-    config = fs.readFileSync(path.resolve(relativeRoot, '.mock-yeah'));
-  }
-} catch (err) {
-  // noop
+const { filepath } = searchedFor;
+
+if (!filepath) {
+  throw new Error(`No configuration file found.`);
 }
 
+let loaded;
 try {
-  if (config) config = JSON.parse(config);
-} catch (err) {
-  throw new Error('Invalid JSON in .mockyeah configuration file');
+  loaded = explorer.loadSync(filepath);
+} catch (error) {
+  throw new Error(`Error loading configuration file "${filepath}": ${error.message}`);
 }
+
+const { config } = loaded;
 
 module.exports = prepareConfig(config);

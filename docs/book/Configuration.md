@@ -25,9 +25,8 @@
 }
 ```
 
-The default configuration may be overridden by placing a `.mockyeah` file in root of
-your project and adding the key value pair that you wish to change. The file should
-be written using standard `JSON`.
+The default configuration may be overridden by placing a `.mockyeah` (or `.mockyeah.json`) JSON file in root of your project and adding the key/value pairs that you wish to change.
+Also supports a `.mockyeah.js` as a Node module that exports a JavaScript object as the config.
 
 ### Options:
 
