@@ -97,7 +97,7 @@ describe('app helpers', () => {
       const responseOptions = {
         raw
       };
-      const name = 'my-capture';
+      const name = 'my-suite';
       const index = 0;
       const result = getDataForRecordToFixtures({ responseOptions, name, index });
       expect(result).to.deep.equal({
@@ -113,7 +113,7 @@ describe('app helpers', () => {
       const responseOptions = {
         json
       };
-      const name = 'my-capture';
+      const name = 'my-suite';
       const index = 0;
       const result = getDataForRecordToFixtures({ responseOptions, name, index });
       expect(result).to.deep.equal({

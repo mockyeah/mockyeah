@@ -4,7 +4,7 @@
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
-    "start": "MOCKYEAH_ROOT=. nodemon --inspect index.js --ignore captures",
+    "start": "MOCKYEAH_ROOT=. nodemon --inspect index.js",
     "test": "yarn lint && yarn test:coverage",
     "test:watch": "yarn test:unit --watch",
     "test:unit": "mocha test/**/*Test.js test/**/*.test.js",

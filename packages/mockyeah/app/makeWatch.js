@@ -3,11 +3,11 @@ const chokidar = require('chokidar');
 const clearModule = require('clear-module');
 
 const restart = app => {
-  const { capturesDir, fixturesDir } = app.config;
+  const { suitesDir, fixturesDir } = app.config;
 
   app.log(['watch'], 'restarting');
 
-  clearModule.match(new RegExp(capturesDir));
+  clearModule.match(new RegExp(suitesDir));
   clearModule.match(new RegExp(fixturesDir));
 
   const wasPlayingSuites = app.locals.playingSuites;
@@ -25,7 +25,7 @@ const restart = app => {
 };
 
 const makeWatch = app => {
-  const { capturesDir, fixturesDir } = app.config;
+  const { suitesDir, fixturesDir } = app.config;
 
   let first = true;
 
@@ -39,7 +39,7 @@ const makeWatch = app => {
   }, 500);
 
   const watch = () => {
-    const watcher = chokidar.watch([capturesDir, fixturesDir]).on('all', debounced);
+    const watcher = chokidar.watch([suitesDir, fixturesDir]).on('all', debounced);
     app.locals.watcher = watcher;
   };
 

@@ -1,5 +1,5 @@
 {
  "port": "4042",
  "fixturesDir": "../fixtures",
- "capturesDir": "../mockyeah"
+ "suitesDir": "../mockyeah"
 }

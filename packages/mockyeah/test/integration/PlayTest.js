@@ -6,9 +6,9 @@ const TestHelper = require('../TestHelper');
 
 const { mockyeah, request } = TestHelper;
 
-describe('Capture Play', function() {
-  it('should play a custom capture', function(done) {
-    mockyeah.play('some-custom-capture');
+describe('Play', function() {
+  it('should play a custom suite', function(done) {
+    mockyeah.play('some-custom-suite');
 
     /**
      * Make many requests in series, waits to execute `done`

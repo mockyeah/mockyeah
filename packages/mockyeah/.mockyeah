@@ -3,5 +3,5 @@
   "journal": true,
   "verbose": true,
   "proxy": true,
-  "capturesDir": "./captures"
+  "suitesDir": "./suites"
 }

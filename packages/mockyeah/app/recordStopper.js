@@ -23,18 +23,18 @@ module.exports = app => cb => {
 
   if (!name) throw new Error('Not recording.');
 
-  const { capturesDir, fixturesDir } = app.config;
+  const { suitesDir, fixturesDir } = app.config;
 
-  const capturePath = path.join(capturesDir, name);
+  const suitePath = path.join(suitesDir, name);
 
-  mkdirp.sync(capturePath);
+  mkdirp.sync(suitePath);
 
-  const filePath = resolveFilePath(capturePath, 'index.js');
+  const suiteFilePath = resolveFilePath(suitePath, 'index.js');
 
-  const newSet = set.map((capture, index) => {
-    const [match, responseOptions] = capture;
+  const newSet = set.map((suite, index) => {
+    const [match, responseOptions] = suite;
 
-    app.log(['serve', 'capture'], match.url || match.path || match);
+    app.log(['serve', 'suite'], match.url || match.path || match);
 
     if (recordToFixtures) {
       const { newResponseOptions, body } = getDataForRecordToFixtures({
@@ -67,7 +67,7 @@ module.exports = app => cb => {
 
   if (recordToFixturesMode === 'require') {
     js = replaceFixtureWithRequireInJson(js, {
-      relativePath: path.relative(capturePath, fixturesDir)
+      relativePath: path.relative(suitePath, fixturesDir)
     });
   }
 
@@ -89,7 +89,7 @@ module.exports = app => cb => {
     }
   }
 
-  fs.writeFile(filePath, jsModule, err => {
+  fs.writeFile(suiteFilePath, jsModule, err => {
     if (err) {
       app.log(['record', 'response', 'error'], err);
 
@@ -98,8 +98,8 @@ module.exports = app => cb => {
       return;
     }
 
-    set.forEach(capture => {
-      app.log(['record', 'response', 'saved'], capture[0].path || capture[0].url || capture[0]);
+    set.forEach(suite => {
+      app.log(['record', 'response', 'saved'], suite[0].path || suite[0].url || suite[0]);
     });
 
     if (typeof app.locals.proxyingBeforeRecording !== 'undefined') {

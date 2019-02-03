@@ -8,7 +8,7 @@
   "host": "localhost",
   "port": 4001,
   "fixturesDir": "./fixtures",
-  "capturesDir": "./mockyeah",
+  "suitesDir": "./mockyeah",
   "output": true,
   "journal": false,
   "verbose": false,
@@ -37,7 +37,7 @@ Also supports a `.mockyeah.js` as a Node module that exports a JavaScript object
 - `httpsKeyPath`: Optional file path to SSL key for custom certificates (instead of auto-generated).
 - `httpsCertPath`: Optional file path to SSL key for custom certificates (instead of auto-generated)
 - `fixturesDir`: Relative path to the fixtures directory.
-- `capturesDir`: Relative path to the captures directory.
+- `suitesDir`: Relative path to the suites directory.
 - `output`: Boolean to toggle mockyeah generated output written to `stdout`.
 - `journal`: Boolean to toggle request journaling. Example journaling output:
 
@@ -87,11 +87,11 @@ Internally, this mounts with a leading slash, i.e., `'/https://service.example.c
 - `adminServer`: Boolean to enable admin server (for recording, playing, etc.)
 - `adminHost`: Host on which admin server will run.
 - `adminPort`: Port on which admin server will run.
-- `recordToFixtures`: Whether to record captures with response bodies written to separate files in the fixtures directory vs. inlined into the capture files.
+- `recordToFixtures`: Whether to record suites with response bodies written to separate files in the fixtures directory vs. inlined into the suite files.
 - `recordToFixturesMode`: When `recordToFixtures` is enabled, which mode to use to refer to fixture files
   - "path" (default): Use the response option of `fixture` with the path to the fixture file as a string.
   - "require": For JSON fixtures, use the response option of `json` with an inline `require` of the JSON file using a relative path, otherwise fallback to "path" mode (may support custom `require`-able files in the future for users with custom setups, e.g., Webpack loaders).
-- `formatScript`: To apply custom formatting to the JS in the capture files, specify a string path to a module (relative to mockyeah root near your config file) that exports a function of the signature `(js: string) : string => {}`. Or if using programmatically rather than a JSON config file, you can provide a function as a value directly.
+- `formatScript`: To apply custom formatting to the JS in the suite files, specify a string path to a module (relative to mockyeah root near your config file) that exports a function of the signature `(js: string) : string => {}`. Or if using programmatically rather than a JSON config file, you can provide a function as a value directly.
 
 ### HTTPS
 

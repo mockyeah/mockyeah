@@ -16,10 +16,10 @@ Usage: mockyeah [options] [command]
 
   Commands:
 
-    ls             list service captures
-    play [name]    play service capture
-    playAll        play all service captures
-    record [name]  record service capture
+    ls             list suites
+    play [name]    play suite
+    playAll        play all suites
+    record [name]  record suite
     help [cmd]     display help for [cmd]
 
   Options:

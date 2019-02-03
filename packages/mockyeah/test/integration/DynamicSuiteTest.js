@@ -12,7 +12,7 @@ describe('Dynamic Suites', function() {
       {
         port: 0,
         adminPort: 0,
-        capturesDir: `${__dirname}/../mockyeah`,
+        suitesDir: `${__dirname}/../mockyeah`,
         aliases: [['http://localhost', 'http://localhost.alias.com']]
       },
       done
@@ -23,35 +23,35 @@ describe('Dynamic Suites', function() {
   it('should dynamically enable a suite per-request', function(done) {
     request
       .get('/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-capture')
+      .set('x-mockyeah-suite', 'some-custom-suite')
       .expect(200, /hello there/, done);
   });
 
   it('should support full URL', function(done) {
     request
       .get('/http://localhost/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-capture')
+      .set('x-mockyeah-suite', 'some-custom-suite')
       .expect(200, /hello absolute/, done);
   });
 
   it('should support aliases', function(done) {
     request
       .get('/http://localhost.alias.com/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-capture')
+      .set('x-mockyeah-suite', 'some-custom-suite')
       .expect(200, /hello absolute/, done);
   });
 
   it('should support aliases with encoding', function(done) {
     request
       .get('/http~~~localhost.alias.com/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-capture')
+      .set('x-mockyeah-suite', 'some-custom-suite')
       .expect(200, /hello absolute/, done);
   });
 
   it('should ignore non-existent dynamic suite', function(done) {
     request
       .get('/say-hello')
-      .set('x-mockyeah-suite', 'some-nonexistent-capture')
+      .set('x-mockyeah-suite', 'some-nonexistent-suite')
       .expect(404, done);
   });
 });

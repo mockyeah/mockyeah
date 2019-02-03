@@ -34,9 +34,9 @@
     - [`.expect().verify()`](API/Expectation-API.md#verify)
   - Classes
     - [`Server`](API/Server.md)
-- [Snapshots](Snapshots/Overview.md)
-  - [Snapshots Overview](Snapshots/Overview.md#snapshots-overview)
-  - [Ad Hoc Snapshots](Snapshots/Overview.md#ad-hoc-snapshots)
+- [Suites](Suites/Overview.md)
+  - [Suites Overview](Suites/Overview.md#suites-overview)
+  - [Ad Hoc Suites](Suites/Overview.md#ad-hoc-suites)
 - [CLI](CLI/CLI.md)
 - [Recipes & Examples](https://github.com/mockyeah/mockyeah/tree/master/examples)
 - [Contributing](Contributing.md)

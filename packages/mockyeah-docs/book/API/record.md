@@ -1,11 +1,11 @@
 # `record()`
 
-`mockyeah.record([snapshot name])`
+`mockyeah.record([suite name])`
 
-`snapshot name` (`String`; required) Directory name to save service snapshots
-(i.e. `./mockyeah/[snapshot name]`).
+`suite name` (`String`; required) Directory name to save service suites
+(i.e. `./mockyeah/[suite name]`).
 
-Configures mockyeah to proxy and capture service requests. Recorded responses
+Configures mockyeah to proxy and suite service requests. Recorded responses
 will be written when you call [`recordStop`](./recordStop.md).
 To use this feature, you can update the service addresses in your application
 to proxy through mockyeah. Here is an example of an address configured for recording:

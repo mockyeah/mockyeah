@@ -17,9 +17,9 @@ program.parse(process.argv);
 boot(() => {
   program
     .version(version)
-    .command('ls', 'list service captures')
-    .command('play [name]', 'play service capture')
-    .command('playAll', 'play all service captures')
-    .command('record [name]', 'record service capture')
+    .command('ls', 'list suites')
+    .command('play [name]', 'play suite')
+    .command('playAll', 'play all suites')
+    .command('record [name]', 'record suite')
     .parse(process.argv);
 });

@@ -11,7 +11,7 @@ const mockApp = playingNames => {
 
   return {
     config: {
-      capturesDir: './captures',
+      suitesDir: './suites',
       fixturesDir: './fixtures'
     },
     locals: {
