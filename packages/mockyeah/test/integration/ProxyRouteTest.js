@@ -2,7 +2,7 @@
 
 const { expect } = require('chai');
 require('../TestHelper');
-const { makeRequestUrl } = require('../../app/proxyRoute');
+const { makeRequestUrl } = require('../../app/lib/proxyRoute');
 
 describe('proxyRoute', () => {
   describe('makeRequestUrl', () => {

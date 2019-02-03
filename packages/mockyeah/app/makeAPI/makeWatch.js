@@ -43,13 +43,11 @@ const makeWatch = app => {
     app.locals.watcher = watcher;
   };
 
-  if (app.config.watch) {
-    watch();
-  }
-
   return watch;
 };
 
-makeWatch.restart = restart;
+// Exposed only for testing.
+// eslint-disable-next-line no-underscore-dangle
+makeWatch.__restart = restart;
 
 module.exports = makeWatch;

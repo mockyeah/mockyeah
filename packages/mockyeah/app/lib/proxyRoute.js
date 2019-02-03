@@ -1,8 +1,8 @@
 const request = require('request');
 const isAbsoluteUrl = require('is-absolute-url');
 const { isEmpty } = require('lodash');
-const { decodeProtocolAndPort } = require('./lib/helpers');
-const proxyRecord = require('./lib/proxyRecord');
+const { decodeProtocolAndPort } = require('./helpers');
+const proxyRecord = require('./proxyRecord');
 
 const openingSlashRegex = /^\//;
 const leadUrlEncodedProtocolRegex = /^(https?)%3A%2F%2F/;
