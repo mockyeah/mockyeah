@@ -34,11 +34,11 @@ module.exports = (config = {}) => {
 
   config = Object.assign({}, configDefaults, config);
 
-  // Expand file system configuration paths relative to configuration root
-  config.fixturesDir = expandPath(config.fixturesDir);
-  config.suitesDir = expandPath(config.suitesDir);
-  config.httpsKeyPath = config.httpsKeyPath && expandPath(config.httpsKeyPath);
-  config.httpsCertPath = config.httpsCertPath && expandPath(config.httpsCertPath);
+  // Expand file system configuration paths relative to configuration roo
+  config.fixturesDir = expandPath(config.fixturesDir, config.root);
+  config.suitesDir = expandPath(config.suitesDir, config.root);
+  config.httpsKeyPath = config.httpsKeyPath && expandPath(config.httpsKeyPath, config.root);
+  config.httpsCertPath = config.httpsCertPath && expandPath(config.httpsCertPath, config.root);
 
   return config;
 };

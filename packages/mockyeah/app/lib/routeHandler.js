@@ -154,7 +154,7 @@ module.exports = function handler(app, route) {
 
     if (response.filePath) {
       // if filePath, send file
-      const filePath = expandPath(response.filePath);
+      const filePath = expandPath(response.filePath, app.config.root);
       if (response.type) res.type(response.type);
       verifyFile(app, filePath, '`filePath` option invalid, file not found at ' + filePath);
       send = res.sendFile.bind(res, filePath);
