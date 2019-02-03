@@ -2,7 +2,27 @@
 
 The Expectation API enables you to verify your integration via the perspective of mockyeah. Chaining `.expect()` with any number of supported expectations returns an expectation object that can be verified at the end of your test.
 
-Example:
+Example returning a promise to the test suite via `verify` after `run`:
+
+```js
+const mockyeah = require("mockyeah");
+const request = require("supertest");
+
+describe("This test", () => {
+  it("should verify service is called once with parameter", () =>
+    mockyeah
+      .get("/say-hello", { text: "hello" })
+      .expect()
+      .params({
+        foo: "bar"
+      })
+      .run(cb => request("http://localhost:4040").get("/say-hello?foo=bar"))
+      .once()
+      .verify());
+});
+```
+
+Or without `run`, with `verifier` call as callback:
 
 ```js
 const mockyeah = require("mockyeah");
@@ -20,8 +40,39 @@ describe("This test", () => {
 
     request("http://localhost:4040")
       .get("/say-hello?foo=bar")
-      .expect(200, () => {
-        expectation.verify(done);
+      .expect(200, expectation.verifier(done));
+  });
+});
+```
+
+Or with `verify` instead of `verifier` (be sure handle prior errors and try/catch the call, which `verifier` does for you):
+
+```js
+const mockyeah = require("mockyeah");
+const request = require("supertest");
+
+describe("This test", () => {
+  it("should verify service is called once with parameter", done => {
+    const expectation = mockyeah
+      .get("/say-hello", { text: "hello" })
+      .expect()
+      .params({
+        foo: "bar"
+      })
+      .once();
+
+    request("http://localhost:4040")
+      .get("/say-hello?foo=bar")
+      .expect(200, err => {
+        if (err) {
+          done(err);
+          return;
+        }
+        try {
+          expectation.verify(done);
+        } catch (err2) {
+          done(err2);
+        }
       });
   });
 });
@@ -153,7 +204,8 @@ const expectation = mockyeah
 
 <div id="after"></div>
 
-`.run(functionOrPromise)` - This will schedule a call to `.verify()`, e.g., after a network call.
+`.run(functionOrPromise)` - This will register side effects to run
+before `.verify()` logic is executed, e.g., after a network call.
 Pass a function which will be called with an argument that is a Node-style callback function reference
 to be executed by you when you're ready for `.verify()` to be called.
 Or pass a promise, which mockyeah will wait for to be settled until calling `.verify()`.
@@ -170,18 +222,12 @@ mockyeah
   })
   .once()
   .run(cb => request.get("/foo?id=9999").end(cb))
-  .done(done);
+  .verify(done);
 ```
-
-<div id="done"></div>
-
-`.done(callback)` - Register a Node-style callback to be called when verification has completed
-after `.verify()` is called, e.g., manually or by having registered with `.run()`.
-Any verification error will be passed to the callback. This is useful for async unit tests.
 
 <div id="verify"></div>
 
-`.verify(callback)` - Asserts expectation to be correct, and if optional callback is provided, using that to pass up assertion errors instead of throwing inline.
+`.verify(callback)` - Asserts expectation to be correct, and if optional callback is provided, using that to pass up assertion errors instead of throwing an assert error inline.
 
 ```js
 expectation.verify();
@@ -225,4 +271,34 @@ const expectation = mockyeah
   .get("/foo", { text: "bar" })
   .expect()
   .body(body => body.id === "123");
+```
+
+<div id="verifier"></div>
+
+`.verifier(callback)` - Creates a callback function for you that bubbles any errors passed to it
+up to the provided callback (in the Node style), and otherwise calls `.verify(callback)` internally.
+It's a shorthand so that you can write this:
+
+```js
+request("http://localhost:4040")
+  .get("/say-hello?foo=bar")
+  .expect(200, expectation.verifier(done));
+```
+
+Instead of this:
+
+```js
+request("http://localhost:4040")
+  .get("/say-hello?foo=bar")
+  .expect(200, err => {
+    if (err) {
+      done(err);
+      return;
+    }
+    try {
+      expectation.verify(done);
+    } catch (err2) {
+      done(err2);
+    }
+  });
 ```

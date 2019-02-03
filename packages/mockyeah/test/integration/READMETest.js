@@ -34,23 +34,16 @@ describe('Wondrous service', () => {
     request.get('/wondrous').expect(200, { foo: 'bar' }, done);
   });
 
-  it('should verify a mock service expectation', done => {
+  it('should verify a mock service expectation', () =>
     // create service mock with expectation
-    const expectation = mockyeah
+    mockyeah
       .get('/wondrous', { text: 'it worked' })
       .expect()
       .params({
         foo: 'bar'
       })
-      .once();
-
-    // invoke request and verify expectation
-    request
-      .get('/wondrous?foo=bar')
-      .expect(200, 'it worked')
-      .then(() => {
-        expectation.verify();
-        done();
-      });
-  });
+      .once()
+      // invoke request and verify expectation
+      .run(request.get('/wondrous?foo=bar').expect(200, 'it worked'))
+      .verify());
 });
