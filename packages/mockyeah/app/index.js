@@ -5,13 +5,14 @@ const bodyParser = require('body-parser');
 const async = require('async');
 const Logger = require('./lib/Logger');
 const RouteManager = require('./lib/RouteManager');
-const proxyRoute = require('./proxyRoute');
-const recorder = require('./recorder');
-const recordStopper = require('./recordStopper');
-const player = require('./player');
-const playAller = require('./playAller');
-const makeWatch = require('./makeWatch');
-const makeUnwatch = require('./makeUnwatch');
+const proxyRoute = require('./lib/proxyRoute');
+const makeRecord = require('./makeAPI/makeRecord');
+const makeRecordStop = require('./makeAPI/makeRecordStop');
+const makePlay = require('./makeAPI/makePlay');
+const makePlayAll = require('./makeAPI/makePlayAll');
+const makeWatch = require('./makeAPI/makeWatch');
+const makeUnwatch = require('./makeAPI/makeUnwatch');
+const makeReset = require('./makeAPI/makeReset');
 
 /**
  * App module
@@ -76,26 +77,21 @@ module.exports = function App(config) {
     app.locals.proxying = typeof on !== 'undefined' ? on : true;
   };
 
-  app.record = recorder(app);
-  app.recordStop = recordStopper(app);
-  app.play = player(app);
-  app.playAll = playAller(app);
+  app.record = makeRecord(app);
+  app.recordStop = makeRecordStop(app);
+  app.play = makePlay(app);
+  app.playAll = makePlayAll(app);
+  app.watch = makeWatch(app);
+  app.unwatch = makeUnwatch(app);
+  app.reset = makeReset(app);
 
-  app.reset = () => {
-    app.routeManager.reset();
-    app.locals.playingSuites = [];
-    app.locals.playingAll = false;
-    app.locals.proxying = app.config.proxy;
-    app.middlewares = [];
-  };
+  if (app.config.watch) {
+    app.watch();
+  }
 
   app.use = middleware => {
     app.middlewares.push(middleware);
   };
-
-  app.watch = makeWatch(app);
-
-  app.unwatch = makeUnwatch(app);
 
   return app;
 };

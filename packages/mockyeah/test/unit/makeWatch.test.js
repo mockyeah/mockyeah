@@ -2,7 +2,7 @@
 
 const { expect } = require('chai');
 
-const { restart } = require('../../app/makeWatch');
+const { __restart } = require('../../app/makeAPI/makeWatch');
 
 const mockApp = playingNames => {
   const called = {
@@ -35,7 +35,7 @@ const mockApp = playingNames => {
 describe('app watcher', () => {
   it('to call reset and play all without existing suites', () => {
     const app = mockApp();
-    restart(app);
+    __restart(app);
     expect(app.called).to.deep.equal({
       reset: true,
       playAll: true,
@@ -45,7 +45,7 @@ describe('app watcher', () => {
 
   it('to call reset and play existing suites', () => {
     const app = mockApp(['foo', 'bar']);
-    restart(app);
+    __restart(app);
     expect(app.called).to.deep.equal({
       reset: true,
       play: ['foo', 'bar']
