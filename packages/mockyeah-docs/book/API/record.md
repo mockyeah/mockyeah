@@ -1,9 +1,9 @@
 # `record()`
 
-`mockyeah.record([snapshot name])`
+`mockyeah.record([suite name])`
 
-`snapshot name` (`String`; required) Directory name to save service snapshots
-(i.e. `./mockyeah/[snapshot name]`).
+`suite name` (`String`; required) Directory name to save service suites
+(i.e. `./mockyeah/[suite name]`).
 
 Configures mockyeah to proxy and suite service requests. Recorded responses
 will be written when you call [`recordStop`](./recordStop.md).

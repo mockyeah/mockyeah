@@ -131,7 +131,7 @@ const handlePathTypes = (_path, _query) => {
   }
 
   if (_path instanceof RegExp) {
-    // TODO: Maybe support `matchKeys` with index of match or maybe even named suite groups?
+    // TODO: Maybe support `matchKeys` with index of match or maybe even named capture groups?
 
     return {
       path: _path,

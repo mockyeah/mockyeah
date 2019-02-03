@@ -11,7 +11,7 @@ const MockYeahServer = require('../../server');
 
 const PROXY_SUITES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Suite Record and Playback', function() {
+describe('Record and Playback', function() {
   let proxy;
   let remote;
   let proxyReq;
@@ -138,7 +138,7 @@ describe('Suite Record and Playback', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -237,7 +237,7 @@ describe('Suite Record and Playback', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -322,7 +322,7 @@ describe('Suite Record and Playback', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -404,7 +404,7 @@ describe('Suite Record and Playback', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -470,7 +470,7 @@ describe('Suite Record and Playback', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -533,7 +533,7 @@ describe('Suite Record and Playback', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -605,7 +605,7 @@ describe('Suite Record and Playback', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -698,7 +698,7 @@ describe('Suite Record and Playback', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();

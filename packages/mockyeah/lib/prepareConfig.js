@@ -34,7 +34,7 @@ module.exports = (config = {}) => {
 
   config = Object.assign({}, configDefaults, config);
 
-  // Expand file system configuration paths relative to configuration roo
+  // Expand file system configuration paths relative to configuration root
   config.fixturesDir = expandPath(config.fixturesDir, config.root);
   config.suitesDir = expandPath(config.suitesDir, config.root);
   config.httpsKeyPath = config.httpsKeyPath && expandPath(config.httpsKeyPath, config.root);

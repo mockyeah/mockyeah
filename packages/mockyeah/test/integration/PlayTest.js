@@ -6,7 +6,7 @@ const TestHelper = require('../TestHelper');
 
 const { mockyeah, request } = TestHelper;
 
-describe('Suite Play', function() {
+describe('Play', function() {
   it('should play a custom suite', function(done) {
     mockyeah.play('some-custom-suite');
 

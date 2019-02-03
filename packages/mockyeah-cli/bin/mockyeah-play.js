@@ -58,7 +58,7 @@ boot(env => {
         {
           type: 'list',
           name: 'name',
-          message: 'Choose a recording to play:',
+          message: 'Choose a suite to play:',
           choices: suiteNames
         }
       ],

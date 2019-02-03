@@ -13,7 +13,7 @@ const formatScript = require('../formatter');
 
 const PROXY_SUITES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Suite Record Format Script Function Test', function() {
+describe('Record Format Script Function Test', function() {
   let proxy;
   let remote;
   let proxyReq;
@@ -110,7 +110,7 @@ describe('Suite Record Format Script Function Test', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();

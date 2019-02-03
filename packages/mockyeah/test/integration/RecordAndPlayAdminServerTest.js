@@ -11,7 +11,7 @@ const MockYeahServer = require('../../server');
 
 const PROXY_SUITES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Suite Record and Playback Admin Server', function() {
+describe('Record and Playback Admin Server', function() {
   let proxy;
   let remote;
   let proxyReq;
@@ -121,7 +121,7 @@ describe('Suite Record and Playback Admin Server', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -217,7 +217,7 @@ describe('Suite Record and Playback Admin Server', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -293,7 +293,7 @@ describe('Suite Record and Playback Admin Server', function() {
           cb();
         },
 
-        // Reset proxy services and play suited suite
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
