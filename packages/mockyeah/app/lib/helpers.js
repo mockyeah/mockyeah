@@ -11,7 +11,7 @@ const {
 } = require('./constants');
 const routeHandler = require('./routeHandler');
 
-const isPromise = value => value instanceof Promise || !!(value.then && value.catch);
+const isPromise = value => value && (value instanceof Promise || !!(value.then && value.catch));
 
 function resolveFilePath(suitePath, url) {
   const fileName = url.replace(/\//g, '|');
