@@ -6,7 +6,12 @@ global.MOCKYEAH_ROOT = __dirname;
 global.MOCKYEAH_SUPPRESS_OUTPUT = true;
 global.MOCKYEAH_VERBOSE_OUTPUT = false;
 
-const mockyeah = require('..');
+const Server = require('../server');
+
+const mockyeah = new Server({
+  root: __dirname
+});
+
 const request = require('supertest');
 
 const configHttps = Object.assign({}, mockyeah.config, {
@@ -14,7 +19,7 @@ const configHttps = Object.assign({}, mockyeah.config, {
   portHttps: 4443,
   adminPort: 4773
 });
-const mockyeahHttps = new mockyeah.Server(configHttps);
+const mockyeahHttps = new Server(configHttps);
 
 after(() => {
   mockyeah.close();
