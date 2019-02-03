@@ -1,13 +1,13 @@
 const { requireSuite } = require('./lib/helpers');
 
 module.exports = app => name => {
-  const capture = requireSuite(app, name);
+  const suite = requireSuite(app, name);
 
-  if (!capture) return;
+  if (!suite) return;
 
   app.locals.playingSuites.push(name);
 
   app.log(['serve', 'play'], name);
 
-  capture.map(c => app.routeManager.all(...c));
+  suite.map(c => app.routeManager.all(...c));
 };

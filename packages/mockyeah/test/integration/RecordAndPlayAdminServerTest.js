@@ -9,9 +9,9 @@ const supertest = require('supertest');
 const rimraf = require('rimraf');
 const MockYeahServer = require('../../server');
 
-const PROXY_CAPTURES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
+const PROXY_SUITES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Capture Record and Playback Admin Server', function() {
+describe('Record and Playback Admin Server', function() {
   let proxy;
   let remote;
   let proxyReq;
@@ -28,7 +28,7 @@ describe('Capture Record and Playback Admin Server', function() {
               name: 'proxy',
               port: 0,
               adminPort: 0,
-              capturesDir: PROXY_CAPTURES_DIR
+              suitesDir: PROXY_SUITES_DIR
             },
             cb
           );
@@ -57,7 +57,7 @@ describe('Capture Record and Playback Admin Server', function() {
   afterEach(() => {
     proxy.reset();
     remote.reset();
-    rimraf.sync(PROXY_CAPTURES_DIR);
+    rimraf.sync(PROXY_SUITES_DIR);
   });
 
   after(() => {
@@ -65,14 +65,14 @@ describe('Capture Record and Playback Admin Server', function() {
     remote.close();
   });
 
-  function getCaptureFilePath(captureName) {
-    return path.resolve(PROXY_CAPTURES_DIR, captureName, 'index.js');
+  function getSuiteFilePath(suiteName) {
+    return path.resolve(PROXY_SUITES_DIR, suiteName, 'index.js');
   }
 
-  it('should record and playback capture over admin server', function(done) {
+  it('should record and playback suite over admin server', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'test-some-fancy-admin-server-capture';
+    const suiteName = 'test-some-fancy-admin-server-suite';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -99,7 +99,7 @@ describe('Capture Record and Playback Admin Server', function() {
 
         // Initiate recording
         cb => {
-          proxyAdminReq.get(`/record?name=${captureName}`).expect(204, cb);
+          proxyAdminReq.get(`/record?name=${suiteName}`).expect(204, cb);
         },
 
         // Invoke requests to remote services through proxy
@@ -115,13 +115,13 @@ describe('Capture Record and Playback Admin Server', function() {
           proxyAdminReq.get('/record-stop').expect(204, cb);
         },
 
-        // Assert capture file exists
+        // Assert suite file exists
         cb => {
-          fs.statSync(getCaptureFilePath(captureName));
+          fs.statSync(getSuiteFilePath(suiteName));
           cb();
         },
 
-        // Reset proxy services and play captured capture
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
@@ -133,7 +133,7 @@ describe('Capture Record and Playback Admin Server', function() {
         },
 
         cb => {
-          proxyAdminReq.get(`/play?name=${captureName}`).expect(204, cb);
+          proxyAdminReq.get(`/play?name=${suiteName}`).expect(204, cb);
         },
 
         // Test remote url paths and their sub paths route to the same services
@@ -160,7 +160,7 @@ describe('Capture Record and Playback Admin Server', function() {
   it('should record and playback calls matching `headers` option over admin server', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'test-some-fancy-admin-server-capture-3';
+    const suiteName = 'test-some-fancy-admin-server-suite-3';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -176,7 +176,7 @@ describe('Capture Record and Playback Admin Server', function() {
         cb => {
           proxyAdminReq
             .get(
-              `/record?name=${captureName}&options=${encodeURIComponent(
+              `/record?name=${suiteName}&options=${encodeURIComponent(
                 JSON.stringify({
                   headers: {
                     'X-My-Header': 'My-Value',
@@ -211,20 +211,20 @@ describe('Capture Record and Playback Admin Server', function() {
           proxyAdminReq.get('/record-stop').expect(204, cb);
         },
 
-        // Assert capture file exists
+        // Assert suite file exists
         cb => {
-          fs.statSync(getCaptureFilePath(captureName));
+          fs.statSync(getSuiteFilePath(suiteName));
           cb();
         },
 
-        // Reset proxy services and play captured capture
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();
         },
 
         cb => {
-          proxyAdminReq.get(`/play?name=${captureName}`).expect(204, cb);
+          proxyAdminReq.get(`/play?name=${suiteName}`).expect(204, cb);
         },
 
         // Test remote url paths and their sub paths route to the same services
@@ -246,10 +246,10 @@ describe('Capture Record and Playback Admin Server', function() {
     );
   });
 
-  it('should record and playback capture with playAll over admin server', function(done) {
+  it('should record and playback suite with playAll over admin server', function(done) {
     this.timeout = 10000;
 
-    const captureName = 'test-some-fancy-admin-server-capture-all';
+    const suiteName = 'test-some-fancy-admin-server-suite-all';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -271,7 +271,7 @@ describe('Capture Record and Playback Admin Server', function() {
       [
         // Initiate recording
         cb => {
-          proxyAdminReq.get(`/record?name=${captureName}`).expect(204, cb);
+          proxyAdminReq.get(`/record?name=${suiteName}`).expect(204, cb);
         },
 
         // Invoke requests to remote services through proxy
@@ -287,13 +287,13 @@ describe('Capture Record and Playback Admin Server', function() {
           proxyAdminReq.get('/record-stop').expect(204, cb);
         },
 
-        // Assert capture file exists
+        // Assert suite file exists
         cb => {
-          fs.statSync(getCaptureFilePath(captureName));
+          fs.statSync(getSuiteFilePath(suiteName));
           cb();
         },
 
-        // Reset proxy services and play captured capture
+        // Reset proxy services and play recorded suite
         cb => {
           proxy.reset();
           cb();

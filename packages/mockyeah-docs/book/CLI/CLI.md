@@ -1,6 +1,6 @@
 # CLI
 
-mockyeah-cli provides a simple command line interface for recording and playing service snapshots to integrate with during development.
+mockyeah-cli provides a simple command line interface for recording and playing suites to integrate with during development.
 
 ## Getting started
 
@@ -26,25 +26,25 @@ http://localhost:4001/http://example.com/your/service/url
 
 We agree the above URL looks pretty nutty, but rest assured all other known approaches add unnecessary complexity.
 
-3. Initiate a mockyeah snapshot recording
+3. Initiate a mockyeah suite recording
 
 ```shell
-$ mockyeah record my-first-snapshot
+$ mockyeah record my-first-suite
 ```
 
 4. Invoke the service call you previously configured. You should see mockyeah-cli output.
 
 5. Stop mockyeah-cli by hitting enter on the stop question.
 
-6. Play back the snapshot
+6. Play back the suite
 
 ```shell
-$ mockyeah play my-first-snapshot
+$ mockyeah play my-first-suite
 ```
 
 7. Invoke the service call again.
 
-Good work! You've recorded and played back a service snapshot.
+Good work! You've recorded and played back a suite.
 
 ## Options
 
@@ -55,10 +55,10 @@ Usage: mockyeah [options] [command]
 
   Commands:
 
-    ls             list service captures
-    play [name]    play service capture
-    playAll        play all service captures
-    record [name]  record service capture
+    ls             list suites
+    play [name]    play suite
+    playAll        play all suites
+    record [name]  record suite
     help [cmd]     display help for [cmd]
 
   Options:

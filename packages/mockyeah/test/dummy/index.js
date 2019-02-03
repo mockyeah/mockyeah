@@ -5,4 +5,4 @@ global.MOCKYEAH_ROOT = __dirname;
 
 const mockyeah = require('mockyeah');
 
-mockyeah.play('some-custom-capture');
+mockyeah.play('some-custom-suite');

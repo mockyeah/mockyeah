@@ -5,7 +5,7 @@ require('../TestHelper');
 const MockYeahServer = require('../../server');
 const supertest = require('supertest');
 
-const watchedSuiteDir = `${__dirname}/../mockyeah/test-some-custom-capture`;
+const watchedSuiteDir = `${__dirname}/../mockyeah/test-some-custom-watcher-suite`;
 const watchedSuiteFile = `${watchedSuiteDir}/index.js`;
 
 const root = `${__dirname}/../`;

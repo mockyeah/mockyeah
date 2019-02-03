@@ -34,20 +34,20 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 boot(env => {
   const name = program.args[0];
 
-  const { capturesDir } = env.config;
-  let captureNames;
+  const { suitesDir } = env.config;
+  let suiteNames;
 
   try {
-    captureNames = fs
-      .readdirSync(capturesDir)
-      .filter(file => fs.statSync(path.join(capturesDir, file)).isDirectory());
+    suiteNames = fs
+      .readdirSync(suitesDir)
+      .filter(file => fs.statSync(path.join(suitesDir, file)).isDirectory());
   } catch (err) {
-    console.log(chalk.red(`Capture directory not found at ${capturesDir}`));
+    console.log(chalk.red(`Suite directory not found at ${suitesDir}`));
     process.exit(1);
   }
 
-  if (!captureNames.length) {
-    console.log(chalk.red('No captures available to start'));
+  if (!suiteNames.length) {
+    console.log(chalk.red('No suites available to start'));
     console.log(chalk.red('Record one by running: mockyeah record [name]'));
     process.exit(0);
   }
@@ -58,8 +58,8 @@ boot(env => {
         {
           type: 'list',
           name: 'name',
-          message: 'Choose a recording to play:',
-          choices: captureNames
+          message: 'Choose a suite to play:',
+          choices: suiteNames
         }
       ],
       answers => {

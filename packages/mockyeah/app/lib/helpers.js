@@ -13,9 +13,9 @@ const routeHandler = require('./routeHandler');
 
 const isPromise = value => value instanceof Promise || !!(value.then && value.catch);
 
-function resolveFilePath(capturePath, url) {
+function resolveFilePath(suitePath, url) {
   const fileName = url.replace(/\//g, '|');
-  return nodePath.resolve(capturePath, fileName);
+  return nodePath.resolve(suitePath, fileName);
 }
 
 const relativizePath = path => (isAbsoluteUrl(path) ? `/${path}` : path);
@@ -31,17 +31,17 @@ const normalizePathname = pathname => {
 
 // eslint-disable-next-line consistent-return
 const requireSuite = (app, name) => {
-  const { capturesDir } = app.config;
-  const capturePath = nodePath.join(capturesDir, name);
-  const filePath = resolveFilePath(capturePath, 'index.js');
+  const { suitesDir } = app.config;
+  const suitePath = nodePath.join(suitesDir, name);
+  const filePath = resolveFilePath(suitePath, 'index.js');
 
   try {
     // eslint-disable-next-line import/no-dynamic-require, global-require
-    const captures = require(filePath);
+    const suites = require(filePath);
 
-    return captures;
+    return suites;
   } catch (err) {
-    app.log(['capture', 'error'], `Error reading capture: ${err.message}`);
+    app.log(['suite', 'error'], `Error reading suite: ${err.message}`);
   }
 };
 

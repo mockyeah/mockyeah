@@ -1,15 +1,15 @@
 # `play()`
 
-`mockyeah.play([snapshot name])`
+`mockyeah.play([suite name])`
 
-`snapshot name` (`String`; required) Directory name from which to mount contained
-service snapshots (i.e. `./mockyeah/[snapshot name]`).
+`suite name` (`String`; required) Directory name from which to mount contained
+service suites (i.e. `./mockyeah/[suite name]`).
 
-Mounts each service snapshot. Each snapshot will be mounted with the
-exact same payload, headers, status, and latency as captured during its recording.
-This behavior may be changed by altering the values in the snapshot files.
+Mounts each service suite. Each suite will be mounted with the
+exact same payload, headers, status, and latency as suited during its recording.
+This behavior may be changed by altering the values in the suite files.
 
-Here is an example of a service snapshot file:
+Here is an example of a service suite file:
 
 ```json
 {

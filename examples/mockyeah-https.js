@@ -8,7 +8,7 @@ module.exports = require('../server')({
   port: 4001,
   portHttps: 4443,
   fixturesDir: path.join(__dirname, './fixtures'),
-  capturesDir: path.join(__dirname, './mockyeah'),
+  suitesDir: path.join(__dirname, './mockyeah'),
   output: true,
   journal: true,
   verbose: false

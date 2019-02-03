@@ -7,7 +7,7 @@ const configDefaults = {
   host: 'localhost',
   port: 4001,
   fixturesDir: './fixtures',
-  capturesDir: './mockyeah',
+  suitesDir: './mockyeah',
   output: true,
   journal: false,
   verbose: false,
@@ -29,11 +29,14 @@ module.exports = (config = {}) => {
   config.adminHost = config.adminHost || config.host || configDefaults.host;
   config.proxy = (config.proxy || config.record) === true;
 
+  // legacy support for `capturesDir`
+  config.suitesDir = config.suitesDir || config.capturesDir || configDefaults.suitesDir;
+
   config = Object.assign({}, configDefaults, config);
 
   // Expand file system configuration paths relative to configuration root
   config.fixturesDir = expandPath(config.fixturesDir, config.root);
-  config.capturesDir = expandPath(config.capturesDir, config.root);
+  config.suitesDir = expandPath(config.suitesDir, config.root);
   config.httpsKeyPath = config.httpsKeyPath && expandPath(config.httpsKeyPath, config.root);
   config.httpsCertPath = config.httpsCertPath && expandPath(config.httpsCertPath, config.root);
 
