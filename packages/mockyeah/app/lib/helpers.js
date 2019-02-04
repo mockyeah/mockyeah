@@ -73,12 +73,12 @@ const replaceFixtureWithRequireInJson = (json, { relativePath }) =>
     `"json"$1:$2require("${relativePath}/$3.json")`
   );
 
-const getDataForRecordToFixtures = ({ responseOptions, name, index }) => {
+const getDataForRecordToFixtures = ({ responseOptions, name, index, group }) => {
   const newResponseOptions = Object.assign({}, responseOptions);
 
   const { raw, json } = responseOptions;
 
-  const fixtureName = `${name}/${index}`;
+  const fixtureName = `${group && group.directory ? `${group.directory}/` : ''}${name}/${index}`;
 
   let body;
 
