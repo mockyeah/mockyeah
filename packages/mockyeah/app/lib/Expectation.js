@@ -83,6 +83,8 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
     });
   }
 
+  let runPromise;
+
   const apiInstance = {
     atLeast: function atLeast(number) {
       internal.assertions.push(() => {
@@ -195,70 +197,63 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
 
       return this;
     },
-    done: function done(callback) {
-      internal.callback = callback;
-      return this;
+    verifier: done => err => {
+      if (err) {
+        done(err);
+        return;
+      }
+      apiInstance.verify(done);
     },
     run: function run(handlerOrPromise) {
       if (isPromise(handlerOrPromise)) {
-        // exposed only for testing
-        // eslint-disable-next-line no-underscore-dangle
-        apiInstance.__runPromise = handlerOrPromise
-          .then(() => {
-            apiInstance.verify();
-          })
-          .catch(err => {
-            if (internal.callback) {
-              internal.callback(err);
-            } else {
-              throw err;
+        runPromise = handlerOrPromise;
+      } else {
+        runPromise = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            const result = handlerOrPromise(err => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            });
+
+            if (isPromise(result)) {
+              result.then(resolve).catch(reject);
             }
           });
-      } else {
-        setTimeout(() => {
-          const result = handlerOrPromise(apiInstance.verify);
-
-          if (isPromise(result)) {
-            result
-              .then(() => {
-                apiInstance.verify();
-              })
-              .catch(err => {
-                if (internal.callback) {
-                  internal.callback(err);
-                } else {
-                  throw err;
-                }
-              });
-          }
         });
       }
 
       return this;
     },
-    verify: function verify(callbackOrErr) {
-      // Detect if we're using it like `.done(expectation.verify)` (not `expectation.verify(err => {})`),
-      //  where it will be called like a Node callback with optional error argument.
-      if (callbackOrErr && typeof callbackOrErr !== 'function' && internal.callback) {
-        internal.callback(callbackOrErr);
-        return;
-      }
-
-      const argCallback = typeof callbackOrErr === 'function' ? callbackOrErr : undefined;
-      const callback = internal.callback ? internal.callback : argCallback;
-
-      try {
-        internal.assertions.forEach(_assertion => _assertion());
-        if (callback) {
-          callback();
-        }
-      } catch (err) {
+    // eslint-disable-next-line consistent-return
+    verify: function verify(callback) {
+      const onError = err => {
         if (callback) {
           callback(err);
         } else {
           throw err;
         }
+      };
+
+      const onSuccess = () => {
+        try {
+          internal.assertions.forEach(_assertion => _assertion());
+          if (callback) {
+            callback();
+          }
+        } catch (err) {
+          onError(err);
+        }
+      };
+
+      if (runPromise) {
+        return runPromise.then(onSuccess).catch(onError);
       }
+
+      onSuccess();
     }
   };
 

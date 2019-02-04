@@ -549,9 +549,22 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .run(cb => request.get('/foo?id=9999').end(cb))
-      .done(done);
+      .run(cb => {
+        request.get('/foo?id=9999').end(cb);
+      })
+      .verify(done);
   });
+
+  it('should support run then promise', () =>
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(() => request.get('/foo?id=9999'))
+      .verify());
 
   it('should support run callback with error', done => {
     mockyeah
@@ -562,11 +575,34 @@ describe('Route expectation', () => {
       })
       .once()
       .run(cb => cb(new Error('failure in run callback')))
-      .done(err => {
+      .verify(err => {
         if (!err) {
           done(new Error('expected error'));
           return;
         }
+        try {
+          expect(err.message).to.equal('failure in run callback');
+          done();
+        } catch (err2) {
+          done(err2);
+        }
+      });
+  });
+
+  it('should support run callback then promise with error', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(cb => cb(new Error('failure in run callback')))
+      .verify()
+      .then(() => {
+        done(new Error('expected error'));
+      })
+      .catch(err => {
         try {
           expect(err.message).to.equal('failure in run callback');
           done();
@@ -584,8 +620,10 @@ describe('Route expectation', () => {
         id: '123'
       })
       .once()
-      .run(cb => request.get('/foo?id=9999').end(cb))
-      .done(err => {
+      .run(cb => {
+        request.get('/foo?id=9999').end(cb);
+      })
+      .verify(err => {
         if (!err) {
           done(new Error('expected error'));
           return;
@@ -600,6 +638,49 @@ describe('Route expectation', () => {
         }
       });
   });
+
+  it('should support run promise', done => {
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(
+        new Promise((resolve, reject) => {
+          request.get('/foo?id=9999').end((err, res) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve(res);
+          });
+        })
+      )
+      .verify(done);
+  });
+
+  it('should support run promise then promise', () =>
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(
+        new Promise((resolve, reject) => {
+          request.get('/foo?id=9999').end((err, res) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve(res);
+          });
+        })
+      )
+      .verify());
 
   it('should support run callback returning promise', done => {
     mockyeah
@@ -621,8 +702,30 @@ describe('Route expectation', () => {
             });
           })
       )
-      .done(done);
+      .verify(done);
   });
+
+  it('should support run callback returning promise then promise', () =>
+    mockyeah
+      .get('/foo', { text: 'bar' })
+      .expect()
+      .params({
+        id: '9999'
+      })
+      .once()
+      .run(
+        () =>
+          new Promise((resolve, reject) => {
+            request.get('/foo?id=9999').end((err, res) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+              resolve(res);
+            });
+          })
+      )
+      .verify());
 
   it('should support run callback returning promise with error', done => {
     mockyeah
@@ -638,7 +741,7 @@ describe('Route expectation', () => {
             reject(new Error('failure in run promise'));
           })
       )
-      .done(err => {
+      .verify(err => {
         if (!err) {
           done(new Error('expected error'));
           return;
@@ -696,7 +799,7 @@ describe('Route expectation', () => {
       })
       .once()
       .run(promise)
-      .done(done);
+      .verify(done);
   });
 
   it('should support run promise with error', done => {
@@ -712,7 +815,7 @@ describe('Route expectation', () => {
       })
       .once()
       .run(promise)
-      .done(err => {
+      .verify(err => {
         if (!err) {
           done(new Error('expected error'));
           return;
@@ -741,7 +844,8 @@ describe('Route expectation', () => {
       .run(promise);
 
     // eslint-disable-next-line no-underscore-dangle
-    expecation.__runPromise
+    expecation
+      .verify()
       .then(() => {
         done(new Error('expected error'));
       })
@@ -769,7 +873,7 @@ describe('Route expectation', () => {
       })
       .once()
       .run(promise)
-      .done(err => {
+      .verify(err => {
         if (!err) {
           done(new Error('expected error'));
           return;
@@ -785,7 +889,7 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support expectation callback', done => {
+  it('should support expectation verifier callback', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
@@ -796,40 +900,16 @@ describe('Route expectation', () => {
       .body({
         foo: 'bar'
       })
-      .once()
-      .done(done);
+      .once();
 
     request
       .post('/foo?id=9999')
       .set('HOST', 'example.com')
       .send({ foo: 'bar' })
-      .end(expectation.verify);
+      .end(expectation.verifier(done));
   });
 
-  it('should support expectation callback with request failure', done => {
-    const wrappedDone = err => {
-      expect(err).to.exist;
-      expect(err.message).to.match(/fake error/);
-      done();
-    };
-
-    const expectation = mockyeah
-      .post('/foo', { text: 'bar', status: 500 })
-      .expect()
-      .header('host', 'example.com')
-      .params({
-        id: '9999'
-      })
-      .body({
-        foo: 'bar'
-      })
-      .once()
-      .done(wrappedDone);
-
-    expectation.verify(new Error('fake error'));
-  });
-
-  it('should support expectation callback with error', done => {
+  it('should support expectation verifier callback with verify error', done => {
     const wrappedDone = err => {
       expect(err).to.exist;
       expect(err.message).to.match(/\[post\] \/foo -- Header "host" did not match expected/);
@@ -846,10 +926,55 @@ describe('Route expectation', () => {
       .body({
         foo: 'bar'
       })
-      .once()
-      .done(wrappedDone);
+      .once();
 
-    request.post('/foo?id=9999').end(expectation.verify);
+    request.post('/foo?id=9999').end(expectation.verifier(wrappedDone));
+  });
+
+  it('should support expectation verifier callback with verify error', done => {
+    const wrappedDone = err => {
+      expect(err).to.exist;
+      expect(err.message).to.match(/\[post\] \/foo -- Header "host" did not match expected/);
+      done();
+    };
+
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .header('host', 'example.com')
+      .params({
+        id: '9999'
+      })
+      .body({
+        foo: 'bar'
+      })
+      .once();
+
+    request.post('/foo?id=8888').end(expectation.verifier(wrappedDone));
+  });
+
+  it('should support expectation verifier callback with request error', done => {
+    const wrappedDone = err => {
+      expect(err).to.exist;
+      expect(err.message).to.match(/request error/);
+      done();
+    };
+
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .header('host', 'example.com')
+      .params({
+        id: '9999'
+      })
+      .body({
+        foo: 'bar'
+      })
+      .once();
+
+    const verifier = expectation.verifier(wrappedDone);
+
+    verifier(new Error('request error'));
   });
 
   it('should handle custom error in expectation functions', done => {
@@ -863,7 +988,12 @@ describe('Route expectation', () => {
       })
       .once();
 
-    request.post('/foo?id=9999').end(() => {
+    request.post('/foo?id=9999').end(err => {
+      if (err) {
+        done(err);
+        return;
+      }
+
       expectation.verify(err => {
         if (!err) {
           done(new Error('expected error'));
@@ -999,9 +1129,7 @@ describe('Route expectation', () => {
       .params(params => params.id === '9999')
       .once();
 
-    request.post('/foo?id=9999').end(() => {
-      expectation.verify(done);
-    });
+    request.post('/foo?id=9999').end(expectation.verifier(done));
   });
 
   it('should handle return false in expectation functions', done => {
@@ -1046,9 +1174,7 @@ describe('Route expectation', () => {
       .post('/foo?id=9999')
       .set('HOST', 'example.com')
       .send({ foo: 'bar' })
-      .end(() => {
-        expectation.verify(done);
-      });
+      .end(expectation.verifier(done));
   });
 
   it('should support query alias to params for expectations', done => {
@@ -1068,9 +1194,7 @@ describe('Route expectation', () => {
       .post('/foo?id=9999')
       .set('HOST', 'example.com')
       .send({ foo: 'bar' })
-      .end(() => {
-        expectation.verify(done);
-      });
+      .end(expectation.verifier(done));
   });
 
   it('should support custom generic expect object', done => {
@@ -1088,14 +1212,13 @@ describe('Route expectation', () => {
           foo: 'bar'
         }
       })
-      .once()
-      .done(done);
+      .once();
 
     request
       .post('/foo?id=9999&int=3')
       .set('HOST', 'example.com')
       .send({ foo: 'bar' })
-      .end(expectation.verify);
+      .end(expectation.verifier(done));
   });
 
   it('should support custom generic expect function', done => {
@@ -1116,14 +1239,13 @@ describe('Route expectation', () => {
         expect(data.body.foo).to.equal('bar');
         expect(data.req.originalUrl).to.equal('/foo?id=9999');
       })
-      .once()
-      .done(done);
+      .once();
 
     request
       .post('/foo?id=9999')
       .set('HOST', 'example.com')
       .send({ foo: 'bar' })
-      .end(expectation.verify);
+      .end(expectation.verifier(done));
   });
 
   it('should support custom generic expect function', done => {
@@ -1149,9 +1271,7 @@ describe('Route expectation', () => {
       .post('/foo?id=9999')
       .set('HOST', 'example.com')
       .send({ foo: 'bar' })
-      .end(() => {
-        expectation.verify(done);
-      });
+      .end(expectation.verifier(done));
   });
 
   it('should support custom generic expect function returning true', done => {
@@ -1164,9 +1284,7 @@ describe('Route expectation', () => {
       .post('/foo?id=9999')
       .set('HOST', 'example.com')
       .send({ foo: 'bar' })
-      .end(() => {
-        expectation.verify(done);
-      });
+      .end(expectation.verifier(done));
   });
 
   it('should render custom error in expect functions returning false', done => {
