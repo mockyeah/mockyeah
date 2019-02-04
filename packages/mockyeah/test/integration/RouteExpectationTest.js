@@ -885,7 +885,7 @@ describe('Route expectation', () => {
       });
   });
 
-  it('should support expectation callback', done => {
+  it('should support expectation verifier callback', done => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
@@ -905,7 +905,7 @@ describe('Route expectation', () => {
       .end(expectation.verifier(done));
   });
 
-  it('should support expectation callback with error', done => {
+  it('should support expectation verifier callback with verify error', done => {
     const wrappedDone = err => {
       expect(err).to.exist;
       expect(err.message).to.match(/\[post\] \/foo -- Header "host" did not match expected/);
@@ -925,6 +925,52 @@ describe('Route expectation', () => {
       .once();
 
     request.post('/foo?id=9999').end(expectation.verifier(wrappedDone));
+  });
+
+  it('should support expectation verifier callback with verify error', done => {
+    const wrappedDone = err => {
+      expect(err).to.exist;
+      expect(err.message).to.match(/\[post\] \/foo -- Header "host" did not match expected/);
+      done();
+    };
+
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .header('host', 'example.com')
+      .params({
+        id: '9999'
+      })
+      .body({
+        foo: 'bar'
+      })
+      .once();
+
+    request.post('/foo?id=8888').end(expectation.verifier(wrappedDone));
+  });
+
+  it('should support expectation verifier callback with request error', done => {
+    const wrappedDone = err => {
+      expect(err).to.exist;
+      expect(err.message).to.match(/request error/);
+      done();
+    };
+
+    const expectation = mockyeah
+      .post('/foo', { text: 'bar' })
+      .expect()
+      .header('host', 'example.com')
+      .params({
+        id: '9999'
+      })
+      .body({
+        foo: 'bar'
+      })
+      .once();
+
+    const verifier = expectation.verifier(wrappedDone);
+
+    verifier(new Error('request error'));
   });
 
   it('should handle custom error in expectation functions', done => {

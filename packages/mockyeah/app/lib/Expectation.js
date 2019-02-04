@@ -234,9 +234,6 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
 
       return Object.assign(this, runPromise);
     },
-    promise: function promise() {
-      return runPromise;
-    },
     // eslint-disable-next-line consistent-return
     verify: function verify(callback) {
       const onError = err => {
