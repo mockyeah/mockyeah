@@ -202,11 +202,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         done(err);
         return;
       }
-      try {
-        apiInstance.verify(done);
-      } catch (err2) {
-        done(err2);
-      }
+      apiInstance.verify(done);
     },
     run: function run(handlerOrPromise) {
       if (isPromise(handlerOrPromise)) {
@@ -215,8 +211,6 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         runPromise = new Promise((resolve, reject) => {
           setTimeout(() => {
             const result = handlerOrPromise(err => {
-              // users relying on promise handling below may never call this callback
-
               if (err) {
                 reject(err);
                 return;
@@ -232,7 +226,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         });
       }
 
-      return Object.assign(this, runPromise);
+      return this;
     },
     // eslint-disable-next-line consistent-return
     verify: function verify(callback) {

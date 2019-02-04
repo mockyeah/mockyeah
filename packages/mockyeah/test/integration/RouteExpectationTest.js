@@ -549,7 +549,9 @@ describe('Route expectation', () => {
         id: '9999'
       })
       .once()
-      .run(cb => request.get('/foo?id=9999').end(cb))
+      .run(cb => {
+        request.get('/foo?id=9999').end(cb);
+      })
       .verify(done);
   });
 
@@ -618,7 +620,9 @@ describe('Route expectation', () => {
         id: '123'
       })
       .once()
-      .run(cb => request.get('/foo?id=9999').end(cb))
+      .run(cb => {
+        request.get('/foo?id=9999').end(cb);
+      })
       .verify(err => {
         if (!err) {
           done(new Error('expected error'));
