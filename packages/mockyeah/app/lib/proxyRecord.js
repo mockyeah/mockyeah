@@ -4,9 +4,16 @@ const { handleContentType } = require('./helpers');
 const proxyRecord = ({ app, req, res, reqUrl, startTime, body }) => {
   const { recordMeta } = app.locals;
 
-  const { options: { headers: optionsHeaders, only, useHeaders, useLatency } = {} } = recordMeta;
+  const {
+    options: { headers: optionsHeaders, only, useHeaders, useLatency, groups } = {}
+  } = recordMeta;
 
-  if (only && !only(reqUrl)) return;
+  if (!groups && only && !only.test(reqUrl)) return;
+
+  let group;
+  if (groups) {
+    group = groups.find(g => g.test(reqUrl));
+  }
 
   const { method, body: reqBody } = req;
 
@@ -59,7 +66,13 @@ const proxyRecord = ({ app, req, res, reqUrl, startTime, body }) => {
     responseOptions.latency = latency;
   }
 
-  recordMeta.set.push([match, responseOptions]);
+  recordMeta.set.push([
+    match,
+    responseOptions,
+    {
+      group
+    }
+  ]);
 };
 
 module.exports = proxyRecord;

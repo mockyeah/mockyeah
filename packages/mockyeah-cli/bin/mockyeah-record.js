@@ -14,7 +14,7 @@ const request = require('request');
 const querystring = require('querystring');
 
 // TODO: write tests for this
-const collect = (val, memo) => {
+const collectHeaders = (val, memo) => {
   const pair = val.split(/\s*:\s*/);
   const key = pair[0];
   const value = pair[1];
@@ -22,14 +22,17 @@ const collect = (val, memo) => {
   return memo;
 };
 
+const collectArray = (val, memo = []) => [...memo, ...val.split(',').map(v => v.trim())];
+
 program
+  .option('-g, --groups [name]', 'record with these named groups from configuration', collectArray)
   .option('-o, --only <regex>', 'only record calls to URLs matching given regex pattern')
   .option('-h, --use-headers', 'record headers to response options')
   .option('-l, --use-latency', 'record latency to response options')
   .option(
     '-H, --header <line>',
     'record matches will require these headers ("Name: Value")',
-    collect,
+    collectHeaders,
     {}
   )
   .option('-v, --verbose', 'verbose output')
@@ -85,11 +88,12 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
   const [name] = program.args;
-  const { only, header, useHeaders, useLatency } = program;
+  const { groups, only, header, useHeaders, useLatency } = program;
 
   env.program = program;
 
   const options = {
+    groups,
     only,
     headers: header,
     useHeaders,

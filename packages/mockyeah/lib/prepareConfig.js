@@ -22,7 +22,8 @@ const configDefaults = {
   recordToFixturesMode: 'path',
   formatScript: undefined,
   watch: false,
-  responseHeaders: true
+  responseHeaders: true,
+  groups: {}
 };
 
 module.exports = (config = {}) => {

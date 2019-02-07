@@ -32,8 +32,26 @@ const makeRecordStop = app => {
 
     const filePath = resolveFilePath(suitePath, 'index.js');
 
-    const newSet = set.map((suite, index) => {
-      const [match, responseOptions] = suite;
+    let i = 0;
+    const indexByDirectory = {};
+
+    const newSet = set.map(suite => {
+      const [match, responseOptions, options = {}] = suite;
+
+      const { group } = options;
+
+      const { directory } = group || {};
+
+      let index;
+      if (directory) {
+        index = indexByDirectory[directory] || 0;
+        indexByDirectory[directory] = indexByDirectory[directory]
+          ? indexByDirectory[directory] + 1
+          : 1;
+      } else {
+        index = i;
+        i += 1;
+      }
 
       app.log(['serve', 'suite'], match.url || match.path || match);
 
@@ -41,7 +59,8 @@ const makeRecordStop = app => {
         const { newResponseOptions, body } = getDataForRecordToFixtures({
           responseOptions,
           name,
-          index
+          index,
+          group
         });
 
         const { fixture } = newResponseOptions;
@@ -51,7 +70,7 @@ const makeRecordStop = app => {
 
           // TODO: Any easy way to coordinate this asynchronously?
           // eslint-disable-next-line no-sync
-          mkdirp.sync(path.join(fixturesDir, name));
+          mkdirp.sync(path.resolve(fixturesPath, '..'));
 
           // TODO: Any easy way to coordinate this asynchronously?
           // eslint-disable-next-line no-sync
