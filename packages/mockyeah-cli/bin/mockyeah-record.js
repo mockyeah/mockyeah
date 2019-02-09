@@ -14,7 +14,7 @@ const request = require('request');
 const querystring = require('querystring');
 
 // TODO: write tests for this
-const collectHeaders = (val, memo) => {
+const collectHeaders = (val, memo = {}) => {
   const pair = val.split(/\s*:\s*/);
   const key = pair[0];
   const value = pair[1];
@@ -26,14 +26,13 @@ const collectArray = (val, memo = []) => [...memo, ...val.split(',').map(v => v.
 
 program
   .option('-g, --groups [name]', 'record with these named groups from configuration', collectArray)
-  .option('-o, --only <regex>', 'only record calls to URLs matching given regex pattern')
+  .option('-o, --only [regex]', 'only record calls to URLs matching given regex pattern')
   .option('-h, --use-headers', 'record headers to response options')
   .option('-l, --use-latency', 'record latency to response options')
   .option(
-    '-H, --header <line>',
+    '-H, --header [line]',
     'record matches will require these headers ("Name: Value")',
-    collectHeaders,
-    {}
+    collectHeaders
   )
   .option('-v, --verbose', 'verbose output')
   .parse(process.argv);
