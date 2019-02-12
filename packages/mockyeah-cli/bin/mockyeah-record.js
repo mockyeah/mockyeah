@@ -22,16 +22,26 @@ const collectHeaders = (val, memo = {}) => {
   return memo;
 };
 
-const collectArray = (val, memo = []) => [...memo, ...val.split(',').map(v => v.trim())];
+const collectCommaSeparated = (val, memo = []) => [...memo, ...val.split(',').map(v => v.trim())];
+
+const collect = (val, memo = []) => [...memo, val.trim()];
 
 program
-  .option('-g, --groups [name]', 'record with these named groups from configuration', collectArray)
-  .option('-o, --only [regex]', 'only record calls to URLs matching given regex pattern')
+  .option(
+    '-g, --groups [name]',
+    'record with these named groups from configuration (comma-separated and/or repeatable)',
+    collectCommaSeparated
+  )
+  .option(
+    '-o, --only [regex]',
+    'only record calls to URLs matching given regex pattern (repeatable)',
+    collect
+  )
   .option('-h, --use-headers', 'record headers to response options')
   .option('-l, --use-latency', 'record latency to response options')
   .option(
-    '-H, --header [line]',
-    'record matches will require these headers ("Name: Value")',
+    '-H, --header [pair]',
+    'record matches will require these headers ("Name: Value") (repeatable)',
     collectHeaders
   )
   .option('-v, --verbose', 'verbose output')

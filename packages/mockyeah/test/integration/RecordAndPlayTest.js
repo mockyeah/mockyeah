@@ -201,7 +201,7 @@ describe('Record and Playback', function() {
       [
         // Initiate recording
         cb => {
-          proxy.record(suiteName, { only: '.*three.*' });
+          proxy.record(suiteName, { only: ['.*three.*', 'madeup'] });
           cb();
         },
 
