@@ -160,9 +160,7 @@ const compileRoute = (app, match, response) => {
   if (!_.isFunction(response)) {
     route.response = makeRouteHandler(route);
   } else {
-    const routeHandler = (_app, req, res, next) => {
-      return response(req, res, next);
-    };
+    const routeHandler = (_app, req, res, next) => response(req, res, next);
     route.response = routeHandler;
   }
 
