@@ -2,8 +2,9 @@
 
 const _ = require('lodash');
 const Expectation = require('./Expectation');
-const { compileRoute, requireSuite } = require('./helpers');
+const { compileRoute } = require('./helpers');
 const routeMatchesRequest = require('./routeMatchesRequest');
+const handleDynamicSuite = require('./handleDynamicSuite');
 
 /**
  * This is used for replacing routes, so we need exact matches.
@@ -19,38 +20,6 @@ function isRouteMatch(route1, route2) {
 }
 
 function listen() {
-  // Check for an unmounted route dynamically based on header.
-  const handleDynamicSuite = (app, req, res) => {
-    const dynamicSuite = req.headers['x-mockyeah-suite'];
-
-    if (!dynamicSuite) return false;
-
-    const suite = requireSuite(app, dynamicSuite);
-
-    if (!suite) return false;
-
-    const {
-      config: { aliases }
-    } = app;
-
-    const route = suite.find(r => {
-      const compiledRoute = compileRoute(app, r[0], r[1]);
-
-      return routeMatchesRequest(compiledRoute, req, {
-        aliases
-      });
-    });
-
-    if (!route) return false;
-
-    // TODO: Do we need to re-compute this?
-    const compiledRoute = compileRoute(app, route[0], route[1]);
-
-    compiledRoute.response(req, res);
-
-    return true;
-  };
-
   this.app.all('*', (req, res, next) => {
     const { app, routes } = this;
 
