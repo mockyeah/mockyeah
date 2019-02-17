@@ -1,84 +1,9 @@
 'use strict';
 
 const _ = require('lodash');
-const { parse } = require('url');
-const isAbsoluteUrl = require('is-absolute-url');
 const Expectation = require('./Expectation');
-const {
-  compileRoute,
-  decodeProtocolAndPort,
-  normalizePathname,
-  requireSuite
-} = require('./helpers');
-const matches = require('./matches');
-
-function isEqualMethod(method1, method2) {
-  const m1 = method1.toLowerCase();
-  const m2 = method2.toLowerCase();
-  return m1 === 'all' || m2 === 'all' || m1 === m2;
-}
-
-// eslint-disable-next-line consistent-return
-const findAliasReplacements = (app, url) => {
-  const {
-    config: { aliases = [] }
-  } = app;
-
-  const aliasReplacements = {};
-
-  aliases.forEach(aliasSet => {
-    aliasSet.forEach(alias => {
-      if (url.startsWith(alias)) {
-        aliasReplacements[alias] = aliasSet;
-      }
-    });
-  });
-
-  if (!_.isEmpty(aliasReplacements)) return aliasReplacements;
-};
-
-function isRouteForRequest(app, route, req) {
-  if (!isEqualMethod(req.method, route.method)) return false;
-
-  const pathname = normalizePathname(parse(req.url, true).pathname);
-
-  const decodedPathname = decodeProtocolAndPort(pathname);
-
-  const url = decodedPathname.toString().replace(/^\//, '');
-
-  const reqPathnameIsAbsoluteUrl = isAbsoluteUrl(url);
-
-  if (reqPathnameIsAbsoluteUrl) {
-    const aliasReplacements = findAliasReplacements(app, url);
-
-    if (aliasReplacements) {
-      const matchesAnyAliases = Object.keys(aliasReplacements).some(toReplace => {
-        const aliases = aliasReplacements[toReplace];
-        return aliases.some(alias => {
-          const aliasedPathname = decodedPathname.replace(toReplace, alias);
-          const matchesAlias = route.pathFn(aliasedPathname);
-          return matchesAlias;
-        });
-      });
-
-      // eslint-disable-next-line no-lonely-if
-      if (!matchesAnyAliases) return false;
-    } else if (!route.pathFn(pathname)) return false;
-  } else {
-    // eslint-disable-next-line no-lonely-if
-    if (route.pathname !== '*' && !route.pathFn(pathname)) return false;
-  }
-
-  if (route.query && !matches(req.query, route.query).result) return false;
-
-  if (route.body && !matches(req.body, route.body).result) return false;
-
-  if (route.headers && !matches(req.headers, route.headers).result) return false;
-
-  // TODO: Later add features to match other things, like cookies, or with other types, etc.
-
-  return true;
-}
+const { compileRoute, requireSuite } = require('./helpers');
+const routeMatchesRequest = require('./routeMatchesRequest');
 
 /**
  * This is used for replacing routes, so we need exact matches.
@@ -104,7 +29,17 @@ function listen() {
 
     if (!suite) return false;
 
-    const route = suite.find(r => isRouteForRequest(app, compileRoute(app, r[0], r[1]), req));
+    const {
+      config: { aliases }
+    } = app;
+
+    const route = suite.find(r => {
+      const compiledRoute = compileRoute(app, r[0], r[1]);
+
+      return routeMatchesRequest(compiledRoute, req, {
+        aliases
+      });
+    });
 
     if (!route) return false;
 
@@ -118,9 +53,18 @@ function listen() {
 
   this.app.all('*', (req, res, next) => {
     const { app, routes } = this;
+
     if (handleDynamicSuite(app, req, res)) return;
 
-    const route = routes.find(r => isRouteForRequest(app, r, req));
+    const {
+      config: { aliases }
+    } = app;
+
+    const route = routes.find(r =>
+      routeMatchesRequest(r, req, {
+        aliases
+      })
+    );
 
     if (!route) {
       next();
