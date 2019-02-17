@@ -107,12 +107,12 @@ function verifyFile(app, filePath, message) {
   });
 }
 
-module.exports = function handler(app, route) {
+const makeRouteHandler = route => {
   const response = route.response || {};
 
   validateResponse(response);
 
-  return (req, res, next) => {
+  function routeHandler(app, req, res, next) {
     const start = new Date().getTime();
     let send;
 
@@ -193,5 +193,9 @@ module.exports = function handler(app, route) {
       send();
       app.log(['request', req.method], `${req.url} (${duration}ms)`);
     }, response.latency);
-  };
+  }
+
+  return routeHandler;
 };
+
+module.exports = makeRouteHandler;
