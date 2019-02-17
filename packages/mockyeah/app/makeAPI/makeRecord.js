@@ -1,21 +1,27 @@
 const makeRecord = app => {
   const record = (name, options = {}) => {
-    let only;
     let groups;
 
     app.locals.recording = true;
 
     if (!name) throw new Error('Must provide a recording name.');
+
     app.log(['serve', 'record'], name);
 
-    if (options.only && typeof options.only === 'string') {
-      // if only is truthy, assume it is a regex pattern
-      const regex = new RegExp(options.only);
-      only = {
-        test: regex.test.bind(regex)
-      };
-      app.log(['serve', 'record', 'only'], regex);
-    }
+    const only =
+      options.only &&
+      (Array.isArray(options.only) ? options.only : [options.only]).map(o => {
+        app.log(['serve', 'record', 'only'], o);
+
+        // if only is truthy, assume it is a regex pattern
+        const regex = new RegExp(o);
+
+        const obj = {
+          test: regex.test.bind(regex)
+        };
+
+        return obj;
+      });
 
     // array of strings
     if (options.groups) {

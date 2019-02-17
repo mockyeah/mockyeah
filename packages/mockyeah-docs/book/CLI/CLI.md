@@ -76,11 +76,11 @@ Usage: mockyeah-record [options]
 
   Options:
 
-    -g, --groups [name]  record with these named groups from configuration
-    -o, --only [regex]   only record calls to URLs matching given regex pattern
+    -g, --groups [name]  record with these named groups from configuration (comma-separated and/or repeatable)
+    -o, --only [regex]   only record calls to URLs matching given regex pattern (repeatable)
     -h, --use-headers    record headers to response options
     -l, --use-latency    record latency to response options
-    -H, --header [line]  record matches will require these headers ("Name: Value")
+    -H, --header [pair]  record matches will require these headers ("Name: Value") (repeatable)
     -v, --verbose        verbose output
     -h, --help           output usage information
 ```

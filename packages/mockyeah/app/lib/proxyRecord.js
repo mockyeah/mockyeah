@@ -8,7 +8,7 @@ const proxyRecord = ({ app, req, res, reqUrl, startTime, body }) => {
     options: { headers: optionsHeaders, only, useHeaders, useLatency, groups } = {}
   } = recordMeta;
 
-  if (!groups && only && !only.test(reqUrl)) return;
+  if (!groups && only && !only.some(o => o.test(reqUrl))) return;
 
   let group;
   if (groups) {
