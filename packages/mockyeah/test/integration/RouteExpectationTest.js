@@ -994,18 +994,18 @@ describe('Route expectation', () => {
         return;
       }
 
-      expectation.verify(err => {
-        if (!err) {
+      expectation.verify(err2 => {
+        if (!err2) {
           done(new Error('expected error'));
           return;
         }
         try {
-          expect(err.message).to.equal(
+          expect(err2.message).to.equal(
             "[post] /foo -- Params did not match expected: expected { id: '9999' } to deeply equal { id: '1234' }"
           );
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err3) {
+          done(err3);
         }
       });
     });
