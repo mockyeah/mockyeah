@@ -45,27 +45,24 @@ describe('app helpers', () => {
 
   describe('compileRoute', () => {
     it('works for strings', () => {
-      const app = {};
       const match = '/';
-      expect(compileRoute(app, match).path).to.equal('/');
+      expect(compileRoute(match).path).to.equal('/');
     });
 
     it('works for objects without method', () => {
-      const app = {};
       const match = {
         path: '/'
       };
-      expect(compileRoute(app, match).path).to.equal('/');
+      expect(compileRoute(match).path).to.equal('/');
     });
 
     it('works for objects with method', () => {
-      const app = {};
       const match = {
         method: 'post',
         path: '/'
       };
-      expect(compileRoute(app, match).method).to.equal('post');
-      expect(compileRoute(app, match).path).to.equal('/');
+      expect(compileRoute(match).method).to.equal('post');
+      expect(compileRoute(match).path).to.equal('/');
     });
   });
 

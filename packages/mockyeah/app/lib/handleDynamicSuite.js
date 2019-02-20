@@ -18,7 +18,7 @@ const handleDynamicSuite = (app, req, res) => {
   let compiledRoute;
 
   const route = suite.find(r => {
-    compiledRoute = compileRoute(app, r[0], r[1]);
+    compiledRoute = compileRoute(r[0], r[1]);
 
     return routeMatchesRequest(compiledRoute, req, {
       aliases
