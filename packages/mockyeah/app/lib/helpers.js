@@ -9,7 +9,7 @@ const {
   encodedPortRegex,
   encodedProtocolRegex
 } = require('./constants');
-const routeHandler = require('./routeHandler');
+const makeRouteHandler = require('./makeRouteHandler');
 
 const isPromise = value => value && (value instanceof Promise || !!(value.then && value.catch));
 
@@ -157,8 +157,11 @@ const compileRoute = (app, match, response) => {
     response
   };
 
-  if (!_.isFunction(route.response)) {
-    route.response = routeHandler(app, route);
+  if (!_.isFunction(response)) {
+    route.response = makeRouteHandler(route);
+  } else {
+    const routeHandler = (_app, req, res, next) => response(req, res, next);
+    route.response = routeHandler;
   }
 
   if (!_.isPlainObject(match)) {

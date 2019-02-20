@@ -64,7 +64,7 @@ function listen() {
         }
       }
 
-      route.response(req, res);
+      route.response(app, req, res);
     };
 
     route.expectation.middleware(req, res, expectationNext);

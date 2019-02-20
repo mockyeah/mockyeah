@@ -27,7 +27,7 @@ const handleDynamicSuite = (app, req, res) => {
 
   if (!route) return false;
 
-  compiledRoute.response(req, res);
+  compiledRoute.response(app, req, res);
 
   return true;
 };
