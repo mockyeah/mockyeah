@@ -92,7 +92,7 @@ RouteResolver.prototype.register = function register(method, _path, response) {
         path: _path
       };
 
-  const route = compileRoute(this.app, match, response);
+  const route = compileRoute(match, response);
 
   const expectation = new Expectation(route);
   route.expectation = expectation;

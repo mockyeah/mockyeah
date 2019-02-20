@@ -151,7 +151,7 @@ const handlePathTypes = (_path, _query) => {
   throw new Error(`Unsupported path type ${typeof _path}: ${_path}`);
 };
 
-const compileRoute = (app, match, response) => {
+const compileRoute = (match, response) => {
   const route = {
     method: match.method || 'get',
     response
