@@ -9,7 +9,7 @@ const stringify = value => {
   }
 };
 
-const makeMatcher = () => {
+const makeMatcher = ({ shortCircuit } = {}) => {
   const errors = [];
 
   const matcher = (value, source, keyPath = []) => {
@@ -46,8 +46,9 @@ const makeMatcher = () => {
           keyPath
         });
       }
-    } else if (isObject(value)) {
+    } else if (isObject(value) && isObject(source)) {
       Object.keys(source).forEach(key => {
+        if (shortCircuit && errors.length) return;
         matcher(value[key], source[key], [...keyPath, key]);
       });
     } else {
@@ -63,10 +64,12 @@ const makeMatcher = () => {
   return { errors, matcher };
 };
 
-const matches = (object, source) => {
-  const { errors, matcher } = makeMatcher();
+const matches = (value, source, { shortCircuit } = {}) => {
+  const { errors, matcher } = makeMatcher({
+    shortCircuit
+  });
 
-  matcher(object, source);
+  matcher(value, source);
 
   const result = !errors.length;
 

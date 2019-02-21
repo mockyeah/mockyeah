@@ -1,14 +1,8 @@
-const { isEmpty } = require('lodash');
+const { isEmpty, isPlainObject } = require('lodash');
 const { parse } = require('url');
 const isAbsoluteUrl = require('is-absolute-url');
 const { decodeProtocolAndPort, normalizePathname } = require('./helpers');
 const matches = require('./matches');
-
-function isEqualMethod(method1, method2) {
-  const m1 = method1.toLowerCase();
-  const m2 = method2.toLowerCase();
-  return m1 === 'all' || m2 === 'all' || m1 === m2;
-}
 
 // eslint-disable-next-line consistent-return
 const findAliasReplacements = (url, aliases = []) => {
@@ -25,49 +19,85 @@ const findAliasReplacements = (url, aliases = []) => {
   if (!isEmpty(aliasReplacements)) return aliasReplacements;
 };
 
-const routeMatchesRequest = (route, req, options) => {
+const routeMatchesRequestAliases = (normalizedRoute, normalizedReq, url, options) => {
   const { aliases } = options;
 
-  if (!isEqualMethod(req.method, route.method)) return false;
+  const aliasReplacements = findAliasReplacements(url, aliases);
 
-  const pathname = normalizePathname(parse(req.url, true).pathname);
+  if (aliasReplacements) {
+    let aliasMatch;
 
-  const decodedPathname = decodeProtocolAndPort(pathname);
+    Object.keys(aliasReplacements).find(toReplace => {
+      const aliasReplacementsForToReplace = aliasReplacements[toReplace];
 
-  const url = decodedPathname.toString().replace(/^\//, '');
+      return aliasReplacementsForToReplace.find(alias => {
+        if (toReplace === alias) return undefined;
+
+        const aliasedPathname = normalizedReq.pathname.replace(toReplace, alias);
+
+        const aliasedReq = Object.assign({}, normalizedReq, {
+          pathname: aliasedPathname
+        });
+
+        aliasMatch = matches(aliasedReq, normalizedRoute);
+
+        return aliasMatch.result;
+      });
+    });
+
+    return aliasMatch;
+  }
+
+  return undefined;
+};
+
+// TODO: Refactor to return match object, not just result boolean.
+const routeMatchesRequest = (route, req, options) => {
+  // TODO: Later add features to match other things, like cookies, or with other types, etc.
+
+  const normalizedRoute = {
+    method: route.method && route.method.toLowerCase(),
+    pathname: route.pathFn,
+    query: isEmpty(route.query) ? undefined : route.query,
+    body: route.body,
+    headers: isEmpty(route.headers) ? undefined : route.headers
+  };
+
+  const pathname = decodeProtocolAndPort(normalizePathname(parse(req.url, true).pathname));
+
+  const normalizedReq = {
+    method: req.method && req.method.toLowerCase(),
+    pathname,
+    query: isEmpty(route.query) ? undefined : req.query,
+    body: route.body && (!isPlainObject(route.body) || !isEmpty(route.body)) ? req.body : undefined,
+    headers: isEmpty(route.headers) ? undefined : req.headers
+  };
+
+  if (route.path === '*') {
+    delete normalizedRoute.pathname;
+  }
+
+  if ((normalizedRoute.method || '').toLowerCase() === 'all') {
+    delete normalizedRoute.method;
+  }
+
+  const match = matches(normalizedReq, normalizedRoute);
+
+  if (match.result) return true;
+
+  const url = normalizedReq.pathname.toString().replace(/^\//, '');
 
   const reqPathnameIsAbsoluteUrl = isAbsoluteUrl(url);
 
   if (reqPathnameIsAbsoluteUrl) {
-    const aliasReplacements = findAliasReplacements(url, aliases);
+    const aliasMatch = routeMatchesRequestAliases(normalizedRoute, normalizedReq, url, options);
 
-    if (aliasReplacements) {
-      const matchesAnyAliases = Object.keys(aliasReplacements).some(toReplace => {
-        const aliasReplacementsForToReplace = aliasReplacements[toReplace];
-        return aliasReplacementsForToReplace.some(alias => {
-          const aliasedPathname = decodedPathname.replace(toReplace, alias);
-          const matchesAlias = route.pathFn(aliasedPathname);
-          return matchesAlias;
-        });
-      });
-
-      // eslint-disable-next-line no-lonely-if
-      if (!matchesAnyAliases) return false;
-    } else if (!route.pathFn(pathname)) return false;
-  } else {
-    // eslint-disable-next-line no-lonely-if
-    if (route.pathname !== '*' && !route.pathFn(pathname)) return false;
+    if (aliasMatch && aliasMatch.result) {
+      return true;
+    }
   }
 
-  if (route.query && !matches(req.query, route.query).result) return false;
-
-  if (route.body && !matches(req.body, route.body).result) return false;
-
-  if (route.headers && !matches(req.headers, route.headers).result) return false;
-
-  // TODO: Later add features to match other things, like cookies, or with other types, etc.
-
-  return true;
+  return false;
 };
 
 module.exports = routeMatchesRequest;
