@@ -21,6 +21,8 @@ module.exports = function Server(config, onStart) {
   // Instantiate an application
   const app = new App(config);
 
+  app.log('initialized', false);
+
   // Enable CORS for all routes
   app.use(cors());
 

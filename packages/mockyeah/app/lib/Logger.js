@@ -1,5 +1,12 @@
 'use strict';
 
+const defaultDebug = value => value || 'mockyeah:*';
+
+// TODO: Support browser.
+process.env.DEBUG = defaultDebug(process.env.DEBUG);
+
+const debug = require('debug');
+
 /* eslint-disable no-console, prefer-destructuring */
 
 /**
@@ -32,6 +39,7 @@ function prepareArguments(/* [type=INFO], message, [verbose=true] */) {
     args.message = arguments[1];
     args.verbose = arguments[2];
   } else if (arguments.length === 2 && typeof arguments[1] === 'boolean') {
+    args.types = ['info'];
     args.message = arguments[0];
     args.verbose = arguments[1];
   } else if (arguments.length === 2) {
@@ -39,13 +47,8 @@ function prepareArguments(/* [type=INFO], message, [verbose=true] */) {
     args.message = arguments[1];
   }
 
-  args.types = args.types || 'info';
   // Coerce types string to array
   args.types = Array.isArray(args.types) ? args.types : [args.types];
-
-  // If verbose value is not passed, message should always output
-  args.always = args.verbose === undefined;
-  args.verbose = Boolean(args.verbose);
 
   return args;
 }
@@ -73,12 +76,15 @@ Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) 
   if (args.verbose) args.types.unshift('verbose');
 
   // Add timestamp to message
-  args.types.unshift(new Date().toLocaleTimeString('en-US', { hour12: false }));
+  const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
 
-  // Prepare string of types for output
-  args.types = args.types.reduce((result, value) => `${result}[${value.toUpperCase()}]`, '');
+  const logTypesDebugMessage = args.types.map(type => type.toLowerCase()).join(':');
 
-  console.log(`[${this.name}]${args.types} ${args.message}`);
+  const debugLog = debug(`${this.name}:${logTypesDebugMessage}`);
+
+  debugLog.log = console.log.bind(console);
+
+  debugLog(`[${timestamp}] ${args.message}`);
 };
 
 module.exports = Logger;
