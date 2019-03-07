@@ -2,11 +2,8 @@
 
 const defaultDebug = value => value || 'mockyeah:*';
 
-if (typeof process !== 'undefined') {
-  process.env.DEBUG = defaultDebug(process.env.DEBUG);
-} else {
-  global.DEBUG = defaultDebug(global.DEBUG);
-}
+// TODO: Support browser.
+process.env.DEBUG = defaultDebug(process.env.DEBUG);
 
 const debug = require('debug');
 
@@ -83,11 +80,11 @@ Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) 
 
   const logTypesDebugMessage = args.types.map(type => type.toLowerCase()).join(':');
 
-  const log = debug(`${this.name}:${logTypesDebugMessage}`);
+  const debugLog = debug(`${this.name}:${logTypesDebugMessage}`);
 
-  log.log = console.log.bind(console);
+  debugLog.log = console.log.bind(console);
 
-  log(`[${timestamp}] ${args.message}`);
+  debugLog(`[${timestamp}] ${args.message}`);
 };
 
 module.exports = Logger;
