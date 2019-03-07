@@ -78,6 +78,7 @@
     "cors": "^2.7.1",
     "cosmiconfig": "^5.0.7",
     "create-cert-files": "^1.0.2",
+    "debug": "^4.1.1",
     "express": "^4.13.3",
     "is-absolute-url": "^2.1.0",
     "lodash": "^4.17.5",
