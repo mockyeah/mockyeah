@@ -7,6 +7,7 @@ const {
   getDataForRecordToFixtures,
   replaceFixtureWithRequireInJson
 } = require('../lib/helpers');
+const safeFilename = require('../../lib/safeFilename');
 
 const makeRecordStop = app => {
   const recordStop = cb => {
@@ -26,7 +27,9 @@ const makeRecordStop = app => {
 
     const { suitesDir, fixturesDir } = app.config;
 
-    const suitePath = path.join(suitesDir, name);
+    const suiteFileame = safeFilename(name);
+
+    const suitePath = path.join(suitesDir, suiteFileame);
 
     mkdirp.sync(suitePath);
 

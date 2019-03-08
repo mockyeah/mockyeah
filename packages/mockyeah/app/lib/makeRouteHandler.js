@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const expandPath = require('../../lib/expandPath');
+const safeFilename = require('../../lib/safeFilename');
 
 /**
  *
@@ -109,6 +110,10 @@ function verifyFile(app, filePath, message) {
 
 const makeRouteHandler = route => {
   const response = route.response || {};
+
+  if (response.filePath) {
+    response.filePath = safeFilename(response.filePath);
+  }
 
   validateResponse(response);
 
