@@ -10,6 +10,7 @@ const {
   encodedProtocolRegex
 } = require('./constants');
 const makeRouteHandler = require('./makeRouteHandler');
+const safeFilename = require('../../lib/safeFilename');
 
 const isPromise = value => value && (value instanceof Promise || !!(value.then && value.catch));
 
@@ -78,7 +79,9 @@ const getDataForRecordToFixtures = ({ responseOptions, name, index, group }) => 
 
   const { raw, json } = responseOptions;
 
-  const fixtureName = `${group && group.directory ? `${group.directory}/` : ''}${name}/${index}`;
+  const fixtureName = safeFilename(
+    `${group && group.directory ? `${group.directory}/` : ''}${name}/${index}`
+  );
 
   let body;
 
