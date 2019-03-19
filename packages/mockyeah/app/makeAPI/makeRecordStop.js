@@ -30,7 +30,7 @@ const makeRecordStop = app => {
 
     mkdirp.sync(suitePath);
 
-    const filePath = resolveFilePath(suitePath, 'index.js');
+    const suiteFilePath = resolveFilePath(suitePath, 'index.js');
 
     let i = 0;
     const indexByDirectory = {};
@@ -109,7 +109,7 @@ const makeRecordStop = app => {
       }
     }
 
-    fs.writeFile(filePath, jsModule, err => {
+    fs.writeFile(suiteFilePath, jsModule, err => {
       if (err) {
         app.log(['record', 'response', 'error'], err);
 
