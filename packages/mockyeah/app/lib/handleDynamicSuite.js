@@ -3,9 +3,9 @@ const routeMatchesRequest = require('./routeMatchesRequest');
 
 // Check for an unmounted route dynamically based on header.
 const handleDynamicSuite = (app, req, res) => {
-  const { suiteHeader } = app.config;
+  const { suiteHeader, suiteCookie } = app.config;
 
-  const dynamicSuite = req.headers[suiteHeader];
+  const dynamicSuite = req.headers[suiteHeader] || req.cookies[suiteCookie];
 
   if (!dynamicSuite) return false;
 

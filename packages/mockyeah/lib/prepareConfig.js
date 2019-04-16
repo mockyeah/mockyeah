@@ -24,7 +24,8 @@ const configDefaults = {
   watch: false,
   responseHeaders: true,
   groups: {},
-  suiteHeader: 'x-mockyeah-suite'
+  suiteHeader: 'x-mockyeah-suite',
+  suiteCookie: 'mockyeahSuite'
 };
 
 module.exports = (config = {}) => {

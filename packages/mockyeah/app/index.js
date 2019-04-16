@@ -2,6 +2,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 const async = require('async');
 const Logger = require('./lib/Logger');
 const RouteManager = require('./lib/RouteManager');
@@ -46,6 +47,8 @@ module.exports = function App(config) {
 
   // Provide user feedback when verbose output is enabled
   app.log('info', 'verbose output enabled', true);
+
+  app.use(cookieParser())
 
   app.use(bodyParser.json());
   app.use(bodyParser.text());
