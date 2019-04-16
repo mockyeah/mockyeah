@@ -44,7 +44,8 @@ describe('prepareConfig', () => {
       formatScript: undefined,
       watch: false,
       responseHeaders: true,
-      groups: {}
+      groups: {},
+      suiteHeader: 'x-mockyeah-suite'
     });
   });
 
@@ -72,7 +73,8 @@ describe('prepareConfig', () => {
       formatScript: undefined,
       watch: false,
       responseHeaders: true,
-      groups: {}
+      groups: {},
+      suiteHeader: 'x-mockyeah-suite'
     });
   });
 });
