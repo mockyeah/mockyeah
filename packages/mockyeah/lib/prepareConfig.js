@@ -23,7 +23,8 @@ const configDefaults = {
   formatScript: undefined,
   watch: false,
   responseHeaders: true,
-  groups: {}
+  groups: {},
+  suiteHeader: 'x-mockyeah-suite'
 };
 
 module.exports = (config = {}) => {
