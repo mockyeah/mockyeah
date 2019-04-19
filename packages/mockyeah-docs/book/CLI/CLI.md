@@ -59,6 +59,7 @@ Usage: mockyeah [options] [command]
     play [name]    play suite
     playAll        play all suites
     record [name]  record suite
+    start          start server
     help [cmd]     display help for [cmd]
 
   Options:

@@ -5,6 +5,8 @@ const makeUnwatch = app => {
     if (!watcher) return;
 
     watcher.close();
+
+    app.log('watch', 'stopped watching');
   };
 
   return unwatch;
