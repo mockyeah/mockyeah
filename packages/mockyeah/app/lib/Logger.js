@@ -47,6 +47,8 @@ function prepareArguments(/* [type=INFO], message, [verbose=true] */) {
     args.message = arguments[1];
   }
 
+  args.always = args.verbose === undefined;
+
   // Coerce types string to array
   args.types = Array.isArray(args.types) ? args.types : [args.types];
 
@@ -80,7 +82,9 @@ Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) 
 
   const logTypesDebugMessage = args.types.map(type => type.toLowerCase()).join(':');
 
-  const debugLog = debug(`${this.name}:${logTypesDebugMessage}`);
+  const label = `${this.name}:${logTypesDebugMessage}`
+
+  const debugLog = debug(label);
 
   debugLog.log = console.log.bind(console);
 
