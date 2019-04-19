@@ -3,7 +3,7 @@
 const MockYeahServer = require('../../server');
 const supertest = require('supertest');
 
-describe('Dynamic Suites', function() {
+describe('Dynamic Suites', function () {
   let mockyeah;
   let request;
 
@@ -20,38 +20,77 @@ describe('Dynamic Suites', function() {
     request = supertest(mockyeah.server);
   });
 
-  it('should dynamically enable a suite per-request', function(done) {
-    request
-      .get('/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-suite')
-      .expect(200, /hello there/, done);
+  describe('with header', () => {
+    it('should dynamically enable a suite per-request', function (done) {
+      request
+        .get('/say-hello')
+        .set('x-mockyeah-suite', 'some-custom-suite')
+        .expect(200, /hello there/, done);
+    });
+
+    it('should support full URL', function (done) {
+      request
+        .get('/http://localhost/say-hello')
+        .set('x-mockyeah-suite', 'some-custom-suite')
+        .expect(200, /hello absolute/, done);
+    });
+
+    it('should support aliases', function (done) {
+      request
+        .get('/http://localhost.alias.com/say-hello')
+        .set('x-mockyeah-suite', 'some-custom-suite')
+        .expect(200, /hello absolute/, done);
+    });
+
+    it('should support aliases with encoding', function (done) {
+      request
+        .get('/http~~~localhost.alias.com/say-hello')
+        .set('x-mockyeah-suite', 'some-custom-suite')
+        .expect(200, /hello absolute/, done);
+    });
+
+    it('should ignore non-existent dynamic suite', function (done) {
+      request
+        .get('/say-hello')
+        .set('x-mockyeah-suite', 'some-nonexistent-suite')
+        .expect(404, done);
+    });
   });
 
-  it('should support full URL', function(done) {
-    request
-      .get('/http://localhost/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-suite')
-      .expect(200, /hello absolute/, done);
-  });
+  describe('with cookie', () => {
+    it('should dynamically enable a suite per-request', function (done) {
+      request
+        .get('/say-hello')
+        .set('Cookie', 'mockyeahSuite=some-custom-suite')
+        .expect(200, /hello there/, done);
+    });
 
-  it('should support aliases', function(done) {
-    request
-      .get('/http://localhost.alias.com/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-suite')
-      .expect(200, /hello absolute/, done);
-  });
+    it('should support full URL', function (done) {
+      request
+        .get('/http://localhost/say-hello')
+        .set('Cookie', 'mockyeahSuite=some-custom-suite')
+        .expect(200, /hello absolute/, done);
+    });
 
-  it('should support aliases with encoding', function(done) {
-    request
-      .get('/http~~~localhost.alias.com/say-hello')
-      .set('x-mockyeah-suite', 'some-custom-suite')
-      .expect(200, /hello absolute/, done);
-  });
+    it('should support aliases', function (done) {
+      request
+        .get('/http://localhost.alias.com/say-hello')
+        .set('Cookie', 'mockyeahSuite=some-custom-suite')
+        .expect(200, /hello absolute/, done);
+    });
 
-  it('should ignore non-existent dynamic suite', function(done) {
-    request
-      .get('/say-hello')
-      .set('x-mockyeah-suite', 'some-nonexistent-suite')
-      .expect(404, done);
+    it('should support aliases with encoding', function (done) {
+      request
+        .get('/http~~~localhost.alias.com/say-hello')
+        .set('Cookie', 'mockyeahSuite=some-custom-suite')
+        .expect(200, /hello absolute/, done);
+    });
+
+    it('should ignore non-existent dynamic suite', function (done) {
+      request
+        .get('/say-hello')
+        .set('Cookie', 'mockyeahSuite=some-nonexistent-suite')
+        .expect(404, done);
+    });
   });
 });
