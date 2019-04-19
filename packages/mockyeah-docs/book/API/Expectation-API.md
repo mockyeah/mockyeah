@@ -1,6 +1,7 @@
 # Mock Expectations
 
-The Expectation API enables you to verify your integration via the perspective of mockyeah. Chaining `.expect()` with any number of supported expectations returns an expectation object that can be verified at the end of your test.
+The Expectation API enables you to verify your integration via the perspective of mockyeah. Chaining `.expect()` with any number of supported expectation functions returns an expectation object that can be verified at the end of your test. There are [quantitative](quantitative), [structural](#structural),
+and other expectation functions.
 
 Example returning a promise to the test suite via `verify` after `run`:
 
@@ -17,7 +18,10 @@ describe("This test", () => {
         foo: "bar"
       })
       .once()
-      .run(() => request("http://localhost:4040").get("/say-hello?foo=bar"))
+      .run(() =>
+        request("http://localhost:4040")
+          .get("/say-hello?foo=bar")
+      )
       .verify());
 });
 ```
@@ -78,19 +82,24 @@ describe("This test", () => {
 });
 ```
 
+## Expectations
+
 <div id="expect"></div>
 
 `.expect(optionalPredicateOrMatchObject)` -
-Returns an expectation object for a given mock service when chained to a [Mock Services API](./Mock-API.md) method call.
-If provided an optional predicate function, it will call this function when `.verify()` is called.
-In this function we can throw errors or return true/false to make assertions.
-It receives one argument - an object with the following fields:
+Returns an expectation object for a given mock service when chained
+to a [Mock API](./Mock-API.md) method call.
+
+It optionally accepts a [match value](./Match-Values.md), in this case either
+an object or a function, allowing you to assert on several fields of the request at once,
+as an alternative to the individual functions below like `query()`, `body()`, etc.
+The match will be against an object with the following fields:
 
 - `method` (String): the request method (lowercase).
 - `path` (String): the request path.
 - `query` (Object): a key/value map of query parameters.
 - `headers` (Object): a key/value map of headers. Header names are all lowercase.
-- `body` (Object|String): the parsed response body. If JSON, then a JS objec, otherwise a string.
+- `body` (Object|String): the parsed response body. If JSON, then an object, otherwise a string.
 - `req` (Object): the raw Express request object for additional custom assertions.
 
 ```js
@@ -110,10 +119,6 @@ const expectation = mockyeah
   });
 ```
 
-If instead an object is provided, it is a match object with the same power as when mounting mocks.
-It will deep partial match against a view into the request that has the fields above (except `req`),
-and supports matching with string equality, number stringification, regular expressions, functions, etc.
-
 ```js
 const expectation = mockyeah
   .post("/foo", {
@@ -132,6 +137,8 @@ const expectation = mockyeah
     }
   });
 ```
+
+## Quantitative
 
 <div id="atLeast">
 
@@ -161,9 +168,11 @@ const expectation = mockyeah
 
 `.exactly(Number)` - Adds expectation that a service must be called exactly a specified number of times.
 
+## Structural
+
 <div id="body"></div>
 
-`.body(Object)` - Adds expectation that a service must receive only requests with bodies matching the body specified.
+`.body(MatchValue)` - Adds an expectation that a service must receive only requests with bodies matching the body specified. See [match value](./Match-Values.md).
 
 ```js
 const expectation = mockyeah
@@ -176,7 +185,7 @@ const expectation = mockyeah
 
 <div id="params"></div>
 
-`.params(Object)` - Adds expectation that a service must receive only requests with query params matching those specified.
+`.params(MatchValue)` - Adds expectation that a service must receive only requests with query params matching those specified. See [match value](./Match-Values.md).
 
 ```js
 const expectation = mockyeah
@@ -189,11 +198,11 @@ const expectation = mockyeah
 
 <div id="query"></div>
 
-`.query(Object)` - An alias of <a href="#params">`.params(Object)`</a>.
+`.query(MatchValue)` - An alias of <a href="#params">`.params(Object)`</a>.
 
 <div id="header"></div>
 
-`.header(key, value)` - Adds expectation that a service must receive only requests with headers matching those specified.
+`.header(key, MatchValue)` - Adds expectation that a service must receive only requests with headers matching those specified. See [match value](./Match-Values.md).
 
 ```js
 const expectation = mockyeah
@@ -202,7 +211,9 @@ const expectation = mockyeah
   .header("host", "example.com");
 ```
 
-<div id="after"></div>
+## Execute
+
+<div id="run"></div>
 
 `.run(functionOrPromise)` - This will register side effects to run
 before `.verify()` logic is executed, e.g., after a network call.
@@ -306,7 +317,7 @@ request("http://localhost:4040")
 
 <div id="examples"></div>
 
-Examples:
+## Examples
 
 ```js
 const expectation = mockyeah

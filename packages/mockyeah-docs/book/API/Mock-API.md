@@ -30,22 +30,23 @@ mockyeah.get(/say-[a-z]+/, { text: "something, someone" });
 If you want the mock to match only for specific headers, query parameters, or request body,
 or use some of the more advanced matching features like regular expressions or functions
 in place of string matches, then you can use the object syntax.
+
+Values within the object can be strings, regular expressions,
+functions, or plain objects - see [Match Values](./Match-Values.md).
+
 All keys but `path` (also aliased as `url`) are optional.
+
 Its structure is:
 
 <!-- prettier-ignore -->
 ```js
 {
-  path?: MatchString,
-  url?: MatchString,
-  query?: {
-    [name: string]: MatchString
-  },
-  headers?: {
-    [name: string]: MatchString
-  },
-  body?: MatchBody,
-  method?: Method
+  path?: MatchValue,
+  url?: MatchValue,
+  query?: MatchValue
+  headers?: MatchValue
+  body?: MatchValue,
+  method?: MatchValue
 }
 ```
 
@@ -53,23 +54,19 @@ with types:
 
 <!-- prettier-ignore -->
 ```js
-type MatchString = string | RegExp | (string) => boolean;
+type MatchValue = string | RegExp | (string) => boolean | MatchBody;
 
 type MatchBody = {
-  [key: string]: MatchBody | MatchString | mixed
+  [key: string]: MatchValue
 };
-
-type Method = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'all'
 ```
 
 If using query parameters in both the `path`/`url` and in a `query` object, then the key/value
 pairs are merged, with the values in `query` taking precedence.
 
-Body matching supports parsed JSON payloads, raw strings, or regular expressions.
+If using `.all`, you may use `method` to match only a specific method anyway. This may ease programmatic use, e.g., wiring up mocks from a declarative definition. Supports any casing. Recommended values include:
 
-Objects like `headers` and `body` can be partial, deep object matches - they do not need to match the entire set of headers or the entire body of the request.
-
-If using `.all`, you may use `method` to match only a specific method anyway. Supports any casing. This may ease programmatic use, e.g., wiring up mocks from a declarative definition.
+`'get' | 'post' | 'put' | 'patch' | 'delete' | 'all'`
 
 Examples:
 
