@@ -33,4 +33,4 @@ const mockyeahServer = new Server({
 });
 ```
 
-For configuration options, see [Configuration](../Configuration).
+For configuration options, see [Configuration](../Configuration.md).

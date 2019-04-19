@@ -32,6 +32,7 @@
     - [`.expect().params()`](API/Expectation-API.md#params)
     - [`.expect().header()`](API/Expectation-API.md#header)
     - [`.expect().verify()`](API/Expectation-API.md#verify)
+  - [Match Values](./API/Match-Values.md)
   - Classes
     - [`Server`](API/Server.md)
 - [Suites](Suites/Overview.md)

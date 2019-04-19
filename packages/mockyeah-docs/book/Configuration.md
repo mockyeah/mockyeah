@@ -26,7 +26,8 @@
   "responseHeaders": true,
   "groups": {},
   "suiteHeader": "x-mockyeah-suite",
-  "suiteCookie": "mockyeahSuite"
+  "suiteCookie": "mockyeahSuite",
+  "aliases": {}
 }
 ```
 
@@ -99,6 +100,54 @@ Internally, this mounts with a leading slash, i.e., `'/https://service.example.c
   - "path" (default): Use the response option of `fixture` with the path to the fixture file as a string.
   - "require": For JSON fixtures, use the response option of `json` with an inline `require` of the JSON file using a relative path, otherwise fallback to "path" mode (may support custom `require`-able files in the future for users with custom setups, e.g., Webpack loaders).
 - `formatScript`: To apply custom formatting to the JS in the suite files, specify a string path to a module (relative to mockyeah root near your config file) that exports a function of the signature `(js: string) : string => {}`. Or if using programmatically rather than a JSON config file, you can provide a function as a value directly.
+- `aliases`: Aliases for match URLs, so that mocks for any of the URL prefixes in an alias set work for any of the others in its set too, to support sharing suites various environments where service domains and base path endpoints may change. So with this configuration:
+
+```
+{
+  "aliases": [
+    [
+      "https://demo.api.example.com",
+      "https://test.api.example.com",
+      "https://api.example.com"
+    ],
+    // more sets of aliases...
+  ]
+}
+```
+
+So now a mock like this:
+
+```js
+mockyeah.get('https://api.example.com/some/endpoint', { text: 'hello' })
+```
+
+Would be able to respond identically to calls to:
+* `https://demo.api.example.com/some/endpoint`
+* `https://test.api.example.com/some/endpoint`
+* `https://api.example.com/some/endpoint`
+
+- `groups`: When using `--only`, rather than always typing out regular expressions, you can define them here, so that rather than:
+
+```
+mockyeah record --only '/api/v(.*)/users' --only '/api/v(.*)/posts)'
+```
+
+We can instead type:
+
+```
+mockyeah record --groups users,posts
+```
+
+Where we have those regexes defined in config as:
+
+```js
+{
+  "groups": {
+    "users": "/api/v(.*)/users",
+    "posts": "/api/v(.*)/posts"
+  }
+}
+```
 
 ### HTTPS
 
