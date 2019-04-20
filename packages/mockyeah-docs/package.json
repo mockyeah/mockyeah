@@ -6,7 +6,7 @@
   "scripts": {
     "start": "gitbook serve",
     "build": "gitbook build",
-    "docs:publish": "yarn build && git checkout f1d15fb && mkdir -p _book/archive/0.16 && gitbook build . _book/archive/0.16 && cp CNAME _book/CNAME && gh-pages -d _book && git checkout -"
+    "docs:publish": "yarn build && cp CNAME _book/CNAME && gh-pages -d _book"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
