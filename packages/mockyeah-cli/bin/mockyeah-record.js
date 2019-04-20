@@ -79,16 +79,15 @@ const withName = (env, name, options = {}) => {
           name: 'stop',
           message: 'Press enter when ready to stop recording.'
         }
-      ],
-      () => {
-        if (remote) {
-          request.get(`${adminUrl}/record-stop`, recordStopCallback);
-        } else {
-          // eslint-disable-next-line global-require, import/no-dynamic-require
-          require(env.modulePath).recordStop(recordStopCallback);
-        }
+      ]
+    ).then(() => {
+      if (remote) {
+        request.get(`${adminUrl}/record-stop`, recordStopCallback);
+      } else {
+        // eslint-disable-next-line global-require, import/no-dynamic-require
+        require(env.modulePath).recordStop(recordStopCallback);
       }
-    );
+    });
   });
 };
 
@@ -117,16 +116,15 @@ boot(env => {
           name: 'name',
           message: 'Recording name:'
         }
-      ],
-      answers => {
-        if (!answers.name.length) {
-          console.log(chalk.red('Recording name required'));
-          process.exit(1);
-        }
-
-        withName(env, answers.name, options);
+      ]
+    ).then(answers => {
+      if (!answers.name.length) {
+        console.log(chalk.red('Recording name required'));
+        process.exit(1);
       }
-    );
+
+      withName(env, answers.name, options);
+    })
   } else {
     withName(env, name, options);
   }
