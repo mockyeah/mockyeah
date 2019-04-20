@@ -10,20 +10,43 @@ const {
 const safeFilename = require('../../lib/safeFilename');
 
 const makeRecordStop = app => {
-  const recordStop = cb => {
-    app.locals.recording = false;
-
-    if (!app.locals.recordMeta) {
-      return;
+  const recordStop = (options = {}, cb) => {
+    if (typeof options === 'function') {
+      cb = options;
+      options = {};
     }
+
+    const { noWrite } = options;
+
+    app.locals.recording = false;
 
     const { recordToFixtures, recordToFixturesMode, formatScript } = app.config;
 
     const {
-      recordMeta: { name, set }
+      recordMeta: { name, set } = {}
     } = app.locals;
 
-    if (!name) throw new Error('Not recording.');
+    if (!name) {
+      const error = new Error('Not recording.');
+
+      delete app.locals.recordMeta;
+
+      if (cb) {
+        cb(error);
+
+        return;
+      }
+
+      throw error;
+    }
+
+    if (noWrite) {
+      delete app.locals.recordMeta;
+
+      if (cb) cb();
+
+      return;
+    }
 
     const { suitesDir, fixturesDir } = app.config;
 
@@ -39,9 +62,9 @@ const makeRecordStop = app => {
     const indexByDirectory = {};
 
     const newSet = set.map(suite => {
-      const [match, responseOptions, options = {}] = suite;
+      const [match, responseOptions, suiteMeta = {}] = suite;
 
-      const { group } = options;
+      const { group } = suiteMeta;
 
       const { directory } = group || {};
 
@@ -116,7 +139,7 @@ const makeRecordStop = app => {
       if (err) {
         app.log(['record', 'response', 'error'], err);
 
-        cb(err);
+        if (cb) cb(err);
 
         return;
       }

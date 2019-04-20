@@ -81,16 +81,26 @@ const withName = (env, name, options = {}) => {
       [
         {
           type: 'confirm',
-          name: 'stop',
-          message: 'Press enter when ready to stop recording.'
+          name: 'write',
+          message: 'When done, press enter to finish recording (or type "n" to abort).'
         }
       ]
-    ).then(() => {
+    ).then(answer => {
+      const { write = true } = answer;
+
+      const stopOptions = { noWrite: !write };
+
       if (remote) {
-        request.get(`${adminUrl}/record-stop`, recordStopCallback);
+        const qs2 = querystring.stringify({
+          options: JSON.stringify(stopOptions)
+        });
+
+        request.get(`${adminUrl}/record-stop?${qs2}`, recordStopCallback, {
+
+        });
       } else {
         // eslint-disable-next-line global-require, import/no-dynamic-require
-        require(env.modulePath).recordStop(recordStopCallback);
+        require(env.modulePath).recordStop(stopOptions, recordStopCallback);
       }
     });
   });

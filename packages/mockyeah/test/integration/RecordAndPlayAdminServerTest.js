@@ -11,7 +11,7 @@ const MockYeahServer = require('../../server');
 
 const PROXY_SUITES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Record and Playback Admin Server', function() {
+describe('Record and Playback Admin Server', function () {
   let proxy;
   let remote;
   let proxyReq;
@@ -21,7 +21,7 @@ describe('Record and Playback Admin Server', function() {
   before(done => {
     async.parallel(
       [
-        function(cb) {
+        function (cb) {
           // Instantiate proxy server for recording
           proxy = MockYeahServer(
             {
@@ -33,7 +33,7 @@ describe('Record and Playback Admin Server', function() {
             cb
           );
         },
-        function(cb) {
+        function (cb) {
           // Instantiate remote server
           remote = MockYeahServer(
             {
@@ -69,7 +69,7 @@ describe('Record and Playback Admin Server', function() {
     return path.resolve(PROXY_SUITES_DIR, suiteName, 'index.js');
   }
 
-  it('should record and playback suite over admin server', function(done) {
+  it('should record and playback suite over admin server', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-admin-server-suite';
@@ -157,7 +157,7 @@ describe('Record and Playback Admin Server', function() {
     );
   });
 
-  it('should record and playback calls matching `headers` option over admin server', function(done) {
+  it('should record and playback calls matching `headers` option over admin server', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-admin-server-suite-3';
@@ -246,7 +246,7 @@ describe('Record and Playback Admin Server', function() {
     );
   });
 
-  it('should record and playback suite with playAll over admin server', function(done) {
+  it('should record and playback suite with playAll over admin server', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-admin-server-suite-all';
@@ -323,4 +323,61 @@ describe('Record and Playback Admin Server', function() {
       done
     );
   });
+
+  it('record stop should support no write', function (done) {
+    this.timeout = 10000;
+
+    const suiteName = 'test-some-fancy-admin-server-suite-record-stop-no-write';
+
+    // Construct remote service urls
+    // e.g. http://localhost:4041/http://example.com/some/service
+    const path1 = '/some/service/one';
+
+    // Mount remote service end points
+    remote.get('/some/service/one', { text: 'first' });
+
+    // Initiate recording and playback series
+    async.series(
+      [
+        // Initiate recording
+        cb => {
+          proxyAdminReq.get(`/record?name=${suiteName}`).expect(204, cb);
+        },
+
+        // Invoke requests to remote services through proxy
+        // e.g. http://localhost:4041/http://example.com/some/service
+        cb => proxyReq.get(path1).expect(200, 'first', cb),
+
+        // Stop recording
+        cb => {
+          proxyAdminReq.get('/record-stop?options={"noWrite":true}').expect(204, cb);
+        },
+
+        // Assert suite file does not exists
+        cb => {
+          try {
+            fs.statSync(getSuiteFilePath(suiteName));
+            cb(new Error('should fail'));
+          } catch (error) {
+            cb();
+          }
+        }
+      ],
+      done
+    );
+  });
+
+  it('should fail when calling record stop when not recording', function (done) {
+    this.timeout = 10000;
+
+    // Initiate recording and playback series
+    async.series(
+      [
+        cb => {
+          proxyAdminReq.get(`/record-stop`).expect(500, cb);
+        }
+      ],
+      done
+    );
+  })
 });
