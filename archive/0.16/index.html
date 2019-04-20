@@ -4,11 +4,11 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Home · mockyeah</title>
+        <title>Introduction · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
-        <meta name="author" content="Ryan Ricard">
+        
         
         
     
@@ -57,8 +57,6 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="pages/Mock-Services.html" />
-    
     
 
     </head>
@@ -92,98 +90,7 @@
                 <a href="./">
             
                     
-                    Home
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2" data-path="pages/Mock-Services.html">
-            
-                <a href="pages/Mock-Services.html">
-            
-                    
-                    API: Mock Services
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.3" data-path="pages/Server-Management.html">
-            
-                <a href="pages/Server-Management.html">
-            
-                    
-                    API: Server Management
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.4" data-path="pages/Mock-Expectations.html">
-            
-                <a href="pages/Mock-Expectations.html">
-            
-                    
-                    API: Mock Expectations
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.5" data-path="pages/Service-Snapshots.html">
-            
-                <a href="pages/Service-Snapshots.html">
-            
-                    
-                    API: Service Snapshots
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.6" data-path="pages/Service-Snapshot-CLI.html">
-            
-                <a href="pages/Service-Snapshot-CLI.html">
-            
-                    
-                    Service Snapshot CLI
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.7" data-path="pages/Configuration.html">
-            
-                <a href="pages/Configuration.html">
-            
-                    
-                    Configuration
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.8" data-path="pages/Contributing.html">
-            
-                <a href="pages/Contributing.html">
-            
-                    
-                    Contributing
+                    Introduction
             
                 </a>
             
@@ -221,7 +128,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Home</a>
+        <a href="." >Introduction</a>
     </h1>
 </div>
 
@@ -236,19 +143,117 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="home">Home</h1>
-<h2 id="what-is-mockyeah">What is mockyeah?</h2>
-<p>A web service mocking utility that helps decouple HTTP integrations throughout development and testing.</p>
-<h2 id="what-problem-does-mockyeah-solve">What problem does mockyeah solve?</h2>
-<p>Developing service integrations can be a painful process. APIs designs are often influx, incomplete, unstable, or completely unavailable. mockyeah solves this problem by enabling you to easily create mock services to integrate and test with during development.</p>
-<h2 id="what-is-mockyeahs-purpose">What is mockyeah&apos;s purpose?</h2>
+                                <h1 id="mockyeah">mockyeah</h1>
+<p><a href="https://www.npmjs.com/package/mockyeah" target="_blank"><img src="https://img.shields.io/npm/v/mockyeah.svg" alt="npm"></a>
+<a href="https://travis-ci.org/mockyeah/mockyeah" target="_blank"><img src="https://img.shields.io/travis/mockyeah/mockyeah.svg" alt="Travis"></a>
+<a href="https://coveralls.io/github/mockyeah/mockyeah" target="_blank"><img src="https://img.shields.io/coveralls/github/mockyeah/mockyeah.svg" alt="Coveralls github"></a></p>
+<p><strong>&quot;A powerful service mocking, recording, and playback utility.&quot;</strong></p>
+<p>Testing is difficult when you don&apos;t have control of your data. mockyeah puts you in complete control, enabling you to implement <strong>real mock web services</strong> with ease. Real mock services means you have control of response payloads, HTTP Status Codes, response latency, and more.</p>
+<p>Have a requirement to implement specific behavior when a service is slow to respond or a server returns an unexpected status code? No problem! mockyeah makes developing for such requirements easy.</p>
+<h2 id="install">Install</h2>
+<pre><code class="lang-shell">$ npm install mockyeah --save-dev
+</code></pre>
+<p>or</p>
+<pre><code class="lang-shell">$ yarn add -D mockyeah
+</code></pre>
+<h2 id="usage">Usage</h2>
 <ul>
-<li>To eliminate service side effects</li>
-<li>To provide dependable integrations</li>
-<li>To isolate application behavior</li>
-<li>To increase developer productivity</li>
-<li>To increase integration testing performance by eliminating network latency</li>
+<li><a href="#introductory-tutorial">Introductory tutorial</a></li>
+<li><a href="#testing-with-mockyeah">Testing with mockyeah</a></li>
+<li><a href="https://github.com/mockyeah/mockyeah/tree/master/examples" target="_blank">Examples</a></li>
+<li><a href="https://github.com/mockyeah/mockyeah/wiki/Configuration" target="_blank">Configuration</a></li>
 </ul>
+<h2 id="api">API</h2>
+<ul>
+<li><a href="https://github.com/mockyeah/mockyeah/wiki/Mock-Services" target="_blank">Mock Services</a></li>
+<li><a href="https://github.com/mockyeah/mockyeah/wiki/Server-Management" target="_blank">Server Management</a></li>
+<li><a href="https://github.com/mockyeah/mockyeah/wiki/Mock-Expectations" target="_blank">Mock Expectations</a></li>
+<li><a href="https://github.com/mockyeah/mockyeah/wiki/Service-Snapshots" target="_blank">Service Snapshots</a></li>
+</ul>
+<h2 id="cli">CLI</h2>
+<ul>
+<li><a href="https://github.com/mockyeah/mockyeah-cli" target="_blank">mockyeah-cli</a></li>
+<li><a href="https://github.com/mockyeah/mockyeah/wiki/Service-Snapshot-CLI" target="_blank">mockyeah-cli Documentation</a></li>
+</ul>
+<h2 id="introductory-tutorial">Introductory tutorial</h2>
+<ol>
+<li><p>Create an example project and initialized with NPM</p>
+<pre><code class="lang-shell">$ mkdir example-app &amp;&amp; cd example-app
+$ npm init # all defaults will be fine
+</code></pre>
+</li>
+<li><p>Install <code>mockyeah</code></p>
+<pre><code class="lang-shell">$ npm install mockyeah --save-dev
+</code></pre>
+<p>or</p>
+<pre><code class="lang-shell">$ yarn add -D mockyeah
+</code></pre>
+</li>
+<li><p>Create script file and add the source below</p>
+<pre><code class="lang-shell">$ touch index.js
+</code></pre>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> mockyeah = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;mockyeah&apos;</span>);
+
+mockyeah.get(<span class="hljs-string">&apos;/hello-world&apos;</span>, { text: <span class="hljs-string">&apos;Hello World&apos;</span> });
+</code></pre>
+</li>
+<li><p>Run the script file with Node</p>
+<pre><code class="lang-shell">$ node index.js
+</code></pre>
+</li>
+<li><p>Open <a href="http://localhost:4001/hello-world" target="_blank">http://localhost:4001/hello-world</a></p>
+</li>
+<li><p>Profit. You should see &quot;Hello World&quot; returned from your mock server.</p>
+</li>
+</ol>
+<h2 id="testing-with-mockyeah">Testing with mockyeah</h2>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;supertest&apos;</span>)(<span class="hljs-string">&apos;http://localhost:4001&apos;</span>);
+<span class="hljs-keyword">const</span> mockyeah = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;mockyeah&apos;</span>);
+
+describe(<span class="hljs-string">&apos;Wondrous service&apos;</span>, () =&gt; {
+  <span class="hljs-comment">// remove service mocks after each test</span>
+  afterEach(() =&gt; mockyeah.reset());
+
+  <span class="hljs-comment">// stop mockyeah server</span>
+  after(() =&gt; mockyeah.close());
+
+  it(<span class="hljs-string">&apos;should create a mock service that returns an internal error&apos;</span>, done =&gt; {
+    <span class="hljs-comment">// create failing service mock</span>
+    mockyeah.get(<span class="hljs-string">&apos;/wondrous&apos;</span>, { status: <span class="hljs-number">500</span> });
+
+    <span class="hljs-comment">// assert service mock is working</span>
+    request.get(<span class="hljs-string">&apos;/wondrous&apos;</span>).expect(<span class="hljs-number">500</span>, done);
+  });
+
+  it(<span class="hljs-string">&apos;should create a mock service that returns JSON&apos;</span>, done =&gt; {
+    <span class="hljs-comment">// create service mock that returns json data</span>
+    mockyeah.get(<span class="hljs-string">&apos;/wondrous&apos;</span>, { json: { foo: <span class="hljs-string">&apos;bar&apos;</span> } });
+
+    <span class="hljs-comment">// assert service mock is working</span>
+    request.get(<span class="hljs-string">&apos;/wondrous&apos;</span>).expect(<span class="hljs-number">200</span>, { foo: <span class="hljs-string">&apos;bar&apos;</span> }, done);
+  });
+
+  it(<span class="hljs-string">&apos;should verify a mock service expectation&apos;</span>, done =&gt; {
+    <span class="hljs-comment">// create service mock with expectation</span>
+    <span class="hljs-keyword">const</span> expectation = mockyeah
+      .get(<span class="hljs-string">&apos;/wondrous&apos;</span>, { text: <span class="hljs-string">&apos;it worked&apos;</span> })
+      .expect()
+      .params({
+        foo: <span class="hljs-string">&apos;bar&apos;</span>
+      })
+      .once();
+
+    <span class="hljs-comment">// invoke request and verify expectation</span>
+    request
+      .get(<span class="hljs-string">&apos;/wondrous?foo=bar&apos;</span>)
+      .expect(<span class="hljs-number">200</span>, <span class="hljs-string">&apos;it worked&apos;</span>)
+      .then(() =&gt; {
+        expectation.verify();
+        done();
+      });
+  });
+});
+</code></pre>
 
                                 
                                 </section>
@@ -277,10 +282,6 @@
             
                 
                 
-                <a href="pages/Mock-Services.html" class="navigation navigation-next navigation-unique" aria-label="Next page: API: Mock Services">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-                
             
         
     </div>
@@ -288,7 +289,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Home","level":"1.1","depth":1,"next":{"title":"API: Mock Services","level":"1.2","depth":1,"path":"pages/Mock-Services.md","ref":"pages/Mock-Services.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"README.md","mtime":"2019-01-09T12:46:05.430Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-01-09T12:46:07.086Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2019-04-20T14:30:01.076Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-04-20T14:30:02.776Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
@@ -296,10 +297,6 @@
         
     <script src="gitbook/gitbook.js"></script>
     <script src="gitbook/theme.js"></script>
-    
-        
-        <script src="gitbook/gitbook-plugin-github/plugin.js"></script>
-        
     
         
         <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>

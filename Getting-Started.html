@@ -540,7 +540,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3" >
+        <li class="chapter " data-level="1.4.3" data-path="API/Match-Values.html">
+            
+                <a href="API/Match-Values.html">
+            
+                    
+                    Match Values
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" >
             
                 <span>
             
@@ -554,7 +567,7 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.3.1" data-path="API/Server.html">
+        <li class="chapter " data-level="1.4.4.1" data-path="API/Server.html">
             
                 <a href="API/Server.html">
             
@@ -577,12 +590,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="Snapshots/Overview.html">
+        <li class="chapter " data-level="1.5" data-path="Suites/Overview.html">
             
-                <a href="Snapshots/Overview.html">
+                <a href="Suites/Overview.html">
             
                     
-                    Snapshots
+                    Suites
             
                 </a>
             
@@ -591,12 +604,12 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.5.1" data-path="Snapshots/Overview.html">
+        <li class="chapter " data-level="1.5.1" data-path="Suites/Overview.html">
             
-                <a href="Snapshots/Overview.html#snapshots-overview">
+                <a href="Suites/Overview.html#suites-overview">
             
                     
-                    Snapshots Overview
+                    Suites Overview
             
                 </a>
             
@@ -604,12 +617,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.2" data-path="Snapshots/Overview.html">
+        <li class="chapter " data-level="1.5.2" data-path="Suites/Overview.html">
             
-                <a href="Snapshots/Overview.html#ad-hoc-snapshots">
+                <a href="Suites/Overview.html#ad-hoc-suites">
             
                     
-                    Ad Hoc Snapshots
+                    Ad Hoc Suites
             
                 </a>
             
@@ -743,9 +756,9 @@ $ npm init # all defaults will be fine
 <li><p>Create script file and add the source below</p>
 <pre><code class="lang-shell">$ touch index.js
 </code></pre>
-<pre><code class="lang-js"><span class="hljs-keyword">const</span> mockyeah = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;mockyeah&apos;</span>);
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> mockyeah = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;mockyeah&quot;</span>);
 
-mockyeah.get(<span class="hljs-string">&apos;/hello-world&apos;</span>, { text: <span class="hljs-string">&apos;Hello World&apos;</span> });
+mockyeah.get(<span class="hljs-string">&quot;/hello-world&quot;</span>, { text: <span class="hljs-string">&quot;Hello World&quot;</span> });
 </code></pre>
 </li>
 <li><p>Run the script file with Node</p>
@@ -758,51 +771,44 @@ mockyeah.get(<span class="hljs-string">&apos;/hello-world&apos;</span>, { text: 
 </li>
 </ol>
 <h2 id="testing-with-mockyeah">Testing with mockyeah</h2>
-<pre><code class="lang-js"><span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;supertest&apos;</span>)(<span class="hljs-string">&apos;http://localhost:4001&apos;</span>);
-<span class="hljs-keyword">const</span> mockyeah = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;mockyeah&apos;</span>);
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;supertest&quot;</span>)(<span class="hljs-string">&quot;http://localhost:4001&quot;</span>);
+<span class="hljs-keyword">const</span> mockyeah = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;mockyeah&quot;</span>);
 
-describe(<span class="hljs-string">&apos;Wondrous service&apos;</span>, () =&gt; {
+describe(<span class="hljs-string">&quot;Wondrous service&quot;</span>, () =&gt; {
   <span class="hljs-comment">// remove service mocks after each test</span>
   afterEach(() =&gt; mockyeah.reset());
 
   <span class="hljs-comment">// stop mockyeah server</span>
   after(() =&gt; mockyeah.close());
 
-  it(<span class="hljs-string">&apos;should create a mock service that returns an internal error&apos;</span>, done =&gt; {
+  it(<span class="hljs-string">&quot;should create a mock service that returns an internal error&quot;</span>, done =&gt; {
     <span class="hljs-comment">// create failing service mock</span>
-    mockyeah.get(<span class="hljs-string">&apos;/wondrous&apos;</span>, { status: <span class="hljs-number">500</span> });
+    mockyeah.get(<span class="hljs-string">&quot;/wondrous&quot;</span>, { status: <span class="hljs-number">500</span> });
 
     <span class="hljs-comment">// assert service mock is working</span>
-    request.get(<span class="hljs-string">&apos;/wondrous&apos;</span>).expect(<span class="hljs-number">500</span>, done);
+    request.get(<span class="hljs-string">&quot;/wondrous&quot;</span>).expect(<span class="hljs-number">500</span>, done);
   });
 
-  it(<span class="hljs-string">&apos;should create a mock service that returns JSON&apos;</span>, done =&gt; {
+  it(<span class="hljs-string">&quot;should create a mock service that returns JSON&quot;</span>, done =&gt; {
     <span class="hljs-comment">// create service mock that returns json data</span>
-    mockyeah.get(<span class="hljs-string">&apos;/wondrous&apos;</span>, { json: { foo: <span class="hljs-string">&apos;bar&apos;</span> } });
+    mockyeah.get(<span class="hljs-string">&quot;/wondrous&quot;</span>, { json: { foo: <span class="hljs-string">&quot;bar&quot;</span> } });
 
     <span class="hljs-comment">// assert service mock is working</span>
-    request.get(<span class="hljs-string">&apos;/wondrous&apos;</span>).expect(<span class="hljs-number">200</span>, { foo: <span class="hljs-string">&apos;bar&apos;</span> }, done);
+    request.get(<span class="hljs-string">&quot;/wondrous&quot;</span>).expect(<span class="hljs-number">200</span>, { foo: <span class="hljs-string">&quot;bar&quot;</span> }, done);
   });
 
-  it(<span class="hljs-string">&apos;should verify a mock service expectation&apos;</span>, done =&gt; {
+  it(<span class="hljs-string">&quot;should verify a mock service expectation&quot;</span>, () =&gt;
     <span class="hljs-comment">// create service mock with expectation</span>
-    <span class="hljs-keyword">const</span> expectation = mockyeah
-      .get(<span class="hljs-string">&apos;/wondrous&apos;</span>, { text: <span class="hljs-string">&apos;it worked&apos;</span> })
+    mockyeah
+      .get(<span class="hljs-string">&quot;/wondrous&quot;</span>, { text: <span class="hljs-string">&quot;it worked&quot;</span> })
       .expect()
       .params({
-        foo: <span class="hljs-string">&apos;bar&apos;</span>
+        foo: <span class="hljs-string">&quot;bar&quot;</span>
       })
-      .once();
-
-    <span class="hljs-comment">// invoke request and verify expectation</span>
-    request
-      .get(<span class="hljs-string">&apos;/wondrous?foo=bar&apos;</span>)
-      .expect(<span class="hljs-number">200</span>, <span class="hljs-string">&apos;it worked&apos;</span>)
-      .then(() =&gt; {
-        expectation.verify();
-        done();
-      });
-  });
+      .once()
+      <span class="hljs-comment">// invoke request and verify expectation</span>
+      .run(request.get(<span class="hljs-string">&quot;/wondrous?foo=bar&quot;</span>).expect(<span class="hljs-number">200</span>, <span class="hljs-string">&quot;it worked&quot;</span>))
+      .verify());
 });
 </code></pre>
 
@@ -848,7 +854,7 @@ describe(<span class="hljs-string">&apos;Wondrous service&apos;</span>, () =&gt;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Getting Started","level":"1.2","depth":1,"next":{"title":"Install","level":"1.2.1","depth":2,"anchor":"#install","path":"Getting-Started.md","ref":"Getting-Started.md#install","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"Getting-Started.md","mtime":"2019-01-09T00:36:13.254Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-01-09T12:46:02.357Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Getting Started","level":"1.2","depth":1,"next":{"title":"Install","level":"1.2.1","depth":2,"anchor":"#install","path":"Getting-Started.md","ref":"Getting-Started.md#install","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"Getting-Started.md","mtime":"2019-04-20T14:28:09.998Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-04-20T14:29:57.989Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

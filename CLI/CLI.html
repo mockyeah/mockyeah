@@ -62,7 +62,7 @@
 
     
     
-    <link rel="prev" href="../Snapshots/Overview.html" />
+    <link rel="prev" href="../Suites/Overview.html" />
     
 
     </head>
@@ -538,7 +538,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3" >
+        <li class="chapter " data-level="1.4.3" data-path="../API/Match-Values.html">
+            
+                <a href="../API/Match-Values.html">
+            
+                    
+                    Match Values
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" >
             
                 <span>
             
@@ -552,7 +565,7 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.3.1" data-path="../API/Server.html">
+        <li class="chapter " data-level="1.4.4.1" data-path="../API/Server.html">
             
                 <a href="../API/Server.html">
             
@@ -575,12 +588,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="../Snapshots/Overview.html">
+        <li class="chapter " data-level="1.5" data-path="../Suites/Overview.html">
             
-                <a href="../Snapshots/Overview.html">
+                <a href="../Suites/Overview.html">
             
                     
-                    Snapshots
+                    Suites
             
                 </a>
             
@@ -589,12 +602,12 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.5.1" data-path="../Snapshots/Overview.html">
+        <li class="chapter " data-level="1.5.1" data-path="../Suites/Overview.html">
             
-                <a href="../Snapshots/Overview.html#snapshots-overview">
+                <a href="../Suites/Overview.html#suites-overview">
             
                     
-                    Snapshots Overview
+                    Suites Overview
             
                 </a>
             
@@ -602,12 +615,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.2" data-path="../Snapshots/Overview.html">
+        <li class="chapter " data-level="1.5.2" data-path="../Suites/Overview.html">
             
-                <a href="../Snapshots/Overview.html#ad-hoc-snapshots">
+                <a href="../Suites/Overview.html#ad-hoc-suites">
             
                     
-                    Ad Hoc Snapshots
+                    Ad Hoc Suites
             
                 </a>
             
@@ -718,7 +731,7 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="cli">CLI</h1>
-<p>mockyeah-cli provides a simple command line interface for recording and playing service snapshots to integrate with during development.</p>
+<p>mockyeah-cli provides a simple command line interface for recording and playing suites to integrate with during development.</p>
 <h2 id="getting-started">Getting started</h2>
 <ol>
 <li>Install mockyeah-cli</li>
@@ -734,24 +747,24 @@
 <pre><code>http://localhost:4001/http://example.com/your/service/url
 </code></pre><p>We agree the above URL looks pretty nutty, but rest assured all other known approaches add unnecessary complexity.</p>
 <ol>
-<li>Initiate a mockyeah snapshot recording</li>
+<li>Initiate a mockyeah suite recording</li>
 </ol>
-<pre><code class="lang-shell">$ mockyeah record my-first-snapshot
+<pre><code class="lang-shell">$ mockyeah record my-first-suite
 </code></pre>
 <ol>
 <li><p>Invoke the service call you previously configured. You should see mockyeah-cli output.</p>
 </li>
 <li><p>Stop mockyeah-cli by hitting enter on the stop question.</p>
 </li>
-<li><p>Play back the snapshot</p>
+<li><p>Play back the suite</p>
 </li>
 </ol>
-<pre><code class="lang-shell">$ mockyeah play my-first-snapshot
+<pre><code class="lang-shell">$ mockyeah play my-first-suite
 </code></pre>
 <ol>
 <li>Invoke the service call again.</li>
 </ol>
-<p>Good work! You&apos;ve recorded and played back a service snapshot.</p>
+<p>Good work! You&apos;ve recorded and played back a suite.</p>
 <h2 id="options">Options</h2>
 <pre><code class="lang-console">$ mockyeah --help
 
@@ -759,10 +772,10 @@ Usage: mockyeah [options] [command]
 
   Commands:
 
-    ls             list service captures
-    play [name]    play service capture
-    playAll        play all service captures
-    record [name]  record service capture
+    ls             list suites
+    play [name]    play suite
+    playAll        play all suites
+    record [name]  record suite
     help [cmd]     display help for [cmd]
 
   Options:
@@ -777,10 +790,11 @@ Usage: mockyeah-record [options]
 
   Options:
 
-    -o, --only &lt;regex&gt;   only record calls to URLs matching given regex pattern
+    -g, --group, --groups [name]  record with these named groups from configuration (comma-separated and/or repeatable)
+    -o, --only [regex]   only record calls to URLs matching given regex pattern (repeatable)
     -h, --use-headers    record headers to response options
     -l, --use-latency    record latency to response options
-    -H, --header &lt;line&gt;  record matches will require these headers (&quot;Name: Value&quot;) (default: [object Object])
+    -H, --header [pair]  record matches will require these headers (&quot;Name: Value&quot;) (repeatable)
     -v, --verbose        verbose output
     -h, --help           output usage information
 </code></pre>
@@ -811,7 +825,7 @@ Usage: mockyeah-record [options]
 
             
                 
-                <a href="../Snapshots/Overview.html#ad-hoc-snapshots" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Ad Hoc Snapshots">
+                <a href="../Suites/Overview.html#ad-hoc-suites" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Ad Hoc Suites">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
@@ -823,7 +837,7 @@ Usage: mockyeah-record [options]
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"CLI","level":"1.6","depth":1,"next":{"title":"Recipes & Examples","level":"1.7","depth":1,"url":"https://github.com/mockyeah/mockyeah/tree/master/examples","ref":"https://github.com/mockyeah/mockyeah/tree/master/examples","articles":[]},"previous":{"title":"Ad Hoc Snapshots","level":"1.5.2","depth":2,"anchor":"#ad-hoc-snapshots","path":"Snapshots/Overview.md","ref":"Snapshots/Overview.md#ad-hoc-snapshots","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"CLI/CLI.md","mtime":"2019-01-09T00:36:13.252Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-01-09T12:46:02.357Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"CLI","level":"1.6","depth":1,"next":{"title":"Recipes & Examples","level":"1.7","depth":1,"url":"https://github.com/mockyeah/mockyeah/tree/master/examples","ref":"https://github.com/mockyeah/mockyeah/tree/master/examples","articles":[]},"previous":{"title":"Ad Hoc Suites","level":"1.5.2","depth":2,"anchor":"#ad-hoc-suites","path":"Suites/Overview.md","ref":"Suites/Overview.md#ad-hoc-suites","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"CLI/CLI.md","mtime":"2019-04-20T14:28:09.995Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-04-20T14:29:57.989Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

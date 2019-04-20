@@ -1,0 +1,7 @@
+{
+  "method": "get",
+  "path": "/path+includes+problem+characters",
+  "options": {
+    "text": "it worked!"
+  }
+}
