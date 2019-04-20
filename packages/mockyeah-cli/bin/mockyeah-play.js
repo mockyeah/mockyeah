@@ -61,11 +61,10 @@ boot(env => {
           message: 'Choose a suite to play:',
           choices: suiteNames
         }
-      ],
-      answers => {
-        withName(env, answers.name);
-      }
-    );
+      ]
+    ).then(answers => {
+      withName(env, answers.name);
+    });
   } else {
     withName(env, name);
   }

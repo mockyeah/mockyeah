@@ -10,7 +10,8 @@
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
-  "license": "ISC",
+  "license": "MIT",
+  "private": true,
   "devDependencies": {
     "gh-pages": "^1.1.0",
     "gitbook": "^3.2.3",
