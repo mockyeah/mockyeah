@@ -12,7 +12,7 @@ const { expect } = require('chai');
 
 const ROOT = path.resolve(__dirname, '../.tmp/proxy');
 
-describe('Record Groups Test', function () {
+describe('Record Group Test', function () {
   let proxy;
   let remote;
   let proxyReq;
@@ -87,7 +87,7 @@ describe('Record Groups Test', function () {
   it('should record fixture to group subdirectory', function (done) {
     this.timeout = 10000;
 
-    const suiteName = 'test-some-fancy-suite-groups-file';
+    const suiteName = 'test-some-fancy-suite-group-file';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
@@ -106,12 +106,7 @@ describe('Record Groups Test', function () {
         // Initiate recording
         cb => {
           proxy.record(suiteName, {
-            groups: [
-              'someService',
-              'someNonSubdirGroup',
-              'someServiceNamedDir',
-              'unknownGroupSpecified'
-            ]
+            group: 'someService,someNonSubdirGroup , someServiceNamedDir,unknownGroupSpecified'
           });
           cb();
         },
@@ -155,12 +150,12 @@ describe('Record Groups Test', function () {
         cb => {
           const contents = fs.readFileSync(getSuiteFilePath(suiteName), 'utf8');
           expect(contents).to.contain(
-            '"fixture": "someService/test-some-fancy-suite-groups-file/0.txt"'
+            '"fixture": "someService/test-some-fancy-suite-group-file/0.txt"'
           );
           expect(contents).to.contain(
-            '"fixture": "someServiceDirectoryForNamedDir/test-some-fancy-suite-groups-file/0.txt"'
+            '"fixture": "someServiceDirectoryForNamedDir/test-some-fancy-suite-group-file/0.txt"'
           );
-          expect(contents).to.contain('"fixture": "test-some-fancy-suite-groups-file/0.txt"');
+          expect(contents).to.contain('"fixture": "test-some-fancy-suite-group-file/0.txt"');
           cb();
         },
 

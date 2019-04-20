@@ -33,6 +33,11 @@ program
     collectCommaSeparated
   )
   .option(
+    '--group [name]',
+    'alias of -g, --groups',
+    collectCommaSeparated
+  )
+  .option(
     '-o, --only [regex]',
     'only record calls to URLs matching given regex pattern (repeatable)',
     collect
@@ -96,12 +101,12 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
   const [name] = program.args;
-  const { groups, only, header, useHeaders, useLatency } = program;
+  const { groups, group, only, header, useHeaders, useLatency } = program;
 
   env.program = program;
 
   const options = {
-    groups,
+    groups: groups || group,
     only,
     headers: header,
     useHeaders,
