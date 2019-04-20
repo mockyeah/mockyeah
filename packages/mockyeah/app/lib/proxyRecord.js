@@ -13,6 +13,8 @@ const proxyRecord = ({ app, req, res, reqUrl, startTime, body }) => {
   let group;
   if (groups) {
     group = groups.find(g => g.test(reqUrl));
+
+    if (!group) return;
   }
 
   const { method, body: reqBody } = req;
