@@ -40,6 +40,7 @@ const makeWatch = app => {
 
   const watch = () => {
     const watcher = chokidar.watch([suitesDir, fixturesDir]).on('all', debounced);
+    app.log('watch', 'started watching');
     app.locals.watcher = watcher;
   };
 
