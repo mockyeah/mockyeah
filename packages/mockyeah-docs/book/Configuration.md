@@ -68,8 +68,6 @@ Also supports a `.mockyeah.js` as a Node module that exports a JavaScript object
 
 - `verbose`: Boolean to toggle verbosity of mockyeah generated output.
 - `proxy`: Boolean to enable a proxy on startup.
-- `suiteHeader`: String for the header name to use to opt-in to suites dynamically.
-- `suiteCookie`: String for the cookie name to use to opt-in to suites dynamically.
 
 The proxy will transparently forward all non-matching requests onto their original URL.
 
@@ -92,6 +90,8 @@ mockyeah.get("https://service.example.com/foo/bar", {
 Internally, this mounts with a leading slash, i.e., `'/https://service.example.com/foo/bar'`.
 
 - `record`: Boolean to enable recording on startup.
+- `suiteHeader`: String for the header name to use to opt-in to suites dynamically.
+- `suiteCookie`: String for the cookie name to use to opt-in to suites dynamically.
 - `adminServer`: Boolean to enable admin server (for recording, playing, etc.)
 - `adminHost`: Host on which admin server will run.
 - `adminPort`: Port on which admin server will run.
