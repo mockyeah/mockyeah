@@ -1,6 +1,6 @@
 {
   "name": "mockyeah-cli",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "bin": {
@@ -62,7 +62,7 @@
     "v8flags": "^2.0.11"
   },
   "devDependencies": {
-    "mockyeah": "^0.22.0"
+    "mockyeah": "^0.22.1"
   },
   "engines": {
     "node": ">=6.0.0"
