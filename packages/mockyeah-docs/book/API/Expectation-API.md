@@ -282,7 +282,7 @@ and should return `true` to indicate a pass, or return `false` or throw an error
 
 If `run` was called, verification will pause until the function or promise passed to `run` completes.
 
-Alos, `verify` returns a promise, which can be returned directly to test frameworks without using any `done` callbacks.
+Also, `verify` returns a promise, which can be returned directly to test frameworks without using any `done` callbacks.
 
 <div id="verifier"></div>
 
