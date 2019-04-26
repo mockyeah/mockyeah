@@ -19,6 +19,7 @@
     - [`play()`](API/play.md)
     - [`reset()`](API/reset.md)
     - [`close()`](API/close.md)
+    - [`start()`](API/start.md)
     - [`proxy()`](API/proxy.md)
   - Expectation API
     - [`.expect()`](API/Expectation-API.md#expect)
