@@ -82,26 +82,37 @@ module.exports = function Server(config, onStart) {
 
   // Expose ability to stop server via API
   const close = function close(done) {
-    const tasks = [
-      cb =>
-        server.close(err => {
-          app.log(['serve', 'exit'], 'Goodbye.');
-          cb(err);
-        }),
-      adminServer &&
+    return new Promise((resolve, reject) => {
+      const doneAndResolve = err => {
+        if (done) done(err);
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      }
+
+      const tasks = [
+        cb =>
+          server.close(err => {
+            app.log(['serve', 'exit'], 'Goodbye.');
+            cb(err);
+          }),
+        adminServer &&
         (cb =>
           adminServer.close(err => {
             app.log(['admin', 'serve', 'exit'], 'Goodbye.');
             cb(err);
           }))
-    ].filter(Boolean);
+      ].filter(Boolean);
 
-    async.parallel(tasks, done);
+      async.parallel(tasks, doneAndResolve);
+    });
   };
 
   const shutdown = done => {
     app.unwatch();
-    close(done);
+    return close(done);
   };
 
   const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
