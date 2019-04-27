@@ -45,7 +45,7 @@ module.exports = function Server(config, onStart) {
       app.log('serve', `Listening at ${this.rootUrl}`);
       // Execute callback once server starts
       if (onStart) onStart.call(this);
-      resolve();
+      setTimeout(resolve);
     }
 
     if (config.portHttps) {
@@ -129,7 +129,9 @@ module.exports = function Server(config, onStart) {
           }))
       ].filter(Boolean);
 
-      async.parallel(tasks, doneAndResolve);
+      startedPromise.then(() =>
+        async.parallel(tasks, doneAndResolve)
+      );
     });
   };
 

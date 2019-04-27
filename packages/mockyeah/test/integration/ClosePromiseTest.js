@@ -4,13 +4,13 @@ require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 describe('close() promise', () => {
-  it('should use a promise', done => {
+  it('should use a promise', () => {
     const mockyeah = new MockYeahServer({ port: 0, adminPort: 0 });
-    mockyeah.close().then(done).catch(done);
+    return mockyeah.close()
   })
 
-  it('should use a promise even when given a callback', done => {
+  it('should use a promise even when given a callback', () => {
     const mockyeah = new MockYeahServer({ port: 0, adminPort: 0 });
-    mockyeah.close(() => { }).then(done).catch(done);
+    return mockyeah.close(() => { })
   })
 });
