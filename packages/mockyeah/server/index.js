@@ -26,45 +26,66 @@ module.exports = function Server(config, onStart) {
   // Enable CORS for all routes
   app.use(cors());
 
-  function listen(secure, err) {
-    if (err) throw err;
-    const host = config.host || this.address().address;
-    this.rootUrl = `http${secure ? 's' : ''}://${host}:${this.address().port}`;
-    app.log('serve', `Listening at ${this.rootUrl}`);
-    // Execute callback once server starts
-    if (onStart) onStart.call(this);
-  }
-
   // Start server on configured host and port
   let server;
 
-  if (config.portHttps) {
-    let certFiles;
-    if (!config.httpsKeyPath && !config.httpsCertPath) {
-      certFiles = createCertFiles();
-    } else {
-      certFiles = {
-        key: config.httpsKeyPath,
-        cert: config.httpsCertPath
-      };
+  const startedPromise = new Promise((resolve, reject) => {
+    const handleError = error => {
+      reject(error);
+      if (onStart) onStart(error);
     }
 
-    /* eslint-disable no-sync */
-    const key = fs.readFileSync(certFiles.key);
-    const cert = fs.readFileSync(certFiles.cert);
-    /* eslint-enable no-sync */
+    const listen = function listener(secure, error) {
+      if (error) {
+        handleError(error);
+        return;
+      }
+      const host = config.host || this.address().address;
+      this.rootUrl = `http${secure ? 's' : ''}://${host}:${this.address().port}`;
+      app.log('serve', `Listening at ${this.rootUrl}`);
+      // Execute callback once server starts
+      if (onStart) onStart.call(this);
+      resolve();
+    }
 
-    const credentials = {
-      key,
-      cert
-    };
+    if (config.portHttps) {
+      let certFiles;
+      if (!config.httpsKeyPath && !config.httpsCertPath) {
+        certFiles = createCertFiles();
+      } else {
+        certFiles = {
+          key: config.httpsKeyPath,
+          cert: config.httpsCertPath
+        };
+      }
 
-    const httpsServer = https.createServer(credentials, app);
+      /* eslint-disable no-sync */
+      const key = fs.readFileSync(certFiles.key);
+      const cert = fs.readFileSync(certFiles.cert);
+      /* eslint-enable no-sync */
 
-    server = httpsServer.listen(config.portHttps, config.host, partial(listen, true));
-  } else {
-    server = app.listen(config.port, config.host, partial(listen, false));
-  }
+      const credentials = {
+        key,
+        cert
+      };
+
+      const httpsServer = https.createServer(credentials, app);
+
+      try {
+        server = httpsServer.listen(config.portHttps, config.host, partial(listen, true));
+      } catch (error) {
+        handleError(error);
+      }
+    } else {
+      try {
+        server = app.listen(config.port, config.host, partial(listen, false));
+      } catch (error) {
+        handleError(error);
+      }
+    }
+
+    server.on('error', handleError);
+  });
 
   // Expose ability to implement middleware via API
   const use = function use() {
@@ -123,6 +144,7 @@ module.exports = function Server(config, onStart) {
     recordStop,
     watch,
     unwatch,
-    shutdown
+    shutdown,
+    startedPromise
   });
 };
