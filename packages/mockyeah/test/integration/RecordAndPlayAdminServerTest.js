@@ -28,7 +28,8 @@ describe('Record and Playback Admin Server', function () {
               name: 'proxy',
               port: 0,
               adminPort: 0,
-              suitesDir: PROXY_SUITES_DIR
+              suitesDir: PROXY_SUITES_DIR,
+              proxy: false
             },
             cb
           );

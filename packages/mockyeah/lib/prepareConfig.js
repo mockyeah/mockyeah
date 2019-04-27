@@ -11,7 +11,7 @@ const configDefaults = {
   output: true,
   journal: false,
   verbose: false,
-  proxy: false,
+  proxy: true,
   record: false,
   adminServer: true,
   // TODO: Implement support for HTTPS admin server protocol.
@@ -30,7 +30,8 @@ const configDefaults = {
 
 module.exports = (config = {}) => {
   config.adminHost = config.adminHost || config.host || configDefaults.host;
-  config.proxy = (config.proxy || config.record) === true;
+  config.proxy = typeof config.proxy !== 'undefined' ? config.proxy : configDefaults.proxy;
+  config.proxy = config.proxy || config.record;
 
   // legacy support for `capturesDir`
   config.suitesDir = config.suitesDir || config.capturesDir || configDefaults.suitesDir;
