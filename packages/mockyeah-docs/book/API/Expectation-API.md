@@ -1,6 +1,6 @@
 # Mock Expectations
 
-The Expectation API enables you to verify your integration via the perspective of mockyeah. Chaining `.expect()` with any number of supported expectation functions returns an expectation object that can be verified at the end of your test. There are [quantitative](quantitative), [structural](#structural),
+The Expectation API enables you to verify your integration via the perspective of mockyeah. Chaining `.expect()` with any number of supported expectation functions returns an expectation object that can be verified at the end of your test. There are [quantitative](#quantitative), [structural](#structural),
 and other expectation functions.
 
 Example returning a promise to the test suite via `verify` after `run`:
@@ -271,6 +271,7 @@ mockyeah
 <div id="verify"></div>
 
 `.verify(callback)` - Asserts expectation to be correct, and if optional callback is provided, using that to pass up assertion errors instead of throwing an assert error inline.
+If passed a promise, or a callback returning a promise, then it will return this promise, e.g., to return to a test framework like `jest` or `mocha` supporting that.
 
 ```js
 expectation.verify();

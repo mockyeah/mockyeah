@@ -11,7 +11,7 @@ const MockYeahServer = require('../../server');
 
 const PROXY_SUITES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
 
-describe('Record and Playback', function() {
+describe('Record and Playback', function () {
   let proxy;
   let remote;
   let proxyReq;
@@ -20,19 +20,20 @@ describe('Record and Playback', function() {
   before(done => {
     async.parallel(
       [
-        function(cb) {
+        function (cb) {
           // Instantiate proxy server for recording
           proxy = MockYeahServer(
             {
               name: 'proxy',
               port: 0,
               adminPort: 0,
-              suitesDir: PROXY_SUITES_DIR
+              suitesDir: PROXY_SUITES_DIR,
+              proxy: false
             },
             cb
           );
         },
-        function(cb) {
+        function (cb) {
           // Instantiate remote server
           remote = MockYeahServer(
             {
@@ -67,7 +68,7 @@ describe('Record and Playback', function() {
     return path.resolve(PROXY_SUITES_DIR, suiteName, 'index.js');
   }
 
-  it('should record and playback suite', function(done) {
+  it('should record and playback suite', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite';
@@ -178,7 +179,7 @@ describe('Record and Playback', function() {
     );
   });
 
-  it('should record and playback calls matching `only` option', function(done) {
+  it('should record and playback calls matching `only` option', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-2';
@@ -257,7 +258,6 @@ describe('Record and Playback', function() {
         cb => remoteReq.get(path4).expect(200, 'fourth', cb),
 
         // Assert paths are routed the correct responses
-        // e.g. http://localhost:4041/some/service
         cb => proxyReq.get(path1).expect(404, cb),
         cb => proxyReq.get(path2).expect(404, cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
@@ -267,7 +267,7 @@ describe('Record and Playback', function() {
     );
   });
 
-  it('should record and playback calls matching `headers` option', function(done) {
+  it('should record and playback calls matching `headers` option', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-3';
@@ -352,7 +352,7 @@ describe('Record and Playback', function() {
     );
   });
 
-  it('should record and playback calls with empty `headers` option', function(done) {
+  it('should record and playback calls with empty `headers` option', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-3';
@@ -428,7 +428,7 @@ describe('Record and Playback', function() {
     );
   });
 
-  it('should record and playback call headers with `useHeaders` option', function(done) {
+  it('should record and playback call headers with `useHeaders` option', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-using-headers';
@@ -493,7 +493,7 @@ describe('Record and Playback', function() {
     );
   });
 
-  it('should record and playback call latency with `useLatency` option', function(done) {
+  it('should record and playback call latency with `useLatency` option', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-using-latency';
@@ -556,7 +556,7 @@ describe('Record and Playback', function() {
     );
   });
 
-  it('should record and playback call using full URLs, including custom-encoded', function(done) {
+  it('should record and playback call using full URLs, including custom-encoded', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-full-urls';
@@ -636,7 +636,7 @@ describe('Record and Playback', function() {
     );
   });
 
-  it('should record and playback call with playAll', function(done) {
+  it('should record and playback call with playAll', function (done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-all';

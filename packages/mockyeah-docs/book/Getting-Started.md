@@ -94,7 +94,7 @@ describe("Wondrous service", () => {
       })
       .once()
       // invoke request and verify expectation
-      .run(request.get("/wondrous?foo=bar").expect(200, "it worked"))
+      .run(request.get("/wondrous?foo=bar"))
       .verify());
 });
 ```
