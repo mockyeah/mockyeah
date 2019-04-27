@@ -28,7 +28,8 @@ module.exports = function Server(config, onStart) {
 
   function listen(secure, err) {
     if (err) throw err;
-    this.rootUrl = `http${secure ? 's' : ''}://${this.address().address}:${this.address().port}`;
+    const host = config.host || this.address().address;
+    this.rootUrl = `http${secure ? 's' : ''}://${host}:${this.address().port}`;
     app.log('serve', `Listening at ${this.rootUrl}`);
     // Execute callback once server starts
     if (onStart) onStart.call(this);
@@ -75,7 +76,8 @@ module.exports = function Server(config, onStart) {
   if (config.adminServer) {
     const admin = new AdminServer(config, app);
     adminServer = admin.listen(config.adminPort, config.adminHost, function adminListen() {
-      adminServer.rootUrl = `http://${this.address().address}:${this.address().port}`;
+      const host = config.adminHost || this.address().address;
+      adminServer.rootUrl = `http://${host}:${this.address().port}`;
       app.log(['serve', 'admin'], `Admin server listening at ${adminServer.rootUrl}`);
     });
   }
@@ -89,11 +91,11 @@ module.exports = function Server(config, onStart) {
           cb(err);
         }),
       adminServer &&
-        (cb =>
-          adminServer.close(err => {
-            app.log(['admin', 'serve', 'exit'], 'Goodbye.');
-            cb(err);
-          }))
+      (cb =>
+        adminServer.close(err => {
+          app.log(['admin', 'serve', 'exit'], 'Goodbye.');
+          cb(err);
+        }))
     ].filter(Boolean);
 
     async.parallel(tasks, done);
