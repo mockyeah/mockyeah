@@ -1,7 +1,5 @@
 const makeRecord = app => {
   const record = (name, options = {}) => {
-    let groups;
-
     app.locals.recording = true;
 
     if (!name) throw new Error('Must provide a recording name.');
@@ -23,9 +21,12 @@ const makeRecord = app => {
         return obj;
       });
 
-    // array of strings
-    if (options.groups) {
-      groups = options.groups
+    let groups = options.groups || options.group; // support alias
+
+    if (groups) {
+      groups = Array.isArray(groups) ? groups : groups.split(',').map(v => v.trim());
+
+      groups = groups
         .map(groupName => {
           // map like `{"myGroup": "/some.*/regex/"}`
           let configGroup = app.config.groups[groupName];

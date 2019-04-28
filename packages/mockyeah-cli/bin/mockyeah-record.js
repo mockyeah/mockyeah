@@ -33,6 +33,11 @@ program
     collectCommaSeparated
   )
   .option(
+    '--group [name]',
+    'alias of -g, --groups',
+    collectCommaSeparated
+  )
+  .option(
     '-o, --only [regex]',
     'only record calls to URLs matching given regex pattern (repeatable)',
     collect
@@ -76,19 +81,28 @@ const withName = (env, name, options = {}) => {
       [
         {
           type: 'confirm',
-          name: 'stop',
-          message: 'Press enter when ready to stop recording.'
+          name: 'write',
+          message: 'When done, press enter to finish recording (or type "n" to abort).'
         }
-      ],
-      () => {
-        if (remote) {
-          request.get(`${adminUrl}/record-stop`, recordStopCallback);
-        } else {
-          // eslint-disable-next-line global-require, import/no-dynamic-require
-          require(env.modulePath).recordStop(recordStopCallback);
-        }
+      ]
+    ).then(answer => {
+      const { write = true } = answer;
+
+      const stopOptions = { noWrite: !write };
+
+      if (remote) {
+        const qs2 = querystring.stringify({
+          options: JSON.stringify(stopOptions)
+        });
+
+        request.get(`${adminUrl}/record-stop?${qs2}`, recordStopCallback, {
+
+        });
+      } else {
+        // eslint-disable-next-line global-require, import/no-dynamic-require
+        require(env.modulePath).recordStop(stopOptions, recordStopCallback);
       }
-    );
+    });
   });
 };
 
@@ -97,12 +111,12 @@ global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
   const [name] = program.args;
-  const { groups, only, header, useHeaders, useLatency } = program;
+  const { groups, group, only, header, useHeaders, useLatency } = program;
 
   env.program = program;
 
   const options = {
-    groups,
+    groups: groups || group,
     only,
     headers: header,
     useHeaders,
@@ -117,16 +131,15 @@ boot(env => {
           name: 'name',
           message: 'Recording name:'
         }
-      ],
-      answers => {
-        if (!answers.name.length) {
-          console.log(chalk.red('Recording name required'));
-          process.exit(1);
-        }
-
-        withName(env, answers.name, options);
+      ]
+    ).then(answers => {
+      if (!answers.name.length) {
+        console.log(chalk.red('Recording name required'));
+        process.exit(1);
       }
-    );
+
+      withName(env, answers.name, options);
+    })
   } else {
     withName(env, name, options);
   }

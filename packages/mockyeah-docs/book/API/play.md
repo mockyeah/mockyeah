@@ -1,15 +1,14 @@
 # `play()`
 
-`mockyeah.play([suite name])`
+`mockyeah.play(suiteName)`
 
-`suite name` (`String`; required) Directory name from which to mount contained
-service suites (i.e. `./mockyeah/[suite name]`).
+`suiteName` (`String`; required) Directory name from which to mount contained
+service suites (i.e. `./mockyeah/suiteName`).
 
-Mounts each service suite. Each suite will be mounted with the
-exact same payload, headers, status, and latency as suited during its recording.
+Mounts the specified suite.
 This behavior may be changed by altering the values in the suite files.
 
-Here is an example of a service suite file:
+Here is an example of a suite file:
 
 ```js
 module.exports = [

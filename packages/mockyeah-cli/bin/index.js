@@ -21,5 +21,6 @@ boot(() => {
     .command('play [name]', 'play suite')
     .command('playAll', 'play all suites')
     .command('record [name]', 'record suite')
+    .command('start', 'start server')
     .parse(process.argv);
 });

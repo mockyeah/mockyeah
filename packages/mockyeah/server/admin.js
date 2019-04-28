@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const JSONparseSafe = require('json-parse-safe');
 
 // TODO: Implement support for HTTPS admin server protocol.
 module.exports = function AdminServer(config, app) {
@@ -18,7 +19,7 @@ module.exports = function AdminServer(config, app) {
     const { name, options } = req.query;
 
     try {
-      app.record(name, options ? JSON.parse(options) : undefined);
+      app.record(name, JSONparseSafe(options).value);
     } catch (err) {
       next(err);
       return;
@@ -29,7 +30,9 @@ module.exports = function AdminServer(config, app) {
 
   admin.use('/record-stop', (req, res, next) => {
     try {
-      app.recordStop(err => {
+      const { options } = req.query;
+
+      app.recordStop(JSONparseSafe(options).value, err => {
         if (err) {
           next(err);
           return;

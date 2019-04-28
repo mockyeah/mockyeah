@@ -36,7 +36,7 @@ describe('prepareConfig', () => {
       name: 'mockyeah',
       output: true,
       port: 4001,
-      proxy: false,
+      proxy: true,
       record: false,
       verbose: false,
       recordToFixtures: true,
@@ -46,7 +46,8 @@ describe('prepareConfig', () => {
       responseHeaders: true,
       groups: {},
       suiteHeader: 'x-mockyeah-suite',
-      suiteCookie: 'mockyeahSuite'
+      suiteCookie: 'mockyeahSuite',
+      start: true
     });
   });
 
@@ -66,7 +67,7 @@ describe('prepareConfig', () => {
       name: 'mockyeah',
       output: true,
       port: 4001,
-      proxy: false,
+      proxy: true,
       record: false,
       verbose: false,
       recordToFixtures: true,
@@ -76,7 +77,8 @@ describe('prepareConfig', () => {
       responseHeaders: true,
       groups: {},
       suiteHeader: 'x-mockyeah-suite',
-      suiteCookie: 'mockyeahSuite'
+      suiteCookie: 'mockyeahSuite',
+      start: true
     });
   });
 });

@@ -12,7 +12,7 @@ const { expect } = require('chai');
 
 const ROOT = path.resolve(__dirname, '../.tmp/proxy');
 
-describe('Record Groups Test', function () {
+describe('Record Group Test', function () {
   let proxy;
   let remote;
   let proxyReq;
@@ -87,20 +87,18 @@ describe('Record Groups Test', function () {
   it('should record fixture to group subdirectory', function (done) {
     this.timeout = 10000;
 
-    const suiteName = 'test-some-fancy-suite-groups-file';
+    const suiteName = 'test-some-fancy-suite-group-file';
 
     // Construct remote service urls
     // e.g. http://localhost:4041/http://example.com/some/service
     const path1 = '/some/service/one';
     const path2 = '/some/non-subdir/service/two';
     const path3 = '/some/named-dir/service/three';
-    const path4 = '/some/other';
 
     // Mount remote service end points
     remote.get(path1, { text: 'hey there' });
     remote.get(path2, { text: 'hey non-subdir there' });
     remote.get(path3, { text: 'hey named dir there' });
-    remote.get(path4, { text: 'hey other' });
 
     // Initiate recording and playback series
     async.series(
@@ -108,12 +106,7 @@ describe('Record Groups Test', function () {
         // Initiate recording
         cb => {
           proxy.record(suiteName, {
-            groups: [
-              'someService',
-              'someNonSubdirGroup',
-              'someServiceNamedDir',
-              'unknownGroupSpecified'
-            ]
+            group: 'someService,someNonSubdirGroup , someServiceNamedDir,unknownGroupSpecified'
           });
           cb();
         },
@@ -123,7 +116,6 @@ describe('Record Groups Test', function () {
         cb => proxyReq.get(path1).expect(200, cb),
         cb => proxyReq.get(path2).expect(200, cb),
         cb => proxyReq.get(path3).expect(200, cb),
-        cb => proxyReq.get(path4).expect(200, cb),
 
         // Stop recording
         cb => {
@@ -158,13 +150,12 @@ describe('Record Groups Test', function () {
         cb => {
           const contents = fs.readFileSync(getSuiteFilePath(suiteName), 'utf8');
           expect(contents).to.contain(
-            '"fixture": "someService/test-some-fancy-suite-groups-file/0.txt"'
+            '"fixture": "someService/test-some-fancy-suite-group-file/0.txt"'
           );
           expect(contents).to.contain(
-            '"fixture": "someServiceDirectoryForNamedDir/test-some-fancy-suite-groups-file/0.txt"'
+            '"fixture": "someServiceDirectoryForNamedDir/test-some-fancy-suite-group-file/0.txt"'
           );
-          expect(contents).to.contain('"fixture": "test-some-fancy-suite-groups-file/0.txt"');
-          expect(contents).not.to.contain('"fixture": "test-some-fancy-suite-groups-file/1.txt"');
+          expect(contents).to.contain('"fixture": "test-some-fancy-suite-group-file/0.txt"');
           cb();
         },
 
