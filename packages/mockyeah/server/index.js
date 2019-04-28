@@ -170,21 +170,21 @@ module.exports = function Server(config, onStart) {
 
   // Construct and return mockyeah API
   return Object.assign({}, app.routeManager, {
-    server,
     adminServer,
-    use,
-    config,
     close,
-    proxy,
-    reset,
+    config,
     play,
     playAll,
+    proxy,
     record,
     recordStop,
-    watch,
-    start,
-    unwatch,
+    reset,
+    server,
     shutdown,
-    startedPromise
+    start,
+    startedPromise,
+    unwatch,
+    use,
+    watch
   });
 };

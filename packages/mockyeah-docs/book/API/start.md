@@ -2,6 +2,8 @@
 
 `mockyeah.start(callback)`
 
-Dynamically start the server (if using `start: false` in [Configuration](../Configuration.md)).
+`callback` (`Function`; optional) To be exceuted when starting completes.
+Passed an error as first argument if the closing fails. Also returns a promise.
 
-Accepts a callback and returns a promise.
+Starts the mockyeah server - to be used in combination with `start: false` in [configuration](../Configuration.md)
+for starting the server lazily.
