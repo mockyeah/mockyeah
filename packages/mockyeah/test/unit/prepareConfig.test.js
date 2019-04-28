@@ -46,7 +46,8 @@ describe('prepareConfig', () => {
       responseHeaders: true,
       groups: {},
       suiteHeader: 'x-mockyeah-suite',
-      suiteCookie: 'mockyeahSuite'
+      suiteCookie: 'mockyeahSuite',
+      start: true
     });
   });
 
@@ -76,7 +77,8 @@ describe('prepareConfig', () => {
       responseHeaders: true,
       groups: {},
       suiteHeader: 'x-mockyeah-suite',
-      suiteCookie: 'mockyeahSuite'
+      suiteCookie: 'mockyeahSuite',
+      start: true
     });
   });
 });
