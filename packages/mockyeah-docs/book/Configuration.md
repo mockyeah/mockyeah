@@ -12,6 +12,7 @@
   "output": true,
   "journal": false,
   "verbose": false,
+  "start": true,
   "proxy": false,
   "record": false,
   "adminServer": true,
@@ -67,6 +68,7 @@ Also supports a `.mockyeah.js` as a Node module that exports a JavaScript object
   ```
 
 - `verbose`: Boolean to toggle verbosity of mockyeah generated output.
+- `start`: Whether to start the server on instantiation (otherwise use [`start()`](./API/start.md)).
 - `proxy`: Boolean to enable a proxy on startup.
 
 The proxy will transparently forward all non-matching requests onto their original URL.

@@ -32,6 +32,7 @@ module.exports = (config = {}) => {
   config.adminHost = config.adminHost || config.host || configDefaults.host;
   config.proxy = typeof config.proxy !== 'undefined' ? config.proxy : configDefaults.proxy;
   config.proxy = config.proxy || config.record;
+  config.start = typeof config.start !== 'undefined' ? config.start : true;
 
   // legacy support for `capturesDir`
   config.suitesDir = config.suitesDir || config.capturesDir || configDefaults.suitesDir;

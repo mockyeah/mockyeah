@@ -22,6 +22,7 @@
     - [`recordStop()`](API/recordStop.md)
     - [`reset()`](API/reset.md)
     - [`shutdown()`](API/shutdown.md)
+    - [`start()`](API/start.md)
     - [`startedPromise`](API/startedPromise.md)
     - [`unwatch()`](API/unwatch.md)
     - [`watch()`](API/watch.md)
