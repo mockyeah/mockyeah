@@ -45,7 +45,7 @@ module.exports = function Server(config, onStart) {
       app.log('serve', `Listening at ${this.rootUrl}`);
       // Execute callback once server starts
       if (onStart) onStart.call(this);
-      resolve();
+      setTimeout(resolve);
     }
 
     if (config.portHttps) {
@@ -105,26 +105,39 @@ module.exports = function Server(config, onStart) {
 
   // Expose ability to stop server via API
   const close = function close(done) {
-    const tasks = [
-      cb =>
-        server.close(err => {
-          app.log(['serve', 'exit'], 'Goodbye.');
-          cb(err);
-        }),
-      adminServer &&
-      (cb =>
-        adminServer.close(err => {
-          app.log(['admin', 'serve', 'exit'], 'Goodbye.');
-          cb(err);
-        }))
-    ].filter(Boolean);
+    return new Promise((resolve, reject) => {
+      const doneAndResolve = err => {
+        if (done) done(err);
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      }
 
-    async.parallel(tasks, done);
+      const tasks = [
+        cb =>
+          server.close(err => {
+            app.log(['serve', 'exit'], 'Goodbye.');
+            cb(err);
+          }),
+        adminServer &&
+        (cb =>
+          adminServer.close(err => {
+            app.log(['admin', 'serve', 'exit'], 'Goodbye.');
+            cb(err);
+          }))
+      ].filter(Boolean);
+
+      startedPromise.then(() =>
+        async.parallel(tasks, doneAndResolve)
+      );
+    });
   };
 
   const shutdown = done => {
     app.unwatch();
-    close(done);
+    return close(done);
   };
 
   const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
