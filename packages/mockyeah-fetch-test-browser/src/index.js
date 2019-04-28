@@ -1,4 +1,6 @@
+import '@babel/polyfill';
 import 'whatwg-fetch';
-import { proxy } from 'mockyeah-fetch'
+import 'mockyeah-fetch'
+import fetches from './fetches'
 
-proxy()
+fetches()

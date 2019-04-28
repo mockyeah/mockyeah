@@ -5,9 +5,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "webpack --module-bind js=babel-loader --plugin html-webpack-plugin"
+    "build": "webpack -p --module-bind js=babel-loader --plugin html-webpack-plugin",
+    "build:custom": "webpack -p --module-bind js=babel-loader --plugin html-webpack-plugin src/custom.js"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.4.4",
     "mockyeah-fetch": "0.21.0-alpha.0",
     "whatwg-fetch": "^3.0.0"
   },

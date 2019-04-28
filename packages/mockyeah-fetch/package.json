@@ -4,7 +4,9 @@
   "description": "A browser request mocking utility.",
   "main": "dist/main.js",
   "scripts": {
-    "build": "webpack --module-bind js=babel-loader --output-library-target umd --output-library mockyeahFetch"
+    "build": "yarn build:default && yarn build:proxy",
+    "build:default": "webpack -p --module-bind js=babel-loader --output-library-target umd --output-library mockyeahFetch",
+    "build:proxy": "webpack -p --module-bind js=babel-loader --output-library-target umd --output-library mockyeahFetchProxy -o dist/proxy.js src/proxy.js && cp dist/proxy.js proxy.js"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
