@@ -90,6 +90,7 @@ mockyeah.get("https://service.example.com/foo/bar", {
 Internally, this mounts with a leading slash, i.e., `'/https://service.example.com/foo/bar'`.
 
 - `record`: Boolean to enable recording on startup.
+- `watch`: Boolean to enable watch more on startup. See [`watch()`](./API/watch.md).
 - `suiteHeader`: String for the header name to use to opt-in to suites dynamically.
 - `suiteCookie`: String for the cookie name to use to opt-in to suites dynamically.
 - `adminServer`: Boolean to enable admin server (for recording, playing, etc.)
