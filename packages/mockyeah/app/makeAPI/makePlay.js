@@ -10,7 +10,10 @@ const makePlay = app => {
 
     app.log(['serve', 'play'], name);
 
-    suite.map(c => app.routeManager.all(...c));
+    suite.map((c, i) => app.routeManager.all(...c, {
+      suiteName: name,
+      suiteIndex: i
+    }));
   };
 
   return play;
