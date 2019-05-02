@@ -10,14 +10,14 @@ module.exports = function RouteManager(app) {
   const routeResolver = new RouteResolver(app);
 
   return {
-    register: function register(method, _path, response) {
+    register: function register(method, _path, response, options) {
       app.log(['serve', 'mount', method], _path.path || _path.url || _path);
-      return routeResolver.register(method, _path, response);
+      return routeResolver.register(method, _path, response, options);
     },
 
-    all: function all(_path, response) {
+    all: function all(_path, response, options) {
       const method = _path.method ? _path.method.toLowerCase() : 'all';
-      return this.register(method, _path, response);
+      return this.register(method, _path, response, options);
     },
 
     get: function get(_path, response) {

@@ -1,4 +1,5 @@
 const { compileRoute, requireSuite } = require('./helpers');
+const logMatchError = require('./logMatchError');
 const routeMatchesRequest = require('./routeMatchesRequest');
 
 // Check for an unmounted route dynamically based on header.
@@ -23,7 +24,8 @@ const handleDynamicSuite = (app, req, res) => {
     compiledRoute = compileRoute(r[0], r[1]);
 
     return routeMatchesRequest(compiledRoute, req, {
-      aliases
+      aliases,
+      log: logMatchError.bind(null, app)
     });
   });
 

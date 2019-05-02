@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const Expectation = require('./Expectation');
 const { compileRoute } = require('./helpers');
+const logMatchError = require('./logMatchError');
 const routeMatchesRequest = require('./routeMatchesRequest');
 const handleDynamicSuite = require('./handleDynamicSuite');
 
@@ -31,7 +32,8 @@ function listen() {
 
     const route = routes.find(r =>
       routeMatchesRequest(r, req, {
-        aliases
+        aliases,
+        log: logMatchError.bind(null, app)
       })
     );
 
@@ -84,15 +86,15 @@ function RouteResolver(app) {
   listen.call(this);
 }
 
-RouteResolver.prototype.register = function register(method, _path, response) {
+RouteResolver.prototype.register = function register(method, _path, response, options) {
   const match = _.isPlainObject(_path)
     ? Object.assign({ method }, _path)
     : {
-        method,
-        path: _path
-      };
+      method,
+      path: _path
+    };
 
-  const route = compileRoute(match, response);
+  const route = compileRoute(match, response, options);
 
   const expectation = new Expectation(route);
   route.expectation = expectation;
