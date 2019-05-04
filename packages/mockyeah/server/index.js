@@ -145,13 +145,15 @@ module.exports = function Server(config, onStart) {
         cb =>
           server.close(err => {
             app.log(['serve', 'exit'], 'Goodbye.');
-            cb(err);
+            if (err && err.code === 'ERR_SERVER_NOT_RUNNING') cb()
+            else cb(err);
           }),
         adminServer &&
         (cb =>
           adminServer.close(err => {
             app.log(['admin', 'serve', 'exit'], 'Goodbye.');
-            cb(err);
+            if (err && err.code === 'ERR_SERVER_NOT_RUNNING') cb()
+            else cb(err);
           }))
       ].filter(Boolean);
 
