@@ -105,7 +105,7 @@ RouteResolver.prototype.register = function register(method, _path, response, op
   this.routes.push(route);
 
   return {
-    expect: predicate => expectation.api(predicate)
+    expect: predicateOrMatchObject => expectation.api(predicateOrMatchObject)
   };
 };
 

@@ -3,7 +3,32 @@
 The Expectation API enables you to verify your integration via the perspective of mockyeah. Chaining `.expect()` with any number of supported expectation functions returns an expectation object that can be verified at the end of your test. There are [quantitative](#quantitative), [structural](#structural),
 and other expectation functions.
 
-Example returning a promise to the test suite via `verify` after `run`:
+Example:
+
+```js
+const mockyeah = require("mockyeah");
+const request = require("supertest");
+
+describe("This test", () => {
+  it("should verify service is called once with parameter", () =>
+    mockyeah
+      .expect({
+        method: "get",
+        path: "/say-hello",
+        query: {
+          foo: "bar"
+        }
+      })
+      .once()
+      .run(() =>
+        request("http://localhost:4001")
+          .get("/say-hello?foo=bar")
+      )
+      .verify());
+});
+```
+
+If you would prefer to use the [Mock API](./Mock-API.md) methods to setup endpoints:
 
 ```js
 const mockyeah = require("mockyeah");

@@ -44,6 +44,99 @@ describe('Route expectation', () => {
     );
   });
 
+  it('should support expect with auto-mount', done => {
+    const expectation = mockyeah
+      .expect({
+        path: '/foo'
+      })
+      .once();
+
+    async.series(
+      [
+        cb => {
+          expect(expectation.verify).to.throw(
+            'Expected route to be called once, but it was called 0 times'
+          );
+          cb();
+        },
+        cb => request.get('/foo').end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb => request.get('/foo').end(cb),
+        cb => {
+          expect(expectation.verify).to.throw(
+            'Expected route to be called once, but it was called 2 times'
+          );
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should support expect with auto-mount and redundant assertions', done => {
+    const expectation = mockyeah
+      .expect({
+        path: '/foo',
+        query: {
+          some: 'value'
+        }
+      })
+      .query({
+        some: 'value'
+      })
+      .once();
+
+    async.series(
+      [
+        cb => {
+          expect(expectation.verify).to.throw(
+            'Expected route to be called once, but it was called 0 times'
+          );
+          cb();
+        },
+        cb => request.get('/foo?some=value').end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        },
+        cb => request.get('/foo?some=value').end(cb),
+        cb => {
+          expect(expectation.verify).to.throw(
+            'Expected route to be called once, but it was called 2 times'
+          );
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should fail for expect with auto-mount not matching', done => {
+    const expectation = mockyeah
+      .expect({
+        path: '/faoo',
+        query: {
+          some: 'value'
+        }
+      });
+
+    async.series(
+      [
+        cb => request.get('/foo?some=nope').end(cb),
+        cb => {
+          expect(expectation.verify).to.throw(
+            'Expect object did not match: Expected `"/faoo"` and value `"/foo"` not equal for "path" Expected `"value"` and value `"nope"` not equal for "query.some"'
+          );
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
   it('should implement once() expectation', done => {
     const expectation = mockyeah
       .get('/foo', { text: 'bar' })
