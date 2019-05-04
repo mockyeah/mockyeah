@@ -58,7 +58,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       } catch (err) {
         const message = `${internal.prefix} Expect function did not match${
           err && err.message ? `: ${err.message}` : ''
-        }`;
+          }`;
         assert(false, message);
       }
     });
@@ -91,9 +91,9 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         assert(
           internal.called >= number,
           `${
-            internal.prefix
+          internal.prefix
           } Expected route to be called at least ${number} times, but it was called ${
-            internal.called
+          internal.called
           } times`
         );
       });
@@ -104,9 +104,9 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         assert(
           internal.called <= number,
           `${
-            internal.prefix
+          internal.prefix
           } Expected route to be called at most ${number} times, but it was called ${
-            internal.called
+          internal.called
           } times`
         );
       });
@@ -117,7 +117,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         assert(
           internal.called === 0,
           `${internal.prefix} Expected route to be called never, but it was called ${
-            internal.called
+          internal.called
           } times`
         );
       });
@@ -128,7 +128,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         assert(
           internal.called === 1,
           `${internal.prefix} Expected route to be called once, but it was called ${
-            internal.called
+          internal.called
           } times`
         );
       });
@@ -139,7 +139,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         assert(
           internal.called === 2,
           `${internal.prefix} Expected route to be called twice, but it was called ${
-            internal.called
+          internal.called
           } times`
         );
       });
@@ -150,7 +150,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         assert(
           internal.called === 3,
           `${internal.prefix} Expected route to be called thrice, but it was called ${
-            internal.called
+          internal.called
           } times`
         );
       });
@@ -161,11 +161,24 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
         assert(
           internal.called === number,
           `${internal.prefix} Expected route to be called ${number} times, but it was called ${
-            internal.called
+          internal.called
           } times`
         );
       });
       return this;
+    },
+    path: function path(value) {
+      const message = `${internal.prefix} Path did not match expected`;
+
+      internal.handlers.push(req => {
+        const { _parsedUrl: { pathname } } = req;
+        matchesAssertion(pathname, value, message);
+      });
+
+      return this;
+    },
+    url: function url(value) {
+      return this.path(value);
     },
     header: function header(name, value) {
       const message = `${internal.prefix} Header "${name}" did not match expected`;

@@ -16,6 +16,8 @@ describe('Route expectation', () => {
     request = supertest(mockyeah.server);
   });
 
+  afterEach(() => mockyeah.reset());
+
   after(() => mockyeah.close());
 
   it('should implement never() expectation', done => {
@@ -235,6 +237,42 @@ describe('Route expectation', () => {
           expectation.verify();
           cb();
         },
+        cb => request.get('/foo').end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should implement path() expectation', done => {
+    const expectation = mockyeah
+      .get('*')
+      .expect()
+      .path(/foo/);
+
+    async.series(
+      [
+        cb => request.get('/foo').end(cb),
+        cb => {
+          expectation.verify();
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should implement url() expectation', done => {
+    const expectation = mockyeah
+      .get('*')
+      .expect()
+      .url(/foo/);
+
+    async.series(
+      [
         cb => request.get('/foo').end(cb),
         cb => {
           expectation.verify();
