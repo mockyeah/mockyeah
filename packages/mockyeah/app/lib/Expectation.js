@@ -171,7 +171,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       const message = `${internal.prefix} Path did not match expected`;
 
       internal.handlers.push(req => {
-        const { _parsedUrl: { pathname } = {} } = req;
+        const { _parsedUrl: { pathname } } = req;
         matchesAssertion(pathname, value, message);
       });
 
