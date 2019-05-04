@@ -20,10 +20,7 @@ describe("This test", () => {
         }
       })
       .once()
-      .run(() =>
-        request("http://localhost:4001")
-          .get("/say-hello?foo=bar")
-      )
+      .run(() => request("http://localhost:4001").get("/say-hello?foo=bar"))
       .verify());
 });
 ```
@@ -43,10 +40,7 @@ describe("This test", () => {
         foo: "bar"
       })
       .once()
-      .run(() =>
-        request("http://localhost:4040")
-          .get("/say-hello?foo=bar")
-      )
+      .run(() => request("http://localhost:4040").get("/say-hello?foo=bar"))
       .verify());
 });
 ```

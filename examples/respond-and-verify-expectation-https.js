@@ -1,18 +1,18 @@
-const https = require('https');
-const log = require('./log');
-const mockyeah = require('./mockyeah-https');
+const https = require("https");
+const log = require("./log");
+const mockyeah = require("./mockyeah-https");
 
 const expectation = mockyeah
-  .get('/', { text: 'it worked!' })
+  .get("/", { text: "it worked!" })
   .expect()
-  .header('host', 'example.com')
+  .header("host", "example.com")
   .params({
-    foo: 'bar'
+    foo: "bar"
   })
   .body('{ "some": "data" }')
   .once();
 
-https.get('https://localhost:4443', res => {
+https.get("https://localhost:4443", res => {
   try {
     expectation.verify();
   } catch (err) {
