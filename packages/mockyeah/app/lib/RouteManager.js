@@ -40,6 +40,10 @@ module.exports = function RouteManager(app) {
       return this.register('delete', _path, response);
     },
 
+    expect: function expect(predicateOrMatchObject) {
+      return this.all('*').expect(predicateOrMatchObject);
+    },
+
     reset: function reset() {
       routeResolver.reset();
     }
