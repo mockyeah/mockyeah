@@ -170,6 +170,28 @@ const expectation = mockyeah
 
 ## Structural
 
+<div id="path"></div>
+
+`.path(MatchValue)` - Adds an expectation that a service must receive only requests with paths matching the value specified. See [match value](./Match-Values.md).
+
+```js
+const expectation = mockyeah
+  .get("*")
+  .expect()
+  .path("/foo");
+```
+
+<div id="url"></div>
+
+`.url(MatchValue)` - An alias of <a href="#path">`.path()`</a>.
+
+```js
+const expectation = mockyeah
+  .get("*")
+  .expect()
+  .url("/foo");
+```
+
 <div id="body"></div>
 
 `.body(MatchValue)` - Adds an expectation that a service must receive only requests with bodies matching the body specified. See [match value](./Match-Values.md).
