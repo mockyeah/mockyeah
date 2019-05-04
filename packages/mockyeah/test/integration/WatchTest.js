@@ -21,10 +21,10 @@ describe('Watcher Test', () => {
     fs.removeSync(watchedSuiteDir);
   });
 
-  it('should watch programmatically', function(done) {
+  it('should watch programmatically', function (done) {
     this.timeout(10000);
 
-    const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root });
+    const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root, watch: false });
 
     mockyeah.playAll();
     mockyeah.watch();
@@ -59,7 +59,7 @@ describe('Watcher Test', () => {
     }, 1000);
   });
 
-  it('should watch based on config', function(done) {
+  it('should watch based on config', function (done) {
     this.timeout(10000);
 
     const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root, watch: true });
@@ -89,6 +89,43 @@ describe('Watcher Test', () => {
         supertest(mockyeah.server)
           .get('/watched')
           .expect(200, 'watched!', err => {
+            mockyeah.shutdown();
+            return err ? done(err) : done();
+          });
+      }, 1000);
+    }, 1000);
+  });
+
+  it('should not watch based on config', function (done) {
+    this.timeout(10000);
+
+    const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root, watch: false });
+
+    mockyeah.playAll();
+
+    setTimeout(() => {
+      // eslint-disable-next-line no-sync
+      fs.outputFileSync(
+        watchedSuiteFile,
+        `
+      module.exports = [
+        [
+          {
+            method: 'get',
+            path: '/watched'
+          },
+          {
+            text: 'watched!'
+          }
+        ]
+      ];
+      `
+      );
+
+      setTimeout(() => {
+        supertest(mockyeah.server)
+          .get('/watched')
+          .expect(404, err => {
             mockyeah.shutdown();
             return err ? done(err) : done();
           });
