@@ -37,6 +37,8 @@
     - [`.expect().thrice()`](API/Expectation-API.md#thrice)
     - [`.expect().exactly()`](API/Expectation-API.md#exactly)
     - [Structural](API/Expectation-API.md#structural)
+    - [`.expect().path()`](API/Expectation-API.md#path)
+    - [`.expect().url()`](API/Expectation-API.md#url)
     - [`.expect().body()`](API/Expectation-API.md#body)
     - [`.expect().params()`](API/Expectation-API.md#params)
     - [`.expect().header()`](API/Expectation-API.md#header)
