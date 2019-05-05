@@ -8,6 +8,6 @@ const logMatchError = (app, { match, route }) => {
       app.log(['match', 'error'], `${safeSuiteLabel}"${keyPath}": ${error.message}`, true);
     });
   }
-}
+};
 
 module.exports = logMatchError;

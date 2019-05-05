@@ -40,7 +40,7 @@ module.exports = function Server(config, onStart) {
         if (onStart) onStart.call(this, error);
         if (lazyOnStart) lazyOnStart.call(this, error);
       });
-    }
+    };
 
     const listen = function listener(secure, error) {
       if (error) {
@@ -56,7 +56,7 @@ module.exports = function Server(config, onStart) {
         if (onStart) onStart.call(this);
         if (lazyOnStart) lazyOnStart.call(this);
       });
-    }
+    };
 
     const startServer = () => {
       if (config.portHttps) {
@@ -96,7 +96,7 @@ module.exports = function Server(config, onStart) {
       }
 
       server.on('error', handleError);
-    }
+    };
 
     const startAdminServer = () => {
       const admin = new AdminServer(config, app);
@@ -117,7 +117,7 @@ module.exports = function Server(config, onStart) {
       }
 
       return startedPromise;
-    }
+    };
   });
 
   if (config.start) {
@@ -139,27 +139,25 @@ module.exports = function Server(config, onStart) {
         } else {
           resolve();
         }
-      }
+      };
 
       const tasks = [
         cb =>
           server.close(err => {
             app.log(['serve', 'exit'], 'Goodbye.');
-            if (err && err.code === 'ERR_SERVER_NOT_RUNNING') cb()
+            if (err && err.code === 'ERR_SERVER_NOT_RUNNING') cb();
             else cb(err);
           }),
         adminServer &&
-        (cb =>
-          adminServer.close(err => {
-            app.log(['admin', 'serve', 'exit'], 'Goodbye.');
-            if (err && err.code === 'ERR_SERVER_NOT_RUNNING') cb()
-            else cb(err);
-          }))
+          (cb =>
+            adminServer.close(err => {
+              app.log(['admin', 'serve', 'exit'], 'Goodbye.');
+              if (err && err.code === 'ERR_SERVER_NOT_RUNNING') cb();
+              else cb(err);
+            }))
       ].filter(Boolean);
 
-      startedPromise.then(() =>
-        async.parallel(tasks, doneAndResolve)
-      );
+      startedPromise.then(() => async.parallel(tasks, doneAndResolve));
     });
   };
 

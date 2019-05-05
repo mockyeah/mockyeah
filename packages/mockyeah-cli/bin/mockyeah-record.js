@@ -32,11 +32,7 @@ program
     'record with these named groups from configuration (comma-separated and/or repeatable)',
     collectCommaSeparated
   )
-  .option(
-    '--group [name]',
-    'alias of -g, --groups',
-    collectCommaSeparated
-  )
+  .option('--group [name]', 'alias of -g, --groups', collectCommaSeparated)
   .option(
     '-o, --only [regex]',
     'only record calls to URLs matching given regex pattern (repeatable)',
@@ -77,32 +73,30 @@ const withName = (env, name, options = {}) => {
       remote = true;
     }
 
-    inquirer.prompt(
-      [
+    inquirer
+      .prompt([
         {
           type: 'confirm',
           name: 'write',
           message: 'When done, press enter to finish recording (or type "n" to abort).'
         }
-      ]
-    ).then(answer => {
-      const { write = true } = answer;
+      ])
+      .then(answer => {
+        const { write = true } = answer;
 
-      const stopOptions = { noWrite: !write };
+        const stopOptions = { noWrite: !write };
 
-      if (remote) {
-        const qs2 = querystring.stringify({
-          options: JSON.stringify(stopOptions)
-        });
+        if (remote) {
+          const qs2 = querystring.stringify({
+            options: JSON.stringify(stopOptions)
+          });
 
-        request.get(`${adminUrl}/record-stop?${qs2}`, recordStopCallback, {
-
-        });
-      } else {
-        // eslint-disable-next-line global-require, import/no-dynamic-require
-        require(env.modulePath).recordStop(stopOptions, recordStopCallback);
-      }
-    });
+          request.get(`${adminUrl}/record-stop?${qs2}`, recordStopCallback, {});
+        } else {
+          // eslint-disable-next-line global-require, import/no-dynamic-require
+          require(env.modulePath).recordStop(stopOptions, recordStopCallback);
+        }
+      });
   });
 };
 
@@ -124,22 +118,22 @@ boot(env => {
   };
 
   if (!name) {
-    inquirer.prompt(
-      [
+    inquirer
+      .prompt([
         {
           type: 'input',
           name: 'name',
           message: 'Recording name:'
         }
-      ]
-    ).then(answers => {
-      if (!answers.name.length) {
-        console.log(chalk.red('Recording name required'));
-        process.exit(1);
-      }
+      ])
+      .then(answers => {
+        if (!answers.name.length) {
+          console.log(chalk.red('Recording name required'));
+          process.exit(1);
+        }
 
-      withName(env, answers.name, options);
-    })
+        withName(env, answers.name, options);
+      });
   } else {
     withName(env, name, options);
   }

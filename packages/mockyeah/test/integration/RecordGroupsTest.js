@@ -12,7 +12,7 @@ const { expect } = require('chai');
 
 const ROOT = path.resolve(__dirname, '../.tmp/proxy');
 
-describe('Record Groups Test', function () {
+describe('Record Groups Test', function() {
   let proxy;
   let remote;
   let proxyReq;
@@ -21,7 +21,7 @@ describe('Record Groups Test', function () {
   before(done => {
     async.parallel(
       [
-        function (cb) {
+        function(cb) {
           // Instantiate proxy server for recording
           proxy = MockYeahServer(
             {
@@ -45,7 +45,7 @@ describe('Record Groups Test', function () {
             cb
           );
         },
-        function (cb) {
+        function(cb) {
           // Instantiate remote server
           remote = MockYeahServer(
             {
@@ -84,7 +84,7 @@ describe('Record Groups Test', function () {
     return path.resolve(ROOT, 'fixtures', groupName, suiteName, '0.txt');
   }
 
-  it('should record fixture to group subdirectory', function (done) {
+  it('should record fixture to group subdirectory', function(done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-groups-file';

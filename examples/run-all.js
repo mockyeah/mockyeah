@@ -1,12 +1,12 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const execAndWait = filePaths => {
-  const mockyeah = require('./mockyeah');
+  const mockyeah = require("./mockyeah");
   const next = filePaths.pop();
   if (!next) process.exit();
   mockyeah.close = () => setTimeout(execAndWait.bind(null, filePaths), 2000);
-  console.log('\nRUNNING ' + next + '\n');
+  console.log("\nRUNNING " + next + "\n");
   require(next);
 };
 

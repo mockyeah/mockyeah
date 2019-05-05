@@ -22,9 +22,7 @@ const makeRecordStop = app => {
 
     const { recordToFixtures, recordToFixturesMode, formatScript } = app.config;
 
-    const {
-      recordMeta: { name, set } = {}
-    } = app.locals;
+    const { recordMeta: { name, set } = {} } = app.locals;
 
     if (!name) {
       const error = new Error('Not recording.');

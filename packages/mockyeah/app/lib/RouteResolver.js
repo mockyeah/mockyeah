@@ -90,9 +90,9 @@ RouteResolver.prototype.register = function register(method, _path, response, op
   const match = _.isPlainObject(_path)
     ? Object.assign({ method }, _path)
     : {
-      method,
-      path: _path
-    };
+        method,
+        path: _path
+      };
 
   const route = compileRoute(match, response, options);
 
