@@ -10,6 +10,9 @@ const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
 const AdminServer = require('./admin');
 
+const isErrorServerNotRunning = error =>
+  error && (error.code === 'ERR_SERVER_NOT_RUNNING' || error.message.includes('Not running'));
+
 /**
  * Server module
  * @param  {Object} config Application configuration.
@@ -145,14 +148,14 @@ module.exports = function Server(config, onStart) {
         cb =>
           server.close(err => {
             app.log(['serve', 'exit'], 'Goodbye.');
-            if (err && err.code === 'ERR_SERVER_NOT_RUNNING') cb();
+            if (isErrorServerNotRunning(err)) cb();
             else cb(err);
           }),
         adminServer &&
           (cb =>
             adminServer.close(err => {
               app.log(['admin', 'serve', 'exit'], 'Goodbye.');
-              if (err && err.code === 'ERR_SERVER_NOT_RUNNING') cb();
+              if (isErrorServerNotRunning(err)) cb();
               else cb(err);
             }))
       ].filter(Boolean);
