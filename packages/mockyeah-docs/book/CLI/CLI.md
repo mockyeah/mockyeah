@@ -55,12 +55,12 @@ Usage: mockyeah [options] [command]
 
   Commands:
 
-    ls             list suites
-    play [name]    play suite
-    playAll        play all suites
-    record [name]  record suite
-    start          start server
-    help [cmd]     display help for [cmd]
+    ls                  list suites
+    play [suiteNames]   play suite(s)
+    playAll             play all suites
+    record [suiteName]  record suite
+    start               start server
+    help [cmd]          display help for [cmd]
 
   Options:
 
@@ -77,11 +77,29 @@ Usage: mockyeah-record [options]
 
   Options:
 
-    -g, --group, --groups [name]  record with these named groups from configuration (comma-separated and/or repeatable)
+    -g, --group, --groups [names]  record with these named groups from configuration (comma-separated and/or repeatable)
     -o, --only [regex]   only record calls to URLs matching given regex pattern (repeatable)
     -h, --use-headers    record headers to response options
     -l, --use-latency    record latency to response options
     -H, --header [pair]  record matches will require these headers ("Name: Value") (repeatable)
     -v, --verbose        verbose output
     -h, --help           output usage information
+```
+
+## Play
+
+`mockyeah play [options] [suiteNames]`
+
+Play one or more suites, passing comma-separated list of suite names, or else be prompted to pick one.
+
+E.g., comma-separated:
+
+```console
+$ mockyeah play some-custom-suite,some-custom-suite-2
+```
+
+or space-separated:
+
+```console
+$ mockyeah play some-custom-suite some-custom-suite-2
 ```
