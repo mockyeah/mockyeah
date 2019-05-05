@@ -52,8 +52,6 @@ const makeRecordStop = app => {
 
     const suitePath = path.join(suitesDir, suiteFileame);
 
-    mkdirp.sync(suitePath);
-
     const suiteFilePath = resolveFilePath(suitePath, 'index.js');
 
     let i = 0;
@@ -107,54 +105,62 @@ const makeRecordStop = app => {
       return [match, responseOptions];
     });
 
-    let js = JSON.stringify(newSet, null, 2);
+    if (newSet.length) {
+      let js = JSON.stringify(newSet, null, 2);
 
-    if (recordToFixturesMode === 'require') {
-      js = replaceFixtureWithRequireInJson(js, {
-        relativePath: path.relative(suitePath, fixturesDir)
+      if (recordToFixturesMode === 'require') {
+        js = replaceFixtureWithRequireInJson(js, {
+          relativePath: path.relative(suitePath, fixturesDir)
+        });
+      }
+
+      let jsModule = `module.exports = ${js};`;
+
+      if (formatScript) {
+        let formatFunction;
+
+        if (typeof formatScript === 'string') {
+          const formatScriptModulePath = path.resolve(relativeRoot, formatScript);
+          // eslint-disable-next-line global-require, import/no-dynamic-require
+          formatFunction = require(formatScriptModulePath);
+        } else {
+          formatFunction = formatScript;
+        }
+
+        if (formatFunction) {
+          jsModule = formatFunction(jsModule);
+        }
+      }
+
+      mkdirp.sync(suitePath);
+
+      fs.writeFile(suiteFilePath, jsModule, err => {
+        if (err) {
+          app.log(['record', 'response', 'error'], err);
+
+          if (cb) cb(err);
+
+          return;
+        }
+
+        newSet.forEach(suite => {
+          app.log(['record', 'response', 'saved'], suite[0].path || suite[0].url || suite[0]);
+        });
+
+        if (typeof app.locals.proxyingBeforeRecording !== 'undefined') {
+          app.locals.proxying = app.locals.proxyingBeforeRecording;
+          delete app.locals.proxyingBeforeRecording;
+        }
+
+        delete app.locals.recordMeta;
+
+        if (cb) cb();
       });
+
+      return;
     }
 
-    let jsModule = `module.exports = ${js};`;
-
-    if (formatScript) {
-      let formatFunction;
-
-      if (typeof formatScript === 'string') {
-        const formatScriptModulePath = path.resolve(relativeRoot, formatScript);
-        // eslint-disable-next-line global-require, import/no-dynamic-require
-        formatFunction = require(formatScriptModulePath);
-      } else {
-        formatFunction = formatScript;
-      }
-
-      if (formatFunction) {
-        jsModule = formatFunction(jsModule);
-      }
-    }
-
-    fs.writeFile(suiteFilePath, jsModule, err => {
-      if (err) {
-        app.log(['record', 'response', 'error'], err);
-
-        if (cb) cb(err);
-
-        return;
-      }
-
-      set.forEach(suite => {
-        app.log(['record', 'response', 'saved'], suite[0].path || suite[0].url || suite[0]);
-      });
-
-      if (typeof app.locals.proxyingBeforeRecording !== 'undefined') {
-        app.locals.proxying = app.locals.proxyingBeforeRecording;
-        delete app.locals.proxyingBeforeRecording;
-      }
-
-      delete app.locals.recordMeta;
-
-      if (cb) cb();
-    });
+    if (cb) cb();
   };
 
   return recordStop;
