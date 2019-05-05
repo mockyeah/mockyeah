@@ -21,7 +21,7 @@ describe('Watcher Test', () => {
     fs.removeSync(watchedSuiteDir);
   });
 
-  it('should watch programmatically', function (done) {
+  it('should watch programmatically', function(done) {
     this.timeout(10000);
 
     const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root, watch: false });
@@ -59,7 +59,7 @@ describe('Watcher Test', () => {
     }, 1000);
   });
 
-  it('should watch based on config', function (done) {
+  it('should watch based on config', function(done) {
     this.timeout(10000);
 
     const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root, watch: true });
@@ -96,7 +96,7 @@ describe('Watcher Test', () => {
     }, 1000);
   });
 
-  it('should not watch based on config', function (done) {
+  it('should not watch based on config', function(done) {
     this.timeout(10000);
 
     const mockyeah = new MockYeahServer({ port: 0, adminPort: 0, root, watch: false });

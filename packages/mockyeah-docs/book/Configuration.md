@@ -121,15 +121,16 @@ Internally, this mounts with a leading slash, i.e., `'/https://service.example.c
 So now a mock like this:
 
 ```js
-mockyeah.get('https://api.example.com/some/endpoint', { text: 'hello' })
+mockyeah.get("https://api.example.com/some/endpoint", { text: "hello" });
 ```
 
 Would be able to respond identically to calls to:
-* `https://demo.api.example.com/some/endpoint`
-* `https://test.api.example.com/some/endpoint`
-* `https://api.example.com/some/endpoint`
 
-- `groups`: When using `--only`, rather than always typing out regular expressions, you can define them here, so that rather than:
+- `https://demo.api.example.com/some/endpoint`
+- `https://test.api.example.com/some/endpoint`
+- `https://api.example.com/some/endpoint`
+
+* `groups`: When using `--only`, rather than always typing out regular expressions, you can define them here, so that rather than:
 
 ```
 mockyeah record --only '/api/v(.*)/users' --only '/api/v(.*)/posts)'

@@ -115,13 +115,12 @@ describe('Route expectation', () => {
   });
 
   it('should fail for expect with auto-mount not matching', done => {
-    const expectation = mockyeah
-      .expect({
-        path: '/faoo',
-        query: {
-          some: 'value'
-        }
-      });
+    const expectation = mockyeah.expect({
+      path: '/faoo',
+      query: {
+        some: 'value'
+      }
+    });
 
     async.series(
       [
