@@ -110,11 +110,11 @@ RouteResolver.prototype.register = function register(method, _path, response, op
 };
 
 RouteResolver.prototype.unregister = function unregister(routes) {
-  this.routes = this.routes.filter(r1 => !routes.some(r2 => isRouteMatch(r1, r2)));
+  this.routes = routes ? this.routes.filter(r1 => !routes.some(r2 => isRouteMatch(r1, r2))) : [];
 };
 
 RouteResolver.prototype.reset = function reset() {
-  this.unregister(this.routes);
+  this.unregister();
 };
 
 module.exports = RouteResolver;
