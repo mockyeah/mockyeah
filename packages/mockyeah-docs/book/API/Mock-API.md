@@ -4,9 +4,10 @@
 
 Each method creates a mock service with a HTTP verb matching its respective method name.
 
-## Parameters
+## Match
 
-<div id="match"></div>
+<div id="parameters"></div>
+
 ### `match` Request Match
 
 Specifies how to match requests to this mock.
@@ -73,7 +74,7 @@ type MatchBody = {
 If using query parameters in both the `path`/`url` and in a `query` object, then the key/value
 pairs are merged, with the values in `query` taking precedence.
 
-## Methods
+### Methods
 
 If using `.all` with the object syntax, you may use a `method` key to match only a specific method anyway.
 This may ease programmatic use, e.g., wiring up mocks from a declarative definition.
@@ -108,8 +109,34 @@ mockyeah.all(
 );
 ```
 
+### Shorthands
+
+You can also mount an empty HTTP 200 response by not providing response options:
+
+```js
+mockyeah.get("/hey");
+```
+
+which is shorthand for:
+
+```js
+mockyeah.get("/hey", {});
+```
+
+Or an HTTP 200 repsonse with text body by providing a string instead of object options:
+
+```js
+mockyeah.get("/hey", "why hello");
+```
+
+which is shorthand for:
+
+```js
+mockyeah.get("/hey", { text: "why hello" });
+```
+
 <div id="options"></div>
-### `options` Response Options (`Object`)
+### `options` Response Options (optional `Object|String`)
 
 Response options informing mockyeah how to respond to matching requests. Supported options:
 
