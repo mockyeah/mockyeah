@@ -7,32 +7,41 @@ Each method creates a mock service with a HTTP verb matching its respective meth
 ## Parameters
 
 <div id="match"></div>
-### `match` Request Match (`String` or `Object`)
+### `match` Request Match
 
 Specifies how to match requests to this mock.
+
 In the simplest case, it can be a string specifying the `path` to match.
-This can include query parameters as a shorthand for `query` below.
-This fully supports all Express path matching options.
+
+We support [Express route path matching options](https://expressjs.com/en/guide/routing.html#route-paths).
+
+But you can also include query parameters as a shorthand for `query` below.
 
 Examples:
 
 ```js
 mockyeah.get("/say-hello", { text: "hello" });
 
-mockyeah.get("/say-hello/:person", { text: "hello, person" });
-
 mockyeah.get("/say-hello?to=someone", { text: "hello, someone" });
 
-// or regex path match:
+// Or used named parameters for wildcard matching.
+mockyeah.get("/say-hello/:person", { text: "hello, person" });
+
+// Or drop into regular expression with '()':
+mockyeah.get("/say-(.*)", { text: "something, someone" });
+
+// Or regex path match:
 mockyeah.get(/say-[a-z]+/, { text: "something, someone" });
+
+// Or to match any path, use just a wildcard:
+mockyeah.get("*", { text: "anything, anyone" });
 ```
 
 If you want the mock to match only for specific headers, query parameters, or request body,
 or use some of the more advanced matching features like regular expressions or functions
 in place of string matches, then you can use the object syntax.
-
 Values within the object can be strings, regular expressions,
-functions, or plain objects - see [Match Values](./Match-Values.md).
+functions, or plain objects. See [Match Values](./Match-Values.md).
 
 All keys but `path` (also aliased as `url`) are optional.
 
@@ -64,7 +73,11 @@ type MatchBody = {
 If using query parameters in both the `path`/`url` and in a `query` object, then the key/value
 pairs are merged, with the values in `query` taking precedence.
 
-If using `.all`, you may use `method` to match only a specific method anyway. This may ease programmatic use, e.g., wiring up mocks from a declarative definition. Supports any casing. Recommended values include:
+## Methods
+
+If using `.all` with the object syntax, you may use a `method` key to match only a specific method anyway.
+This may ease programmatic use, e.g., wiring up mocks from a declarative definition.
+Supports any casing. Recommended values include:
 
 `'get' | 'post' | 'put' | 'patch' | 'delete' | 'all'`
 
