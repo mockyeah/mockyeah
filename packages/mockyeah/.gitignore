@@ -1,7 +1,3 @@
-suites
-mockyeah
-fixtures
-
 test/fixtures/test-*
 test/mockyeah/test-*
 
