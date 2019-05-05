@@ -28,11 +28,11 @@ const collect = (val, memo = []) => [...memo, val.trim()];
 
 program
   .option(
-    '-g, --groups [name]',
+    '-g, --groups [names]',
     'record with these named groups from configuration (comma-separated and/or repeatable)',
     collectCommaSeparated
   )
-  .option('--group [name]', 'alias of -g, --groups', collectCommaSeparated)
+  .option('--group [names]', 'alias of -g, --groups', collectCommaSeparated)
   .option(
     '-o, --only [regex]',
     'only record calls to URLs matching given regex pattern (repeatable)',

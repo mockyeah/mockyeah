@@ -18,9 +18,9 @@ boot(() => {
   program
     .version(version)
     .command('ls', 'list suites')
-    .command('play [name]', 'play suite')
+    .command('play [suiteNames]', 'play suite(s)')
     .command('playAll', 'play all suites')
-    .command('record [name]', 'record suite')
+    .command('record [suiteName]', 'record suite')
     .command('start', 'start server')
     .parse(process.argv);
 });

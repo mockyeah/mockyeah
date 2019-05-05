@@ -16,11 +16,11 @@ Usage: mockyeah [options] [command]
 
   Commands:
 
-    ls             list suites
-    play [name]    play suite
-    playAll        play all suites
-    record [name]  record suite
-    help [cmd]     display help for [cmd]
+    ls                  list suites
+    play [suiteNames]   play suite(s)
+    playAll             play all suites
+    record [suiteName]  record suite
+    help [cmd]          display help for [cmd]
 
   Options:
 

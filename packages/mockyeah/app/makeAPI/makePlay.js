@@ -1,21 +1,35 @@
+const { flatten } = require('lodash');
 const { requireSuite } = require('../lib/helpers');
 
+const flattenNames = names =>
+  Array.isArray(names)
+    ? flatten(names.map(name => flattenNames(name)))
+    : names.split(',').map(v => v.trim());
+
 const makePlay = app => {
-  const play = name => {
-    const suite = requireSuite(app, name);
+  const play = names => {
+    if (!names) return;
 
-    if (!suite) return;
+    names = flattenNames(names);
 
-    app.locals.playingSuites.push(name);
+    if (!names.length) return;
 
-    app.log(['serve', 'play'], name);
+    names.forEach(name => {
+      const suite = requireSuite(app, name);
 
-    suite.map((c, i) =>
-      app.routeManager.all(...c, {
-        suiteName: name,
-        suiteIndex: i
-      })
-    );
+      if (!suite) return;
+
+      app.locals.playingSuites.push(name);
+
+      app.log(['serve', 'play'], name);
+
+      suite.map((c, i) =>
+        app.routeManager.all(...c, {
+          suiteName: name,
+          suiteIndex: i
+        })
+      );
+    });
   };
 
   return play;

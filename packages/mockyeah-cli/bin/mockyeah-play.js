@@ -14,16 +14,19 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 const request = require('request');
 
-program.option('-v, --verbose', 'verbose output').parse(process.argv);
+program
+  .arguments('[suiteNames]')
+  .option('-v, --verbose', 'verbose output')
+  .parse(process.argv);
 
-const withName = (env, name) => {
+const withNames = (env, names) => {
   const { adminUrl } = env;
 
-  request.get(`${adminUrl}/play?name=${name}`, err => {
+  request.get(`${adminUrl}/play?name=${names.join(',')}`, err => {
     if (err) {
       // TODO: Detect errors that shouldn't result in local fallback.
       // eslint-disable-next-line global-require, import/no-dynamic-require
-      require(env.modulePath).play(name);
+      require(env.modulePath).play(names);
     }
   });
 };
@@ -32,7 +35,7 @@ const withName = (env, name) => {
 global.MOCKYEAH_VERBOSE_OUTPUT = Boolean(program.verbose);
 
 boot(env => {
-  const name = program.args[0];
+  const names = program.args;
 
   const { suitesDir } = env.config;
   let suiteNames;
@@ -48,11 +51,11 @@ boot(env => {
 
   if (!suiteNames.length) {
     console.log(chalk.red('No suites available to start'));
-    console.log(chalk.red('Record one by running: mockyeah record [name]'));
+    console.log(chalk.red('Record one by running: mockyeah record [suiteName]'));
     process.exit(0);
   }
 
-  if (!name) {
+  if (!names) {
     inquirer
       .prompt([
         {
@@ -63,9 +66,9 @@ boot(env => {
         }
       ])
       .then(answers => {
-        withName(env, answers.name);
+        withNames(env, [answers.name]);
       });
   } else {
-    withName(env, name);
+    withNames(env, names);
   }
 });
