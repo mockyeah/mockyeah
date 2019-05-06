@@ -61,8 +61,7 @@ describe('Watcher Test', () => {
           supertest(mockyeah.server)
             .get('/watched')
             .expect(200, 'watched!', err => {
-              mockyeah.close();
-              return err ? done(err) : done();
+              mockyeah.close(shutErr => done(err || shutErr));
             });
         }, 1000);
       }, 1000);
@@ -102,8 +101,7 @@ describe('Watcher Test', () => {
             supertest(mockyeah.server)
               .get('/watched')
               .expect(200, 'watched!', err => {
-                mockyeah.close();
-                return err ? done(err) : done();
+                mockyeah.close(shutErr => done(err || shutErr));
               });
           }, 1000);
         }, 1000);
@@ -174,8 +172,7 @@ describe('Watcher Test', () => {
         supertest(mockyeah.server)
           .get('/watched')
           .expect(200, 'watched!', err => {
-            mockyeah.close();
-            return err ? done(err) : done();
+            mockyeah.close(shutErr => done(err || shutErr));
           });
       }, 1000);
     }, 1000);
@@ -211,8 +208,7 @@ describe('Watcher Test', () => {
         supertest(mockyeah.server)
           .get('/watched')
           .expect(404, err => {
-            mockyeah.close();
-            return err ? done(err) : done();
+            mockyeah.close(shutErr => done(err || shutErr));
           });
       }, 1000);
     }, 1000);
