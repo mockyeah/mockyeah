@@ -4,8 +4,7 @@ const mockyeah = new MockyeahServer({
   port: 0,
   adminServer: false,
   start: false,
-  watch: false,
-  output: false
+  watch: false
 });
 
 beforeAll(() => mockyeah.start());
