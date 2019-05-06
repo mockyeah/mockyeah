@@ -13,7 +13,7 @@ All you need to do is:
 import mockyeah from 'mockyeah-test-jest';
 
 describe('test', () => {
-  it('should work', () => {
+  test('should work', () => {
     mockyeah.get('/');
   });
 });
