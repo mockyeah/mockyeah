@@ -48,8 +48,8 @@ describe('Record and Playback Admin Server', function() {
       ],
       () => {
         remoteReq = supertest(remote.server);
-        proxyAdminReq = supertest(`${proxy.adminServer.rootUrl}`);
-        proxyReq = supertest(`${proxy.server.rootUrl}/${remote.server.rootUrl}`);
+        proxyAdminReq = supertest(`${proxy.adminServer.url}`);
+        proxyReq = supertest(`${proxy.server.url}/${remote.server.url}`);
         done();
       }
     );

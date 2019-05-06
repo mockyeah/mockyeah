@@ -52,7 +52,8 @@ module.exports = function Server(config, onStart) {
       }
       const host = config.host || this.address().address;
       this.rootUrl = `http${secure ? 's' : ''}://${host}:${this.address().port}`;
-      app.log('serve', `Listening at ${this.rootUrl}`);
+      this.url = this.rootUrl;
+      app.log('serve', `Listening at ${this.url}`);
       // Execute callback once server starts
       setTimeout(() => {
         resolve();
@@ -106,7 +107,8 @@ module.exports = function Server(config, onStart) {
       adminServer = admin.listen(config.adminPort, config.adminHost, function adminListen() {
         const host = config.adminHost || this.address().address;
         adminServer.rootUrl = `http://${host}:${this.address().port}`;
-        app.log(['serve', 'admin'], `Admin server listening at ${adminServer.rootUrl}`);
+        adminServer.url = adminServer.rootUrl;
+        app.log(['serve', 'admin'], `Admin server listening at ${adminServer.url}`);
       });
     };
 
