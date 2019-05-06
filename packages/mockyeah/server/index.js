@@ -134,6 +134,8 @@ module.exports = function Server(config, onStart) {
 
   // Expose ability to stop server via API
   const close = function close(done) {
+    app.unwatch();
+
     return new Promise((resolve, reject) => {
       const doneAndResolve = err => {
         if (done) done(err);
@@ -164,11 +166,6 @@ module.exports = function Server(config, onStart) {
     });
   };
 
-  const shutdown = done => {
-    app.unwatch();
-    return close(done);
-  };
-
   const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
 
   // Construct and return mockyeah API
@@ -183,7 +180,6 @@ module.exports = function Server(config, onStart) {
     recordStop,
     reset,
     server,
-    shutdown,
     start,
     startedPromise,
     unwatch,

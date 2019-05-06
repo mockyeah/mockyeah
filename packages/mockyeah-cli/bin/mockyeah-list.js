@@ -3,7 +3,7 @@
 /* eslint-disable no-console, no-sync */
 
 /**
- * `mockyeah ls` lists service recordings.
+ * `mockyeah list` lists suites.
  */
 
 const fs = require('fs');

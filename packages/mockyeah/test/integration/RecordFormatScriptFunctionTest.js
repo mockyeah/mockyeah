@@ -61,10 +61,7 @@ describe('Record Format Script Function Test', function() {
     rimraf.sync(PROXY_SUITES_DIR);
   });
 
-  after(() => {
-    proxy.close();
-    remote.close();
-  });
+  after(() => Promise.all([proxy.close(), remote.close()]));
 
   function getSuiteFilePath(suiteName) {
     return path.resolve(PROXY_SUITES_DIR, suiteName, 'index.js');
