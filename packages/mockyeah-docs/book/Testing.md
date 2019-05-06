@@ -23,3 +23,25 @@ describe('test', () => {
   });
 });
 ```
+
+## Mocha
+
+If you're using the [Mocha](https://mochajs.org) unit test framework, try our `mockyeah-test-mocha` package to ease setup & use.
+
+All you need to do is:
+
+```console
+$ npm add --only=dev mockyeah-test-mocha
+```
+
+Then, in your test files:
+
+```js
+import mockyeah from 'mockyeah-test-mocha';
+
+describe('test', () => {
+  test('should work', () => {
+    mockyeah.get('/');
+  });
+});
+```
