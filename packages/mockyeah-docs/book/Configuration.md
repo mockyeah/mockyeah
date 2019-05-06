@@ -12,6 +12,7 @@
   "output": true,
   "journal": false,
   "verbose": false,
+  "start": true,
   "proxy": false,
   "record": false,
   "adminServer": true,
@@ -67,6 +68,7 @@ Also supports a `.mockyeah.js` as a Node module that exports a JavaScript object
   ```
 
 - `verbose`: Boolean to toggle verbosity of mockyeah generated output.
+- `start`: Whether to start the server on instantiation (otherwise use [`start()`](./API/start.md)).
 - `proxy`: Boolean to enable a proxy on startup.
 
 The proxy will transparently forward all non-matching requests onto their original URL.
@@ -80,9 +82,9 @@ Then you can hit your mockyeah server's URLs like:
 and allow the first to pass through to the actual origin by not defining any mocks, but mock the second with:
 
 ```js
-mockyeah.get("https://service.example.com/foo/bar", {
+mockyeah.get('https://service.example.com/foo/bar', {
   json: {
-    hello: "there"
+    hello: 'there'
   }
 });
 ```
@@ -90,6 +92,7 @@ mockyeah.get("https://service.example.com/foo/bar", {
 Internally, this mounts with a leading slash, i.e., `'/https://service.example.com/foo/bar'`.
 
 - `record`: Boolean to enable recording on startup.
+- `watch`: Boolean to enable watch more on startup. See [`watch()`](./API/watch.md).
 - `suiteHeader`: String for the header name to use to opt-in to suites dynamically.
 - `suiteCookie`: String for the cookie name to use to opt-in to suites dynamically.
 - `adminServer`: Boolean to enable admin server (for recording, playing, etc.)
@@ -118,15 +121,16 @@ Internally, this mounts with a leading slash, i.e., `'/https://service.example.c
 So now a mock like this:
 
 ```js
-mockyeah.get('https://api.example.com/some/endpoint', { text: 'hello' })
+mockyeah.get('https://api.example.com/some/endpoint', { text: 'hello' });
 ```
 
 Would be able to respond identically to calls to:
-* `https://demo.api.example.com/some/endpoint`
-* `https://test.api.example.com/some/endpoint`
-* `https://api.example.com/some/endpoint`
 
-- `groups`: When using `--only`, rather than always typing out regular expressions, you can define them here, so that rather than:
+- `https://demo.api.example.com/some/endpoint`
+- `https://test.api.example.com/some/endpoint`
+- `https://api.example.com/some/endpoint`
+
+* `groups`: When using `--only`, rather than always typing out regular expressions, you can define them here, so that rather than:
 
 ```
 mockyeah record --only '/api/v(.*)/users' --only '/api/v(.*)/posts)'

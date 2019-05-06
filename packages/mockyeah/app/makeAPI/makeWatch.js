@@ -38,11 +38,23 @@ const makeWatch = app => {
     restart(app);
   }, 500);
 
-  const watch = () => {
-    const watcher = chokidar.watch([suitesDir, fixturesDir]).on('all', debounced);
-    app.log('watch', 'started watching');
-    app.locals.watcher = watcher;
-  };
+  const watch = callback =>
+    new Promise((resolve, reject) => {
+      const watcher = chokidar.watch([suitesDir, fixturesDir]);
+      watcher.on('ready', err => {
+        if (callback) callback(err);
+        if (err) reject(err);
+        else resolve();
+      });
+      watcher.on('error', err => {
+        app.log(['watch', 'error'], err && err.message);
+        if (callback) callback(err);
+        reject(err);
+      });
+      watcher.on('all', debounced);
+      app.log('watch', 'started watching');
+      app.locals.watcher = watcher;
+    });
 
   return watch;
 };

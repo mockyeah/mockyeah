@@ -16,6 +16,8 @@
 
 .nyc_output
 
+package-lock.json
+
 # Editor configurations
 .idea
 .vscode

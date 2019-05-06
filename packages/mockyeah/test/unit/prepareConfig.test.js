@@ -42,11 +42,12 @@ describe('prepareConfig', () => {
       recordToFixtures: true,
       recordToFixturesMode: 'path',
       formatScript: undefined,
-      watch: false,
+      watch: true,
       responseHeaders: true,
       groups: {},
       suiteHeader: 'x-mockyeah-suite',
-      suiteCookie: 'mockyeahSuite'
+      suiteCookie: 'mockyeahSuite',
+      start: true
     });
   });
 
@@ -72,11 +73,12 @@ describe('prepareConfig', () => {
       recordToFixtures: true,
       recordToFixturesMode: 'path',
       formatScript: undefined,
-      watch: false,
+      watch: true,
       responseHeaders: true,
       groups: {},
       suiteHeader: 'x-mockyeah-suite',
-      suiteCookie: 'mockyeahSuite'
+      suiteCookie: 'mockyeahSuite',
+      start: true
     });
   });
 });

@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const Expectation = require('./Expectation');
 const { compileRoute } = require('./helpers');
+const logMatchError = require('./logMatchError');
 const routeMatchesRequest = require('./routeMatchesRequest');
 const handleDynamicSuite = require('./handleDynamicSuite');
 
@@ -31,12 +32,16 @@ function listen() {
 
     const route = routes.find(r =>
       routeMatchesRequest(r, req, {
-        aliases
+        aliases,
+        log: logMatchError.bind(null, app)
       })
     );
 
     if (!route) {
+      res.set('x-mockyeah-missed', 'true');
+
       next();
+
       return;
     }
 
@@ -84,7 +89,7 @@ function RouteResolver(app) {
   listen.call(this);
 }
 
-RouteResolver.prototype.register = function register(method, _path, response) {
+RouteResolver.prototype.register = function register(method, _path, response, options) {
   const match = _.isPlainObject(_path)
     ? Object.assign({ method }, _path)
     : {
@@ -92,7 +97,7 @@ RouteResolver.prototype.register = function register(method, _path, response) {
         path: _path
       };
 
-  const route = compileRoute(match, response);
+  const route = compileRoute(match, response, options);
 
   const expectation = new Expectation(route);
   route.expectation = expectation;
@@ -103,16 +108,16 @@ RouteResolver.prototype.register = function register(method, _path, response) {
   this.routes.push(route);
 
   return {
-    expect: predicate => expectation.api(predicate)
+    expect: predicateOrMatchObject => expectation.api(predicateOrMatchObject)
   };
 };
 
 RouteResolver.prototype.unregister = function unregister(routes) {
-  this.routes = this.routes.filter(r1 => !routes.some(r2 => isRouteMatch(r1, r2)));
+  this.routes = routes ? this.routes.filter(r1 => !routes.some(r2 => isRouteMatch(r1, r2))) : [];
 };
 
 RouteResolver.prototype.reset = function reset() {
-  this.unregister(this.routes);
+  this.unregister();
 };
 
 module.exports = RouteResolver;

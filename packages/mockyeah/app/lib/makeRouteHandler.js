@@ -109,7 +109,13 @@ function verifyFile(app, filePath, message) {
 }
 
 const makeRouteHandler = route => {
-  const response = route.response || {};
+  let response = route.response || {};
+
+  if (typeof response === 'string') {
+    response = {
+      text: response
+    };
+  }
 
   if (response.filePath) {
     response.filePath = safeFilename(response.filePath);
