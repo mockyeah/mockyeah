@@ -1,5 +1,6 @@
 'use strict';
 
+const { expect } = require('chai');
 require('../TestHelper');
 const MockYeahServer = require('../../server');
 
@@ -14,7 +15,10 @@ it('server should start when method called, and call callback', done => {
     adminPort: 0,
     start: false
   });
+
   mockyeah.start(() => {
+    expect(mockyeah.server).to.exist;
+    expect(mockyeah.server.url).to.exist;
     mockyeah.close(done);
   });
 });
@@ -25,5 +29,10 @@ it('server should start when method called, and return promise', () => {
     adminPort: 0,
     start: false
   });
-  return mockyeah.start().then(() => mockyeah.close());
+
+  return mockyeah.start().then(() => {
+    expect(mockyeah.server).to.exist;
+    expect(mockyeah.server.url).to.exist;
+    return mockyeah.close();
+  });
 });
