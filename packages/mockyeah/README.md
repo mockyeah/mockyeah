@@ -2,7 +2,7 @@
 
 **A powerful service mocking, recording, and playback utility.**
 
-<img src="https://raw.githubusercontent.com/mockyeah/mockyeah/master/packages/mockyeah-docs/book/logo/mockyeah-600.png" height="200" />
+<img src="https://raw.githubusercontent.com/mockyeah/mockyeah/master/packages/mockyeah-docs/book/images/logo/mockyeah-600.png" height="200" />
 
 [![npm](https://img.shields.io/npm/v/mockyeah.svg)](https://www.npmjs.com/package/mockyeah)
 [![Travis](https://img.shields.io/travis/mockyeah/mockyeah.svg)](https://travis-ci.org/mockyeah/mockyeah)
