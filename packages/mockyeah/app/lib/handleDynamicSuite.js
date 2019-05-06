@@ -6,34 +6,40 @@ const routeMatchesRequest = require('./routeMatchesRequest');
 const handleDynamicSuite = (app, req, res) => {
   const { suiteHeader, suiteCookie } = app.config;
 
-  const dynamicSuite = req.headers[suiteHeader] || req.cookies[suiteCookie];
+  let dynamicSuites = req.headers[suiteHeader] || req.cookies[suiteCookie];
 
-  if (!dynamicSuite) return false;
+  if (!dynamicSuites) return false;
 
-  const suite = requireSuite(app, dynamicSuite);
+  dynamicSuites = dynamicSuites.split(',').map(v => v.trim(v));
 
-  if (!suite) return false;
+  return dynamicSuites.some(dynamicSuite => {
+    if (!dynamicSuite) return false;
 
-  const {
-    config: { aliases }
-  } = app;
+    const suite = requireSuite(app, dynamicSuite);
 
-  let compiledRoute;
+    if (!suite) return false;
 
-  const route = suite.find(r => {
-    compiledRoute = compileRoute(r[0], r[1]);
+    const {
+      config: { aliases }
+    } = app;
 
-    return routeMatchesRequest(compiledRoute, req, {
-      aliases,
-      log: logMatchError.bind(null, app)
+    let compiledRoute;
+
+    const route = suite.find(r => {
+      compiledRoute = compileRoute(r[0], r[1]);
+
+      return routeMatchesRequest(compiledRoute, req, {
+        aliases,
+        log: logMatchError.bind(null, app)
+      });
     });
+
+    if (!route) return false;
+
+    compiledRoute.response(app, req, res);
+
+    return true;
   });
-
-  if (!route) return false;
-
-  compiledRoute.response(app, req, res);
-
-  return true;
 };
 
 module.exports = handleDynamicSuite;

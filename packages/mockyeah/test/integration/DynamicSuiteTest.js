@@ -1,5 +1,6 @@
 'use strict';
 
+const async = require('async');
 const MockYeahServer = require('../../server');
 const supertest = require('supertest');
 
@@ -26,6 +27,19 @@ describe('Dynamic Suites', function() {
         .get('/say-hello')
         .set('x-mockyeah-suite', 'some-custom-suite')
         .expect(200, /hello there/, done);
+    });
+
+    it('should dynamically enable multiple suites per-request', function() {
+      return Promise.all([
+        request
+          .get('/say-hello')
+          .set('x-mockyeah-suite', 'some-custom-suite, some-custom-suite-2')
+          .expect(200, /hello there/),
+        request
+          .get('/custom-suite-2')
+          .set('x-mockyeah-suite', 'some-custom-suite, some-custom-suite-2')
+          .expect(200, /it worked/)
+      ]);
     });
 
     it('should support full URL', function(done) {
