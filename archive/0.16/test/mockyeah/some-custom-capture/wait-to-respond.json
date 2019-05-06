@@ -1,8 +1,0 @@
-{
-  "method": "get",
-  "path": "/wait-to-respond",
-  "options": {
-    "text": "Oh, hey there.",
-    "latency": 1000
-  }
-}

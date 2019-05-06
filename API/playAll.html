@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>reset() · mockyeah</title>
+        <title>playAll() · mockyeah</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,10 +61,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="shutdown.md" />
+    <link rel="next" href="proxy.html" />
     
     
-    <link rel="prev" href="recordStop.html" />
+    <link rel="prev" href="play.html" />
     
 
     </head>
@@ -321,7 +321,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.1.4" data-path="playAll.html">
+        <li class="chapter active" data-level="1.4.1.4" data-path="playAll.html">
             
                 <a href="playAll.html">
             
@@ -373,7 +373,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.4.1.8" data-path="reset.html">
+        <li class="chapter " data-level="1.4.1.8" data-path="reset.html">
             
                 <a href="reset.html">
             
@@ -899,7 +899,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >reset()</a>
+        <a href=".." >playAll()</a>
     </h1>
 </div>
 
@@ -914,11 +914,9 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="reset"><code>reset()</code></h1>
-<p>Removes all mounted mock services. Best practice is to execute <code>.reset()</code> in an &quot;after each&quot; test hook. Example usage with Mocha:</p>
-<pre><code class="lang-js"><span class="hljs-comment">// unmounts all mounted services after each test</span>
-afterEach(() =&gt; mockyeah.reset());
-</code></pre>
+                                <h1 id="playall"><code>playAll()</code></h1>
+<p><code>mockyeah.playAll()</code></p>
+<p>Mounts all suites in <code>suitesDir</code>. See <a href="play.html"><code>play()</code></a>.</p>
 
                                 
                                 </section>
@@ -946,12 +944,12 @@ afterEach(() =&gt; mockyeah.reset());
 
             
                 
-                <a href="recordStop.html" class="navigation navigation-prev " aria-label="Previous page: recordStop()">
+                <a href="play.html" class="navigation navigation-prev " aria-label="Previous page: play()">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="shutdown.md" class="navigation navigation-next " aria-label="Next page: shutdown()">
+                <a href="proxy.html" class="navigation navigation-next " aria-label="Next page: proxy()">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -962,7 +960,7 @@ afterEach(() =&gt; mockyeah.reset());
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"reset()","level":"1.4.1.8","depth":3,"next":{"title":"shutdown()","level":"1.4.1.9","depth":3,"path":"API/shutdown.md","ref":"API/shutdown.md","articles":[]},"previous":{"title":"recordStop()","level":"1.4.1.7","depth":3,"path":"API/recordStop.md","ref":"API/recordStop.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"API/reset.md","mtime":"2019-04-20T14:34:40.303Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-05-06T09:08:51.511Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"playAll()","level":"1.4.1.4","depth":3,"next":{"title":"proxy()","level":"1.4.1.5","depth":3,"path":"API/proxy.md","ref":"API/proxy.md","articles":[]},"previous":{"title":"play()","level":"1.4.1.3","depth":3,"path":"API/play.md","ref":"API/play.md","articles":[]},"dir":"ltr"},"config":{"plugins":["github","expandable-chapters"],"root":"book","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/mockyeah/mockyeah"},"expandable-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Ryan Ricard","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mockyeah","gitbook":"*","description":"A powerful service mocking, recording, and playback utility."},"file":{"path":"API/playAll.md","mtime":"2019-05-06T07:04:10.166Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-05-06T09:08:51.511Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
