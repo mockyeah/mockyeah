@@ -12,6 +12,6 @@ beforeAll(() => mockyeah.start());
 
 afterEach(() => mockyeah.reset());
 
-afterAll(() => mockyeah.shutdown());
+afterAll(() => mockyeah.close());
 
 module.exports = mockyeah;
