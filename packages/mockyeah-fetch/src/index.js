@@ -1,3 +1,3 @@
-import proxy from './proxy'
+import proxy from './proxy';
 
-proxy()
+proxy();

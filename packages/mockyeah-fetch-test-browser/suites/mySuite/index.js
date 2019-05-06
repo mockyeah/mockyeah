@@ -1,10 +1,10 @@
 module.exports = [
   [
-    "https://httpbin.org/get",
+    'https://httpbin.org/get',
     {
       json: {
         mocked: true
       }
     }
   ]
-]
+];

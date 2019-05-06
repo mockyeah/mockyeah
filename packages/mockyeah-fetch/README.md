@@ -10,9 +10,9 @@ Simply:
 
 ```js
 import 'whatwg-fetch';
-import { proxy } from 'mockyeah-fetch'
+import { proxy } from 'mockyeah-fetch';
 
-proxy()
+proxy();
 ```
 
 or with some options (defaults below):
@@ -22,7 +22,7 @@ proxy({
   serverUrl: 'http://localhost:4001',
   suiteHeader: 'x-mockyeah-suite',
   suiteCookie: 'mockyeahSuite'
-})
+});
 ```
 
 More at **https://mockyeah.js.org**.
