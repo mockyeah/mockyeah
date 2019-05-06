@@ -1,5 +1,7 @@
 dist
 
+*.map
+
 .nyc_output
 
 package-lock.json

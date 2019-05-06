@@ -5,6 +5,8 @@ docs
 tasks
 packages
 
+*.map
+
 .*
 
 .nyc_output
