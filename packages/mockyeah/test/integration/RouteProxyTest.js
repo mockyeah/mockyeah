@@ -61,6 +61,24 @@ describe('Route proxy', () => {
     mockyeah.reset();
   });
 
+  it('should indicate missed header', done => {
+    async.series(
+      [
+        cb =>
+          supertest(proxiedApp)
+            .get('/foo')
+            .expect(200, cb),
+        cb =>
+          request
+            .get(`/http://localhost:${proxiedPort}/nope?ok=yes`)
+            .expect('x-mockyeah-missed', 'true')
+            .expect(404)
+            .end(cb)
+      ],
+      done
+    );
+  });
+
   it('should support registering full URLs manually', done => {
     mockyeah.get(`/http://localhost:${proxiedPort}/foo?ok=yes`, { text: 'bar', status: 500 });
 

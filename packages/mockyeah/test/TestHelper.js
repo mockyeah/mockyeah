@@ -21,10 +21,7 @@ const configHttps = Object.assign({}, mockyeah.config, {
 });
 const mockyeahHttps = new Server(configHttps);
 
-after(() => {
-  mockyeah.close();
-  mockyeahHttps.close();
-});
+after(() => Promise.all([mockyeah.close(), mockyeahHttps.close()]));
 
 afterEach(() => {
   mockyeah.reset();

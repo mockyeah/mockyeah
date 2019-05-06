@@ -10,6 +10,9 @@ const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
 const AdminServer = require('./admin');
 
+const isErrorServerNotRunning = error =>
+  error && (error.code === 'ERR_SERVER_NOT_RUNNING' || error.message.includes('Not running'));
+
 /**
  * Server module
  * @param  {Object} config Application configuration.
@@ -40,7 +43,7 @@ module.exports = function Server(config, onStart) {
         if (onStart) onStart.call(this, error);
         if (lazyOnStart) lazyOnStart.call(this, error);
       });
-    }
+    };
 
     const listen = function listener(secure, error) {
       if (error) {
@@ -49,14 +52,15 @@ module.exports = function Server(config, onStart) {
       }
       const host = config.host || this.address().address;
       this.rootUrl = `http${secure ? 's' : ''}://${host}:${this.address().port}`;
-      app.log('serve', `Listening at ${this.rootUrl}`);
+      this.url = this.rootUrl;
+      app.log('serve', `Listening at ${this.url}`);
       // Execute callback once server starts
       setTimeout(() => {
         resolve();
         if (onStart) onStart.call(this);
         if (lazyOnStart) lazyOnStart.call(this);
       });
-    }
+    };
 
     const startServer = () => {
       if (config.portHttps) {
@@ -96,14 +100,15 @@ module.exports = function Server(config, onStart) {
       }
 
       server.on('error', handleError);
-    }
+    };
 
     const startAdminServer = () => {
       const admin = new AdminServer(config, app);
       adminServer = admin.listen(config.adminPort, config.adminHost, function adminListen() {
         const host = config.adminHost || this.address().address;
         adminServer.rootUrl = `http://${host}:${this.address().port}`;
-        app.log(['serve', 'admin'], `Admin server listening at ${adminServer.rootUrl}`);
+        adminServer.url = adminServer.rootUrl;
+        app.log(['serve', 'admin'], `Admin server listening at ${adminServer.url}`);
       });
     };
 
@@ -117,7 +122,7 @@ module.exports = function Server(config, onStart) {
       }
 
       return startedPromise;
-    }
+    };
   });
 
   if (config.start) {
@@ -131,6 +136,8 @@ module.exports = function Server(config, onStart) {
 
   // Expose ability to stop server via API
   const close = function close(done) {
+    app.unwatch();
+
     return new Promise((resolve, reject) => {
       const doneAndResolve = err => {
         if (done) done(err);
@@ -139,31 +146,26 @@ module.exports = function Server(config, onStart) {
         } else {
           resolve();
         }
-      }
+      };
 
       const tasks = [
         cb =>
           server.close(err => {
             app.log(['serve', 'exit'], 'Goodbye.');
-            cb(err);
+            if (isErrorServerNotRunning(err)) cb();
+            else cb(err);
           }),
         adminServer &&
-        (cb =>
-          adminServer.close(err => {
-            app.log(['admin', 'serve', 'exit'], 'Goodbye.');
-            cb(err);
-          }))
+          (cb =>
+            adminServer.close(err => {
+              app.log(['admin', 'serve', 'exit'], 'Goodbye.');
+              if (isErrorServerNotRunning(err)) cb();
+              else cb(err);
+            }))
       ].filter(Boolean);
 
-      startedPromise.then(() =>
-        async.parallel(tasks, doneAndResolve)
-      );
+      startedPromise.then(() => async.parallel(tasks, doneAndResolve));
     });
-  };
-
-  const shutdown = done => {
-    app.unwatch();
-    return close(done);
   };
 
   const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
@@ -180,7 +182,6 @@ module.exports = function Server(config, onStart) {
     recordStop,
     reset,
     server,
-    shutdown,
     start,
     startedPromise,
     unwatch,

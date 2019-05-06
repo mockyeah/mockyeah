@@ -1,32 +1,32 @@
-const http = require('http');
-const log = require('./log');
-const mockyeah = require('./mockyeah');
+const http = require("http");
+const log = require("./log");
+const mockyeah = require("./mockyeah");
 
-mockyeah.all('/', { text: 'it worked!' });
+mockyeah.all("/", { text: "it worked!" });
 
 const options = {
-  hostname: 'localhost',
+  hostname: "localhost",
   port: 4001,
-  path: '/'
+  path: "/"
 };
 
-http.get(Object.assign(options, { method: 'GET' }), res => {
+http.get(Object.assign(options, { method: "GET" }), res => {
   log(res);
 });
 
-http.get(Object.assign(options, { method: 'POST' }), res => {
+http.get(Object.assign(options, { method: "POST" }), res => {
   log(res);
 });
 
-http.get(Object.assign(options, { method: 'PUT' }), res => {
+http.get(Object.assign(options, { method: "PUT" }), res => {
   log(res);
 });
 
-http.get(Object.assign(options, { method: 'PATCH' }), res => {
+http.get(Object.assign(options, { method: "PATCH" }), res => {
   log(res);
 });
 
-http.get(Object.assign(options, { method: 'DELETE' }), res => {
+http.get(Object.assign(options, { method: "DELETE" }), res => {
   log(res);
   mockyeah.close();
 });

@@ -167,6 +167,21 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       });
       return this;
     },
+    path: function path(value) {
+      const message = `${internal.prefix} Path did not match expected`;
+
+      internal.handlers.push(req => {
+        const {
+          _parsedUrl: { pathname }
+        } = req;
+        matchesAssertion(pathname, value, message);
+      });
+
+      return this;
+    },
+    url: function url(value) {
+      return this.path(value);
+    },
     header: function header(name, value) {
       const message = `${internal.prefix} Header "${name}" did not match expected`;
 

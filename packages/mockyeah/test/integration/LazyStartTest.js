@@ -8,7 +8,6 @@ const MockYeahServer = require('../../server');
  * is not affected with middleware.
  */
 
-
 it('server should start when method called, and call callback', done => {
   const mockyeah = new MockYeahServer({
     port: 0,

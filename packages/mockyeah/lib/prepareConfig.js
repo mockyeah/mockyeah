@@ -21,7 +21,7 @@ const configDefaults = {
   recordToFixtures: true,
   recordToFixturesMode: 'path',
   formatScript: undefined,
-  watch: false,
+  watch: true,
   responseHeaders: true,
   groups: {},
   suiteHeader: 'x-mockyeah-suite',
