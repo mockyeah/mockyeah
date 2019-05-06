@@ -1,4 +1,11 @@
-dist
+test
+fixtures
+*.config.js
+docs
+tasks
+packages
+
+.*
 
 .nyc_output
 

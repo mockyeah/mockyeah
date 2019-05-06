@@ -1,7 +1,7 @@
 {
   "name": "mockyeah-fetch",
-  "version": "0.21.0-alpha.0",
-  "description": "A browser request mocking utility.",
+  "version": "0.22.1",
+  "description": "fetch integration for mockyeah request mocking utility.",
   "main": "dist/main.js",
   "scripts": {
     "build": "yarn build:default && yarn build:proxy",
