@@ -47,7 +47,7 @@ describe('Record and Playback Bad Filename', function() {
       ],
       () => {
         remoteReq = supertest(remote.server);
-        proxyReq = supertest(`${proxy.server.rootUrl}/${remote.server.rootUrl}`);
+        proxyReq = supertest(`${proxy.server.url}/${remote.server.url}`);
         done();
       }
     );
