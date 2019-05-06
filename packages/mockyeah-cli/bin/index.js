@@ -12,8 +12,6 @@ const program = require('commander');
 const boot = require('../lib/boot');
 const version = require('../version');
 
-program.parse(process.argv);
-
 boot(() => {
   program
     .version(version)
