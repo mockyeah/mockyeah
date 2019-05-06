@@ -9,7 +9,7 @@ If you're using the [Jest](https://jestjs.io) unit test framework, try our `mock
 All you need to do is:
 
 ```console
-$ npm add --only=dev mockyeah-test-jest
+$ npm add --save-dev mockyeah-test-jest
 ```
 
 Then, in your test files:
@@ -31,7 +31,7 @@ If you're using the [Mocha](https://mochajs.org) unit test framework, try our `m
 All you need to do is:
 
 ```console
-$ npm add --only=dev mockyeah-test-mocha
+$ npm add --save-dev mockyeah-test-mocha
 ```
 
 Then, in your test files:
