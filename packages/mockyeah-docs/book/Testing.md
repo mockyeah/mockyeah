@@ -18,7 +18,7 @@ Then, in your test files:
 import mockyeah from 'mockyeah-test-jest';
 
 describe('test', () => {
-  it('should work', () => {
+  test('should work', () => {
     mockyeah.get('/');
   });
 });
@@ -40,7 +40,7 @@ Then, in your test files:
 import mockyeah from 'mockyeah-test-mocha';
 
 describe('test', () => {
-  test('should work', () => {
+  it('should work', () => {
     mockyeah.get('/');
   });
 });
