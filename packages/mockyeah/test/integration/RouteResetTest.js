@@ -18,6 +18,7 @@ describe('Route reset', () => {
   });
 
   after(() => mockyeah.close());
+
   afterEach(() => mockyeah.reset());
 
   it('should reset all routes when no paths are passed', done => {
