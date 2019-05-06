@@ -12,6 +12,7 @@ const version = require('../version');
 
 boot(() => {
   program
+    .name('mockyeah')
     .version(version)
     .command('ls', 'list suites')
     .command('play [suiteNames]', 'play suite(s)')
