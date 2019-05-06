@@ -1,4 +1,9 @@
 {
-  "packages": ["packages/mockyeah", "packages/mockyeah-cli"],
+  "packages": [
+    "packages/mockyeah",
+    "packages/mockyeah-cli",
+    "packages/mockyeah-test-jest",
+    "packages/mockyeah-test-mocha"
+  ],
   "version": "0.22.1"
 }
