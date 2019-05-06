@@ -29,12 +29,28 @@ module.exports = function Server(config, onStart) {
   // Enable CORS for all routes
   app.use(cors());
 
-  let start;
+  const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
 
-  let server;
-  let adminServer;
+  // Expose ability to implement middleware via API
+  const use = function use() {
+    app.use.apply(app, arguments);
+  };
 
-  const startedPromise = new Promise((resolve, reject) => {
+  // Construct and return mockyeah API
+  const instance = Object.assign({}, app.routeManager, {
+    config,
+    play,
+    playAll,
+    proxy,
+    record,
+    recordStop,
+    reset,
+    unwatch,
+    use,
+    watch
+  });
+
+  instance.startedPromise = new Promise((resolve, reject) => {
     let lazyOnStart;
 
     const handleError = error => {
@@ -87,32 +103,40 @@ module.exports = function Server(config, onStart) {
         const httpsServer = https.createServer(credentials, app);
 
         try {
-          server = httpsServer.listen(config.portHttps, config.host, partial(listen, true));
+          instance.server = httpsServer.listen(
+            config.portHttps,
+            config.host,
+            partial(listen, true)
+          );
         } catch (error) {
           handleError(error);
         }
       } else {
         try {
-          server = app.listen(config.port, config.host, partial(listen, false));
+          instance.server = app.listen(config.port, config.host, partial(listen, false));
         } catch (error) {
           handleError(error);
         }
       }
 
-      server.on('error', handleError);
+      instance.server.on('error', handleError);
     };
 
     const startAdminServer = () => {
       const admin = new AdminServer(config, app);
-      adminServer = admin.listen(config.adminPort, config.adminHost, function adminListen() {
-        const host = config.adminHost || this.address().address;
-        adminServer.rootUrl = `http://${host}:${this.address().port}`;
-        adminServer.url = adminServer.rootUrl;
-        app.log(['serve', 'admin'], `Admin server listening at ${adminServer.url}`);
-      });
+      instance.adminServer = admin.listen(
+        config.adminPort,
+        config.adminHost,
+        function adminListen() {
+          const host = config.adminHost || this.address().address;
+          instance.adminServer.rootUrl = `http://${host}:${this.address().port}`;
+          instance.adminServer.url = instance.adminServer.rootUrl;
+          app.log(['serve', 'admin'], `Admin server listening at ${instance.adminServer.url}`);
+        }
+      );
     };
 
-    start = argLazyOnStart => {
+    instance.start = argLazyOnStart => {
       lazyOnStart = argLazyOnStart;
 
       startServer();
@@ -121,21 +145,12 @@ module.exports = function Server(config, onStart) {
         startAdminServer();
       }
 
-      return startedPromise;
+      return instance.startedPromise;
     };
   });
 
-  if (config.start) {
-    start();
-  }
-
-  // Expose ability to implement middleware via API
-  const use = function use() {
-    app.use.apply(app, arguments);
-  };
-
   // Expose ability to stop server via API
-  const close = function close(done) {
+  instance.close = function close(done) {
     app.unwatch();
 
     return new Promise((resolve, reject) => {
@@ -150,42 +165,27 @@ module.exports = function Server(config, onStart) {
 
       const tasks = [
         cb =>
-          server.close(err => {
+          instance.server.close(err => {
             app.log(['serve', 'exit'], 'Goodbye.');
             if (isErrorServerNotRunning(err)) cb();
             else cb(err);
           }),
-        adminServer &&
+        instance.adminServer &&
           (cb =>
-            adminServer.close(err => {
+            instance.adminServer.close(err => {
               app.log(['admin', 'serve', 'exit'], 'Goodbye.');
               if (isErrorServerNotRunning(err)) cb();
               else cb(err);
             }))
       ].filter(Boolean);
 
-      startedPromise.then(() => async.parallel(tasks, doneAndResolve));
+      instance.startedPromise.then(() => async.parallel(tasks, doneAndResolve));
     });
   };
 
-  const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
+  if (config.start) {
+    instance.start();
+  }
 
-  // Construct and return mockyeah API
-  return Object.assign({}, app.routeManager, {
-    adminServer,
-    close,
-    config,
-    play,
-    playAll,
-    proxy,
-    record,
-    recordStop,
-    reset,
-    server,
-    start,
-    startedPromise,
-    unwatch,
-    use,
-    watch
-  });
+  return instance;
 };
