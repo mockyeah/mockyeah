@@ -14,9 +14,11 @@ boot(() => {
   program
     .name('mockyeah')
     .version(version)
-    .command('ls', 'list suites')
+    .command('list', 'list suites')
+    .alias('ls')
     .command('play [suiteNames]', 'play suite(s)')
     .command('playAll', 'play all suites')
+    .alias('play-all')
     .command('record [suiteName]', 'record suite')
     .command('start', 'start server')
     .parse(process.argv);
