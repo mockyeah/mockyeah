@@ -9,9 +9,7 @@
 const program = require('commander');
 const boot = require('../lib/boot');
 
-program
-  .option('-w, --watch', 'enable watch mode')
-  .parse(process.argv);
+program.option('-w, --watch', 'enable watch mode').parse(process.argv);
 
 boot(env => {
   // eslint-disable-next-line global-require, import/no-dynamic-require

@@ -12,7 +12,7 @@ const { expect } = require('chai');
 
 const ROOT = path.resolve(__dirname, '../.tmp/proxy');
 
-describe('Record Group Test', function () {
+describe('Record Group Test', function() {
   let proxy;
   let remote;
   let proxyReq;
@@ -21,7 +21,7 @@ describe('Record Group Test', function () {
   before(done => {
     async.parallel(
       [
-        function (cb) {
+        function(cb) {
           // Instantiate proxy server for recording
           proxy = MockYeahServer(
             {
@@ -45,7 +45,7 @@ describe('Record Group Test', function () {
             cb
           );
         },
-        function (cb) {
+        function(cb) {
           // Instantiate remote server
           remote = MockYeahServer(
             {
@@ -59,7 +59,7 @@ describe('Record Group Test', function () {
       ],
       () => {
         remoteReq = supertest(remote.server);
-        proxyReq = supertest(`${proxy.server.rootUrl}/${remote.server.rootUrl}`);
+        proxyReq = supertest(`${proxy.server.url}/${remote.server.url}`);
         done();
       }
     );
@@ -71,10 +71,7 @@ describe('Record Group Test', function () {
     rimraf.sync(ROOT);
   });
 
-  after(() => {
-    proxy.close();
-    remote.close();
-  });
+  after(() => Promise.all([proxy.close(), remote.close()]));
 
   function getSuiteFilePath(suiteName) {
     return path.resolve(ROOT, 'mockyeah', suiteName, 'index.js');
@@ -84,7 +81,7 @@ describe('Record Group Test', function () {
     return path.resolve(ROOT, 'fixtures', groupName, suiteName, '0.txt');
   }
 
-  it('should record fixture to group subdirectory', function (done) {
+  it('should record fixture to group subdirectory', function(done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite-group-file';

@@ -7,7 +7,7 @@ branches:
     - master
 cache: yarn
 script:
+  - ./packages/mockyeah-tools/node_modules/.bin/prettier --check $(git ls-files | grep -E '.(js|json|md)$')
   - yarn test
 after_success:
   - yarn test:coverage:report
-

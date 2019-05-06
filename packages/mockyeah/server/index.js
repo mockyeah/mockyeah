@@ -10,6 +10,9 @@ const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
 const AdminServer = require('./admin');
 
+const isErrorServerNotRunning = error =>
+  error && (error.code === 'ERR_SERVER_NOT_RUNNING' || error.message.includes('Not running'));
+
 /**
  * Server module
  * @param  {Object} config Application configuration.
@@ -26,14 +29,21 @@ module.exports = function Server(config, onStart) {
   // Enable CORS for all routes
   app.use(cors());
 
-  // Start server on configured host and port
+  let start;
+
   let server;
+  let adminServer;
 
   const startedPromise = new Promise((resolve, reject) => {
+    let lazyOnStart;
+
     const handleError = error => {
-      reject(error);
-      if (onStart) onStart(error);
-    }
+      setTimeout(() => {
+        reject(error);
+        if (onStart) onStart.call(this, error);
+        if (lazyOnStart) lazyOnStart.call(this, error);
+      });
+    };
 
     const listen = function listener(secure, error) {
       if (error) {
@@ -42,109 +52,140 @@ module.exports = function Server(config, onStart) {
       }
       const host = config.host || this.address().address;
       this.rootUrl = `http${secure ? 's' : ''}://${host}:${this.address().port}`;
-      app.log('serve', `Listening at ${this.rootUrl}`);
+      this.url = this.rootUrl;
+      app.log('serve', `Listening at ${this.url}`);
       // Execute callback once server starts
-      if (onStart) onStart.call(this);
-      resolve();
-    }
+      setTimeout(() => {
+        resolve();
+        if (onStart) onStart.call(this);
+        if (lazyOnStart) lazyOnStart.call(this);
+      });
+    };
 
-    if (config.portHttps) {
-      let certFiles;
-      if (!config.httpsKeyPath && !config.httpsCertPath) {
-        certFiles = createCertFiles();
-      } else {
-        certFiles = {
-          key: config.httpsKeyPath,
-          cert: config.httpsCertPath
+    const startServer = () => {
+      if (config.portHttps) {
+        let certFiles;
+        if (!config.httpsKeyPath && !config.httpsCertPath) {
+          certFiles = createCertFiles();
+        } else {
+          certFiles = {
+            key: config.httpsKeyPath,
+            cert: config.httpsCertPath
+          };
+        }
+
+        /* eslint-disable no-sync */
+        const key = fs.readFileSync(certFiles.key);
+        const cert = fs.readFileSync(certFiles.cert);
+        /* eslint-enable no-sync */
+
+        const credentials = {
+          key,
+          cert
         };
+
+        const httpsServer = https.createServer(credentials, app);
+
+        try {
+          server = httpsServer.listen(config.portHttps, config.host, partial(listen, true));
+        } catch (error) {
+          handleError(error);
+        }
+      } else {
+        try {
+          server = app.listen(config.port, config.host, partial(listen, false));
+        } catch (error) {
+          handleError(error);
+        }
       }
 
-      /* eslint-disable no-sync */
-      const key = fs.readFileSync(certFiles.key);
-      const cert = fs.readFileSync(certFiles.cert);
-      /* eslint-enable no-sync */
+      server.on('error', handleError);
+    };
 
-      const credentials = {
-        key,
-        cert
-      };
+    const startAdminServer = () => {
+      const admin = new AdminServer(config, app);
+      adminServer = admin.listen(config.adminPort, config.adminHost, function adminListen() {
+        const host = config.adminHost || this.address().address;
+        adminServer.rootUrl = `http://${host}:${this.address().port}`;
+        adminServer.url = adminServer.rootUrl;
+        app.log(['serve', 'admin'], `Admin server listening at ${adminServer.url}`);
+      });
+    };
 
-      const httpsServer = https.createServer(credentials, app);
+    start = argLazyOnStart => {
+      lazyOnStart = argLazyOnStart;
 
-      try {
-        server = httpsServer.listen(config.portHttps, config.host, partial(listen, true));
-      } catch (error) {
-        handleError(error);
+      startServer();
+
+      if (config.adminServer) {
+        startAdminServer();
       }
-    } else {
-      try {
-        server = app.listen(config.port, config.host, partial(listen, false));
-      } catch (error) {
-        handleError(error);
-      }
-    }
 
-    server.on('error', handleError);
+      return startedPromise;
+    };
   });
+
+  if (config.start) {
+    start();
+  }
 
   // Expose ability to implement middleware via API
   const use = function use() {
     app.use.apply(app, arguments);
   };
 
-  // Instantiate an admin server, if configured as such.
-  let adminServer;
-  if (config.adminServer) {
-    const admin = new AdminServer(config, app);
-    adminServer = admin.listen(config.adminPort, config.adminHost, function adminListen() {
-      const host = config.adminHost || this.address().address;
-      adminServer.rootUrl = `http://${host}:${this.address().port}`;
-      app.log(['serve', 'admin'], `Admin server listening at ${adminServer.rootUrl}`);
-    });
-  }
-
   // Expose ability to stop server via API
   const close = function close(done) {
-    const tasks = [
-      cb =>
-        server.close(err => {
-          app.log(['serve', 'exit'], 'Goodbye.');
-          cb(err);
-        }),
-      adminServer &&
-      (cb =>
-        adminServer.close(err => {
-          app.log(['admin', 'serve', 'exit'], 'Goodbye.');
-          cb(err);
-        }))
-    ].filter(Boolean);
-
-    async.parallel(tasks, done);
-  };
-
-  const shutdown = done => {
     app.unwatch();
-    close(done);
+
+    return new Promise((resolve, reject) => {
+      const doneAndResolve = err => {
+        if (done) done(err);
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      };
+
+      const tasks = [
+        cb =>
+          server.close(err => {
+            app.log(['serve', 'exit'], 'Goodbye.');
+            if (isErrorServerNotRunning(err)) cb();
+            else cb(err);
+          }),
+        adminServer &&
+          (cb =>
+            adminServer.close(err => {
+              app.log(['admin', 'serve', 'exit'], 'Goodbye.');
+              if (isErrorServerNotRunning(err)) cb();
+              else cb(err);
+            }))
+      ].filter(Boolean);
+
+      startedPromise.then(() => async.parallel(tasks, doneAndResolve));
+    });
   };
 
   const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
 
   // Construct and return mockyeah API
   return Object.assign({}, app.routeManager, {
-    server,
     adminServer,
-    use,
-    config,
     close,
-    proxy,
-    reset,
+    config,
     play,
     playAll,
+    proxy,
     record,
     recordStop,
-    watch,
+    reset,
+    server,
+    start,
+    startedPromise,
     unwatch,
-    shutdown,
-    startedPromise
+    use,
+    watch
   });
 };

@@ -48,7 +48,7 @@ describe('Record Format Script File Test', function() {
       ],
       () => {
         remoteReq = supertest(remote.server);
-        proxyReq = supertest(`${proxy.server.rootUrl}/${remote.server.rootUrl}`);
+        proxyReq = supertest(`${proxy.server.url}/${remote.server.url}`);
         done();
       }
     );
@@ -60,10 +60,7 @@ describe('Record Format Script File Test', function() {
     rimraf.sync(PROXY_SUITES_DIR);
   });
 
-  after(() => {
-    proxy.close();
-    remote.close();
-  });
+  after(() => Promise.all([proxy.close(), remote.close()]));
 
   function getSuiteFilePath(suiteName) {
     return path.resolve(PROXY_SUITES_DIR, suiteName, 'index.js');

@@ -1,9 +1,9 @@
 # mockyeah-cli
 
-Command line utility for [mockyeah](https://github.com/ryanricard/mockyeah),
+Command line utility for [mockyeah](https://github.com/mockyeah/mockyeah),
 a powerful service mocking, recording, and playback utility.
 
-<img src="../../packages/mockyeah-docs/book/logo/mockyeah.png" height="200" />
+<img src="https://raw.githubusercontent.com/mockyeah/mockyeah/master/packages/mockyeah-docs/book/logo/mockyeah-600.png" height="200" />
 
 [![npm](https://img.shields.io/npm/v/mockyeah-cli.svg)](https://www.npmjs.com/package/mockyeah-cli)
 
@@ -16,11 +16,11 @@ Usage: mockyeah [options] [command]
 
   Commands:
 
-    ls             list suites
-    play [name]    play suite
-    playAll        play all suites
-    record [name]  record suite
-    help [cmd]     display help for [cmd]
+    ls                  list suites
+    play [suiteNames]   play suite(s)
+    playAll             play all suites
+    record [suiteName]  record suite
+    help [cmd]          display help for [cmd]
 
   Options:
 
