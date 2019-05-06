@@ -1,7 +1,7 @@
 {
   "name": "mockyeah-test-jest",
   "version": "0.21.0-alpha.0",
-  "description": "Jest setup for mockyeah request mocking utility.",
+  "description": "Jest unit test setup for mockyeah request mocking utility.",
   "main": "index.js",
   "scripts": {
     "test": "jest"
