@@ -21,21 +21,21 @@ But you can also include query parameters as a shorthand for `query` below.
 Examples:
 
 ```js
-mockyeah.get("/say-hello", { text: "hello" });
+mockyeah.get('/say-hello', { text: 'hello' });
 
-mockyeah.get("/say-hello?to=someone", { text: "hello, someone" });
+mockyeah.get('/say-hello?to=someone', { text: 'hello, someone' });
 
 // Or used named parameters for wildcard matching.
-mockyeah.get("/say-hello/:person", { text: "hello, person" });
+mockyeah.get('/say-hello/:person', { text: 'hello, person' });
 
 // Or drop into regular expression with '()':
-mockyeah.get("/say-(.*)", { text: "something, someone" });
+mockyeah.get('/say-(.*)', { text: 'something, someone' });
 
 // Or regex path match:
-mockyeah.get(/say-[a-z]+/, { text: "something, someone" });
+mockyeah.get(/say-[a-z]+/, { text: 'something, someone' });
 
 // Or to match any path, use just a wildcard:
-mockyeah.get("*", { text: "anything, anyone" });
+mockyeah.get('*', { text: 'anything, anyone' });
 ```
 
 If you want the mock to match only for specific headers, query parameters, or request body,
@@ -87,25 +87,25 @@ Examples:
 ```js
 mockyeah.post(
   {
-    path: "/say-hello",
+    path: '/say-hello',
     headers: {
-      "X-API-Key": /[0-9A-F]{32}/i
+      'X-API-Key': /[0-9A-F]{32}/i
     },
     body: {
-      to: "friend"
+      to: 'friend'
     }
   },
-  { text: "hello, friend" }
+  { text: 'hello, friend' }
 );
 ```
 
 ```js
 mockyeah.all(
   {
-    path: "/say-hello",
-    method: "get"
+    path: '/say-hello',
+    method: 'get'
   },
-  { text: "hello, friend" }
+  { text: 'hello, friend' }
 );
 ```
 
@@ -114,25 +114,25 @@ mockyeah.all(
 You can also mount an empty HTTP 200 response by not providing response options:
 
 ```js
-mockyeah.get("/hey");
+mockyeah.get('/hey');
 ```
 
 which is shorthand for:
 
 ```js
-mockyeah.get("/hey", {});
+mockyeah.get('/hey', {});
 ```
 
 Or an HTTP 200 repsonse with text body by providing a string instead of object options:
 
 ```js
-mockyeah.get("/hey", "why hello");
+mockyeah.get('/hey', 'why hello');
 ```
 
 which is shorthand for:
 
 ```js
-mockyeah.get("/hey", { text: "why hello" });
+mockyeah.get('/hey', { text: 'why hello' });
 ```
 
 <div id="options"></div>
@@ -157,17 +157,17 @@ The functions will receive the Express request object as a first and only argume
 Examples:
 
 ```js
-mockyeah.get("/service/exists", { json: req => ({ hello: req.query.name }) });
+mockyeah.get('/service/exists', { json: req => ({ hello: req.query.name }) });
 ```
 
 ```js
-mockyeah.get("/service/exists", {
+mockyeah.get('/service/exists', {
   json: req => Promise.resolve({ hello: req.query.name })
 });
 ```
 
 ```js
-mockyeah.get("/service/exists", { json: Promise.resolve({ hello: "there" }) });
+mockyeah.get('/service/exists', { json: Promise.resolve({ hello: 'there' }) });
 ```
 
 **Additional options:**

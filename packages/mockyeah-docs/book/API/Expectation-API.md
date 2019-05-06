@@ -6,21 +6,21 @@ and other expectation functions.
 Example:
 
 ```js
-const mockyeah = require("mockyeah");
-const request = require("supertest");
+const mockyeah = require('mockyeah');
+const request = require('supertest');
 
-describe("This test", () => {
-  it("should verify service is called once with parameter", () =>
+describe('This test', () => {
+  it('should verify service is called once with parameter', () =>
     mockyeah
       .expect({
-        method: "get",
-        path: "/say-hello",
+        method: 'get',
+        path: '/say-hello',
         query: {
-          foo: "bar"
+          foo: 'bar'
         }
       })
       .once()
-      .run(() => request("http://localhost:4001").get("/say-hello?foo=bar"))
+      .run(() => request('http://localhost:4001').get('/say-hello?foo=bar'))
       .verify());
 });
 ```
@@ -28,19 +28,19 @@ describe("This test", () => {
 If you would prefer to use the [Mock API](./Mock-API.md) methods to setup endpoints:
 
 ```js
-const mockyeah = require("mockyeah");
-const request = require("supertest");
+const mockyeah = require('mockyeah');
+const request = require('supertest');
 
-describe("This test", () => {
-  it("should verify service is called once with parameter", () =>
+describe('This test', () => {
+  it('should verify service is called once with parameter', () =>
     mockyeah
-      .get("/say-hello", { text: "hello" })
+      .get('/say-hello', { text: 'hello' })
       .expect()
       .params({
-        foo: "bar"
+        foo: 'bar'
       })
       .once()
-      .run(() => request("http://localhost:4040").get("/say-hello?foo=bar"))
+      .run(() => request('http://localhost:4040').get('/say-hello?foo=bar'))
       .verify());
 });
 ```
@@ -48,21 +48,21 @@ describe("This test", () => {
 Or without `run`, with `verifier` call as callback:
 
 ```js
-const mockyeah = require("mockyeah");
-const request = require("supertest");
+const mockyeah = require('mockyeah');
+const request = require('supertest');
 
-describe("This test", () => {
-  it("should verify service is called once with parameter", done => {
+describe('This test', () => {
+  it('should verify service is called once with parameter', done => {
     const expectation = mockyeah
-      .get("/say-hello", { text: "hello" })
+      .get('/say-hello', { text: 'hello' })
       .expect()
       .params({
-        foo: "bar"
+        foo: 'bar'
       })
       .once();
 
-    request("http://localhost:4040")
-      .get("/say-hello?foo=bar")
+    request('http://localhost:4040')
+      .get('/say-hello?foo=bar')
       .expect(200, expectation.verifier(done));
   });
 });
@@ -71,21 +71,21 @@ describe("This test", () => {
 Or with `verify` instead of `verifier` (be sure handle prior errors and try/catch the call, which `verifier` does for you):
 
 ```js
-const mockyeah = require("mockyeah");
-const request = require("supertest");
+const mockyeah = require('mockyeah');
+const request = require('supertest');
 
-describe("This test", () => {
-  it("should verify service is called once with parameter", done => {
+describe('This test', () => {
+  it('should verify service is called once with parameter', done => {
     const expectation = mockyeah
-      .get("/say-hello", { text: "hello" })
+      .get('/say-hello', { text: 'hello' })
       .expect()
       .params({
-        foo: "bar"
+        foo: 'bar'
       })
       .once();
 
-    request("http://localhost:4040")
-      .get("/say-hello?foo=bar")
+    request('http://localhost:4040')
+      .get('/say-hello?foo=bar')
       .expect(200, err => {
         if (err) {
           done(err);
@@ -122,37 +122,37 @@ The match will be against an object with the following fields:
 - `req` (Object): the raw Express request object for additional custom assertions.
 
 ```js
-const { expect } = reuqire("chai");
+const { expect } = reuqire('chai');
 
 const expectation = mockyeah
-  .post("/foo", {
-    text: "bar"
+  .post('/foo', {
+    text: 'bar'
   })
   .expect(data => {
-    expect(data.method).to.equal("post");
-    expect(data.path).to.equal("/foo");
-    expect(data.query.id).to.equal("9999");
-    expect(data.headers.host).to.equal("example.com");
-    expect(data.body.foo).to.equal("bar");
-    expect(data.req.originalUrl).to.equal("/foo?id=9999");
+    expect(data.method).to.equal('post');
+    expect(data.path).to.equal('/foo');
+    expect(data.query.id).to.equal('9999');
+    expect(data.headers.host).to.equal('example.com');
+    expect(data.body.foo).to.equal('bar');
+    expect(data.req.originalUrl).to.equal('/foo?id=9999');
   });
 ```
 
 ```js
 const expectation = mockyeah
-  .post("/foo", {
-    text: "bar"
+  .post('/foo', {
+    text: 'bar'
   })
   .expect({
-    method: "post",
-    path: "/foo",
+    method: 'post',
+    path: '/foo',
     query: {
       id: /99/,
       int: 3
     },
-    headers: value => value.host.includes("example"),
+    headers: value => value.host.includes('example'),
     body: {
-      foo: "bar"
+      foo: 'bar'
     }
   });
 ```
@@ -195,9 +195,9 @@ const expectation = mockyeah
 
 ```js
 const expectation = mockyeah
-  .get("*")
+  .get('*')
   .expect()
-  .path("/foo");
+  .path('/foo');
 ```
 
 <div id="url"></div>
@@ -206,9 +206,9 @@ const expectation = mockyeah
 
 ```js
 const expectation = mockyeah
-  .get("*")
+  .get('*')
   .expect()
-  .url("/foo");
+  .url('/foo');
 ```
 
 <div id="body"></div>
@@ -217,10 +217,10 @@ const expectation = mockyeah
 
 ```js
 const expectation = mockyeah
-  .get("/say-hello", { text: "hello" })
+  .get('/say-hello', { text: 'hello' })
   .expect()
   .body({
-    foo: "bar"
+    foo: 'bar'
   });
 ```
 
@@ -230,10 +230,10 @@ const expectation = mockyeah
 
 ```js
 const expectation = mockyeah
-  .get("/say-hello", { text: "hello" })
+  .get('/say-hello', { text: 'hello' })
   .expect()
   .params({
-    id: "9999"
+    id: '9999'
   });
 ```
 
@@ -247,9 +247,9 @@ const expectation = mockyeah
 
 ```js
 const expectation = mockyeah
-  .get("/say-hello", { text: "hello" })
+  .get('/say-hello', { text: 'hello' })
   .expect()
-  .header("host", "example.com");
+  .header('host', 'example.com');
 ```
 
 ## Execute
@@ -269,13 +269,13 @@ With promise:
 
 ```js
 mockyeah
-  .get("/foo", { text: "bar" })
+  .get('/foo', { text: 'bar' })
   .expect()
   .params({
-    id: "9999"
+    id: '9999'
   })
   .once()
-  .run(request.get("/foo?id=9999"))
+  .run(request.get('/foo?id=9999'))
   .verify(done);
 ```
 
@@ -283,13 +283,13 @@ Or function returning promise:
 
 ```js
 mockyeah
-  .get("/foo", { text: "bar" })
+  .get('/foo', { text: 'bar' })
   .expect()
   .params({
-    id: "9999"
+    id: '9999'
   })
   .once()
-  .run(() => request.get("/foo?id=9999"))
+  .run(() => request.get('/foo?id=9999'))
   .verify(done);
 ```
 
@@ -297,14 +297,14 @@ Or function calling callback:
 
 ```js
 mockyeah
-  .get("/foo", { text: "bar" })
+  .get('/foo', { text: 'bar' })
   .expect()
   .params({
-    id: "9999"
+    id: '9999'
   })
   .once()
   .run(cb => {
-    request.get("/foo?id=9999").end(cb);
+    request.get('/foo?id=9999').end(cb);
   })
   .verify(done);
 ```
@@ -334,16 +334,16 @@ and otherwise safely calls `.verify(callback)` internally in a `try`/`catch` and
 It's a shorthand so that you can write this:
 
 ```js
-request("http://localhost:4040")
-  .get("/say-hello?foo=bar")
+request('http://localhost:4040')
+  .get('/say-hello?foo=bar')
   .expect(200, expectation.verifier(done));
 ```
 
 Instead of this:
 
 ```js
-request("http://localhost:4040")
-  .get("/say-hello?foo=bar")
+request('http://localhost:4040')
+  .get('/say-hello?foo=bar')
   .expect(200, err => {
     if (err) {
       done(err);
@@ -363,34 +363,34 @@ request("http://localhost:4040")
 
 ```js
 const expectation = mockyeah
-  .get("/foo", { text: "bar" })
+  .get('/foo', { text: 'bar' })
   .expect()
-  .header("X-API-Key", value => /[0-9A-F]{32}/i.test(value));
+  .header('X-API-Key', value => /[0-9A-F]{32}/i.test(value));
 ```
 
 ```js
-const { expect } = require("chai");
+const { expect } = require('chai');
 
 const expectation = mockyeah
-  .get("/foo", { text: "bar" })
+  .get('/foo', { text: 'bar' })
   .expect()
   .params(params =>
     expect(params).to.equal({
-      some: "value"
+      some: 'value'
     })
   );
 ```
 
 ```js
 const expectation = mockyeah
-  .get("/foo", { text: "bar" })
+  .get('/foo', { text: 'bar' })
   .expect()
-  .params(params => params.someParam === "yes");
+  .params(params => params.someParam === 'yes');
 ```
 
 ```js
 const expectation = mockyeah
-  .get("/foo", { text: "bar" })
+  .get('/foo', { text: 'bar' })
   .expect()
-  .body(body => body.id === "123");
+  .body(body => body.id === '123');
 ```

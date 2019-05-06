@@ -10,13 +10,13 @@ Use it to programmatically construct your own instance of mockyeah, perhaps with
 First import it:
 
 ```js
-import Server from "mockyeah/server";
+import Server from 'mockyeah/server';
 ```
 
 or:
 
 ```js
-const Server = require("mockyeah/server");
+const Server = require('mockyeah/server');
 ```
 
 Then use it:

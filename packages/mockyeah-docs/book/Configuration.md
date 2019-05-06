@@ -82,9 +82,9 @@ Then you can hit your mockyeah server's URLs like:
 and allow the first to pass through to the actual origin by not defining any mocks, but mock the second with:
 
 ```js
-mockyeah.get("https://service.example.com/foo/bar", {
+mockyeah.get('https://service.example.com/foo/bar', {
   json: {
-    hello: "there"
+    hello: 'there'
   }
 });
 ```
@@ -121,7 +121,7 @@ Internally, this mounts with a leading slash, i.e., `'/https://service.example.c
 So now a mock like this:
 
 ```js
-mockyeah.get("https://api.example.com/some/endpoint", { text: "hello" });
+mockyeah.get('https://api.example.com/some/endpoint', { text: 'hello' });
 ```
 
 Would be able to respond identically to calls to:
