@@ -58,8 +58,10 @@ yarn add -D mockyeah
 ## Testing with mockyeah
 
 ```js
-const request = require('supertest')('http://localhost:4001');
 const mockyeah = require('mockyeah');
+const supertest = require('supertest');
+
+const request = supertest(mockyeah.server.url);
 
 describe('Wondrous service', () => {
   // remove service mocks after each test
