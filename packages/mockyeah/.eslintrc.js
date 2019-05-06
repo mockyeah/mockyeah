@@ -1,6 +1,14 @@
 const tools = require('mockyeah-tools/.eslintrc.js');
 
 module.exports = Object.assign({}, tools, {
+  rules: Object.assign({}, tools.rules, {
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: ['**/test/**']
+      }
+    ]
+  }),
   overrides: [
     {
       files: ['test/**/*.js'],
