@@ -1,6 +1,6 @@
 {
   "name": "mockyeah-test-jest",
-  "version": "0.21.0-alpha.0",
+  "version": "0.23.1",
   "description": "Jest unit test setup for mockyeah request mocking utility.",
   "main": "index.js",
   "scripts": {
@@ -54,6 +54,6 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "mockyeah": "^0.22.1"
+    "mockyeah": "^0.23.1"
   }
 }
