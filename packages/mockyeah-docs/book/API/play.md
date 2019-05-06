@@ -1,28 +1,50 @@
 # `play()`
 
-`mockyeah.play([suite name])`
+`mockyeah.play(suiteName)`
 
-`suite name` (`String`; required) Directory name from which to mount contained
-service suites (i.e. `./mockyeah/[suite name]`).
+`suiteName` (`String|String[]`; required) Suite name(s) to mount.
 
-Mounts each service suite. Each suite will be mounted with the
-exact same payload, headers, status, and latency as suited during its recording.
+Mounts the specified suite in the suites directory (e.g., `./mockyeah/mySuite/index.js`).
 This behavior may be changed by altering the values in the suite files.
 
-Here is an example of a service suite file:
+You can also pass an array of suite names, or a single string with comma-separated list of suite names, e.g.:
+
+```js
+mockyeah.play('some-custom-suite,some-custom-suite-2');
+```
+
+or:
+
+```js
+mockyeah.play(['some-custom-suite', 'some-custom-suite-2']);
+```
+
+Or on the CLI, comma-separated:
+
+```console
+$ mockyeah play some-custom-suite,some-custom-suite-2
+```
+
+or space-separated:
+
+```console
+$ mockyeah play some-custom-suite some-custom-suite-2
+```
+
+Here is an example of a suite file:
 
 ```js
 module.exports = [
   [
-    "http://example.com/some/service",
+    'http://example.com/some/service',
     {
       headers: {
-        "x-powered-by": "Express",
-        "content-type": "text/plain; charset=utf-8",
-        "content-length": "12"
+        'x-powered-by': 'Express',
+        'content-type': 'text/plain; charset=utf-8',
+        'content-length': '12'
       },
       status: 200,
-      raw: "Hello world!",
+      raw: 'Hello world!',
       latency: 57
     }
   ]

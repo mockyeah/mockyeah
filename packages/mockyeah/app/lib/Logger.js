@@ -82,7 +82,7 @@ Logger.prototype.log = function log(/* [type=INFO], message, [verbose=true] */) 
 
   const logTypesDebugMessage = args.types.map(type => type.toLowerCase()).join(':');
 
-  const label = `${this.name}:${logTypesDebugMessage}`
+  const label = `${this.name}:${logTypesDebugMessage}`;
 
   const debugLog = debug(label);
 

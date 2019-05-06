@@ -6,6 +6,12 @@ const TestHelper = require('../TestHelper');
 const { mockyeah, request } = TestHelper;
 
 describe('Route Patterns', () => {
+  it('should support matching response options as string', () => {
+    mockyeah.get('/', 'hey there');
+
+    return request.get('/').expect(200, 'hey there');
+  });
+
   describe('method', () => {
     it('should match method if passed as option', done => {
       mockyeah.all({

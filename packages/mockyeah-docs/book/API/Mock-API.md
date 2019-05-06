@@ -4,35 +4,45 @@
 
 Each method creates a mock service with a HTTP verb matching its respective method name.
 
-## Parameters
+## Match
 
-<div id="match"></div>
-### `match` Request Match (`String` or `Object`)
+<div id="parameters"></div>
+
+### `match` Request Match
 
 Specifies how to match requests to this mock.
+
 In the simplest case, it can be a string specifying the `path` to match.
-This can include query parameters as a shorthand for `query` below.
-This fully supports all Express path matching options.
+
+We support [Express route path matching options](https://expressjs.com/en/guide/routing.html#route-paths).
+
+But you can also include query parameters as a shorthand for `query` below.
 
 Examples:
 
 ```js
-mockyeah.get("/say-hello", { text: "hello" });
+mockyeah.get('/say-hello', { text: 'hello' });
 
-mockyeah.get("/say-hello/:person", { text: "hello, person" });
+mockyeah.get('/say-hello?to=someone', { text: 'hello, someone' });
 
-mockyeah.get("/say-hello?to=someone", { text: "hello, someone" });
+// Or used named parameters for wildcard matching.
+mockyeah.get('/say-hello/:person', { text: 'hello, person' });
 
-// or regex path match:
-mockyeah.get(/say-[a-z]+/, { text: "something, someone" });
+// Or drop into regular expression with '()':
+mockyeah.get('/say-(.*)', { text: 'something, someone' });
+
+// Or regex path match:
+mockyeah.get(/say-[a-z]+/, { text: 'something, someone' });
+
+// Or to match any path, use just a wildcard:
+mockyeah.get('*', { text: 'anything, anyone' });
 ```
 
 If you want the mock to match only for specific headers, query parameters, or request body,
 or use some of the more advanced matching features like regular expressions or functions
 in place of string matches, then you can use the object syntax.
-
 Values within the object can be strings, regular expressions,
-functions, or plain objects - see [Match Values](./Match-Values.md).
+functions, or plain objects. See [Match Values](./Match-Values.md).
 
 All keys but `path` (also aliased as `url`) are optional.
 
@@ -64,7 +74,11 @@ type MatchBody = {
 If using query parameters in both the `path`/`url` and in a `query` object, then the key/value
 pairs are merged, with the values in `query` taking precedence.
 
-If using `.all`, you may use `method` to match only a specific method anyway. This may ease programmatic use, e.g., wiring up mocks from a declarative definition. Supports any casing. Recommended values include:
+### Methods
+
+If using `.all` with the object syntax, you may use a `method` key to match only a specific method anyway.
+This may ease programmatic use, e.g., wiring up mocks from a declarative definition.
+Supports any casing. Recommended values include:
 
 `'get' | 'post' | 'put' | 'patch' | 'delete' | 'all'`
 
@@ -73,30 +87,56 @@ Examples:
 ```js
 mockyeah.post(
   {
-    path: "/say-hello",
+    path: '/say-hello',
     headers: {
-      "X-API-Key": /[0-9A-F]{32}/i
+      'X-API-Key': /[0-9A-F]{32}/i
     },
     body: {
-      to: "friend"
+      to: 'friend'
     }
   },
-  { text: "hello, friend" }
+  { text: 'hello, friend' }
 );
 ```
 
 ```js
 mockyeah.all(
   {
-    path: "/say-hello",
-    method: "get"
+    path: '/say-hello',
+    method: 'get'
   },
-  { text: "hello, friend" }
+  { text: 'hello, friend' }
 );
 ```
 
+### Shorthands
+
+You can also mount an empty HTTP 200 response by not providing response options:
+
+```js
+mockyeah.get('/hey');
+```
+
+which is shorthand for:
+
+```js
+mockyeah.get('/hey', {});
+```
+
+Or an HTTP 200 repsonse with text body by providing a string instead of object options:
+
+```js
+mockyeah.get('/hey', 'why hello');
+```
+
+which is shorthand for:
+
+```js
+mockyeah.get('/hey', { text: 'why hello' });
+```
+
 <div id="options"></div>
-### `options` Response Options (`Object`)
+### `options` Response Options (optional `Object|String`)
 
 Response options informing mockyeah how to respond to matching requests. Supported options:
 
@@ -117,17 +157,17 @@ The functions will receive the Express request object as a first and only argume
 Examples:
 
 ```js
-mockyeah.get("/service/exists", { json: req => ({ hello: req.query.name }) });
+mockyeah.get('/service/exists', { json: req => ({ hello: req.query.name }) });
 ```
 
 ```js
-mockyeah.get("/service/exists", {
+mockyeah.get('/service/exists', {
   json: req => Promise.resolve({ hello: req.query.name })
 });
 ```
 
 ```js
-mockyeah.get("/service/exists", { json: Promise.resolve({ hello: "there" }) });
+mockyeah.get('/service/exists', { json: Promise.resolve({ hello: 'there' }) });
 ```
 
 **Additional options:**

@@ -52,7 +52,7 @@ const routeMatchesRequestAliases = (normalizedRoute, normalizedReq, url, options
 };
 
 // TODO: Refactor to return match object, not just result boolean.
-const routeMatchesRequest = (route, req, options) => {
+const routeMatchesRequest = (route, req, options = {}) => {
   // TODO: Later add features to match other things, like cookies, or with other types, etc.
 
   const normalizedRoute = {
@@ -82,6 +82,8 @@ const routeMatchesRequest = (route, req, options) => {
   }
 
   const match = matches(normalizedReq, normalizedRoute);
+
+  if (options.log) options.log({ match, route });
 
   if (match.result) return true;
 

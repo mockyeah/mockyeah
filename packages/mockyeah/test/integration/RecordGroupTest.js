@@ -71,10 +71,7 @@ describe('Record Group Test', function() {
     rimraf.sync(ROOT);
   });
 
-  after(() => {
-    proxy.close();
-    remote.close();
-  });
+  after(() => Promise.all([proxy.close(), remote.close()]));
 
   function getSuiteFilePath(suiteName) {
     return path.resolve(ROOT, 'mockyeah', suiteName, 'index.js');

@@ -27,7 +27,8 @@ describe('Record and Playback', function() {
               name: 'proxy',
               port: 0,
               adminPort: 0,
-              suitesDir: PROXY_SUITES_DIR
+              suitesDir: PROXY_SUITES_DIR,
+              proxy: false
             },
             cb
           );
@@ -58,10 +59,7 @@ describe('Record and Playback', function() {
     rimraf.sync(PROXY_SUITES_DIR);
   });
 
-  after(() => {
-    proxy.close();
-    remote.close();
-  });
+  after(() => Promise.all([proxy.close(), remote.close()]));
 
   function getSuiteFilePath(suiteName) {
     return path.resolve(PROXY_SUITES_DIR, suiteName, 'index.js');
@@ -257,7 +255,6 @@ describe('Record and Playback', function() {
         cb => remoteReq.get(path4).expect(200, 'fourth', cb),
 
         // Assert paths are routed the correct responses
-        // e.g. http://localhost:4041/some/service
         cb => proxyReq.get(path1).expect(404, cb),
         cb => proxyReq.get(path2).expect(404, cb),
         cb => proxyReq.get(path3).expect(200, 'third', cb),
