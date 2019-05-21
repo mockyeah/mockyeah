@@ -28,7 +28,7 @@
   "groups": {},
   "suiteHeader": "x-mockyeah-suite",
   "suiteCookie": "mockyeahSuite",
-  "aliases": {}
+  "aliases": []
 }
 ```
 
@@ -103,7 +103,7 @@ Internally, this mounts with a leading slash, i.e., `'/https://service.example.c
   - "path" (default): Use the response option of `fixture` with the path to the fixture file as a string.
   - "require": For JSON fixtures, use the response option of `json` with an inline `require` of the JSON file using a relative path, otherwise fallback to "path" mode (may support custom `require`-able files in the future for users with custom setups, e.g., Webpack loaders).
 - `formatScript`: To apply custom formatting to the JS in the suite files, specify a string path to a module (relative to mockyeah root near your config file) that exports a function of the signature `(js: string) : string => {}`. Or if using programmatically rather than a JSON config file, you can provide a function as a value directly.
-- `aliases`: Aliases for match URLs, so that mocks for any of the URL prefixes in an alias set work for any of the others in its set too, to support sharing suites various environments where service domains and base path endpoints may change. So with this configuration:
+- `aliases`: Aliases for match URLs, so that mocks for any of the URL prefixes in an alias set work for any of the others in its set too, to support sharing suites across various environments where service domains and base path endpoints may change. So with this configuration:
 
 ```
 {
