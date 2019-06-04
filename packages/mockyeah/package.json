@@ -86,7 +86,7 @@
     "lodash": "^4.17.5",
     "mkdirp": "^0.5.1",
     "path-to-regexp": "^2.1.0",
-    "request": "^2.69.0",
+    "request": "^2.88.0",
     "tildify": "^1.1.2"
   },
   "private": false
