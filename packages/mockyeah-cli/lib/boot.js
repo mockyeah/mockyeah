@@ -23,7 +23,7 @@ const getPackageAndCheckVersionMatch = env => {
   checkVersionMatch(env, pkgUp);
 };
 
-function boot(callback) {
+module.exports = function boot(callback) {
   liftoff.launch({}, env => {
     // check for local mockyeah
     if (!env.modulePath) {
@@ -45,6 +45,4 @@ function boot(callback) {
 
     callback.call(this, env);
   });
-}
-
-module.exports = boot;
+};

@@ -1,7 +1,5 @@
 'use strict';
 
-/* eslint-disable no-console, no-process-exit, no-sync */
-
 const chalk = require('chalk');
 
 const checkVersionMatch = (env, pkgUp) => {
