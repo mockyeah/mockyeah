@@ -6,6 +6,7 @@ const Liftoff = require('liftoff');
 const v8flags = require('v8flags');
 const chalk = require('chalk');
 const readPkgUp = require('read-pkg-up');
+const checkVersionMatch = require('./checkVersionMatch');
 
 const liftoff = new Liftoff({
   name: 'mockyeah',
@@ -14,35 +15,12 @@ const liftoff = new Liftoff({
   v8flags
 });
 
-const checkVersionMatchWithPackage = (env, pkgUp) => {
-  if (!pkgUp || !pkgUp.package || !pkgUp.package.version) {
-    throw new Error(
-      chalk.red('Could not find `mockyeah-cli` package version to check against core.')
-    );
-  }
-
-  if (!env.modulePackage || !env.modulePackage.version) {
-    throw new Error(chalk.red('Could not find `mockyeah` package version to check against CLI.'));
-  }
-
-  const cliVersion = pkgUp.package.version;
-  const coreVersion = env.modulePackage.version;
-
-  if (cliVersion !== coreVersion) {
-    throw new Error(
-      chalk.red(
-        `Version mismatch between CLI (${cliVersion}) and core (${coreVersion}) - please install same versions.`
-      )
-    );
-  }
-};
-
-const checkVersionMatch = env => {
+const getPackageAndCheckVersionMatch = env => {
   const pkgUp = readPkgUp.sync({
     cwd: __dirname
   });
 
-  checkVersionMatchWithPackage(env, pkgUp);
+  checkVersionMatch(env, pkgUp);
 };
 
 function boot(callback) {
@@ -54,7 +32,7 @@ function boot(callback) {
       process.exit(1);
     }
 
-    checkVersionMatch(env);
+    getPackageAndCheckVersionMatch(env);
 
     // eslint-disable-next-line global-require
     env.config = require('./config')(env);
@@ -68,7 +46,5 @@ function boot(callback) {
     callback.call(this, env);
   });
 }
-
-boot.checkVersionMatchWithPackage = checkVersionMatchWithPackage;
 
 module.exports = boot;
