@@ -51,7 +51,7 @@
     "jest": "^24.8.0"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "dependencies": {
     "mockyeah": "^0.23.2"
