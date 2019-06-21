@@ -39,5 +39,21 @@ describe('boot', () => {
         'Version mismatch between CLI (0.0.0-test) and core (99.99.99-test) - please install same versions.'
       );
     });
+
+    test('passes on matching package versions', () => {
+      expect(() => {
+        const env = {
+          modulePackage: {
+            version: '0.0.0-test'
+          }
+        };
+        const pkgUp = {
+          package: {
+            version: '0.0.0-test'
+          }
+        };
+        checkVersionMatchWithPackage(env, pkgUp);
+      }).not.toThrow();
+    });
   });
 });
