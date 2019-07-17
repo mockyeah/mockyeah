@@ -1,10 +1,11 @@
 import '@babel/polyfill';
-import 'whatwg-fetch';
-import proxy from 'mockyeah-fetch/proxy';
+// import 'whatwg-fetch';
+import Mockyeah from 'mockyeah-fetch';
 import fetches from './fetches';
 
-proxy({
-  serverUrl: 'http://localhost:4001',
+Mockyeah({
+  host: 'localhost',
+  port: 4001,
   suiteHeader: 'x-mockyeah-suite',
   suiteCookie: 'mockyeahSuite'
 });

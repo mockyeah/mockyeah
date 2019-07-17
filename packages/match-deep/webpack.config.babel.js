@@ -1,5 +1,5 @@
 export default {
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {
@@ -12,7 +12,7 @@ export default {
     ]
   },
   output: {
-    library: 'mockyeahFetch',
+    library: 'matchDeep',
     libraryTarget: 'commonjs2',
     libraryExport: 'default'
   }

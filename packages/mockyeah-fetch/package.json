@@ -4,10 +4,10 @@
   "description": "fetch integration for mockyeah request mocking utility.",
   "main": "dist/main.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
-  "author": "Ryan Ricard",
   "license": "MIT",
   "keywords": [
     "assert",
@@ -49,12 +49,22 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.4.3",
+    "@babel/plugin-transform-runtime": "^7.5.0",
     "@babel/preset-env": "^7.4.3",
+    "@babel/register": "^7.4.4",
     "babel-loader": "^8.0.5",
-    "webpack": "^4.30.0",
+    "isomorphic-fetch": "^2.2.1",
+    "jest": "^24.8.0",
+    "webpack": "^4.35.3",
     "webpack-cli": "^3.3.0"
   },
   "engines": {
     "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
+    "@babel/runtime": "^7.5.4",
+    "match-deep": "^0.22.1",
+    "qs": "^6.7.0"
   }
 }
