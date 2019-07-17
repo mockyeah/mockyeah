@@ -1,6 +1,6 @@
 {
   "name": "mockyeah-fetch",
-  "version": "0.22.1",
+  "version": "0.24.0-alpha.0",
   "description": "fetch integration for mockyeah request mocking utility.",
   "main": "dist/main.js",
   "scripts": {
@@ -64,7 +64,7 @@
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
     "@babel/runtime": "^7.5.4",
-    "match-deep": "^0.22.1",
+    "match-deep": "^0.24.0-alpha.0",
     "qs": "^6.7.0"
   }
 }

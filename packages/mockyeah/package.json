@@ -1,6 +1,6 @@
 {
   "name": "mockyeah",
-  "version": "0.22.1",
+  "version": "0.24.0-alpha.0",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Ryan Ricard",
   "license": "MIT",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "keywords": [
     "assert",
@@ -85,7 +85,7 @@
     "json-parse-safe": "^1.0.5",
     "lodash": "^4.17.5",
     "mkdirp": "^0.5.1",
-    "match-deep": "^0.22.1",
+    "match-deep": "^0.24.0-alpha.0",
     "path-to-regexp": "^2.1.0",
     "request": "^2.69.0",
     "tildify": "^1.1.2"

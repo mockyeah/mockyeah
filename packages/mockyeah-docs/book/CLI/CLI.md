@@ -55,7 +55,7 @@ Usage: mockyeah [options] [command]
 
   Commands:
 
-    ls                  list suites
+    list                list suites
     play [suiteNames]   play suite(s)
     playAll             play all suites
     record [suiteName]  record suite

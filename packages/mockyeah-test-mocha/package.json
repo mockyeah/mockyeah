@@ -1,6 +1,6 @@
 {
   "name": "mockyeah-test-mocha",
-  "version": "0.22.1",
+  "version": "0.24.0-alpha.0",
   "description": "Mocha unit test setup for mockyeah request mocking utility.",
   "main": "index.js",
   "scripts": {
@@ -51,9 +51,9 @@
     "mocha": "^6.1.4"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "dependencies": {
-    "mockyeah": "^0.22.1"
+    "mockyeah": "^0.24.0-alpha.0"
   }
 }

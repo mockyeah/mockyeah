@@ -55,7 +55,7 @@ boot(env => {
     process.exit(0);
   }
 
-  if (!names) {
+  if (!names.length) {
     inquirer
       .prompt([
         {

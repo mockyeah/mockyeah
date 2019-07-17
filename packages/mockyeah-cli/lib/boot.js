@@ -5,6 +5,8 @@
 const Liftoff = require('liftoff');
 const v8flags = require('v8flags');
 const chalk = require('chalk');
+const readPkgUp = require('read-pkg-up');
+const checkVersionMatch = require('./checkVersionMatch');
 
 const liftoff = new Liftoff({
   name: 'mockyeah',
@@ -12,6 +14,14 @@ const liftoff = new Liftoff({
   extensions: {},
   v8flags
 });
+
+const getPackageAndCheckVersionMatch = env => {
+  const pkgUp = readPkgUp.sync({
+    cwd: __dirname
+  });
+
+  checkVersionMatch(env, pkgUp);
+};
 
 module.exports = function boot(callback) {
   liftoff.launch({}, env => {
@@ -21,6 +31,8 @@ module.exports = function boot(callback) {
       console.log(chalk.red('Try running: npm install mockyeah --save-dev'));
       process.exit(1);
     }
+
+    getPackageAndCheckVersionMatch(env);
 
     // eslint-disable-next-line global-require
     env.config = require('./config')(env);

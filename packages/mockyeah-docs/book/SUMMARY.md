@@ -4,7 +4,6 @@
 - [Getting Started](Getting-Started.md)
   - [Install](Getting-Started.md#install)
   - [Introductory tutorial](Getting-Started.md#introductory-tutorial)
-  - [Testing with mockyeah](Getting-Started.md#testing-with-mockyeah)
 - [Configuration](Configuration.md)
   - [Defaults](Configuration.md#default-configuration)
   - [Options](Configuration.md#options)

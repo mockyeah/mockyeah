@@ -1,6 +1,6 @@
 {
   "name": "match-deep",
-  "version": "0.22.1",
+  "version": "0.24.0-alpha.0",
   "description": "deep object matcher",
   "main": "dist/main.js",
   "module": "src/index.js",

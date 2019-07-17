@@ -1,6 +1,6 @@
 {
   "name": "mockyeah-cli",
-  "version": "0.22.1",
+  "version": "0.24.0-alpha.0",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "bin": {
@@ -8,7 +8,7 @@
   },
   "preferGlobal": true,
   "scripts": {
-    "test": "yarn lint",
+    "test": "yarn lint && jest",
     "lint": "eslint .js ./bin ./lib"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
@@ -57,14 +57,16 @@
     "commander": "^2.9.0",
     "inquirer": "^6.3.1",
     "liftoff": "^2.2.0",
+    "mockyeah": "^0.24.0-alpha.0",
+    "read-pkg-up": "^6.0.0",
     "request": "^2.87.0",
     "tildify": "^1.1.2",
     "v8flags": "^2.0.11"
   },
   "devDependencies": {
-    "mockyeah": "^0.22.1"
+    "jest": "^24.8.0"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   }
 }
