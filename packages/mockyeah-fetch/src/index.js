@@ -54,14 +54,16 @@ const Mockyeah = (bootOptions = {}) => {
         ? JSON.parse(options.body)
         : options.body;
 
-    const incoming = normalize({
-      path: url,
-      url,
-      query: qs.parse(parsed.query),
-      headers: options.headers, // TODO: Handle `Headers` type.
-      body: inBody, // TODO: Handle other `body` types, e.g., `Form`
-      method: options.method && options.method.toLowerCase()
-    });
+    const incoming = normalize(
+      {
+        url,
+        query: qs.parse(parsed.query),
+        headers: options.headers, // TODO: Handle `Headers` type.
+        body: inBody, // TODO: Handle other `body` types, e.g., `Form`
+        method: options.method && options.method.toLowerCase()
+      },
+      true
+    );
 
     const matchingMock = mocks.find(m => {
       const match = normalize(m[0]);

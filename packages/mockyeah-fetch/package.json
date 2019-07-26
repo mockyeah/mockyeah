@@ -66,6 +66,7 @@
   "dependencies": {
     "@babel/runtime": "^7.5.4",
     "match-deep": "^0.24.0-alpha.0",
+    "path-to-regexp": "^3.0.0",
     "qs": "^6.7.0"
   }
 }

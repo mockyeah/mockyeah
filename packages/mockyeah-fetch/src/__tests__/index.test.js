@@ -15,6 +15,30 @@ describe('mockyeah-fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
+  test('should work with regex and json', async () => {
+    const mockyeah = Mockyeah();
+
+    mockyeah.mock(/https:\/\/e.*?e\.local/, { json: { a: 1 } });
+
+    const res = await mockyeah.fetch('https://example.local');
+    const data = await res.json();
+
+    expect(res.headers.get('content-type')).toBe('application/json');
+    expect(data).toEqual({ a: 1 });
+  });
+
+  test('should work with wildcard url', async () => {
+    const mockyeah = Mockyeah();
+
+    mockyeah.mock('https://example.local/v(.*)/ok', { json: { a: 1 } });
+
+    const res = await mockyeah.fetch('https://example.local/v1/ok');
+    const data = await res.json();
+
+    expect(res.headers.get('content-type')).toBe('application/json');
+    expect(data).toEqual({ a: 1 });
+  });
+
   test('should work with post method, query and text', async () => {
     const mockyeah = Mockyeah();
 
