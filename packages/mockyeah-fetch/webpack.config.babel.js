@@ -1,4 +1,6 @@
-export default {
+import nodeExternals from 'webpack-node-externals';
+
+const common = {
   mode: 'production',
   module: {
     rules: [
@@ -10,10 +12,26 @@ export default {
         }
       }
     ]
-  },
-  output: {
-    library: 'mockyeahFetch',
-    libraryTarget: 'commonjs2',
-    libraryExport: 'default'
   }
 };
+
+export default [
+  {
+    ...common,
+    target: 'node',
+    externals: [nodeExternals()],
+    output: {
+      libraryTarget: 'commonjs2',
+      libraryExport: 'default'
+    }
+  },
+  {
+    ...common,
+    output: {
+      filename: 'browser.js',
+      library: 'Mockyeah',
+      libraryTarget: 'window',
+      libraryExport: 'default'
+    }
+  }
+];
