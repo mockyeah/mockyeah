@@ -3,7 +3,7 @@ import 'isomorphic-fetch';
 import Mockyeah from '..';
 
 describe('mockyeah-fetch', () => {
-  test('should work with url and json', async () => {
+  test('should work with url', async () => {
     const mockyeah = Mockyeah();
 
     mockyeah.mock('https://example.local', { json: { a: 1 } });
@@ -15,7 +15,19 @@ describe('mockyeah-fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
-  test('should work with regex and json', async () => {
+  test('should work with only wildcard', async () => {
+    const mockyeah = Mockyeah();
+
+    mockyeah.mock('*', { json: { a: 1 } });
+
+    const res = await mockyeah.fetch('https://example.local');
+    const data = await res.json();
+
+    expect(res.headers.get('content-type')).toBe('application/json');
+    expect(data).toEqual({ a: 1 });
+  });
+
+  test('should work with regex', async () => {
     const mockyeah = Mockyeah();
 
     mockyeah.mock(/https:\/\/e.*?e\.local/, { json: { a: 1 } });
@@ -27,7 +39,7 @@ describe('mockyeah-fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
-  test('should work with wildcard url', async () => {
+  test('should work with express wildcard in path', async () => {
     const mockyeah = Mockyeah();
 
     mockyeah.mock('https://example.local/v(.*)/ok', { json: { a: 1 } });

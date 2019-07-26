@@ -47,7 +47,9 @@ const normalize = (match, incoming) => {
     match.method = match.method.toLowerCase();
   }
 
-  if (match.url && typeof match.url === 'string') {
+  if (match.url === '*') {
+    match.url = /.*/;
+  } else if (match.url && typeof match.url === 'string') {
     const stripped = stripQuery(match.url);
     match.url = stripped.url.replace(/\/$/, '');
     if (!incoming) {
