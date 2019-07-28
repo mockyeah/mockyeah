@@ -6,11 +6,6 @@ import isEmpty from 'lodash/isEmpty';
 
 const decodedPortRegex = /^(\/?https?.{3}[^/:?]+):/;
 const decodedProtocolRegex = /^(\/?https?).{3}/;
-const encodedPortRegex = /^(\/?https?.{3}[^/:?]+)~/;
-const encodedProtocolRegex = /^(\/?https?).{3}/;
-
-const decodeProtocolAndPort = str =>
-  str.replace(encodedProtocolRegex, '$1://').replace(encodedPortRegex, '$1:');
 
 const encodeProtocolAndPort = str =>
   str.replace(decodedPortRegex, '$1~').replace(decodedProtocolRegex, '$1~~~');

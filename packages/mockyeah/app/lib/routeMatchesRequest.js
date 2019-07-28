@@ -3,6 +3,7 @@ const { parse } = require('url');
 const isAbsoluteUrl = require('is-absolute-url');
 const { decodeProtocolAndPort, normalizePathname } = require('./helpers');
 const matches = require('match-deep');
+const normalize = require('mockyeah-fetch/normalize');
 
 // eslint-disable-next-line consistent-return
 const findAliasReplacements = (url, aliases = []) => {
