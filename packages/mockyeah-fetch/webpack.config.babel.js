@@ -18,6 +18,17 @@ const common = {
 export default [
   {
     ...common,
+    entry: './src/normalize.js',
+    target: 'node',
+    externals: [nodeExternals()],
+    output: {
+      filename: 'normalize.js',
+      libraryTarget: 'commonjs2',
+      libraryExport: 'default'
+    }
+  },
+  {
+    ...common,
     target: 'node',
     externals: [nodeExternals()],
     output: {

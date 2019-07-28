@@ -148,44 +148,43 @@ const handlePathTypes = (_path, _query) => {
   throw new Error(`Unsupported path type ${typeof _path}: ${_path}`);
 };
 
-const compileRoute = (match, response, options = {}) => {
-  const route = {
-    method: match.method || 'get',
-    response
-  };
+// const compileRoute = (match, response, options = {}) => {
+//   const route = {
+//     method: match.method || 'get',
+//     response
+//   };
 
-  if (!_.isFunction(response)) {
-    route.response = makeRouteHandler(route);
-  } else {
-    const routeHandler = (_app, req, res, next) => response(req, res, next);
-    route.response = routeHandler;
-  }
+//   if (!_.isFunction(response)) {
+//     route.response = makeRouteHandler(route);
+//   } else {
+//     const routeHandler = (_app, req, res, next) => response(req, res, next);
+//     route.response = routeHandler;
+//   }
 
-  if (!_.isPlainObject(match)) {
-    Object.assign(route, handlePathTypes(match));
-  } else {
-    const object = match;
-    const headers = _.mapKeys(object.headers, (value, key) => key.toLowerCase());
+//   if (!_.isPlainObject(match)) {
+//     Object.assign(route, handlePathTypes(match));
+//   } else {
+//     const object = match;
+//     const headers = _.mapKeys(object.headers, (value, key) => key.toLowerCase());
 
-    Object.assign(
-      route,
-      handlePathTypes(typeof object.path !== 'undefined' ? object.path : object.url, object.query),
-      {
-        body: object.body,
-        headers
-      }
-    );
-  }
+//     Object.assign(
+//       route,
+//       handlePathTypes(typeof object.path !== 'undefined' ? object.path : object.url, object.query),
+//       {
+//         body: object.body,
+//         headers
+//       }
+//     );
+//   }
 
-  route.suiteName = options.suiteName;
-  route.suiteIndex = options.suiteIndex;
+//   route.suiteName = options.suiteName;
+//   route.suiteIndex = options.suiteIndex;
 
-  return route;
-};
+//   return route;
+// };
 
 module.exports = {
   isPromise,
-  compileRoute,
   requireSuite,
   decodeProtocolAndPort,
   encodeProtocolAndPort,

@@ -1,9 +1,7 @@
-const { isEmpty, isPlainObject } = require('lodash');
-const { parse } = require('url');
+const { isEmpty } = require('lodash');
 const isAbsoluteUrl = require('is-absolute-url');
-const { decodeProtocolAndPort, normalizePathname } = require('./helpers');
 const matches = require('match-deep');
-const normalize = require('mockyeah-fetch/normalize');
+const normalize = require('mockyeah-fetch/dist/normalize');
 
 // eslint-disable-next-line consistent-return
 const findAliasReplacements = (url, aliases = []) => {
@@ -56,31 +54,22 @@ const routeMatchesRequestAliases = (normalizedRoute, normalizedReq, url, options
 const routeMatchesRequest = (route, req, options = {}) => {
   // TODO: Later add features to match other things, like cookies, or with other types, etc.
 
-  const normalizedRoute = {
-    method: route.method && route.method.toLowerCase(),
-    pathname: route.pathFn,
-    query: isEmpty(route.query) ? undefined : route.query,
-    body: route.body,
-    headers: isEmpty(route.headers) ? undefined : route.headers
-  };
+  const normalizedRoute = normalize(route[0]);
 
-  const pathname = decodeProtocolAndPort(normalizePathname(parse(req.url, true).pathname));
+  // const pathname = decodeProtocolAndPort(parse(req.url, true).pathname);
 
-  const normalizedReq = {
-    method: req.method && req.method.toLowerCase(),
-    pathname,
-    query: isEmpty(route.query) ? undefined : req.query,
-    body: route.body && (!isPlainObject(route.body) || !isEmpty(route.body)) ? req.body : undefined,
-    headers: isEmpty(route.headers) ? undefined : req.headers
-  };
+  const urlNoSlashPrefix = req.url.replace(/^\//, '');
 
-  if (route.path === '*') {
-    delete normalizedRoute.pathname;
-  }
-
-  if ((normalizedRoute.method || '').toLowerCase() === 'all') {
-    delete normalizedRoute.method;
-  }
+  const normalizedReq = normalize(
+    {
+      method: req.method,
+      url: isAbsoluteUrl(urlNoSlashPrefix) ? urlNoSlashPrefix : req.url,
+      query: req.query,
+      body: req.body,
+      headers: req.headers
+    },
+    true
+  );
 
   const match = matches(normalizedReq, normalizedRoute);
 
@@ -88,7 +77,7 @@ const routeMatchesRequest = (route, req, options = {}) => {
 
   if (match.result) return true;
 
-  const url = normalizedReq.pathname.toString().replace(/^\//, '');
+  const url = normalizedReq.url.toString().replace(/^\//, '');
 
   const reqPathnameIsAbsoluteUrl = isAbsoluteUrl(url);
 

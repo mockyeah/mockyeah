@@ -65,7 +65,7 @@ describe('Record and Playback', function() {
     return path.resolve(PROXY_SUITES_DIR, suiteName, 'index.js');
   }
 
-  it('should record and playback suite', function(done) {
+  it.only('should record and playback suite', function(done) {
     this.timeout = 10000;
 
     const suiteName = 'test-some-fancy-suite';
