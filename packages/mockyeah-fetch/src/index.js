@@ -12,6 +12,7 @@ function Mockyeah(bootOptions = {}) {
     portHttps, // e.g., 4443
     suiteHeader = 'x-mockyeah-suite',
     suiteCookie = 'mockyeahSuite',
+    ignorePrefix = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}/`,
     // This is the fallback fetch when no mocks match.
     fetch = global.fetch
   } = bootOptions;
@@ -56,7 +57,7 @@ function Mockyeah(bootOptions = {}) {
 
     const incoming = normalize(
       {
-        url,
+        url: url.replace(ignorePrefix, ''),
         query: qs.parse(parsed.query),
         headers: options.headers, // TODO: Handle `Headers` type.
         body: inBody, // TODO: Handle other `body` types, e.g., `Form`

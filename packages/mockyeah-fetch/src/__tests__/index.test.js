@@ -2,9 +2,11 @@ import '@babel/polyfill';
 import 'isomorphic-fetch';
 import Mockyeah from '..';
 
+global.fetch = window.fetch = jest.fn();
+
 describe('mockyeah-fetch', () => {
-  test('should work with url', async () => {
-    const mockyeah = Mockyeah();
+  test('should work with new constructor', async () => {
+    const mockyeah = new Mockyeah();
 
     mockyeah.mock('https://example.local', { json: { a: 1 } });
 
@@ -15,10 +17,25 @@ describe('mockyeah-fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
-  test('should work with new constructor', async () => {
-    const mockyeah = new Mockyeah();
+  test('should ignore prefix with defaults', async () => {
+    const mockyeah = Mockyeah();
 
-    mockyeah.mock('https://example.local', { json: { a: 1 } });
+    mockyeah.mock('http://localhost:4001/https://example.local', { json: { a: 1 } });
+
+    const res = await mockyeah.fetch('https://example.local');
+    const data = await res.json();
+
+    expect(res.headers.get('content-type')).toBe('application/json');
+    expect(data).toEqual({ a: 1 });
+  });
+
+  test('should ignore prefix with non-defaults', async () => {
+    const mockyeah = Mockyeah({
+      host: 'my.mockyeah.host',
+      portHttps: 7777
+    });
+
+    mockyeah.mock('https://my.mockyeah.host:7777/https://example.local', { json: { a: 1 } });
 
     const res = await mockyeah.fetch('https://example.local');
     const data = await res.json();
