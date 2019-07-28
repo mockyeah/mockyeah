@@ -30,7 +30,7 @@ export default [
     output: {
       filename: 'browser.js',
       library: 'Mockyeah',
-      libraryTarget: 'window',
+      libraryTarget: 'var',
       libraryExport: 'default'
     }
   }

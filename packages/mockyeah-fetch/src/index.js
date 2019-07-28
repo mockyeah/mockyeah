@@ -3,9 +3,7 @@ import qs from 'qs';
 import matches from 'match-deep';
 import normalize from './normalize';
 
-const originalFetch = global.fetch;
-
-const Mockyeah = (bootOptions = {}) => {
+function Mockyeah(bootOptions = {}) {
   const {
     proxy,
     noPolyfill,
@@ -13,7 +11,9 @@ const Mockyeah = (bootOptions = {}) => {
     port = 4001,
     portHttps, // e.g., 4443
     suiteHeader = 'x-mockyeah-suite',
-    suiteCookie = 'mockyeahSuite'
+    suiteCookie = 'mockyeahSuite',
+    // This is the fallback fetch when no mocks match.
+    fetch = global.fetch
   } = bootOptions;
 
   const serverUrl = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}`;
@@ -87,7 +87,9 @@ const Mockyeah = (bootOptions = {}) => {
         contentType = 'text/plain; charset=UTF-8';
       }
 
-      const headers = {};
+      const headers = {
+        'x-mockyeah-mocked': 'true'
+      };
 
       if (contentType) {
         headers['content-type'] = contentType;
@@ -124,7 +126,7 @@ const Mockyeah = (bootOptions = {}) => {
       }
     };
 
-    return originalFetch(url, newOptions);
+    return fetch(url, newOptions);
   };
 
   if (!noPolyfill) {
@@ -138,6 +140,6 @@ const Mockyeah = (bootOptions = {}) => {
   };
 
   return api;
-};
+}
 
 export default Mockyeah;

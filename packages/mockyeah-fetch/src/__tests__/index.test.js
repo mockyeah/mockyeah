@@ -15,6 +15,18 @@ describe('mockyeah-fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
+  test('should work with new constructor', async () => {
+    const mockyeah = new Mockyeah();
+
+    mockyeah.mock('https://example.local', { json: { a: 1 } });
+
+    const res = await mockyeah.fetch('https://example.local');
+    const data = await res.json();
+
+    expect(res.headers.get('content-type')).toBe('application/json');
+    expect(data).toEqual({ a: 1 });
+  });
+
   test('should work with only wildcard', async () => {
     const mockyeah = Mockyeah();
 

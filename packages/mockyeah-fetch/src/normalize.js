@@ -1,6 +1,8 @@
 import { parse } from 'url';
 import qs from 'qs';
 import pathToRegExp from 'path-to-regexp';
+import isPlainObject from 'lodash/isPlainObject';
+import isEmpty from 'lodash/isEmpty';
 
 const decodedPortRegex = /^(\/?https?.{3}[^/:?]+):/;
 const decodedProtocolRegex = /^(\/?https?).{3}/;
@@ -25,7 +27,7 @@ const stripQuery = u => {
 };
 
 const normalize = (match, incoming) => {
-  if (typeof match !== 'object') {
+  if (!isPlainObject(match)) {
     match = {
       url: match
     };
@@ -41,23 +43,25 @@ const normalize = (match, incoming) => {
     delete match.path;
   }
 
-  if (!match.method) {
-    match.method = 'get';
-  } else if (typeof match.method === 'string') {
-    match.method = match.method.toLowerCase();
+  if (match.url === '*') {
+    delete match.url;
   }
 
-  if (match.url === '*') {
-    match.url = /.*/;
-  } else if (match.url && typeof match.url === 'string') {
+  if (typeof match.url === 'string') {
     const stripped = stripQuery(match.url);
     match.url = stripped.url.replace(/\/$/, '');
     if (!incoming) {
       const regex = pathToRegExp(encodeProtocolAndPort(match.url));
       match.url = u => regex.test(encodeProtocolAndPort(u));
     }
-    match.query =
-      typeof match.query === 'function' ? match.query : { ...stripped.query, ...match.query };
+    match.query = isPlainObject(match.query) ? { ...stripped.query, ...match.query } : match.query;
+    match.query = isEmpty(match.query) ? undefined : match.query;
+  }
+
+  if (!match.method) {
+    match.method = 'get';
+  } else if (typeof match.method === 'string') {
+    match.method = match.method.toLowerCase();
   }
 
   return match;
