@@ -53,7 +53,7 @@ const makeMatcher = ({ shortCircuit } = {}) => {
         if (shortCircuit && errors.length) return;
         matcher(value[key], source[key], [...keyPath, key]);
       });
-    } else {
+    } else if (typeof source !== 'undefined') {
       const result = isEqual(value, source);
       if (!result)
         errors.push({

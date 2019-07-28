@@ -60,6 +60,8 @@ const normalize = (match, incoming) => {
 
   if (!match.method) {
     match.method = 'get';
+  } else if (match.method === 'all' || match.method === '*') {
+    delete match.method;
   } else if (typeof match.method === 'string') {
     match.method = match.method.toLowerCase();
   }

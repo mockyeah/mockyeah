@@ -1,5 +1,6 @@
 import { parse } from 'url';
 import qs from 'qs';
+import isPlainObject from 'lodash/isPlainObject';
 import matches from 'match-deep';
 import normalize from './normalize';
 
@@ -26,7 +27,7 @@ function Mockyeah(bootOptions = {}) {
   };
 
   const methodize = (match, method) => {
-    match = typeof match === 'string' ? { ...match, url: match } : match;
+    match = isPlainObject(match) ? match : { url: match };
     return { ...match, method };
   };
 
@@ -39,72 +40,87 @@ function Mockyeah(bootOptions = {}) {
   };
 
   const mockyeahFetch = (url, options = {}) => {
-    // TODO: Support `Request` object.
+    try {
+      // TODO: Support `Request` object.
 
-    const parsed = parse(url);
+      const parsed = parse(url);
 
-    // eslint-disable-next-line no-nested-ternary
-    const inHeaders = options.headers
-      ? options.headers instanceof Headers
-        ? options.headers
-        : new Headers(options.headers)
-      : undefined;
+      // eslint-disable-next-line no-nested-ternary
+      const inHeaders = options.headers
+        ? options.headers instanceof Headers
+          ? options.headers
+          : new Headers(options.headers)
+        : undefined;
 
-    const inBody =
-      inHeaders && inHeaders.get('Content-Type') === 'application/json'
-        ? JSON.parse(options.body)
-        : options.body;
+      const inBody =
+        inHeaders && inHeaders.get('Content-Type') === 'application/json'
+          ? JSON.parse(options.body)
+          : // TODO: Support forms as key/value object (see https://expressjs.com/en/api.html#req.body)
+            options.body;
 
-    const incoming = normalize(
-      {
-        url: url.replace(ignorePrefix, ''),
-        query: qs.parse(parsed.query),
-        headers: options.headers, // TODO: Handle `Headers` type.
-        body: inBody, // TODO: Handle other `body` types, e.g., `Form`
-        method: options.method && options.method.toLowerCase()
-      },
-      true
-    );
+      const query = qs.parse(parsed.query);
+      const method = options.method && options.method.toLowerCase();
 
-    const matchingMock = mocks.find(m => {
-      const match = normalize(m[0]);
-      const report = matches(incoming, match);
+      const incoming = normalize(
+        {
+          url: url.replace(ignorePrefix, ''),
+          query,
+          headers: options.headers, // TODO: Handle `Headers` type.
+          body: inBody, // TODO: Handle other `body` types, e.g., `Form`
+          method
+        },
+        true
+      );
 
-      return report.result;
-    });
+      const matchingMock = mocks.find(m => {
+        const match = normalize(m[0]);
+        const report = matches(incoming, match);
 
-    if (matchingMock) {
-      const resOpts = matchingMock[1];
+        return report.result;
+      });
 
-      let body;
-      let contentType;
+      if (matchingMock) {
+        const resOpts = matchingMock[1];
 
-      if (resOpts.json) {
-        const json = typeof resOpts.json === 'function' ? resOpts.json() : resOpts.json;
-        body = JSON.stringify(json);
-        contentType = 'application/json';
-      } else if (resOpts.text) {
-        body = typeof resOpts.text === 'function' ? resOpts.text() : resOpts.text;
-        contentType = 'text/plain; charset=UTF-8';
+        const req = {
+          query,
+          method,
+          body: inBody
+        };
+
+        let body;
+        let contentType;
+
+        if (resOpts.json) {
+          // TODO: Promise and function-returning-Promise support
+          const json = typeof resOpts.json === 'function' ? resOpts.json(req) : resOpts.json;
+          body = JSON.stringify(json);
+          contentType = 'application/json';
+        } else if (resOpts.text) {
+          body = typeof resOpts.text === 'function' ? resOpts.text(req) : resOpts.text;
+          contentType = 'text/plain; charset=UTF-8';
+        }
+
+        const headers = {
+          'x-mockyeah-mocked': 'true'
+        };
+
+        if (contentType) {
+          headers['content-type'] = contentType;
+        }
+
+        const init = {
+          status: resOpts.status || 200,
+          headers
+        };
+
+        const response = new Response(body, init);
+
+        // TODO: Support latency.
+        return Promise.resolve(response);
       }
-
-      const headers = {
-        'x-mockyeah-mocked': 'true'
-      };
-
-      if (contentType) {
-        headers['content-type'] = contentType;
-      }
-
-      const init = {
-        status: resOpts.status || 200,
-        headers
-      };
-
-      const res = new Response(body, init);
-
-      // TODO: Support latency.
-      return Promise.resolve(res);
+    } catch (error) {
+      return Promise.reject(error);
     }
 
     if (proxy && serverUrl) {
@@ -134,10 +150,15 @@ function Mockyeah(bootOptions = {}) {
     global.fetch = mockyeahFetch;
   }
 
+  const reset = () => {
+    global.fetch = fetch;
+  };
+
   const api = {
     fetch: mockyeahFetch,
     mock,
-    ...methods
+    ...methods,
+    reset
   };
 
   return api;
