@@ -1,7 +1,0 @@
-{
-  "name": "mockyeah",
-  "journal": true,
-  "verbose": true,
-  "proxy": true,
-  "suitesDir": "./suites"
-}
