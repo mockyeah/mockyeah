@@ -108,13 +108,13 @@ function verifyFile(app, filePath, message) {
   });
 }
 
-const makeRouteHandler = response => {
+const makeRouteHandler = route => {
+  let response = route.response || {};
+
   if (typeof response === 'string') {
     response = {
       text: response
     };
-  } else {
-    response = Object.assign({}, response);
   }
 
   if (response.filePath) {

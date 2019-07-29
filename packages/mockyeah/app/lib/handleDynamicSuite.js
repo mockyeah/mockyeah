@@ -1,4 +1,4 @@
-const { requireSuite } = require('./helpers');
+const { compileRoute, requireSuite } = require('./helpers');
 const logMatchError = require('./logMatchError');
 const routeMatchesRequest = require('./routeMatchesRequest');
 
@@ -25,12 +25,14 @@ const handleDynamicSuite = (app, req, res) => {
 
     let compiledRoute;
 
-    const route = suite.find(r =>
-      routeMatchesRequest(r, req, {
+    const route = suite.find(r => {
+      compiledRoute = compileRoute(r[0], r[1]);
+
+      return routeMatchesRequest(compiledRoute, req, {
         aliases,
         log: logMatchError.bind(null, app)
-      })
-    );
+      });
+    });
 
     if (!route) return false;
 

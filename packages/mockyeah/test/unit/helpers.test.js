@@ -3,6 +3,7 @@
 const { expect } = require('chai');
 
 const {
+  compileRoute,
   handleContentType,
   handlePathTypes,
   replaceFixtureWithRequireInJson,
@@ -39,6 +40,29 @@ describe('app helpers', () => {
           foo: 'bar'
         }
       });
+    });
+  });
+
+  describe('compileRoute', () => {
+    it('works for strings', () => {
+      const match = '/';
+      expect(compileRoute(match).path).to.equal('/');
+    });
+
+    it('works for objects without method', () => {
+      const match = {
+        path: '/'
+      };
+      expect(compileRoute(match).path).to.equal('/');
+    });
+
+    it('works for objects with method', () => {
+      const match = {
+        method: 'post',
+        path: '/'
+      };
+      expect(compileRoute(match).method).to.equal('post');
+      expect(compileRoute(match).path).to.equal('/');
     });
   });
 

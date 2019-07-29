@@ -10,7 +10,7 @@ const { isPromise } = require('./helpers');
  */
 function Expectation(route) {
   this.route = route;
-  this.prefix = `[${this.route[0].method}] ${this.route[0].path || this.route[0].url} --`;
+  this.prefix = `[${this.route.method}] ${this.route.path} --`;
   this.called = 0;
   this.assertions = [];
   this.handlers = [];

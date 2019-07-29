@@ -2,18 +2,17 @@
 
 const _ = require('lodash');
 const Expectation = require('./Expectation');
+const { compileRoute } = require('./helpers');
 const logMatchError = require('./logMatchError');
 const routeMatchesRequest = require('./routeMatchesRequest');
-const makeRouteHandler = require('./makeRouteHandler');
 const handleDynamicSuite = require('./handleDynamicSuite');
 
 /**
  * This is used for replacing routes, so we need exact matches.
  */
-function isRouteMatch([route1], [route2]) {
+function isRouteMatch(route1, route2) {
   return (
-    route1.url === route2.url &&
-    route1.path === route2.path &&
+    route1.pathname === route2.pathname &&
     route1.method === route2.method &&
     _.isEqual(route1.query, route2.query) &&
     _.isEqual(route1.body, route2.body) &&
@@ -30,8 +29,6 @@ function listen() {
     const {
       config: { aliases }
     } = app;
-
-    // console.log('ADJ routes', routes);
 
     const route = routes.find(r =>
       routeMatchesRequest(r, req, {
@@ -72,7 +69,7 @@ function listen() {
         }
       }
 
-      makeRouteHandler(route[1])(app, req, res);
+      route.response(app, req, res);
     };
 
     route.expectation.middleware(req, res, expectationNext);
@@ -100,7 +97,7 @@ RouteResolver.prototype.register = function register(method, _path, response, op
         path: _path
       };
 
-  const route = [match, response, options];
+  const route = compileRoute(match, response, options);
 
   const expectation = new Expectation(route);
   route.expectation = expectation;
