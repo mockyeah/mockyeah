@@ -31,7 +31,7 @@ function listen() {
       config: { aliases }
     } = app;
 
-    console.log('ADJ routes', routes);
+    // console.log('ADJ routes', routes);
 
     const route = routes.find(r =>
       routeMatchesRequest(r, req, {
