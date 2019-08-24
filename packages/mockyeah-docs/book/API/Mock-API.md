@@ -152,7 +152,7 @@ Response options informing mockyeah how to respond to matching requests. Support
 
 For dynamic behavior, the noted methods above can also be defined as functions that return response body values.
 For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises.
-The functions will receive the Express request object as a first and only argument.
+The functions will receive the [Express request object](https://expressjs.com/en/api.html#req) as a first and only argument.
 
 Examples:
 
