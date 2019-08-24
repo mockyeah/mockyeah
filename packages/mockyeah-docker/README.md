@@ -2,7 +2,13 @@
 
 A docker image for running the Mockyeah server.
 
-Here's an example of mounting suites and fixtures directories, and binding to the port:
+To build the image locally:
+
+```console
+docker build -t mockyeah-docker .
+```
+
+Then to run it, here's an example of mounting suites and fixtures directories, and binding to the port:
 
 ```console
 docker run --rm \
