@@ -48,7 +48,8 @@
     "web service"
   ],
   "devDependencies": {
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "prettier": "^1.18.2"
   },
   "engines": {
     "node": ">=8.0.0"

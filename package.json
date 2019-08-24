@@ -15,7 +15,8 @@
     "build:fetch:test": "cd packages/match-deep && yarn build && cd ../mockyeah-fetch && yarn build && cd ../mockyeah-fetch-test-browser && yarn build"
   },
   "devDependencies": {
-    "lerna": "^3.3.1"
+    "lerna": "^3.3.1",
+    "prettier": "^1.18.2"
   },
   "name": "mockyeah"
 }
