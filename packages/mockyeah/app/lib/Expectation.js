@@ -90,11 +90,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.assertions.push(() => {
         assert(
           internal.called >= number,
-          `${
-            internal.prefix
-          } Expected route to be called at least ${number} times, but it was called ${
-            internal.called
-          } times`
+          `${internal.prefix} Expected route to be called at least ${number} times, but it was called ${internal.called} times`
         );
       });
       return this;
@@ -103,11 +99,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.assertions.push(() => {
         assert(
           internal.called <= number,
-          `${
-            internal.prefix
-          } Expected route to be called at most ${number} times, but it was called ${
-            internal.called
-          } times`
+          `${internal.prefix} Expected route to be called at most ${number} times, but it was called ${internal.called} times`
         );
       });
       return this;
@@ -116,9 +108,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.assertions.push(() => {
         assert(
           internal.called === 0,
-          `${internal.prefix} Expected route to be called never, but it was called ${
-            internal.called
-          } times`
+          `${internal.prefix} Expected route to be called never, but it was called ${internal.called} times`
         );
       });
       return this;
@@ -127,9 +117,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.assertions.push(() => {
         assert(
           internal.called === 1,
-          `${internal.prefix} Expected route to be called once, but it was called ${
-            internal.called
-          } times`
+          `${internal.prefix} Expected route to be called once, but it was called ${internal.called} times`
         );
       });
       return this;
@@ -138,9 +126,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.assertions.push(() => {
         assert(
           internal.called === 2,
-          `${internal.prefix} Expected route to be called twice, but it was called ${
-            internal.called
-          } times`
+          `${internal.prefix} Expected route to be called twice, but it was called ${internal.called} times`
         );
       });
       return this;
@@ -149,9 +135,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.assertions.push(() => {
         assert(
           internal.called === 3,
-          `${internal.prefix} Expected route to be called thrice, but it was called ${
-            internal.called
-          } times`
+          `${internal.prefix} Expected route to be called thrice, but it was called ${internal.called} times`
         );
       });
       return this;
@@ -160,9 +144,7 @@ Expectation.prototype.api = function api(predicateOrMatchObject) {
       internal.assertions.push(() => {
         assert(
           internal.called === number,
-          `${internal.prefix} Expected route to be called ${number} times, but it was called ${
-            internal.called
-          } times`
+          `${internal.prefix} Expected route to be called ${number} times, but it was called ${internal.called} times`
         );
       });
       return this;
