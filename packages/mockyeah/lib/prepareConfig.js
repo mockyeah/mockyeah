@@ -18,6 +18,8 @@ const configDefaults = {
   adminProtocol: 'http',
   adminHost: 'localhost',
   adminPort: 4777,
+  httpsCertPath: undefined,
+  httpsKeyPath: undefined,
   recordToFixtures: true,
   recordToFixturesMode: 'path',
   formatScript: undefined,
@@ -25,7 +27,8 @@ const configDefaults = {
   responseHeaders: true,
   groups: {},
   suiteHeader: 'x-mockyeah-suite',
-  suiteCookie: 'mockyeahSuite'
+  suiteCookie: 'mockyeahSuite',
+  aliases: []
 };
 
 module.exports = (config = {}) => {
