@@ -4,7 +4,6 @@
   "description": "deep object matcher",
   "main": "dist/main.js",
   "module": "src/index.js",
-  "private": true,
   "scripts": {
     "build": "webpack",
     "build:ci": "webpack",
