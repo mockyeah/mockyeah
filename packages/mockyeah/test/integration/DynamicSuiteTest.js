@@ -1,6 +1,5 @@
 'use strict';
 
-const async = require('async');
 const MockYeahServer = require('../../server');
 const supertest = require('supertest');
 
