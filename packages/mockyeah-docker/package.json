@@ -45,8 +45,5 @@
   ],
   "dependencies": {
     "mockyeah-cli": "^0.24.0-alpha.0"
-  },
-  "engines": {
-    "node": ">=12"
   }
 }
