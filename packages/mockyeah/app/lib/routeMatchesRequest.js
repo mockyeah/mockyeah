@@ -2,7 +2,7 @@ const { isEmpty, isPlainObject } = require('lodash');
 const { parse } = require('url');
 const isAbsoluteUrl = require('is-absolute-url');
 const { decodeProtocolAndPort, normalizePathname } = require('./helpers');
-const matches = require('./matches');
+const matches = require('match-deep');
 
 // eslint-disable-next-line consistent-return
 const findAliasReplacements = (url, aliases = []) => {

@@ -53,5 +53,6 @@
   - [Ad Hoc Suites](Suites/Overview.md#ad-hoc-suites)
 - [CLI](CLI/CLI.md)
 - [Testing](Testing.md)
+- [Integration](Integration.md)
 - [Recipes & Examples](https://github.com/mockyeah/mockyeah/tree/master/examples)
 - [Contributing](Contributing.md)
