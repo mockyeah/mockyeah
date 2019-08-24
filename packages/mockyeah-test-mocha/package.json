@@ -48,7 +48,8 @@
     "web service"
   ],
   "devDependencies": {
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "mockyeah-tools": "^0.24.0-alpha.0"
   },
   "engines": {
     "node": ">=8.0.0"
