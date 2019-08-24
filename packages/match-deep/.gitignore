@@ -1,13 +1,6 @@
-test
-fixtures
-*.config.js
-docs
-tasks
-packages
+dist
 
 *.map
-
-.*
 
 .nyc_output
 
