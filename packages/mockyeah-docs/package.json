@@ -19,6 +19,7 @@
     "gitbook-plugin-expandable-chapters": "^0.2.0",
     "gitbook-plugin-github": "2",
     "mockyeah-tools": "^0.24.0-alpha.0",
-    "nyc": "^11.4.1"
+    "nyc": "^11.4.1",
+    "prettier": "^1.18.2"
   }
 }
