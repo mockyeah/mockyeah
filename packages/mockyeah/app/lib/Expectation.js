@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert');
-const matches = require('./matches');
+const matches = require('match-deep');
 const { isPromise } = require('./helpers');
 
 /**

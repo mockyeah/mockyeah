@@ -1,11 +1,7 @@
-'use strict';
-
-const { expect } = require('chai');
-
-const matches = require('../../app/lib/matches');
+import matches from '..';
 
 describe('matches', () => {
-  it('reports all deep errors by default', () => {
+  test('reports all deep errors by default', () => {
     const match = matches(
       {
         a: 1,
@@ -26,10 +22,10 @@ describe('matches', () => {
       }
     );
 
-    expect(match.errors).to.have.length(2);
+    expect(match.errors).toHaveLength(2);
   });
 
-  it('short circuits if specified', () => {
+  test('short circuits if specified', () => {
     const match = matches(
       {
         a: 1,
@@ -44,6 +40,6 @@ describe('matches', () => {
       }
     );
 
-    expect(match.errors).to.have.length(1);
+    expect(match.errors).toHaveLength(1);
   });
 });
