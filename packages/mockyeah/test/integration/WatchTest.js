@@ -60,8 +60,8 @@ describe('Watcher Test', () => {
         setTimeout(() => {
           supertest(mockyeah.server)
             .get('/watched')
-            .expect(200, 'watched!', err => {
-              mockyeah.close(shutErr => done(err || shutErr));
+            .expect(200, 'watched!', err2 => {
+              mockyeah.close(shutErr => done(err2 || shutErr));
             });
         }, 1000);
       }, 1000);

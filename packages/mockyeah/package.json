@@ -11,7 +11,7 @@
     "test:coverage": "nyc yarn test:unit",
     "test:coverage:report:html": "nyc yarn test:unit && nyc report --reporter=html",
     "test:coverage:report": "nyc report --reporter=text-lcov | coveralls ../..",
-    "lint": "eslint ./app ./lib ./server ./test"
+    "lint": "eslint --max-warnings 0 ./app ./lib ./server ./test"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
@@ -69,7 +69,8 @@
     "nyc": "^11.4.1",
     "prettier": "^1.18.2",
     "rimraf": "^2.5.2",
-    "supertest": "^3.4.2"
+    "supertest": "^3.4.2",
+    "mockyeah-tools": "^0.24.0-alpha.0"
   },
   "dependencies": {
     "async": "^1.5.2",

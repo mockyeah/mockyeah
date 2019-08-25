@@ -57,6 +57,7 @@
     "babel-loader": "^8.0.5",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^24.8.0",
+    "mockyeah-tools": "^0.24.0-alpha.0",
     "prettier": "^1.18.2",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.0",
