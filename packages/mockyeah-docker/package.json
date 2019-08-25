@@ -41,7 +41,8 @@
     "test framework",
     "testing",
     "utility",
-    "web service"
+    "web service",
+    "docker"
   ],
   "dependencies": {
     "mockyeah-cli": "^0.24.0-alpha.0"
