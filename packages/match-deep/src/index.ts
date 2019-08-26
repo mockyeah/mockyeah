@@ -2,7 +2,7 @@ import isObject from 'lodash/isObject';
 import isRegExp from 'lodash/isRegExp';
 import isEqual from 'lodash/isEqual';
 
-const stringify = value => {
+const stringify = (value: any) => {
   if (value === undefined) return 'undefined';
   try {
     return JSON.stringify(value);
@@ -11,10 +11,21 @@ const stringify = value => {
   }
 };
 
-const makeMatcher = ({ shortCircuit } = {}) => {
-  const errors = [];
+interface MatchOptions {
+  shortCircuit?: boolean;
+}
 
-  const matcher = (value, source, keyPath = []) => {
+interface MatchError {
+  message: string;
+  keyPath: string[];
+}
+
+const DEFAULT_MATCH_OPTIONS: MatchOptions = {};
+
+const makeMatcher = ({ shortCircuit } = DEFAULT_MATCH_OPTIONS) => {
+  const errors: MatchError[] = [];
+
+  const internalMatcher = (value: any, source: any, keyPath: string[]) => {
     if (isRegExp(source)) {
       const result = source.test(value);
       if (!result)
@@ -51,7 +62,8 @@ const makeMatcher = ({ shortCircuit } = {}) => {
     } else if (isObject(value) && isObject(source)) {
       Object.keys(source).forEach(key => {
         if (shortCircuit && errors.length) return;
-        matcher(value[key], source[key], [...keyPath, key]);
+        // @ts-ignore
+        internalMatcher(value[key], source[key], [...keyPath, key]);
       });
     } else if (typeof source !== 'undefined') {
       const result = isEqual(value, source);
@@ -63,13 +75,13 @@ const makeMatcher = ({ shortCircuit } = {}) => {
     }
   };
 
+  const matcher = (value: any, source: any) => internalMatcher(value, source, []);
+
   return { errors, matcher };
 };
 
-const matches = (value, source, { shortCircuit } = {}) => {
-  const { errors, matcher } = makeMatcher({
-    shortCircuit
-  });
+const matches = (value: any, source: any, options?: MatchOptions) => {
+  const { errors, matcher } = makeMatcher(options);
 
   matcher(value, source);
 

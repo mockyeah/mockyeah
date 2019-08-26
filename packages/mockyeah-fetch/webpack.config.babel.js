@@ -2,10 +2,14 @@ import nodeExternals from 'webpack-node-externals';
 
 const common = {
   mode: 'production',
+  entry: './src/index.ts',
+  resolve: {
+    extensions: ['.ts', '.js', '.json']
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.[jt]s$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader'
@@ -18,11 +22,11 @@ const common = {
 export default [
   {
     ...common,
-    entry: './src/normalize.js',
+    entry: './src/normalize.ts',
     target: 'node',
     externals: [nodeExternals()],
     output: {
-      filename: 'normalize.js',
+      filename: 'normalize.ts',
       libraryTarget: 'commonjs2',
       libraryExport: 'default'
     }
