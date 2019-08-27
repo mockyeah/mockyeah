@@ -1,8 +1,11 @@
 import '@babel/polyfill';
 import 'isomorphic-fetch';
-import Mockyeah from '..';
+import Mockyeah from '../index';
 
-global.fetch = window.fetch = jest.fn();
+// @ts-ignore
+global.fetch = jest.fn();
+// @ts-ignore
+window.fetch = global.fetch;
 
 describe('mockyeah-fetch', () => {
   let mockyeah;
@@ -24,7 +27,7 @@ describe('mockyeah-fetch', () => {
   });
 
   test('should ignore prefix with defaults', async () => {
-    mockyeah = Mockyeah();
+    mockyeah = new Mockyeah();
 
     mockyeah.mock('https://example.local', { json: { a: 2 } });
 
@@ -36,7 +39,7 @@ describe('mockyeah-fetch', () => {
   });
 
   test('should ignore prefix with non-defaults', async () => {
-    mockyeah = Mockyeah({
+    mockyeah = new Mockyeah({
       host: 'my.mockyeah.host',
       portHttps: 7777
     });
@@ -51,7 +54,7 @@ describe('mockyeah-fetch', () => {
   });
 
   test('should work with only wildcard', async () => {
-    mockyeah = Mockyeah();
+    mockyeah = new Mockyeah();
 
     mockyeah.mock('*', { json: { a: 1 } });
 
@@ -63,7 +66,7 @@ describe('mockyeah-fetch', () => {
   });
 
   test('should work with regex', async () => {
-    mockyeah = Mockyeah();
+    mockyeah = new Mockyeah();
 
     mockyeah.mock(/https:\/\/e.*?e\.local/, { json: { a: 1 } });
 
@@ -75,7 +78,7 @@ describe('mockyeah-fetch', () => {
   });
 
   test('should work with express wildcard in path', async () => {
-    mockyeah = Mockyeah();
+    mockyeah = new Mockyeah();
 
     mockyeah.mock('https://example.local/v(.*)/ok', { json: { a: 1 } });
 
@@ -89,7 +92,7 @@ describe('mockyeah-fetch', () => {
   });
 
   test('should work with post method, query and text', async () => {
-    mockyeah = Mockyeah();
+    mockyeah = new Mockyeah();
 
     mockyeah.mock(
       {
@@ -99,7 +102,7 @@ describe('mockyeah-fetch', () => {
           ok: /yes/
         },
         body: {
-          sure: v => v === 'thing'
+          sure: (v: string): boolean => v === 'thing'
         }
       },
       { text: 'hello' }
@@ -120,7 +123,7 @@ describe('mockyeah-fetch', () => {
   });
 
   test('should work with dynamic response', async () => {
-    mockyeah = Mockyeah();
+    mockyeah = new Mockyeah();
 
     mockyeah.post('https://example.local/v1?', {
       json: req => ({ ok: req.query.ok, hmm: req.body.hmm, method: req.method })

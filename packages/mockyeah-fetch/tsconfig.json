@@ -1,0 +1,8 @@
+{
+  "extends": "mockyeah-tools",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": ["src/*"],
+  "exclude": ["dist"]
+}
