@@ -1,9 +1,13 @@
 export default {
-  mode: 'development',
+  mode: 'production',
+  entry: './src/index.ts',
+  resolve: {
+    extensions: ['.ts', '.js', '.json']
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.[jt]s$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader'

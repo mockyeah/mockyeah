@@ -3,11 +3,16 @@
   "version": "0.24.0-alpha.0",
   "description": "deep object matcher",
   "main": "dist/main.js",
+  "types": "dist/index.d.ts",
   "module": "src/index.js",
   "scripts": {
     "build": "webpack",
-    "build:ci": "webpack",
-    "test": "jest"
+    "build:ci": "yarn build && yarn build:types",
+    "build:types": "tsc --emitDeclarationOnly",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint --max-warnings 0 src/**/*.ts",
+    "test": "yarn type-check && yarn lint && yarn test:unit",
+    "test:unit": "jest"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "license": "MIT",
@@ -20,11 +25,20 @@
   "devDependencies": {
     "@babel/core": "^7.5.4",
     "@babel/preset-env": "^7.5.4",
+    "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.4.4",
+    "@types/lodash": "^4.14.137",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
     "babel-loader": "^8.0.6",
+    "eslint": "^6.2.2",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-import-resolver-typescript": "^1.1.1",
+    "eslint-plugin-import": "^2.18.2",
     "jest": "^24.8.0",
     "mockyeah-tools": "^0.24.0-alpha.0",
     "prettier": "^1.18.2",
+    "typescript": "^3.5.3",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.6"
   }

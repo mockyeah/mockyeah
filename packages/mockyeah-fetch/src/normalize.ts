@@ -3,6 +3,7 @@ import qs from 'qs';
 import pathToRegExp from 'path-to-regexp';
 import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
+import { MatchObject, Match, Method } from "./types";
 
 const decodedPortRegex = /^(\/?https?.{3}[^/:?]+):/;
 const decodedProtocolRegex = /^(\/?https?).{3}/;
@@ -10,23 +11,22 @@ const encodedPortRegex = /^(\/?https?.{3}[^/:?]+)~/;
 const encodedProtocolRegex = /^(\/?https?).{3}/;
 
 // Restore any special protocol or port characters that were possibly tilde-replaced.
-const decodeProtocolAndPort = str =>
+const decodeProtocolAndPort = (str: string) =>
   str.replace(encodedProtocolRegex, '$1://').replace(encodedPortRegex, '$1:');
 
-const encodeProtocolAndPort = str =>
+const encodeProtocolAndPort = (str: string) =>
   str.replace(decodedPortRegex, '$1~').replace(decodedProtocolRegex, '$1~~~');
 
-const stripQuery = u => {
-  let url = u;
+const stripQuery = (url: string) => {
   let query;
 
   // is absolute?
   if (/^https?:/.test(url)) {
     const parsed = parse(url);
     url = `${parsed.protocol || 'http:'}//${parsed.hostname}${
-      parsed.port && ![80, 443].includes(parsed.port) ? `:${parsed.port}` : ''
+      parsed.port && !['80', '443'].includes(parsed.port) ? `:${parsed.port}` : ''
     }${parsed.pathname}`;
-    query = qs.parse(parsed.query);
+    query = parsed.query ? qs.parse(parsed.query) : undefined;
   }
 
   return {
@@ -35,16 +35,17 @@ const stripQuery = u => {
   };
 };
 
-const normalize = (match, incoming) => {
+const normalize = (match: Match, incoming?: boolean) => {
   if (!isPlainObject(match)) {
     match = {
       url: match
-    };
+    } as MatchObject;
   } else {
     // shallow copy
     match = {
+      // @ts-ignore
       ...match
-    };
+    } as MatchObject;
   }
 
   if (match.path) {
@@ -80,7 +81,7 @@ const normalize = (match, incoming) => {
   } else if (match.method === 'all' || match.method === 'ALL' || match.method === '*') {
     delete match.method;
   } else if (typeof match.method === 'string') {
-    match.method = match.method.toLowerCase();
+    match.method = match.method.toLowerCase() as Method;
   }
 
   return match;

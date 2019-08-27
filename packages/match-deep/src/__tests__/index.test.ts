@@ -1,4 +1,4 @@
-import matches from '..';
+import matches from '../index';
 
 describe('matches', () => {
   test('reports all deep errors by default', () => {
