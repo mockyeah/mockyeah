@@ -7,23 +7,23 @@ matchDeep(value, source, options?)
 ```
 
 ```js
-import matchDeep from 'match-deep'
+import matchDeep from 'match-deep';
 
 const matches = matchDeep(
-      {
-        a: 1,
-        b: 2
-      },
-      {
-        c: 1,
-        d: 2
-      },
-      {
-        shortCircuit: true
-      }
-    );
+  {
+    a: 1,
+    b: 2
+  },
+  {
+    c: 1,
+    d: 2
+  },
+  {
+    shortCircuit: true
+  }
+);
 
-console.log(matches)
+console.log(matches);
 /*
 
 {
@@ -43,13 +43,13 @@ console.log(matches)
 }
 
 */
-
 ```
 
 ## Options
 
 Defaults:
 
+<!-- prettier-ignore -->
 ```js
 {
   shortCircuit: false
