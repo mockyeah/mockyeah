@@ -22,7 +22,7 @@ describe('Response Headers', () => {
 
     request
       .get('/some/service/end/point')
-      .expect('Content-Type', /text\/xml/)
+      .expect('Content-Type', /\/xml/)
       .expect(200, /Hello/, done);
   });
 });
