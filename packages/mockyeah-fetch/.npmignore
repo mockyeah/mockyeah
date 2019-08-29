@@ -1,6 +1,9 @@
+src
 test
 fixtures
 *.config.js
+*.config.babel.js
+tsconfig.json
 docs
 tasks
 packages
