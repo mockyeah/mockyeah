@@ -8,9 +8,12 @@ const { isPromise } = require('./helpers');
  * Expectation
  *  Provides mock service assertion api
  */
-function Expectation(route) {
-  this.route = route;
-  this.prefix = `[${this.route.method}] ${this.route.path} --`;
+function Expectation(match) {
+  const originalNormal =
+    match.$meta && match.$meta.originalNormal ? match.$meta.originalNormal : match;
+
+  this.prefix = `[${originalNormal.method || 'get'}] ${originalNormal.path ||
+    originalNormal.url} --`;
   this.called = 0;
   this.assertions = [];
   this.handlers = [];
@@ -24,7 +27,7 @@ Expectation.prototype.middleware = function middleware(req, res, next) {
     this.assertions.push(handler.bind(this, req, res, next));
   });
   req.callCount = this.called;
-  next();
+  if (next) next();
 };
 
 const matchesAssertion = (value, source, prefixMessage) => {

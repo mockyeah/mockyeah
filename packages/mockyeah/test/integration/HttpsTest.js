@@ -27,4 +27,10 @@ describe('HTTPS', () => {
 
     request.get('/some/service/end/point').expect(500, done);
   });
+
+  it('should support function status code 300', done => {
+    mockyeah.get('/some/service/end/point', { status: req => parseInt(req.query.status, 10) });
+
+    request.get('/some/service/end/point?status=300').expect(300, done);
+  });
 });

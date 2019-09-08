@@ -1,22 +1,32 @@
+import '@babel/polyfill';
 import { parse } from 'url';
 import qs from 'qs';
 import isPlainObject from 'lodash/isPlainObject';
+import flatten from 'lodash/flatten';
 import matches from 'match-deep';
-import normalize from './normalize';
-import { Match, MatchObject, Method, ResponseOptions } from './types';
+import { normalize } from './normalize';
+import { isMockEqual } from './isMockEqual';
+import { respond } from './respond';
+import {
+  BootOptions,
+  Mock,
+  MockNormal,
+  Match,
+  MatchObject,
+  Method,
+  ResponseOptions,
+  ResponseOptionsObject,
+  responseOptionsKeys
+} from './types';
 
-type MockNormal = [MatchObject, ResponseOptions];
-
-interface BootOptions {
+interface FetchOptions {
+  dynamicMocks?: Mock[];
   proxy?: boolean;
-  noPolyfill?: boolean;
-  host?: string;
-  port?: number;
-  portHttps?: number;
-  suiteHeader?: string;
-  suiteCookie?: string;
-  ignorePrefix?: string;
-  fetch?: GlobalFetch['fetch'];
+}
+
+interface FetchResponseOptions {
+  response: Response;
+  mock?: MockNormal;
 }
 
 const DEFAULT_BOOT_OPTIONS: BootOptions = {};
@@ -24,7 +34,8 @@ const DEFAULT_BOOT_OPTIONS: BootOptions = {};
 class Mockyeah {
   constructor(bootOptions = DEFAULT_BOOT_OPTIONS) {
     const {
-      proxy,
+      proxy: defaultProxy,
+      prependServerURL,
       noPolyfill,
       host = 'localhost',
       port = 4001,
@@ -32,21 +43,45 @@ class Mockyeah {
       suiteHeader = 'x-mockyeah-suite',
       suiteCookie = 'mockyeahSuite',
       ignorePrefix = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}/`,
+      aliases,
+      responseHeaders,
       // This is the fallback fetch when no mocks match.
       // @ts-ignore
       fetch = global.fetch
     } = bootOptions;
 
     if (!fetch) {
-      throw new Error('mockyeah-fetch requires a fetch implementation')
+      throw new Error('mockyeah-fetch requires a fetch implementation');
     }
 
     const serverUrl = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}`;
 
-    const mocks: MockNormal[] = [];
+    let mocks: MockNormal[] = [];
+
+    const makeMock = (match: Match, res: ResponseOptions): MockNormal => {
+      const normal = normalize(match);
+
+      const existingIndex = mocks.findIndex(m => isMockEqual(normal, m[0]));
+      if (existingIndex >= 0) {
+        mocks.splice(existingIndex, 1);
+      }
+
+      let resObj = typeof res === 'string' ? ({ text: res } as ResponseOptionsObject) : res;
+      resObj = resObj || ({ status: 200 } as ResponseOptionsObject);
+
+      if (Object.keys(resObj).some(key => !responseOptionsKeys.includes(key))) {
+        throw new Error(
+          `Response option(s) invalid. Options must include one of the following: ${responseOptionsKeys.join(
+            ', '
+          )}`
+        );
+      }
+
+      return [normal, resObj];
+    };
 
     const mock = (match: Match, res: ResponseOptions) => {
-      mocks.push([normalize(match), res]);
+      mocks.push(makeMock(match, res));
     };
 
     const methodize = (match: Match, method: Method): MatchObject => {
@@ -56,9 +91,53 @@ class Mockyeah {
       return { ...matchObject, method };
     };
 
-    const mockyeahFetch = async (input: RequestInfo, init: RequestInit = {}) => {
+    const fallbackFetch = async (
+      url: string,
+      init: RequestInit,
+      fetchOptions: FetchOptions = {}
+    ) => {
+      const { proxy } = fetchOptions;
+
+      if (!url.startsWith('http') || !proxy) {
+        const headers: Record<string, string> = {};
+        if (responseHeaders) {
+          headers['x-mockyeah-missed'] = 'true';
+        }
+        return new Response('asd', {
+          status: 404,
+          headers
+        });
+      }
+
+      const res = await fetch(url, init);
+
+      if (responseHeaders) {
+        res.headers.set('x-mockyeah-proxied', 'true');
+        res.headers.set('x-mockyeah-missed', 'true');
+      }
+
+      return res;
+    };
+
+    const aliasReplacements: Record<string, string[]> = {};
+
+    (aliases || []).forEach(aliasSet => {
+      aliasSet.forEach(alias => {
+        aliasReplacements[alias] = aliasSet;
+      });
+    });
+
+    const mockyeahFetch = async (
+      input: RequestInfo,
+      init: RequestInit = {},
+      { dynamicMocks, proxy = defaultProxy }: FetchOptions = {}
+    ): Promise<FetchResponseOptions> => {
       const options = init;
       let url = typeof input === 'string' ? input : input.toString();
+
+      const dynamicMocksNormal = (dynamicMocks || [])
+        .map(dynamicMock => dynamicMock && makeMock(...dynamicMock))
+        .filter(Boolean);
 
       try {
         // TODO: Support `Request` object.
@@ -71,96 +150,102 @@ class Mockyeah {
             : new Headers(options.headers)
           : undefined;
 
+        // TODO: Handle non-string bodies (Buffer, Form, etc.).
         if (options.body && typeof options.body !== 'string') {
           // eslint-disable-next-line no-console
           console.error('mockyeah-fetch does not yet support non-string request bodies');
-          return fetch(input, init);
+          return {
+            response: await fallbackFetch(url, init)
+          };
         }
 
-        const isBodyJson = inHeaders && inHeaders.get('Content-Type') === 'application/json';
+        // TODO: Does this handle lowercase `content-type`?
+        const contentType = inHeaders && inHeaders.get('Content-Type');
+        // TODO: More robust content-type parsing.
+        const isBodyJson = contentType && contentType.includes('application/json');
 
-        const inBody = options.body && isBodyJson
-          ? JSON.parse(options.body)
-          : // TODO: Support forms as key/value object (see https://expressjs.com/en/api.html#req.body)
-            options.body;
+        const inBody =
+          options.body && isBodyJson
+            ? JSON.parse(options.body)
+            : // TODO: Support forms as key/value object (see https://expressjs.com/en/api.html#req.body)
+              options.body;
 
         const query = parsed.query ? qs.parse(parsed.query) : undefined;
         const method: Method = options.method ? (options.method.toLowerCase() as Method) : 'get';
 
+        // TODO: Handle `Headers` type.
         if (options.headers && !isPlainObject(options.headers)) {
           // eslint-disable-next-line no-console
           console.error('mockyeah-fetch does not yet support non-object request headers');
-          return fetch(input, init);
+          return {
+            response: await fallbackFetch(url, init)
+          };
         }
 
-        const incoming = normalize(
-          {
-            url: url.replace(ignorePrefix, ''),
-            query,
-            headers: options.headers as Record<string, string>, // TODO: Handle `Headers` type.
-            body: inBody, // TODO: Handle other `body` types, e.g., `Form`
-            method
-          },
-          true
-        );
+        const incoming = {
+          url: url.replace(ignorePrefix, ''),
+          query,
+          headers: options.headers as Record<string, string>,
+          body: inBody,
+          method
+        };
 
-        const matchingMock = mocks.find(m => {
-          const match = normalize(m[0]);
-          const report = matches(incoming, match);
+        let matchingMock: MockNormal | undefined;
 
-          return report.result;
-        });
+        [
+          incoming,
+          ...flatten(
+            Object.entries(aliasReplacements).map(([alias, aliasSet]) => {
+              if (incoming.url.replace(/^\//, '').startsWith(alias)) {
+                return aliasSet.map(alias2 => ({
+                  ...incoming,
+                  url: url.replace(alias, alias2)
+                }));
+              }
+              return [];
+            })
+          )
+        ]
+          .filter(Boolean)
+          .find(inc => {
+            const incNorm = normalize(inc, true);
+
+            return [...(dynamicMocksNormal || []).filter(Boolean), ...mocks].find(m => {
+              const match = normalize(m[0]);
+
+              const matchResult = matches(incNorm, match, { skipKeys: ['$meta'] });
+
+              if (matchResult.result) {
+                matchingMock = m;
+                return true;
+              }
+
+              return false;
+            });
+          });
+
+        const requestForHandler = {
+          url,
+          query,
+          method,
+          body: inBody
+          // TODO: `cookies`
+        };
 
         if (matchingMock) {
-          const resOpts: ResponseOptions = matchingMock[1];
+          const responseForMock = await respond(matchingMock, requestForHandler, bootOptions);
 
-          const req = {
-            url,
-            query,
-            method,
-            body: inBody
-            // TODO: `cookies`
-            // TODO: `url`
+          return {
+            mock: matchingMock,
+            response: responseForMock
           };
-
-          let body;
-          let contentType;
-
-          if (resOpts.json) {
-            // TODO: Promise and function-returning-Promise support
-            const json = await (typeof resOpts.json === 'function'
-              ? resOpts.json(req)
-              : resOpts.json);
-            body = JSON.stringify(json);
-            contentType = 'application/json';
-          } else if (resOpts.text) {
-            body = await (typeof resOpts.text === 'function' ? resOpts.text(req) : resOpts.text);
-            contentType = 'text/plain; charset=UTF-8';
-          }
-
-          const headers: RequestInit['headers'] = {
-            'x-mockyeah-mocked': 'true'
-          };
-
-          if (contentType) {
-            headers['content-type'] = contentType;
-          }
-
-          const forwardInit = {
-            ...init,
-            headers
-          };
-
-          const response = new Response(body, forwardInit);
-
-          // TODO: Support latency.
-          return response;
         }
       } catch (error) {
         throw error;
       }
 
-      if (proxy && serverUrl) {
+      // Consider removing this `prependServerURL` feature.
+      if (prependServerURL && serverUrl) {
         url = `${serverUrl}/${url.replace('://', '~~~')}`;
       }
 
@@ -180,7 +265,9 @@ class Mockyeah {
         }
       };
 
-      return fetch(url, newOptions);
+      return {
+        response: await fallbackFetch(url, newOptions, { proxy })
+      };
     };
 
     if (!noPolyfill) {
@@ -190,7 +277,8 @@ class Mockyeah {
 
     const reset = () => {
       // @ts-ignore
-      global.fetch = fetch;
+      // global.fetch = fetch;
+      mocks = [];
     };
 
     const all = (match: Match, res: ResponseOptions) => mock(match, res);
@@ -199,17 +287,24 @@ class Mockyeah {
     const put = (match: Match, res: ResponseOptions) => mock(methodize(match, 'put'), res);
     const del = (match: Match, res: ResponseOptions) => mock(methodize(match, 'delete'), res);
     const options = (match: Match, res: ResponseOptions) => mock(methodize(match, 'options'), res);
+    const patch = (match: Match, res: ResponseOptions) => mock(methodize(match, 'patch'), res);
 
-    Object.assign(this, {
-      fetch: mockyeahFetch,
-      mock,
+    const methods = {
       all,
       get,
       post,
       put,
       delete: del,
       options,
-      reset
+      patch
+    };
+
+    Object.assign(this, {
+      fetch: mockyeahFetch,
+      reset,
+      mock,
+      methods,
+      ...methods
     });
   }
 }

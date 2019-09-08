@@ -77,10 +77,14 @@ describe('Record Nothing Test', function() {
       [
         // Initiate recording
         cb => {
-          proxy.record(suiteName, {
-            only: 'whatever/none/of/them'
-          });
-          cb();
+          try {
+            proxy.record(suiteName, {
+              only: 'whatever/none/of/them'
+            });
+            cb();
+          } catch (error) {
+            cb(error);
+          }
         },
 
         // Invoke requests to remote services through proxy
@@ -96,8 +100,12 @@ describe('Record Nothing Test', function() {
 
         // // Assert no fixture file exists
         cb => {
-          expect(fs.existsSync(getSuiteFilePath(suiteName))).to.be.false;
-          cb();
+          try {
+            expect(fs.existsSync(getSuiteFilePath(suiteName))).to.be.false;
+            cb();
+          } catch (error) {
+            cb(error);
+          }
         }
       ],
       done

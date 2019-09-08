@@ -1,8 +1,7 @@
-const _ = require('lodash');
 const nodePath = require('path');
 const { parse } = require('url');
 const isAbsoluteUrl = require('is-absolute-url');
-const pathToRegExp = require('path-to-regexp');
+const pathToRegexp = require('path-to-regexp');
 const JSONparseSafe = require('json-parse-safe');
 const {
   decodedPortRegex,
@@ -10,7 +9,6 @@ const {
   encodedPortRegex,
   encodedProtocolRegex
 } = require('./constants');
-const makeRouteHandler = require('./makeRouteHandler');
 const safeFilename = require('../../lib/safeFilename');
 
 const isPromise = value => value && (value instanceof Promise || !!(value.then && value.catch));
@@ -48,7 +46,8 @@ const requireSuite = (app, name) => {
 };
 
 const handleContentType = (body, headers) => {
-  const contentType = headers['content-type'];
+  let contentType = headers['content-type'];
+  contentType = Array.isArray(contentType) ? contentType[0] : contentType;
 
   // TODO: More spec-conformant detection of JSON content type.
   if (contentType && contentType.includes('/json')) {
@@ -112,8 +111,8 @@ const handlePathTypes = (_path, _query) => {
     const paramEncodedPathname = encodeProtocolAndPort(pathname);
 
     const matchKeys = [];
-    // `pathToRegExp` mutates `matchKeys` to contain a list of named parameters
-    const pathRegExp = pathToRegExp(paramEncodedPathname, matchKeys);
+    // `pathToRegexp` mutates `matchKeys` to contain a list of named parameters
+    const pathRegExp = pathToRegexp(paramEncodedPathname, matchKeys);
 
     const query = Object.assign({}, url.query, _query);
 
@@ -148,44 +147,8 @@ const handlePathTypes = (_path, _query) => {
   throw new Error(`Unsupported path type ${typeof _path}: ${_path}`);
 };
 
-const compileRoute = (match, response, options = {}) => {
-  const route = {
-    method: match.method || 'get',
-    response
-  };
-
-  if (!_.isFunction(response)) {
-    route.response = makeRouteHandler(route);
-  } else {
-    const routeHandler = (_app, req, res, next) => response(req, res, next);
-    route.response = routeHandler;
-  }
-
-  if (!_.isPlainObject(match)) {
-    Object.assign(route, handlePathTypes(match));
-  } else {
-    const object = match;
-    const headers = _.mapKeys(object.headers, (value, key) => key.toLowerCase());
-
-    Object.assign(
-      route,
-      handlePathTypes(typeof object.path !== 'undefined' ? object.path : object.url, object.query),
-      {
-        body: object.body,
-        headers
-      }
-    );
-  }
-
-  route.suiteName = options.suiteName;
-  route.suiteIndex = options.suiteIndex;
-
-  return route;
-};
-
 module.exports = {
   isPromise,
-  compileRoute,
   requireSuite,
   decodeProtocolAndPort,
   encodeProtocolAndPort,

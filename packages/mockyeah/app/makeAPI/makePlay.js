@@ -1,5 +1,6 @@
 const { flatten } = require('lodash');
 const { requireSuite } = require('../lib/helpers');
+const { modifyMockForMockyeahFetch } = require('../lib/modifyMockForMockyeahFetch');
 
 const flattenNames = names =>
   Array.isArray(names)
@@ -23,12 +24,15 @@ const makePlay = app => {
 
       app.log(['serve', 'play'], name);
 
-      suite.map((c, i) =>
-        app.routeManager.all(...c, {
+      suite.forEach((c, i) => {
+        const modified = modifyMockForMockyeahFetch(app, ...c);
+
+        // TODO: Handle `suiteName` and `suiteIndex` in `mockyeah-fetch` on mount for logging.
+        return app.locals.mockyeahFetch.all(...modified, {
           suiteName: name,
           suiteIndex: i
-        })
-      );
+        });
+      });
     });
   };
 
