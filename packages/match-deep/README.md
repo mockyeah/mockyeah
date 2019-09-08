@@ -52,8 +52,11 @@ Defaults:
 <!-- prettier-ignore -->
 ```js
 {
-  shortCircuit: false
+  shortCircuit: false,
+  skipKeys: []
 }
 ```
 
-`shortCircuit: true` will stop on the first match error and report only that one, which can help performance.
+`shortCircuit` (`boolean`) - `true` will stop on the first match error and report only that one, which can help performance.
+
+`skipKeys` (`string[]`) - an array of key names under which to not do comparisons - all keys are considered by default.

@@ -13,6 +13,8 @@ const stringify = (value: any) => {
 
 interface MatchOptions {
   shortCircuit?: boolean;
+  // TODO: Support skip keys as singular, as regex, as functions, etc.
+  skipKeys?: string[];
 }
 
 interface MatchError {
@@ -22,7 +24,7 @@ interface MatchError {
 
 const DEFAULT_MATCH_OPTIONS: MatchOptions = {};
 
-const makeMatcher = ({ shortCircuit } = DEFAULT_MATCH_OPTIONS) => {
+const makeMatcher = ({ shortCircuit, skipKeys } = DEFAULT_MATCH_OPTIONS) => {
   const errors: MatchError[] = [];
 
   const internalMatcher = (value: any, source: any, keyPath: string[]) => {
@@ -61,6 +63,7 @@ const makeMatcher = ({ shortCircuit } = DEFAULT_MATCH_OPTIONS) => {
       }
     } else if (isObject(value) && isObject(source)) {
       Object.keys(source).forEach(key => {
+        if (skipKeys && skipKeys.includes(key)) return;
         if (shortCircuit && errors.length) return;
         // @ts-ignore
         internalMatcher(value[key], source[key], [...keyPath, key]);
@@ -97,6 +100,8 @@ const matches = (value: any, source: any, options?: MatchOptions) => {
     : undefined;
 
   return {
+    value,
+    source,
     result,
     message,
     errors
