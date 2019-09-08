@@ -66,7 +66,7 @@ describe('Record and Playback Bad Filename', function() {
   }
 
   it('should record and playback bad filename', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = '../test-bad-filename-suite';
 

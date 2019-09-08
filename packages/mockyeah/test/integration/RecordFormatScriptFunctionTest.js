@@ -68,7 +68,7 @@ describe('Record Format Script Function Test', function() {
   }
 
   it('should record and format script', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-format-script-function';
 

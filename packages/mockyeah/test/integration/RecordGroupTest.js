@@ -82,7 +82,7 @@ describe('Record Group Test', function() {
   }
 
   it('should record fixture to group subdirectory', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-group-file';
 
