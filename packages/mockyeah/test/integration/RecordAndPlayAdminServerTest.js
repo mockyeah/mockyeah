@@ -68,7 +68,7 @@ describe('Record and Playback Admin Server', function() {
   }
 
   it('should record and playback suite over admin server', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-admin-server-suite';
 
@@ -156,7 +156,7 @@ describe('Record and Playback Admin Server', function() {
   });
 
   it('should record and playback calls matching `headers` option over admin server', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-admin-server-suite-3';
 
@@ -245,7 +245,7 @@ describe('Record and Playback Admin Server', function() {
   });
 
   it('should record and playback suite with playAll over admin server', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-admin-server-suite-all';
 
@@ -323,7 +323,7 @@ describe('Record and Playback Admin Server', function() {
   });
 
   it('record stop should support no write', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-admin-server-suite-record-stop-no-write';
 
@@ -366,7 +366,7 @@ describe('Record and Playback Admin Server', function() {
   });
 
   it('should fail when calling record stop when not recording', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     // Initiate recording and playback series
     async.series(

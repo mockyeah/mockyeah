@@ -67,7 +67,7 @@ describe('Record Format Script File Test', function() {
   }
 
   it('should record and format script', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-format-script-file';
 
@@ -130,7 +130,7 @@ describe('Record Format Script File Test', function() {
   });
 
   it('should record non-200 status and format script', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-non-200-format-script-file';
 
