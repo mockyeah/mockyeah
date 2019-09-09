@@ -272,7 +272,10 @@ class Mockyeah {
 
     if (!noPolyfill) {
       // @ts-ignore
-      global.fetch = mockyeahFetch;
+      global.fetch = async (input, init) => {
+        const { response } = await mockyeahFetch(input, init);
+        return response;
+      };
     }
 
     const reset = () => {
