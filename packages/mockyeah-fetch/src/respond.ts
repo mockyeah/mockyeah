@@ -1,8 +1,15 @@
 import mime from 'mime';
-import { MockNormal, ResponseOptionsObject, RequestForHandler, BootOptions } from './types';
+import {
+  MockNormal,
+  ResponseOptionsObject,
+  Responder,
+  ResponderFunction,
+  RequestForHandler,
+  BootOptions
+} from './types';
 
-const handler = (value: any, requestForHandler: RequestForHandler) =>
-  typeof value === 'function' ? value(requestForHandler) : value;
+const handler = <T>(value: Responder<T>, requestForHandler: RequestForHandler) =>
+  typeof value === 'function' ? (value as ResponderFunction<T>)(requestForHandler) : value;
 
 const respond = async (
   matchingMock: MockNormal,
@@ -13,12 +20,28 @@ const respond = async (
 
   const resOpts: ResponseOptionsObject = matchingMock[1];
 
-  const status = (await handler(resOpts.status, requestForHandler)) || 200;
+  const status =
+    (resOpts.status && (await handler<number>(resOpts.status, requestForHandler))) || 200;
 
   let body;
+  let type = resOpts.type && (await resOpts.type);
   let contentType: string | null | undefined;
 
-  if (resOpts.json) {
+  if (resOpts.fixture) {
+    if (!options.fixtureResolver) {
+      throw new Error('Using `fixture` in mock response options requires a `fixtureResolver`.');
+    }
+    const fixture = await handler<string>(resOpts.fixture, requestForHandler);
+    type = type || fixture; // TODO: Use base name only to conceal file path?
+    body = fixture ? await options.fixtureResolver(fixture) : undefined;
+  } else if (resOpts.filePath) {
+    if (!options.fileResolver) {
+      throw new Error('Using `filePath` in mock response options requires a `fileResolver`.');
+    }
+    const filePath = await handler<string>(resOpts.filePath, requestForHandler);
+    type = type || filePath; // TODO: Use base name only to conceal file path?
+    body = filePath ? await options.fileResolver(filePath) : undefined;
+  } else if (resOpts.json) {
     const json = await handler(resOpts.json, requestForHandler);
     // body = JSON.stringify(json, undefined, 2);
     body = JSON.stringify(json);
@@ -35,10 +58,8 @@ const respond = async (
     contentType = undefined;
   }
 
-  // TODO: Handle all `responseOptionsKeys`, including `fixture`, `filePath`.
-
   body = body || '';
-  contentType = resOpts.type ? mime.getType(resOpts.type) : contentType;
+  contentType = type ? mime.getType(type) : contentType;
 
   const headers: RequestInit['headers'] = {
     ...resOpts.headers
@@ -58,7 +79,8 @@ const respond = async (
   };
 
   if (resOpts.latency) {
-    await new Promise(resolve => setTimeout(resolve, resOpts.latency));
+    const latency = await handler<number>(resOpts.latency, requestForHandler);
+    await new Promise(resolve => setTimeout(resolve, latency));
   }
 
   // eslint-disable-next-line consistent-return

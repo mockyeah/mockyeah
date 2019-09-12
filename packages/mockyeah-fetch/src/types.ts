@@ -13,6 +13,8 @@ interface BootOptions {
   fetch?: GlobalFetch['fetch'];
   aliases?: string[][];
   responseHeaders?: boolean;
+  fileResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  fixtureResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
@@ -22,7 +24,7 @@ type Method = MethodLower | MethodUpper;
 type MethodOrAll = Method | 'all' | 'ALL' | '*';
 
 // TODO: Better JSON type.
-type JSON = Record<string, any>;
+type JSON = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 interface RequestForHandler {
   url: string;
@@ -34,18 +36,24 @@ interface RequestForHandler {
   body?: any;
 }
 
-type Responder<T> = T | ((arg: RequestForHandler) => T) | ((arg: RequestForHandler) => Promise<T>);
+type ResponderResult<T> = T | Promise<T>;
+
+type ResponderFunction<T> =
+  | ((arg: RequestForHandler) => T)
+  | ((arg: RequestForHandler) => Promise<T>);
+
+type Responder<T> = ResponderResult<T> | ResponderFunction<T>;
 
 interface ResponseOptionsObject {
   json?: Responder<JSON>;
   text?: Responder<string>;
   html?: Responder<string>;
-  raw?: Responder<string>; // TODO: Other raw types?
+  raw?: Responder<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  filePath: Responder<string>;
+  fixture: Responder<string>;
   status?: Responder<number>;
-  // TODO: `filePath`?
-  // TODO: `fixture`?
-  type?: string;
-  latency?: number;
+  type?: Responder<string>;
+  latency?: Responder<number>;
   headers: Record<string, string>;
   onMatch(): void;
 }
@@ -101,6 +109,9 @@ export {
   MethodOrAll,
   ResponseOptions,
   ResponseOptionsObject,
+  Responder,
+  ResponderFunction,
+  ResponderResult,
   Match,
   MatchObject,
   MatchString,

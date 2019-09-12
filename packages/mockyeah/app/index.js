@@ -17,6 +17,7 @@ const makePlayAll = require('./makeAPI/makePlayAll');
 const makeWatch = require('./makeAPI/makeWatch');
 const makeUnwatch = require('./makeAPI/makeUnwatch');
 const makeReset = require('./makeAPI/makeReset');
+const { makeFileResolver, makeFixtureResolver } = require('./lib/fileResolver');
 
 const rawBodySaver = (req, res, buf, encoding) => {
   if (buf && buf.length) {
@@ -83,7 +84,9 @@ module.exports = function App(config) {
     port: app.config.port,
     portHttps: app.config.portHttps,
     suiteHeader: app.config.suiteHeader,
-    suiteCookie: app.config.suiteCookie
+    suiteCookie: app.config.suiteCookie,
+    fileResolver: makeFileResolver(app),
+    fixtureResolver: makeFixtureResolver(app)
   });
 
   app.locals.mockyeahFetch = mockyeahFetch;
