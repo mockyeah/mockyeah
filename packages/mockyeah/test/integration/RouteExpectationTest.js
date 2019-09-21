@@ -127,7 +127,7 @@ describe('Route expectation', () => {
         cb => request.get('/foo?some=nope').end(cb),
         cb => {
           expect(expectation.verify).to.throw(
-            'Expect object did not match: Expected `"/faoo"` and value `"/foo"` not equal for "path" Expected `"value"` and value `"nope"` not equal for "query.some"'
+            'Expect object did not match: Expected `"/faoo"` and value `"/foo"` not equal for "path". Expected `"value"` and value `"nope"` not equal for "query.some"'
           );
           cb();
         }
