@@ -23,12 +23,13 @@ const makePlay = app => {
 
       app.log(['serve', 'play'], name);
 
-      suite.map((c, i) =>
-        app.routeManager.all(...c, {
+      suite.forEach((c, i) => {
+        // TODO: Handle `suiteName` and `suiteIndex` in `mockyeah-fetch` on mount for logging.
+        return app.locals.mockyeahFetch.all(...c, {
           suiteName: name,
           suiteIndex: i
-        })
-      );
+        });
+      });
     });
   };
 

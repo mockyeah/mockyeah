@@ -65,12 +65,12 @@
     "fs-extra": "^7.0.1",
     "gitbook-plugin-github": "2.0.0",
     "mocha": "^3.1.2",
+    "mockyeah-tools": "^0.24.0-alpha.0",
     "nodemon": "^1.17.5",
     "nyc": "^11.4.1",
     "prettier": "^1.18.2",
     "rimraf": "^2.5.2",
-    "supertest": "^3.4.2",
-    "mockyeah-tools": "^0.24.0-alpha.0"
+    "supertest": "^3.4.2"
   },
   "dependencies": {
     "async": "^1.5.2",
@@ -83,12 +83,12 @@
     "create-cert-files": "^1.0.2",
     "debug": "^4.1.1",
     "express": "^4.13.3",
-    "is-absolute-url": "^2.1.0",
+    "isomorphic-fetch": "^2.2.1",
     "json-parse-safe": "^1.0.5",
     "lodash": "^4.17.5",
     "match-deep": "^0.24.0-alpha.0",
     "mkdirp": "^0.5.1",
-    "path-to-regexp": "^2.1.0",
+    "mockyeah-fetch": "^0.24.0-alpha.0",
     "request": "^2.69.0",
     "tildify": "^1.1.2"
   },

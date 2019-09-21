@@ -3,10 +3,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const async = require('async');
+const _ = require('lodash');
+const fetch = require('isomorphic-fetch');
+const MockyeahFetch = require('mockyeah-fetch');
 const Logger = require('./lib/Logger');
-const RouteManager = require('./lib/RouteManager');
 const proxyRoute = require('./lib/proxyRoute');
+const { modifyMockForMockyeahFetch } = require('./lib/modifyMockForMockyeahFetch');
 const makeRecord = require('./makeAPI/makeRecord');
 const makeRecordStop = require('./makeAPI/makeRecordStop');
 const makePlay = require('./makeAPI/makePlay');
@@ -14,6 +16,13 @@ const makePlayAll = require('./makeAPI/makePlayAll');
 const makeWatch = require('./makeAPI/makeWatch');
 const makeUnwatch = require('./makeAPI/makeUnwatch');
 const makeReset = require('./makeAPI/makeReset');
+const { makeFileResolver, makeFixtureResolver } = require('./lib/fileResolver');
+
+const rawBodySaver = (req, res, buf, encoding) => {
+  if (buf && buf.length) {
+    req.rawBody = buf.toString(encoding || 'utf8');
+  }
+};
 
 /**
  * App module
@@ -50,21 +59,11 @@ module.exports = function App(config) {
 
   app.use(cookieParser());
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.text());
-  app.use(bodyParser.urlencoded({ extended: false }));
-
-  app.middlewares = [];
-
-  // A single middleware to execute any/all consumer-configured middleware.
-  app.use((req, res, next) => {
-    async.series(app.middlewares.map(middleware => cb => middleware(req, res, cb)), err =>
-      next(err)
-    );
-  });
-
-  // Attach RouteManager to app object, the primary set of mockyeah API methods.
-  app.routeManager = new RouteManager(app);
+  app.use(bodyParser.json({ verify: rawBodySaver }));
+  app.use(bodyParser.text({ verify: rawBodySaver }));
+  // TODO: Consider `extended: true`.
+  app.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: false }));
+  app.use(bodyParser.raw({ verify: rawBodySaver, type: '*/*' }));
 
   app.locals.proxying = app.config.proxy;
 
@@ -73,6 +72,34 @@ module.exports = function App(config) {
 
   app.locals.recording = app.config.record;
   app.locals.recordMeta = {};
+
+  const mockyeahFetch = new MockyeahFetch({
+    noPolyfill: true,
+    fetch,
+    aliases: app.config.aliases,
+    responseHeaders: true, // we'll use these to coordinate logging and manually delete from response
+    proxy: app.config.proxy,
+    host: app.config.host,
+    port: app.config.port,
+    portHttps: app.config.portHttps,
+    suiteHeader: app.config.suiteHeader,
+    suiteCookie: app.config.suiteCookie,
+    fileResolver: makeFileResolver(app),
+    fixtureResolver: makeFixtureResolver(app)
+  });
+
+  app.locals.mockyeahFetch = mockyeahFetch;
+
+  app.locals.methods = _.mapValues(mockyeahFetch.methods, (value, key) => (_match, _resOpts) => {
+    const method = key;
+    const [match, newResOpts] = modifyMockForMockyeahFetch(app, _match, _resOpts, method);
+
+    app.log(['serve', 'mount', method], match.url || match.path);
+
+    return mockyeahFetch.methods[method](match, newResOpts);
+  });
+
+  app.locals.expect = mockyeahFetch.expect;
 
   app.use('/', proxyRoute);
 
@@ -91,10 +118,6 @@ module.exports = function App(config) {
   if (app.config.watch) {
     app.watch();
   }
-
-  app.use = middleware => {
-    app.middlewares.push(middleware);
-  };
 
   return app;
 };

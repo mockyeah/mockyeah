@@ -62,6 +62,7 @@
     "@babel/register": "^7.4.4",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.137",
+    "@types/mime": "^2.0.1",
     "@types/node": "^12.7.2",
     "@types/path-to-regexp": "^1.7.0",
     "@types/qs": "^6.5.3",
@@ -85,7 +86,8 @@
     "@babel/runtime": "^7.5.4",
     "lodash": "^4.17.15",
     "match-deep": "^0.24.0-alpha.0",
-    "path-to-regexp": "^3.0.0",
+    "mime": "^2.4.4",
+    "path-to-regexp": "^3.1.0",
     "qs": "^6.7.0"
   }
 }

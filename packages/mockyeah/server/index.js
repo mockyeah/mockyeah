@@ -31,13 +31,8 @@ module.exports = function Server(config, onStart) {
 
   const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
 
-  // Expose ability to implement middleware via API
-  const use = function use() {
-    app.use.apply(app, arguments);
-  };
-
   // Construct and return mockyeah API
-  const instance = Object.assign({}, app.routeManager, {
+  const instance = Object.assign({}, app.locals.methods, {
     config,
     play,
     playAll,
@@ -46,9 +41,10 @@ module.exports = function Server(config, onStart) {
     recordStop,
     reset,
     unwatch,
-    use,
     watch
   });
+
+  instance.expect = app.locals.expect;
 
   instance.startedPromise = new Promise((resolve, reject) => {
     let lazyOnStart;
