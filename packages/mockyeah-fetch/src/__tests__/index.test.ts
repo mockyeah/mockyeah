@@ -19,7 +19,7 @@ describe('mockyeah-fetch', () => {
 
     mockyeah.mock('https://example.local', { json: { a: 1 } });
 
-    const { response } = await mockyeah.fetch('https://example.local');
+    const response = await mockyeah.fetch('https://example.local');
     const data = await response.json();
 
     expect(response.headers.get('content-type')).toMatch('application/json');
@@ -31,7 +31,7 @@ describe('mockyeah-fetch', () => {
 
     mockyeah.mock('https://example.local', { json: { a: 2 } });
 
-    const { response } = await mockyeah.fetch('http://localhost:4001/https://example.local');
+    const response = await mockyeah.fetch('http://localhost:4001/https://example.local');
     const data = await response.json();
 
     expect(response.headers.get('content-type')).toMatch('application/json');
@@ -46,9 +46,7 @@ describe('mockyeah-fetch', () => {
 
     mockyeah.mock('https://example.local', { json: { a: 1 } });
 
-    const { response } = await mockyeah.fetch(
-      'https://my.mockyeah.host:7777/https://example.local'
-    );
+    const response = await mockyeah.fetch('https://my.mockyeah.host:7777/https://example.local');
     const data = await response.json();
 
     expect(response.headers.get('content-type')).toMatch('application/json');
@@ -60,7 +58,7 @@ describe('mockyeah-fetch', () => {
 
     mockyeah.mock('*', { json: { a: 1 } });
 
-    const { response } = await mockyeah.fetch('https://example.local');
+    const response = await mockyeah.fetch('https://example.local');
     const data = await response.json();
 
     expect(response.headers.get('content-type')).toMatch('application/json');
@@ -72,7 +70,7 @@ describe('mockyeah-fetch', () => {
 
     mockyeah.mock(/https:\/\/e.*?e\.local/, { json: { a: 1 } });
 
-    const { response } = await mockyeah.fetch('https://example.local');
+    const response = await mockyeah.fetch('https://example.local');
     const data = await response.json();
 
     expect(response.headers.get('content-type')).toMatch('application/json');
@@ -84,7 +82,7 @@ describe('mockyeah-fetch', () => {
 
     mockyeah.mock('https://example.local/v(.*)/ok', { json: { a: 1 } });
 
-    const { response } = await mockyeah.fetch('https://example.local/v1/ok');
+    const response = await mockyeah.fetch('https://example.local/v1/ok');
     const data = await response.json();
 
     expect(response.headers.get('content-type')).toMatch('application/json');
@@ -110,7 +108,7 @@ describe('mockyeah-fetch', () => {
       { text: 'hello' }
     );
 
-    const { response } = await mockyeah.fetch('https://example.local?ok=yes&and=more', {
+    const response = await mockyeah.fetch('https://example.local?ok=yes&and=more', {
       method: 'post',
       headers: {
         'content-type': 'application/json'
@@ -131,7 +129,7 @@ describe('mockyeah-fetch', () => {
       json: req => ({ ok: req.query.ok, hmm: req.body.hmm, method: req.method })
     });
 
-    const { response } = await mockyeah.fetch('https://example.local/v1?ok=yes', {
+    const response = await mockyeah.fetch('https://example.local/v1?ok=yes', {
       method: 'post',
       body: '{"hmm":"sure"}',
       headers: {
