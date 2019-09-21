@@ -11,9 +11,12 @@ const common = {
       {
         test: /\.[jt]s$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        }
+        use: 'babel-loader'
+      },
+      {
+        test: /\.js$/,
+        use: 'source-map-loader',
+        enforce: 'pre'
       }
     ]
   }
