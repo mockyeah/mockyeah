@@ -10,7 +10,7 @@ import { respond } from './respond';
 import { Expectation } from './Expectation';
 import {
   BootOptions,
-  Mock,
+  FetchOptions,
   MockNormal,
   Match,
   MatchObject,
