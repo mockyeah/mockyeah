@@ -582,14 +582,14 @@ describe('Route expectation', () => {
     const expectation = mockyeah
       .get('/foo', { text: 'bar' })
       .expect()
-      .header('host', 'example.com');
+      .header('X-TEST', 'myTest');
 
     async.series(
       [
         cb =>
           request
             .get('/foo')
-            .set('HOST', 'example.com')
+            .set('X-TEST', 'myTest')
             .end(cb),
         cb => {
           expectation.verify();
@@ -598,10 +598,10 @@ describe('Route expectation', () => {
         cb =>
           request
             .get('/foo')
-            .set('HOST', 'unknown.com')
+            .set('X-TEST', 'otherTest')
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Header "host" did not match expected');
+          expect(expectation.verify).to.throw('Header "X-TEST" did not match expected');
           cb();
         }
       ],
@@ -613,14 +613,14 @@ describe('Route expectation', () => {
     const expectation = mockyeah
       .get('/foo', { text: 'bar' })
       .expect()
-      .header('host', /ample/);
+      .header('x-test', /yT/);
 
     async.series(
       [
         cb =>
           request
             .get('/foo')
-            .set('HOST', 'example.com')
+            .set('x-test', 'myTest')
             .end(cb),
         cb => {
           expectation.verify();
@@ -629,10 +629,10 @@ describe('Route expectation', () => {
         cb =>
           request
             .get('/foo')
-            .set('HOST', 'unknown.com')
+            .set('x-test', 'otherTest')
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Header "host" did not match expected');
+          expect(expectation.verify).to.throw('Header "x-test" did not match expected');
           cb();
         }
       ],
@@ -644,14 +644,14 @@ describe('Route expectation', () => {
     const expectation = mockyeah
       .get('/foo', { text: 'bar' })
       .expect()
-      .header('host', value => value === 'example.com');
+      .header('x-test', value => value === 'myTest');
 
     async.series(
       [
         cb =>
           request
             .get('/foo')
-            .set('HOST', 'example.com')
+            .set('X-TEST', 'myTest')
             .end(cb),
         cb => {
           expectation.verify();
@@ -660,10 +660,10 @@ describe('Route expectation', () => {
         cb =>
           request
             .get('/foo')
-            .set('HOST', 'unknown.com')
+            .set('X-TEST', 'otherTest')
             .end(cb),
         cb => {
-          expect(expectation.verify).to.throw('Header "host" did not match expected');
+          expect(expectation.verify).to.throw('Header "x-test" did not match expected');
           cb();
         }
       ],
@@ -1023,7 +1023,7 @@ describe('Route expectation', () => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
-      .header('host', 'example.com')
+      .header('x-test', 'myTest')
       .params({
         id: '9999'
       })
@@ -1034,7 +1034,7 @@ describe('Route expectation', () => {
 
     request
       .post('/foo?id=9999')
-      .set('HOST', 'example.com')
+      .set('X-Test', 'myTest')
       .send({ foo: 'bar' })
       .end(expectation.verifier(done));
   });
@@ -1042,14 +1042,14 @@ describe('Route expectation', () => {
   it('should support expectation verifier callback with verify error', done => {
     const wrappedDone = err => {
       expect(err).to.exist;
-      expect(err.message).to.match(/\[post\] \/foo -- Header "host" did not match expected/);
+      expect(err.message).to.match(/\[post\] \/foo -- Header "x-test" did not match expected/);
       done();
     };
 
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
-      .header('host', 'example.com')
+      .header('x-test', 'myTest')
       .params({
         id: '9999'
       })
@@ -1064,14 +1064,14 @@ describe('Route expectation', () => {
   it('should support expectation verifier callback with verify error', done => {
     const wrappedDone = err => {
       expect(err).to.exist;
-      expect(err.message).to.match(/\[post\] \/foo -- Header "host" did not match expected/);
+      expect(err.message).to.match(/\[post\] \/foo -- Header "x-test" did not match expected/);
       done();
     };
 
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
-      .header('host', 'example.com')
+      .header('x-test', 'myTest')
       .params({
         id: '9999'
       })
@@ -1093,7 +1093,6 @@ describe('Route expectation', () => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
-      .header('host', 'example.com')
       .params({
         id: '9999'
       })
@@ -1291,7 +1290,7 @@ describe('Route expectation', () => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
-      .header('host', 'example.com')
+      .header('x-test', 'myTest')
       .params({
         id: '9999'
       })
@@ -1302,7 +1301,7 @@ describe('Route expectation', () => {
 
     request
       .post('/foo?id=9999')
-      .set('HOST', 'example.com')
+      .set('x-test', 'myTest')
       .send({ foo: 'bar' })
       .end(expectation.verifier(done));
   });
@@ -1311,7 +1310,6 @@ describe('Route expectation', () => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect()
-      .header('host', 'example.com')
       .query({
         id: '9999'
       })
@@ -1322,7 +1320,6 @@ describe('Route expectation', () => {
 
     request
       .post('/foo?id=9999')
-      .set('HOST', 'example.com')
       .send({ foo: 'bar' })
       .end(expectation.verifier(done));
   });
@@ -1337,7 +1334,7 @@ describe('Route expectation', () => {
           id: /99/,
           int: 3
         },
-        headers: value => value.host.includes('mple'),
+        headers: value => value['x-test'].includes('Tes'),
         body: {
           foo: 'bar'
         }
@@ -1346,7 +1343,7 @@ describe('Route expectation', () => {
 
     request
       .post('/foo?id=9999&int=3')
-      .set('HOST', 'example.com')
+      .set('X-TEST', 'myTest')
       .send({ foo: 'bar' })
       .end(expectation.verifier(done));
   });
@@ -1355,51 +1352,21 @@ describe('Route expectation', () => {
     const expectation = mockyeah
       .post('/foo', { text: 'bar' })
       .expect(data => {
-        expect(data).to.exist;
-
         expect(data.headers).to.be.object;
         expect(data.query).to.be.object;
         expect(data.body).to.be.object;
-        expect(data.req).to.be.object;
 
         expect(data.method).to.equal('post');
         expect(data.path).to.equal('/foo');
         expect(data.query.id).to.equal('9999');
-        expect(data.headers.host).to.equal('example.com');
+        expect(data.headers['x-test']).to.equal('myTest');
         expect(data.body.foo).to.equal('bar');
-        expect(data.req.originalUrl).to.equal('/foo?id=9999');
       })
       .once();
 
     request
       .post('/foo?id=9999')
-      .set('HOST', 'example.com')
-      .send({ foo: 'bar' })
-      .end(expectation.verifier(done));
-  });
-
-  it('should support custom generic expect function', done => {
-    const expectation = mockyeah
-      .post('/foo', { text: 'bar' })
-      .expect(data => {
-        expect(data).to.exist;
-
-        expect(data.headers).to.be.object;
-        expect(data.query).to.be.object;
-        expect(data.body).to.be.object;
-        expect(data.req).to.be.object;
-
-        expect(data.path).to.equal('/foo');
-        expect(data.query.id).to.equal('9999');
-        expect(data.headers.host).to.equal('example.com');
-        expect(data.body.foo).to.equal('bar');
-        expect(data.req.originalUrl).to.equal('/foo?id=9999');
-      })
-      .once();
-
-    request
-      .post('/foo?id=9999')
-      .set('HOST', 'example.com')
+      .set('X-TEST', 'myTest')
       .send({ foo: 'bar' })
       .end(expectation.verifier(done));
   });
@@ -1412,7 +1379,6 @@ describe('Route expectation', () => {
 
     request
       .post('/foo?id=9999')
-      .set('HOST', 'example.com')
       .send({ foo: 'bar' })
       .end(expectation.verifier(done));
   });
