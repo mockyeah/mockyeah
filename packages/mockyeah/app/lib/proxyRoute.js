@@ -7,7 +7,7 @@ const openingSlashRegex = /^\//;
 const leadUrlEncodedProtocolRegex = /^(https?)%3A%2F%2F/;
 
 const makeRequestUrl = req => {
-  const isAbsolute = /^\/+https?[:~][/~]{2}/.test(decodeURIComponent(req.originalUrl));
+  const isAbsolute = /^\/*https?[:~][/~]{2}/.test(decodeURIComponent(req.originalUrl));
 
   return isAbsolute
     ? decodeProtocolAndPort(
