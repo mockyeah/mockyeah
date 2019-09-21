@@ -2,6 +2,7 @@ test
 fixtures
 *.config.js
 
+examples
 docs
 tasks
 packages
