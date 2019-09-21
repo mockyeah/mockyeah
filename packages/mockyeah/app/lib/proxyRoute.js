@@ -82,36 +82,38 @@ const proxyRoute = (req, res, next) => {
       proxy: app.locals.proxying,
       dynamicMocks
     })
-    .then(({ response: fetchRes, mock }) =>
-      fetchRes.text().then(body => ({ fetchRes, mock, body }))
-    )
-    .then(({ fetchRes, mock, body }) => {
-      if (!mock) {
-        app.log(['proxy', req.method], reqUrl);
-
-        if (app.config.responseHeaders) {
-          res.set('x-mockyeah-proxied', 'true');
-        }
-      }
-
+    .then(fetchRes => fetchRes.text().then(body => ({ fetchRes, body })))
+    .then(({ fetchRes, body }) => {
       // TODO: Handle all forms of headers including object, tuple array, Headers instance, etc.
       let headers = {};
 
       if (fetchRes.headers) {
         if (typeof fetchRes.headers.forEach === 'function') {
           fetchRes.headers.forEach((v, k) => {
-            if (k === 'content-encoding') return;
             headers[k] = v;
-            res.set(k, v);
           });
         } else if (isPlainObject(fetchRes.headers)) {
           headers = Object.entries(fetchRes.headers).forEach(([k, v]) => {
-            if (k === 'content-encoding') return;
             headers[k] = v;
-            res.set(k, v);
           });
         }
       }
+
+      delete headers['content-encoding'];
+
+      if (headers['x-mockyeah-proxied'] === 'true') {
+        app.log(['proxy', req.method], reqUrl);
+      }
+
+      if (!app.config.responseHeaders) {
+        delete headers['x-mockyeah-proxied'];
+        delete headers['x-mockyeah-missed'];
+        delete headers['x-mockyeah-mocked'];
+      }
+
+      Object.entries(headers).forEach(([k, v]) => {
+        res.set(k, v);
+      });
 
       const { status } = fetchRes;
 

@@ -77,7 +77,7 @@ module.exports = function App(config) {
     noPolyfill: true,
     fetch,
     aliases: app.config.aliases,
-    responseHeaders: app.config.responseHeaders,
+    responseHeaders: true, // we'll use these to coordinate logging and manually delete from response
     proxy: app.config.proxy,
     host: app.config.host,
     port: app.config.port,

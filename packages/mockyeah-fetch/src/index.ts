@@ -36,7 +36,7 @@ class Mockyeah {
       suiteCookie = 'mockyeahSuite',
       ignorePrefix = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}/`,
       aliases,
-      responseHeaders,
+      responseHeaders = true,
       // This is the fallback fetch when no mocks match.
       // @ts-ignore
       fetch = global.fetch
@@ -273,7 +273,7 @@ class Mockyeah {
         }
       };
 
-      return await fallbackFetch(url, newOptions, { proxy });
+      return fallbackFetch(url, newOptions, { proxy });
     };
 
     if (!noPolyfill) {
