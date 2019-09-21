@@ -75,7 +75,7 @@ const respond = async (
   contentType = type ? mime.getType(type) : contentType;
 
   const headers: RequestInit['headers'] = {
-    ...resOpts.headers
+    ...(await handler<Record<string, string>>(resOpts.headers, requestForHandler))
   };
 
   if (responseHeaders) {
