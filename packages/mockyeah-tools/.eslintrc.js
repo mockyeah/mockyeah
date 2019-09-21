@@ -29,6 +29,7 @@ module.exports = {
     'no-mixed-requires': 1,
     'callback-return': 0,
     'handle-callback-err': 0,
-    'node/no-unpublished-require': 0
+    'node/no-unpublished-require': 0,
+    'import/prefer-default-export': 0
   }
 };
