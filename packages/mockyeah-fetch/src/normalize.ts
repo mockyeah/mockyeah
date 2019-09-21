@@ -117,7 +117,6 @@ const normalize = (match: Match, incoming?: boolean) => {
 
     match.url = stripped.url.replace(/\/+$/, '');
     match.url = match.url || '/';
-    match.query = stripped.query;
 
     originalNormal.url = match.url;
 
@@ -131,7 +130,9 @@ const normalize = (match: Match, incoming?: boolean) => {
       $meta.fn = match.url.toString();
     }
 
-    match.query = isPlainObject(match.query) ? { ...stripped.query, ...match.query } : match.query;
+    match.query = isPlainObject(match.query)
+      ? { ...stripped.query, ...match.query }
+      : match.query || stripped.query;
   } else if (isRegExp(match.url)) {
     if (!incoming) {
       const regex = match.url;

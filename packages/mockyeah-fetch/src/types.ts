@@ -55,7 +55,6 @@ interface ResponseOptionsObject {
   type?: Responder<string>;
   latency?: Responder<number>;
   headers: Record<string, string>;
-  onMatch(): void;
 }
 
 const responseOptionsKeys = [
@@ -76,21 +75,53 @@ type ResponseOptions = string | ResponseOptionsObject;
 type Matcher<T> = T | ((arg: T) => boolean | undefined);
 type MatchString<T = string> = Matcher<T> | RegExp;
 
+type VerifyCallback = (err?: Error) => void;
+type RunHandler = (callback: (err?: Error) => void) => Promise<void> | void;
+type RunHandlerOrPromise = RunHandler | Promise<void>;
+
+interface Expectation {
+  middleware(request: RequestForHandler): void;
+  api(match: MatchObject): Expectation;
+  atLeast(num: number): Expectation;
+  atMost(num: number): Expectation;
+  never(): Expectation;
+  once(): Expectation;
+  twice(): Expectation;
+  thrice(): Expectation;
+  exactly(number: number): Expectation;
+  path(path: string): Expectation;
+  url(url: string): Expectation;
+  header(name: string, value: string): Expectation;
+  params(match: Matcher<Record<string, MatchString>>): Expectation;
+  query(match: Matcher<Record<string, MatchString>>): Expectation;
+  // TODO: Type out `body`.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body(match: any): Expectation;
+  verifier(fn: () => void): (err?: Error) => void;
+  run(handlerOrPromise: RunHandlerOrPromise): Expectation;
+  verify(callback: VerifyCallback): void;
+}
+
+type ExpectApiArg = MatchObject | ((req: RequestForHandler) => boolean);
+
 interface MatchMeta {
   fn?: string;
   regex?: RegExp;
   matchKeys?: pathToRegexp.Key[];
   original?: Match;
   originalNormal?: MatchObject;
-  // expectation?: any;
+  // expectation?: Expectation;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  expectation?: any;
 }
 
 interface MatchObject {
   url?: MatchString<string>;
   path?: MatchString<string>;
   method?: MatchString<MethodOrAll>;
-  query?: Record<string, MatchString>;
-  headers?: Record<string, MatchString>;
+  query?: Matcher<Record<string, MatchString>>;
+  headers?: Matcher<Record<string, MatchString>>;
+  // TODO: Type out `body`.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
   status?: Matcher<number>;
@@ -112,11 +143,17 @@ export {
   Responder,
   ResponderFunction,
   ResponderResult,
+  Matcher,
   Match,
   MatchObject,
   MatchString,
   Mock,
   MockNormal,
   RequestForHandler,
-  responseOptionsKeys
+  responseOptionsKeys,
+  Expectation,
+  ExpectApiArg,
+  VerifyCallback,
+  RunHandler,
+  RunHandlerOrPromise
 };

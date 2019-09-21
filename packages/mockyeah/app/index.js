@@ -8,7 +8,6 @@ const fetch = require('isomorphic-fetch');
 const MockyeahFetch = require('mockyeah-fetch');
 const Logger = require('./lib/Logger');
 const proxyRoute = require('./lib/proxyRoute');
-const Expectation = require('./lib/Expectation');
 const { modifyMockForMockyeahFetch } = require('./lib/modifyMockForMockyeahFetch');
 const makeRecord = require('./makeAPI/makeRecord');
 const makeRecordStop = require('./makeAPI/makeRecordStop');
@@ -97,16 +96,9 @@ module.exports = function App(config) {
 
     app.log(['serve', 'mount', method], match.url || match.path);
 
-    const expectation = new Expectation(match);
-
     match.$meta = match.$meta || {};
-    match.$meta.expectation = expectation;
 
-    mockyeahFetch.methods[method](match, newResOpts);
-
-    return {
-      expect: __match => expectation.api(__match)
-    };
+    return mockyeahFetch.methods[method](match, newResOpts);
   });
 
   app.locals.expect = match => app.locals.methods.all('*').expect(match);

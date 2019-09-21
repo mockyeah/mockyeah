@@ -7,6 +7,7 @@ import matches from 'match-deep';
 import { normalize } from './normalize';
 import { isMockEqual } from './isMockEqual';
 import { respond } from './respond';
+import { Expectation } from './Expectation';
 import {
   BootOptions,
   Mock,
@@ -16,7 +17,9 @@ import {
   Method,
   ResponseOptions,
   ResponseOptionsObject,
-  responseOptionsKeys
+  responseOptionsKeys,
+  ExpectApiArg,
+  RequestForHandler
 } from './types';
 
 interface FetchOptions {
@@ -59,9 +62,9 @@ class Mockyeah {
     let mocks: MockNormal[] = [];
 
     const makeMock = (match: Match, res: ResponseOptions): MockNormal => {
-      const normal = normalize(match);
+      const matchNormal = normalize(match);
 
-      const existingIndex = mocks.findIndex(m => isMockEqual(normal, m[0]));
+      const existingIndex = mocks.findIndex(m => isMockEqual(matchNormal, m[0]));
       if (existingIndex >= 0) {
         mocks.splice(existingIndex, 1);
       }
@@ -77,11 +80,25 @@ class Mockyeah {
         );
       }
 
-      return [normal, resObj];
+      if (matchNormal.$meta) {
+        matchNormal.$meta.expectation = new Expectation(matchNormal);
+      }
+
+      return [matchNormal, resObj];
     };
 
     const mock = (match: Match, res: ResponseOptions) => {
-      mocks.push(makeMock(match, res));
+      const mockNormal = makeMock(match, res);
+      mocks.push(mockNormal);
+
+      const expectation = mockNormal[0].$meta && mockNormal[0].$meta.expectation;
+
+      const api = expectation.api.bind(expectation);
+      const expect = (_match: ExpectApiArg): Expectation => api(_match);
+
+      return {
+        expect: expect.bind(expectation)
+      };
     };
 
     const methodize = (match: Match, method: Method): MatchObject => {
@@ -182,10 +199,12 @@ class Mockyeah {
           };
         }
 
+        const headers = options.headers as Record<string, string>;
+
         const incoming = {
           url: url.replace(ignorePrefix, ''),
           query,
-          headers: options.headers as Record<string, string>,
+          headers,
           body: inBody,
           method
         };
@@ -224,15 +243,24 @@ class Mockyeah {
             });
           });
 
-        const requestForHandler = {
-          url,
+        const pathname = parsed.pathname || '/';
+
+        const requestForHandler: RequestForHandler = {
+          url: pathname,
+          path: pathname,
           query,
           method,
+          headers,
           body: inBody
-          // TODO: `cookies`
+          // TODO: `cookies, etc.
         };
 
         if (matchingMock) {
+          if (matchingMock[0] && matchingMock[0].$meta && matchingMock[0].$meta.expectation) {
+            // May throw error, which will cause the promise to reject.
+            matchingMock[0].$meta.expectation.middleware(requestForHandler);
+          }
+
           const responseForMock = await respond(matchingMock, requestForHandler, bootOptions);
 
           return {

@@ -24,7 +24,19 @@ const respond = async (
     (resOpts.status && (await handler<number>(resOpts.status, requestForHandler))) || 200;
 
   let body;
-  let type = resOpts.type && (await resOpts.type);
+  const awaitedType = (resOpts.type && (await resOpts.type)) as
+    | string
+    | ((req: RequestForHandler) => string)
+    | undefined;
+
+  let type: string | undefined;
+
+  if (typeof awaitedType === 'function') {
+    type = awaitedType(requestForHandler) as (string | undefined);
+  } else {
+    type = awaitedType;
+  }
+
   let contentType: string | null | undefined;
 
   if (resOpts.fixture) {
@@ -59,6 +71,7 @@ const respond = async (
   }
 
   body = body || '';
+
   contentType = type ? mime.getType(type) : contentType;
 
   const headers: RequestInit['headers'] = {

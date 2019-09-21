@@ -48,7 +48,6 @@ const proxyRoute = (req, res, next) => {
       ['request', 'journal'],
       JSON.stringify(
         {
-          callCount: req.callCount,
           url: req.url,
           fullUrl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
           clientIp: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
@@ -87,12 +86,7 @@ const proxyRoute = (req, res, next) => {
       fetchRes.text().then(body => ({ fetchRes, mock, body }))
     )
     .then(({ fetchRes, mock, body }) => {
-      if (mock) {
-        const [match] = mock;
-        if (match.$meta && match.$meta.expectation) {
-          match.$meta.expectation.middleware(req, res);
-        }
-      } else {
+      if (!mock) {
         app.log(['proxy', req.method], reqUrl);
 
         if (app.config.responseHeaders) {
