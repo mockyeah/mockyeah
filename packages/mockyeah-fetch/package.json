@@ -82,7 +82,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.4.4",
+    "@babel/polyfill": "^7.6.0",
     "@babel/runtime": "^7.5.4",
     "lodash": "^4.17.15",
     "match-deep": "^0.24.0-alpha.0",
