@@ -560,12 +560,12 @@ describe('Record and Playback', function() {
 
     // Construct remote service urls
     const path1 = '/http://example.com/some/service/one';
-    const path2 = '/http://www.example.com/some/service/one';
-    const path3 = '/http://www.example.com:80/some/service/one';
+    const path2 = '/http://www.example.com/some/service/two';
+    const path3 = '/http://www.example.com:80/some/service/three';
 
     const path1encoded = '/http~~~example.com/some/service/one';
-    const path2encoded = '/http~~~www.example.com/some/service/one';
-    const path3encoded = '/http~~~www.example.com~80/some/service/one';
+    const path2encoded = '/http~~~www.example.com/some/service/two';
+    const path3encoded = '/http~~~www.example.com~80/some/service/three';
 
     // Mount remote service end points
     remote.get(path1, { text: 'first' });
