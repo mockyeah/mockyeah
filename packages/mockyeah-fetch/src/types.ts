@@ -80,7 +80,7 @@ type RunHandler = (callback: (err?: Error) => void) => Promise<void> | void;
 type RunHandlerOrPromise = RunHandler | Promise<void>;
 
 interface Expectation {
-  middleware(request: RequestForHandler): void;
+  request(request: RequestForHandler): void;
   api(match: MatchObject): Expectation;
   atLeast(num: number): Expectation;
   atMost(num: number): Expectation;
@@ -101,8 +101,6 @@ interface Expectation {
   run(handlerOrPromise: RunHandlerOrPromise): Expectation;
   verify(callback: VerifyCallback): void;
 }
-
-type ExpectApiArg = MatchObject | ((req: RequestForHandler) => boolean);
 
 interface MatchMeta {
   fn?: string;
@@ -128,14 +126,25 @@ interface MatchObject {
   $meta?: MatchMeta;
 }
 
-type Match = string | RegExp | MatchObject | ((url: string) => boolean);
+interface MatchFunction {
+  (req: RequestForHandler): boolean;
+  $meta?: MatchMeta;
+}
+type MatchNormal = MatchObject | MatchFunction;
+type Match = string | RegExp | MatchNormal;
 
 type Mock = [Match, ResponseOptions];
 
-type MockNormal = [MatchObject, ResponseOptionsObject];
+type MockNormal = [MatchNormal, ResponseOptionsObject];
+
+interface FetchOptions {
+  dynamicMocks?: Mock[];
+  proxy?: boolean;
+}
 
 export {
   BootOptions,
+  FetchOptions,
   Method,
   MethodOrAll,
   ResponseOptions,
@@ -152,7 +161,6 @@ export {
   RequestForHandler,
   responseOptionsKeys,
   Expectation,
-  ExpectApiArg,
   VerifyCallback,
   RunHandler,
   RunHandlerOrPromise

@@ -59,6 +59,8 @@ const makeRequestUrl = (url: string) => {
 };
 
 const normalize = (match: Match, incoming?: boolean) => {
+  if (typeof match === 'function') return match;
+
   const originalMatch = isPlainObject(match) ? { ...(match as MatchObject) } : match;
 
   if (!isPlainObject(match)) {

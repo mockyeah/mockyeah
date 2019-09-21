@@ -2,7 +2,7 @@ import assert from 'assert';
 import matches from 'match-deep';
 import {
   MatchObject,
-  ExpectApiArg,
+  Match,
   Matcher,
   VerifyCallback,
   RunHandlerOrPromise,
@@ -44,14 +44,14 @@ class Expectation {
     this.verify = this.verify.bind(this);
   }
 
-  middleware(req: RequestForHandler) {
+  request(req: RequestForHandler) {
     this.called += 1;
     this.handlers.forEach(handler => {
       this.assertions.push(handler.bind(this, req));
     });
   }
 
-  api(predicateOrMatchObject: ExpectApiArg) {
+  api(predicateOrMatchObject: Match) {
     if (typeof predicateOrMatchObject === 'function') {
       const predicate = predicateOrMatchObject;
       this.handlers.push(req => {

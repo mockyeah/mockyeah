@@ -18,19 +18,8 @@ import {
   ResponseOptions,
   ResponseOptionsObject,
   responseOptionsKeys,
-  ExpectApiArg,
   RequestForHandler
 } from './types';
-
-interface FetchOptions {
-  dynamicMocks?: Mock[];
-  proxy?: boolean;
-}
-
-interface FetchResponseOptions {
-  response: Response;
-  mock?: MockNormal;
-}
 
 const DEFAULT_BOOT_OPTIONS: BootOptions = {};
 
@@ -61,7 +50,7 @@ class Mockyeah {
 
     let mocks: MockNormal[] = [];
 
-    const makeMock = (match: Match, res: ResponseOptions): MockNormal => {
+    const makeMock = (match: Match, res?: ResponseOptions): MockNormal => {
       const matchNormal = normalize(match);
 
       const existingIndex = mocks.findIndex(m => isMockEqual(matchNormal, m[0]));
@@ -87,14 +76,14 @@ class Mockyeah {
       return [matchNormal, resObj];
     };
 
-    const mock = (match: Match, res: ResponseOptions) => {
+    const mock = (match: Match, res?: ResponseOptions) => {
       const mockNormal = makeMock(match, res);
       mocks.push(mockNormal);
 
       const expectation = mockNormal[0].$meta && mockNormal[0].$meta.expectation;
 
       const api = expectation.api.bind(expectation);
-      const expect = (_match: ExpectApiArg): Expectation => api(_match);
+      const expect = (_match: Match): Expectation => api(_match);
 
       return {
         expect: expect.bind(expectation)
@@ -148,7 +137,7 @@ class Mockyeah {
       input: RequestInfo,
       init: RequestInit = {},
       { dynamicMocks, proxy = defaultProxy }: FetchOptions = {}
-    ): Promise<FetchResponseOptions> => {
+    ): Promise<Response> => {
       const options = init;
       let url = typeof input === 'string' ? input : input.toString();
 
@@ -171,9 +160,7 @@ class Mockyeah {
         if (options.body && typeof options.body !== 'string') {
           // eslint-disable-next-line no-console
           console.error('mockyeah-fetch does not yet support non-string request bodies');
-          return {
-            response: await fallbackFetch(url, init)
-          };
+          return await fallbackFetch(url, init);
         }
 
         // TODO: Does this handle lowercase `content-type`?
@@ -194,9 +181,7 @@ class Mockyeah {
         if (options.headers && !isPlainObject(options.headers)) {
           // eslint-disable-next-line no-console
           console.error('mockyeah-fetch does not yet support non-object request headers');
-          return {
-            response: await fallbackFetch(url, init)
-          };
+          return await fallbackFetch(url, init);
         }
 
         const headers = options.headers as Record<string, string>;
@@ -258,15 +243,10 @@ class Mockyeah {
         if (matchingMock) {
           if (matchingMock[0] && matchingMock[0].$meta && matchingMock[0].$meta.expectation) {
             // May throw error, which will cause the promise to reject.
-            matchingMock[0].$meta.expectation.middleware(requestForHandler);
+            matchingMock[0].$meta.expectation.request(requestForHandler);
           }
 
-          const responseForMock = await respond(matchingMock, requestForHandler, bootOptions);
-
-          return {
-            mock: matchingMock,
-            response: responseForMock
-          };
+          return await respond(matchingMock, requestForHandler, bootOptions);
         }
       } catch (error) {
         throw error;
@@ -293,17 +273,12 @@ class Mockyeah {
         }
       };
 
-      return {
-        response: await fallbackFetch(url, newOptions, { proxy })
-      };
+      return await fallbackFetch(url, newOptions, { proxy });
     };
 
     if (!noPolyfill) {
       // @ts-ignore
-      global.fetch = async (input, init) => {
-        const { response } = await mockyeahFetch(input, init);
-        return response;
-      };
+      global.fetch = mockyeahFetch;
     }
 
     const reset = () => {
@@ -312,13 +287,13 @@ class Mockyeah {
       mocks = [];
     };
 
-    const all = (match: Match, res: ResponseOptions) => mock(match, res);
-    const get = (match: Match, res: ResponseOptions) => mock(methodize(match, 'get'), res);
-    const post = (match: Match, res: ResponseOptions) => mock(methodize(match, 'post'), res);
-    const put = (match: Match, res: ResponseOptions) => mock(methodize(match, 'put'), res);
-    const del = (match: Match, res: ResponseOptions) => mock(methodize(match, 'delete'), res);
-    const options = (match: Match, res: ResponseOptions) => mock(methodize(match, 'options'), res);
-    const patch = (match: Match, res: ResponseOptions) => mock(methodize(match, 'patch'), res);
+    const all = (match: Match, res?: ResponseOptions) => mock(match, res);
+    const get = (match: Match, res?: ResponseOptions) => mock(methodize(match, 'get'), res);
+    const post = (match: Match, res?: ResponseOptions) => mock(methodize(match, 'post'), res);
+    const put = (match: Match, res?: ResponseOptions) => mock(methodize(match, 'put'), res);
+    const del = (match: Match, res?: ResponseOptions) => mock(methodize(match, 'delete'), res);
+    const options = (match: Match, res?: ResponseOptions) => mock(methodize(match, 'options'), res);
+    const patch = (match: Match, res?: ResponseOptions) => mock(methodize(match, 'patch'), res);
 
     const methods = {
       all,
@@ -330,11 +305,14 @@ class Mockyeah {
       patch
     };
 
+    const expect = (match: Match) => all('*').expect(match);
+
     Object.assign(this, {
       fetch: mockyeahFetch,
       reset,
       mock,
       methods,
+      expect,
       ...methods
     });
   }

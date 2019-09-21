@@ -96,12 +96,10 @@ module.exports = function App(config) {
 
     app.log(['serve', 'mount', method], match.url || match.path);
 
-    match.$meta = match.$meta || {};
-
     return mockyeahFetch.methods[method](match, newResOpts);
   });
 
-  app.locals.expect = match => app.locals.methods.all('*').expect(match);
+  app.locals.expect = mockyeahFetch.expect;
 
   app.use('/', proxyRoute);
 
