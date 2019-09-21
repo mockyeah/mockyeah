@@ -24,7 +24,8 @@ interface MatchError {
 
 const DEFAULT_MATCH_OPTIONS: MatchOptions = {};
 
-const makeMatcher = ({ shortCircuit, skipKeys } = DEFAULT_MATCH_OPTIONS) => {
+const makeMatcher = (options = DEFAULT_MATCH_OPTIONS) => {
+  const { shortCircuit, skipKeys } = options;
   const errors: MatchError[] = [];
 
   const internalMatcher = (value: any, source: any, keyPath: string[]) => {
@@ -96,7 +97,7 @@ const matches = (value: any, source: any, options?: MatchOptions) => {
           error =>
             `${error.message}${error.keyPath.length ? ` for "${error.keyPath.join('.')}"` : ''}`
         )
-        .join(' ')
+        .join('. ')
     : undefined;
 
   return {
