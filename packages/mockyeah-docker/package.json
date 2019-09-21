@@ -1,5 +1,5 @@
 {
-  "name": "mockyeah-docker",
+  "name": "@mockyeah/docker",
   "version": "0.24.0-alpha.0",
   "description": "A Docker image for mockyeah, a powerful service mocking, recording, and playback utility.",
   "private": true,
@@ -45,6 +45,6 @@
     "docker"
   ],
   "dependencies": {
-    "mockyeah-cli": "^0.24.0-alpha.0"
+    "@mockyeah/cli": "^0.24.0-alpha.0"
   }
 }

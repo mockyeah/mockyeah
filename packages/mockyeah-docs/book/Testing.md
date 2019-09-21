@@ -5,7 +5,7 @@
 Here's an example of using mockyeah in unit tests (via the [Jest package](#jest) described below):
 
 ```js
-const mockyeah = require('mockyeah-test-jest');
+const mockyeah = require('@mockyeah/test-jest');
 const supertest = require('supertest');
 
 const request = supertest(mockyeah.server.url);
@@ -48,18 +48,18 @@ To ease setup & use for popular unit test frameworks, mockyeah maintains some pa
 
 ### Jest
 
-If you're using the [Jest](https://jestjs.io) unit test framework, try our `mockyeah-test-jest` package to ease setup & use.
+If you're using the [Jest](https://jestjs.io) unit test framework, try our `@mockyeah/test-jest` package to ease setup & use.
 
 All you need to do is:
 
 ```console
-$ npm add --save-dev mockyeah-test-jest
+$ npm add --save-dev @mockyeah/test-jest
 ```
 
 Then, in your test files:
 
 ```js
-import mockyeah from 'mockyeah-test-jest';
+import mockyeah from '@mockyeah/test-jest';
 
 describe('test', () => {
   test('should work', () => {
@@ -70,18 +70,18 @@ describe('test', () => {
 
 ### Mocha
 
-If you're using the [Mocha](https://mochajs.org) unit test framework, try our `mockyeah-test-mocha` package to ease setup & use.
+If you're using the [Mocha](https://mochajs.org) unit test framework, try our `@mockyeah/test-mocha` package to ease setup & use.
 
 All you need to do is:
 
 ```console
-$ npm add --save-dev mockyeah-test-mocha
+$ npm add --save-dev @mockyeah/test-mocha
 ```
 
 Then, in your test files:
 
 ```js
-import mockyeah from 'mockyeah-test-mocha';
+import mockyeah from '@mockyeah/test-mocha';
 
 describe('test', () => {
   it('should work', () => {
@@ -96,7 +96,7 @@ You'll want to construct a server with the following options,
 and wire it into before/after each/all hooks for your testing framework.
 
 ```js
-const MockyeahServer = require('mockyeah/server');
+const MockyeahServer = require('@mockyeah/server/server');
 
 const mockyeah = new MockyeahServer({
   port: 0,

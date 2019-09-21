@@ -1,4 +1,4 @@
-const MockyeahServer = require('mockyeah/server');
+const MockyeahServer = require('@mockyeah/server/server');
 
 const mockyeah = new MockyeahServer({
   port: 0,

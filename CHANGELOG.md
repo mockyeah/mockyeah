@@ -135,7 +135,7 @@ mockyeah.reset("/foo-1", "/bar-2");
 
 - Add capture `.play()` functionality. See documentation.
 - Add capture `.record()` functionality. See documentation.
-- Implements necessary changes to facilitate [mockyeah-cli](https://github.com/mockyeah/mockyeah-cli)
+- Implements necessary changes to facilitate [@mockyeah/cli](https://github.com/mockyeah/mockyeah)
 - Add greater test coverage.
 
 #### Remove

@@ -6,7 +6,7 @@ and other expectation functions.
 Example:
 
 ```js
-const mockyeah = require('mockyeah');
+const mockyeah = require('@mockyeah/server');
 const request = require('supertest');
 
 describe('This test', () => {
@@ -28,7 +28,7 @@ describe('This test', () => {
 If you would prefer to use the [Mock API](./Mock-API.md) methods to setup endpoints:
 
 ```js
-const mockyeah = require('mockyeah');
+const mockyeah = require('@mockyeah/server');
 const request = require('supertest');
 
 describe('This test', () => {
@@ -48,7 +48,7 @@ describe('This test', () => {
 Or without `run`, with `verifier` call as callback:
 
 ```js
-const mockyeah = require('mockyeah');
+const mockyeah = require('@mockyeah/server');
 const request = require('supertest');
 
 describe('This test', () => {
@@ -71,7 +71,7 @@ describe('This test', () => {
 Or with `verify` instead of `verifier` (be sure handle prior errors and try/catch the call, which `verifier` does for you):
 
 ```js
-const mockyeah = require('mockyeah');
+const mockyeah = require('@mockyeah/server');
 const request = require('supertest');
 
 describe('This test', () => {

@@ -20,7 +20,7 @@ import Server from 'mockyeah/server';
 or:
 
 ```js
-const Server = require('mockyeah/server');
+const Server = require('@mockyeah/server/server');
 ```
 
 Then use it:

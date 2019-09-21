@@ -32,13 +32,13 @@ module.exports = [
 3. Play your ad hoc suites.
 
 ```js
-require('mockyeah').play('suite-example');
+require('@mockyeah/server').play('suite-example');
 ```
 
 Or play all:
 
 ```js
-require('mockyeah').playAll();
+require('@mockyeah/server').playAll();
 ```
 
 That's it!

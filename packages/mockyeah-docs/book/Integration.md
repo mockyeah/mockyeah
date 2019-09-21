@@ -1,6 +1,6 @@
 # Integration
 
-To integrate mockyeah with apps or tests, you can use the `mockyeah-fetch` package.
+To integrate mockyeah with apps or tests, you can use the `@mockyeah/fetch` package.
 
 This monkeypatches the native `fetch` API to enable some mockyeah features. It is supported in both browser and Node environments with `fetch` support (native or polyfilled). Recommended polyfills are `whatwg-fetch` for browser and `node-fetch` for Node, or `isomorhpic-fetch` for both.
 
@@ -15,14 +15,14 @@ since setting a cookie is often easier for users than setting a header.
 To use, simply:
 
 ```console
-$ npm add --save-dev mockyeah-fetch
+$ npm add --save-dev @mockyeah/fetch
 ```
 
 Then:
 
 ```js
 import 'isomorhpic-fetch';
-import Mockyeah from 'mockyeah-fetch';
+import Mockyeah from '@mockyeah/fetch';
 
 Mockyeah({ proxy: true });
 ```
@@ -31,7 +31,7 @@ Or, with some options overrides (defaults below):
 
 ```js
 import 'isomorhpic-fetch';
-import Mockyeah from 'mockyeah-fetch';
+import Mockyeah from '@mockyeah/fetch';
 
 Mockyeah({
   proxy: true,
@@ -44,7 +44,7 @@ Mockyeah({
 
 ## Client-side mocking
 
-The `mockyeah-fetch` library also supports client-side mocking, which can intercept
+The `@mockyeah/fetch` library also supports client-side mocking, which can intercept
 requests with mocks to bypass a network call entirely.
 For some use cases, this can have a number of advantages over
 the mockyeah server, including:
@@ -57,7 +57,7 @@ the mockyeah server, including:
 
 ```js
 import 'isomorhpic-fetch';
-import Mockyeah from 'mockyeah-fetch';
+import Mockyeah from '@mockyeah/fetch';
 
 const mockyeah = Mockyeah();
 

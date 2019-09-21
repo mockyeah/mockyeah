@@ -1,5 +1,5 @@
 {
-  "extends": "mockyeah-tools",
+  "extends": "@mockyeah/tools",
   "compilerOptions": {
     "outDir": "dist"
   },

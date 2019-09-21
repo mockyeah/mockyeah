@@ -7,7 +7,7 @@ global.fetch = jest.fn();
 // @ts-ignore
 window.fetch = global.fetch;
 
-describe('mockyeah-fetch', () => {
+describe('@mockyeah/fetch', () => {
   let mockyeah;
 
   afterEach(() => {

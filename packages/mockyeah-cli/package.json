@@ -1,5 +1,5 @@
 {
-  "name": "mockyeah-cli",
+  "name": "@mockyeah/cli",
   "version": "0.24.0-alpha.0",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "jest": "^24.8.0",
-    "mockyeah-tools": "^0.24.0-alpha.0",
+    "@mockyeah/tools": "^0.24.0-alpha.0",
     "prettier": "^1.18.2"
   },
   "engines": {
