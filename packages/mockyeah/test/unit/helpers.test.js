@@ -4,7 +4,6 @@ const { expect } = require('chai');
 
 const {
   handleContentType,
-  handlePathTypes,
   replaceFixtureWithRequireInJson,
   getDataForRecordToFixtures
 } = require('../../app/lib/helpers');
@@ -39,12 +38,6 @@ describe('app helpers', () => {
           foo: 'bar'
         }
       });
-    });
-  });
-
-  describe('handlePathTypes', () => {
-    it('throws for unknown type', () => {
-      expect(handlePathTypes.bind(1)).to.throw();
     });
   });
 
