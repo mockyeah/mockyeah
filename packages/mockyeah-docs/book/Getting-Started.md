@@ -3,7 +3,7 @@
 ## Install
 
 ```sh
-npm install mockyeah --save-dev
+npm install @mockyeah/server --save-dev
 ```
 
 or
@@ -24,7 +24,7 @@ yarn add -D mockyeah
 1.  Install `mockyeah`
 
     ```shell
-    $ npm install mockyeah --save-dev
+    $ npm install @mockyeah/server --save-dev
     ```
 
     or
@@ -40,7 +40,7 @@ yarn add -D mockyeah
     ```
 
     ```js
-    const mockyeah = require('mockyeah');
+    const mockyeah = require('@mockyeah/server');
 
     mockyeah.get('/hello-world', { text: 'Hello World' });
     ```

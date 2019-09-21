@@ -1,5 +1,5 @@
 {
-  "extends": "mockyeah-tools",
+  "extends": "@mockyeah/tools",
   "compilerOptions": {
     "outDir": "dist",
     "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,

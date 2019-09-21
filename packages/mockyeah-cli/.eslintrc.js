@@ -1,4 +1,4 @@
-const tools = require('mockyeah-tools/.eslintrc.js');
+const tools = require('@mockyeah/tools/.eslintrc.js');
 
 module.exports = {
   ...tools,

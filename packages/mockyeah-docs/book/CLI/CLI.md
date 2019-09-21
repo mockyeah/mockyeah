@@ -1,19 +1,19 @@
 # CLI
 
-mockyeah-cli provides a simple command line interface for recording and playing suites to integrate with during development.
+@mockyeah/cli provides a simple command line interface for recording and playing suites to integrate with during development.
 
 ## Getting started
 
-1. Install mockyeah-cli
+1. Install @mockyeah/cli
 
 ```shell
-$ npm install -g mockyeah-cli
+$ npm install -g @mockyeah/cli
 ```
 
 or
 
 ```
-$ yarn global add mockyeah-cli
+$ yarn global add @mockyeah/cli
 ```
 
 2. Configure a service call to proxy through mockyeah
@@ -32,9 +32,9 @@ We agree the above URL looks pretty nutty, but rest assured all other known appr
 $ mockyeah record my-first-suite
 ```
 
-4. Invoke the service call you previously configured. You should see mockyeah-cli output.
+4. Invoke the service call you previously configured. You should see @mockyeah/cli output.
 
-5. Stop mockyeah-cli by hitting enter on the stop question.
+5. Stop @mockyeah/cli by hitting enter on the stop question.
 
 6. Play back the suite
 

@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const checkVersionMatch = (env, pkgUp) => {
   if (!pkgUp || !pkgUp.package || !pkgUp.package.version) {
     throw new Error(
-      chalk.red('Could not find `mockyeah-cli` package version to check against core.')
+      chalk.red('Could not find `@mockyeah/cli` package version to check against core.')
     );
   }
 

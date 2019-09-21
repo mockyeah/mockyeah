@@ -43,7 +43,7 @@ class Mockyeah {
     } = bootOptions;
 
     if (!fetch) {
-      throw new Error('mockyeah-fetch requires a fetch implementation');
+      throw new Error('@mockyeah/fetch requires a fetch implementation');
     }
 
     const serverUrl = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}`;
@@ -159,7 +159,7 @@ class Mockyeah {
         // TODO: Handle non-string bodies (Buffer, Form, etc.).
         if (options.body && typeof options.body !== 'string') {
           // eslint-disable-next-line no-console
-          console.error('mockyeah-fetch does not yet support non-string request bodies');
+          console.error('@mockyeah/fetch does not yet support non-string request bodies');
           return await fallbackFetch(url, init);
         }
 
@@ -180,7 +180,7 @@ class Mockyeah {
         // TODO: Handle `Headers` type.
         if (options.headers && !isPlainObject(options.headers)) {
           // eslint-disable-next-line no-console
-          console.error('mockyeah-fetch does not yet support non-object request headers');
+          console.error('@mockyeah/fetch does not yet support non-object request headers');
           return await fallbackFetch(url, init);
         }
 
