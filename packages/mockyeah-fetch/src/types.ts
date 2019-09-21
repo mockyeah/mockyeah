@@ -154,6 +154,7 @@ export {
   ResponderResult,
   Matcher,
   Match,
+  MatchFunction,
   MatchObject,
   MatchString,
   Mock,
