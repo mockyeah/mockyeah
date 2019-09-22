@@ -24,7 +24,7 @@ const Header = ({ siteTitle, siteDescription }) => (
           to="/"
           style={{
             textDecoration: `none`,
-              paddingRight: '1rem'
+            paddingRight: '1rem'
           }}
         >
           <img id="logo" src={logo} alt="Logo" width="160" style={{ marginRight: '1rem' }} />
@@ -46,15 +46,18 @@ const Header = ({ siteTitle, siteDescription }) => (
           <h2 style={{ fontSize: '1rem', marginTop: '0.2rem', marginBottom: '0.6rem' }}>
             {siteDescription}
           </h2>
-          <div style={{ marginTop: '.5rem' }}>
+          <div id="links" style={{ marginTop: '.5rem' }}>
+            <a href="https://github.com/mockyeah/mockyeah" alt="GitHub">
+              <i class="fa fa-github"></i>
+            </a>{' '}
             <a href="https://www.npmjs.com/package/mockyeah">
-              <img style={{ marginBottom: '.5rem' }} alt="npm" src="https://img.shields.io/npm/v/mockyeah.svg" />
+              <img alt="npm" src="https://img.shields.io/npm/v/mockyeah.svg" />
             </a>{' '}
             <a href="https://travis-ci.org/mockyeah/mockyeah">
-              <img style={{ marginBottom: '.5rem' }} alt="Travis CI" src="https://img.shields.io/travis/mockyeah/mockyeah.svg" />
+              <img alt="Travis CI" src="https://img.shields.io/travis/mockyeah/mockyeah.svg" />
             </a>{' '}
             <a href="https://coveralls.io/github/mockyeah/mockyeah">
-              <img style={{ marginBottom: '.5rem' }} alt="Coveralls" src="https://img.shields.io/coveralls/mockyeah/mockyeah.svg" />
+              <img alt="Coveralls" src="https://img.shields.io/coveralls/mockyeah/mockyeah.svg" />
             </a>
           </div>
         </div>

@@ -625,8 +625,18 @@ pre tt:after {
   max-width: 20vw;
 }
 
+#links a {
+  color: white;
+  font-size: 1.6em;
+}
+
+#links img {
+  margin: 0;
+}
+
 #page {
   display: flex;
+  flex-direction: row-reverse;
 }
 
 #page > * {
@@ -639,7 +649,6 @@ pre tt:after {
 
 #page nav {
   width: 30%;
-  order: -1;
   padding-right: 1rem;
 }
 
@@ -655,7 +664,7 @@ footer {
   #page > * {
     float: none !important;
     width: 100% !important;
-    order: 0 !important;
+    flex-direction: column !important;
   }
 
   #page nav {
