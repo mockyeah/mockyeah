@@ -4,9 +4,9 @@ mockyeah provides the ability to capture request/responses and play them back la
 While recording, mockyeah proxies all received requests to configured hosts and captures their responses.
 Suites include: response body, method, headers, status code, latency, and path.
 
-See [`record`](../API/record.md), [`recordStop`](../API/recordStop.md), and [`play`](../API/play.md).
+See [`record`](../API/record), [`recordStop`](../API/recordStop), and [`play`](../API/play).
 
-See also our section on the [CLI](../CLI/CLI.md)
+See also our section on the [CLI](../CLI/CLI)
 for another way to record and play.
 
 ## Ad Hoc Suites

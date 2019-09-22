@@ -42,7 +42,7 @@ If you want the mock to match only for specific headers, query parameters, or re
 or use some of the more advanced matching features like regular expressions or functions
 in place of string matches, then you can use the object syntax.
 Values within the object can be strings, regular expressions,
-functions, or plain objects. See [Match Values](Match-Values.md).
+functions, or plain objects. See [Match Values](Match-Values).
 
 All keys but `path` (also aliased as `url`) are optional.
 

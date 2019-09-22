@@ -7,7 +7,7 @@ Passed an error as first argument if the closing fails. Also returns a promise.
 
 Stops mockyeah Express server.
 
-Also implicitly calls [`unwatch()`](unwatch.md) to stop the file watching.
+Also implicitly calls [`unwatch()`](unwatch) to stop the file watching.
 
 After all tests run, `mockyeah.close()` should be called to
 shutdown mockyeah's Express server. Failing to do so will result in `EADDRINUSE`

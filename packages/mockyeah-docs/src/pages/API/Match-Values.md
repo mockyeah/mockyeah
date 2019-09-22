@@ -1,6 +1,6 @@
 # Match Values
 
-Match values are used both in [mock definitions](Mock-API.md) and in [expecations](Expectation-API.md).
+Match values are used both in [mock definitions](Mock-API) and in [expecations](Expectation-API).
 They are a way to support generic pattern matching on values.
 
 An match value can be a string, regular expression, plain object, or function that will be tested against a given input value.

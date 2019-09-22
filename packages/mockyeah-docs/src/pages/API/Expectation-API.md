@@ -25,7 +25,7 @@ describe('This test', () => {
 });
 ```
 
-If you would prefer to use the [Mock API](Mock-API.md) methods to setup endpoints:
+If you would prefer to use the [Mock API](Mock-API) methods to setup endpoints:
 
 ```js
 const mockyeah = require('@mockyeah/server');
@@ -107,9 +107,9 @@ describe('This test', () => {
 
 `.expect(optionalPredicateOrMatchObject)` -
 Returns an expectation object for a given mock service when chained
-to a [Mock API](Mock-API.md) method call.
+to a [Mock API](Mock-API) method call.
 
-It optionally accepts a [match value](Match-Values.md), in this case either
+It optionally accepts a [match value](Match-Values), in this case either
 an object or a function, allowing you to assert on several fields of the request at once,
 as an alternative to the individual functions below like `query()`, `body()`, etc.
 The match will be against an object with the following fields:
@@ -191,7 +191,7 @@ const expectation = mockyeah
 
 <div id="path"></div>
 
-`.path(MatchValue)` - Adds an expectation that a service must receive only requests with paths matching the value specified. See [match value](Match-Values.md).
+`.path(MatchValue)` - Adds an expectation that a service must receive only requests with paths matching the value specified. See [match value](Match-Values).
 
 ```js
 const expectation = mockyeah
@@ -213,7 +213,7 @@ const expectation = mockyeah
 
 <div id="body"></div>
 
-`.body(MatchValue)` - Adds an expectation that a service must receive only requests with bodies matching the body specified. See [match value](Match-Values.md).
+`.body(MatchValue)` - Adds an expectation that a service must receive only requests with bodies matching the body specified. See [match value](Match-Values).
 
 ```js
 const expectation = mockyeah
@@ -226,7 +226,7 @@ const expectation = mockyeah
 
 <div id="params"></div>
 
-`.params(MatchValue)` - Adds expectation that a service must receive only requests with query params matching those specified. See [match value](Match-Values.md).
+`.params(MatchValue)` - Adds expectation that a service must receive only requests with query params matching those specified. See [match value](Match-Values).
 
 ```js
 const expectation = mockyeah
@@ -243,7 +243,7 @@ const expectation = mockyeah
 
 <div id="header"></div>
 
-`.header(key, MatchValue)` - Adds expectation that a service must receive only requests with headers matching those specified. See [match value](Match-Values.md).
+`.header(key, MatchValue)` - Adds expectation that a service must receive only requests with headers matching those specified. See [match value](Match-Values).
 
 ```js
 const expectation = mockyeah

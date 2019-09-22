@@ -1,3 +1,3 @@
 # `unwatch()`
 
-Stops watching. See [`watch()`](watch.md).
+Stops watching. See [`watch()`](watch).

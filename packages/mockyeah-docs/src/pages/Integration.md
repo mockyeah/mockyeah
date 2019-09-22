@@ -8,7 +8,7 @@ This monkeypatches the native `fetch` API to enable some mockyeah features. It i
 
 The `proxy` option adds the mockyeah server URL prefix to all URLs requested with `fetch` in the browser via a monkeypatch. It can be used place of apps that don't have complex configuration mechanisms or control over re-wiring all their code to use URLs with the mockyeah server URL prefix.
 
-In a browser, for [dynamic suites](Suites/Dynamic.md),
+In a browser, for [dynamic suites](Suites/Dynamic),
 it will also pass any `mockyeahSuite` cookie value as a `x-mockyeah-suite` header,
 since setting a cookie is often easier for users than setting a header.
 

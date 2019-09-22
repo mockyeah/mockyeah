@@ -2,4 +2,4 @@
 
 `mockyeah.playAll()`
 
-Mounts all suites in `suitesDir`. See [`play()`](play.md).
+Mounts all suites in `suitesDir`. See [`play()`](play).
