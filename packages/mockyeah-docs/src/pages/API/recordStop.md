@@ -1,3 +1,6 @@
+---
+title: recordStop | API
+---
 # `recordStop()`
 
 `mockyeah.recordStop(options, callback)`

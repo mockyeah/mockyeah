@@ -1,3 +1,6 @@
+---
+title: Dynamic Suites
+---
 # Dynamic Suites
 
 Without mounting suites explicitly via `play` or `playAll`, you can dynamically opt-in to them

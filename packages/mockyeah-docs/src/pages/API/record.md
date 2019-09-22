@@ -1,3 +1,6 @@
+---
+title: record | API
+---
 # `record()`
 
 `mockyeah.record([suite name])`

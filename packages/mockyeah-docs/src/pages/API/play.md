@@ -1,3 +1,6 @@
+---
+title: play | API
+---
 # `play()`
 
 `mockyeah.play(suiteName)`

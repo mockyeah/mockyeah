@@ -1,3 +1,6 @@
+---
+title: Integration
+---
 # Integration
 
 To integrate mockyeah with apps or tests, you can use the `@mockyeah/fetch` package.

@@ -1,3 +1,6 @@
+---
+title: CLI
+---
 # CLI
 
 `@mockyeah/cli` provides a simple command line interface for recording and playing suites to integrate with during development.

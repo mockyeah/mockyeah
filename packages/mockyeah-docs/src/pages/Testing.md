@@ -1,3 +1,6 @@
+---
+title: Testing
+---
 # Testing
 
 ## Example
