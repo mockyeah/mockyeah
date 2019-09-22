@@ -13,7 +13,7 @@ const Header = ({ siteTitle, siteDescription }) => (
     <div
       style={{
         margin: `0 auto`,
-        maxWidth: 960,
+        maxWidth: 1200,
         padding: `1.45rem 1.0875rem .2rem`,
         display: 'flex',
         color: `white`
@@ -23,37 +23,40 @@ const Header = ({ siteTitle, siteDescription }) => (
         <Link
           to="/"
           style={{
-            textDecoration: `none`
+            textDecoration: `none`,
+              paddingRight: '1rem'
           }}
         >
-          <img src={logo} alt="Logo" width="160" style={{ marginRight: 12 }} />
+          <img id="logo" src={logo} alt="Logo" width="160" style={{ marginRight: '1rem' }} />
         </Link>
       </div>
-      <div>
-        <h1 style={{ margin: 0 }}>
-          <Link
-            to="/"
-            style={{
-              textDecoration: `none`,
-              color: `white`
-            }}
-          >
-            {siteTitle}
-          </Link>
-        </h1>
-        <h2 style={{ fontSize: '1rem', marginTop: '0.2rem', marginBottom: '0.6rem' }}>
-          {siteDescription}
-        </h2>
-        <div style={{ marginTop: 6 }}>
-          <a href="https://www.npmjs.com/package/mockyeah">
-            <img alt="npm" src="https://img.shields.io/npm/v/mockyeah.svg" />
-          </a>{' '}
-          <a href="https://travis-ci.org/mockyeah/mockyeah">
-            <img alt="Travis CI" src="https://img.shields.io/travis/mockyeah/mockyeah.svg" />
-          </a>{' '}
-          <a href="https://coveralls.io/github/mockyeah/mockyeah">
-            <img alt="Coveralls" src="https://img.shields.io/coveralls/mockyeah/mockyeah.svg" />
-          </a>
+      <div style={{ display: 'flex' }}>
+        <div>
+          <h1 style={{ margin: 0 }}>
+            <Link
+              to="/"
+              style={{
+                textDecoration: `none`,
+                color: `white`
+              }}
+            >
+              {siteTitle}
+            </Link>
+          </h1>
+          <h2 style={{ fontSize: '1rem', marginTop: '0.2rem', marginBottom: '0.6rem' }}>
+            {siteDescription}
+          </h2>
+          <div style={{ marginTop: '.5rem' }}>
+            <a href="https://www.npmjs.com/package/mockyeah">
+              <img style={{ marginBottom: '.5rem' }} alt="npm" src="https://img.shields.io/npm/v/mockyeah.svg" />
+            </a>{' '}
+            <a href="https://travis-ci.org/mockyeah/mockyeah">
+              <img style={{ marginBottom: '.5rem' }} alt="Travis CI" src="https://img.shields.io/travis/mockyeah/mockyeah.svg" />
+            </a>{' '}
+            <a href="https://coveralls.io/github/mockyeah/mockyeah">
+              <img style={{ marginBottom: '.5rem' }} alt="Coveralls" src="https://img.shields.io/coveralls/mockyeah/mockyeah.svg" />
+            </a>
+          </div>
         </div>
       </div>
     </div>

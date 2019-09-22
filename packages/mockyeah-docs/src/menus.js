@@ -36,7 +36,6 @@ const menus = {
             { title: '`record()`', url: 'API/record' },
             { title: '`recordStop()`', url: 'API/recordStop' },
             { title: '`reset()`', url: 'API/reset' },
-            { title: '`shutdown()`', url: 'API/shutdown' },
             { title: '`start()`', url: 'API/start' },
             { title: '`startedPromise`', url: 'API/startedPromise' },
             { title: '`unwatch()`', url: 'API/unwatch' },
