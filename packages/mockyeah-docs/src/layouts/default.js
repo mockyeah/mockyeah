@@ -29,7 +29,14 @@ const Default = ({ children, ...props }) => {
 
   return (
     <>
-      <Helmet link={[{ rel: 'stylesheet', href: 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' }]} />
+      <Helmet
+        link={[
+          {
+            rel: 'stylesheet',
+            href: 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
+          }
+        ]}
+      />
       <SEO />
       <Header
         siteTitle={data.site.siteMetadata.title}

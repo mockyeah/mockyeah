@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import isAbsoluteUrl from 'is-absolute-url';
 import { Link } from 'gatsby';
 import Markdown from '../components/Markdown';
