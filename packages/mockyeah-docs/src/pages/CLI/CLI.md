@@ -1,10 +1,10 @@
 # CLI
 
-@mockyeah/cli provides a simple command line interface for recording and playing suites to integrate with during development.
+`@mockyeah/cli` provides a simple command line interface for recording and playing suites to integrate with during development.
 
 ## Getting started
 
-1. Install @mockyeah/cli
+1. Install `@mockyeah/cli`
 
 ```shell
 $ npm install -g @mockyeah/cli

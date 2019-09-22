@@ -2,4 +2,4 @@
 
 `mockyeah.proxy()`
 
-Dynamically enables the `proxy` configuration option. See [Configuration](../../src/pages/Configuration).
+Dynamically enables the `proxy` configuration option. See [Configuration](../../Configuration).
