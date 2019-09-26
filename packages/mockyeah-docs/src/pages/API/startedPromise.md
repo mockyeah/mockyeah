@@ -1,6 +1,7 @@
 ---
 title: startedPromise | API
 ---
+
 # `startedPromise`
 
 `mockyeah.startedPromise` Promise

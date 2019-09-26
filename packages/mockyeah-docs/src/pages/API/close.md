@@ -1,6 +1,7 @@
 ---
 title: close | API
 ---
+
 # `close()`
 
 `mockyeah.close(callback)`

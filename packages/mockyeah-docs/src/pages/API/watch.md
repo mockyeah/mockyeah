@@ -1,6 +1,7 @@
 ---
 title: watch | API
 ---
+
 # `watch()`
 
 Starts watch mode programmatically. See also `watch` in [Configuration](../../Configuration).

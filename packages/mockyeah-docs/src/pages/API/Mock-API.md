@@ -1,6 +1,7 @@
 ---
 title: Mock | API
 ---
+
 # Mock API
 
 `get/post/put/patch/delete/all(match, options)`

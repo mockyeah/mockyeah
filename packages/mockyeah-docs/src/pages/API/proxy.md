@@ -1,6 +1,7 @@
 ---
 title: proxy | API
 ---
+
 # `proxy()`
 
 `mockyeah.proxy()`

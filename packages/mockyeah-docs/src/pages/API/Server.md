@@ -1,6 +1,7 @@
 ---
 title: Server | API
 ---
+
 # `Server`
 
 The default export of `mockyeah` is an instance of this class.

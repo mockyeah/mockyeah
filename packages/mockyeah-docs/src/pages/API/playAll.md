@@ -1,6 +1,7 @@
 ---
 title: playAll | API
 ---
+
 # `playAll()`
 
 `mockyeah.playAll()`

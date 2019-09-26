@@ -19,7 +19,7 @@ const Markdown = ({ data, ...props }) => {
 export const pageQuery = graphql`
   query($path: String!) {
     markdownRemark(fields: { slug: { eq: $path } }) {
-      html,
+      html
       frontmatter {
         title
       }

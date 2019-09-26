@@ -1,6 +1,7 @@
 ---
 title: start | API
 ---
+
 # `start()`
 
 `mockyeah.start(callback)`
