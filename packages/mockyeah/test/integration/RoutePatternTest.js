@@ -1,6 +1,5 @@
 'use strict';
 
-const { expect } = require('chai');
 const TestHelper = require('../TestHelper');
 
 const { mockyeah, request } = TestHelper;
