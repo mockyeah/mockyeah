@@ -7,6 +7,7 @@ module.exports = require('../server')({
   host: 'localhost',
   port: 4001,
   portHttps: 4443,
+  adminPort: 4477,
   fixturesDir: path.join(__dirname, './fixtures'),
   suitesDir: path.join(__dirname, './mockyeah'),
   output: true,

@@ -2,8 +2,8 @@ const http = require('http');
 const log = require('./log');
 const mockyeah = require('./mockyeah');
 
-mockyeah.post('/', (req, res) => {
-  res.send(req.body.hey);
+mockyeah.post('/', {
+  text: req => req.body.hey
 });
 
 const postData = JSON.stringify({
