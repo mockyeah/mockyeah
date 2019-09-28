@@ -1,5 +1,6 @@
 'use strict';
 
+const supertest = require('supertest');
 require('../TestHelper');
 const MockYeahServer = require('../../server');
 
@@ -9,7 +10,7 @@ const MockYeahServer = require('../../server');
  */
 const mockyeah = MockYeahServer({ port: 0, adminPort: 0 });
 
-const request = require('supertest')(mockyeah.server);
+const request = supertest(mockyeah.server);
 
 describe('Wondrous service', () => {
   // remove service mocks after each test

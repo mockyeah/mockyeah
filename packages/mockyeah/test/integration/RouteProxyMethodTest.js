@@ -3,8 +3,8 @@
 require('../TestHelper');
 const async = require('async');
 const express = require('express');
-const MockYeahServer = require('../../server');
 const supertest = require('supertest');
+const MockYeahServer = require('../../server');
 
 describe('Route proxy method', () => {
   let mockyeah;

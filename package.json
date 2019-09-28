@@ -5,7 +5,9 @@
       "packages/*"
     ],
     "nohoist": [
-      "gatsby"
+      "**/gatsby",
+      "**/eslint",
+      "**/eslint*"
     ]
   },
   "scripts": {
