@@ -4,22 +4,43 @@
   "description": "Documentation for a powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
-    "start": "gitbook serve",
-    "build": "gitbook build",
-    "docs:publish": "yarn build && cp CNAME _book/CNAME && gh-pages -d _book"
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
+    "docs:publish": "yarn build && cp CNAME public/CNAME && gh-pages -d public"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "MIT",
   "private": true,
+  "dependencies": {
+    "@mdx-js/mdx": "^1.4.5",
+    "@mdx-js/react": "^1.4.5",
+    "gatsby": "2.15.20",
+    "gatsby-image": "2.2.20",
+    "gatsby-plugin-catch-links": "^2.1.10",
+    "gatsby-plugin-manifest": "2.2.18",
+    "gatsby-plugin-markdown-pages": "^1.0.3",
+    "gatsby-plugin-mdx": "^1.0.43",
+    "gatsby-plugin-offline": "3.0.8",
+    "gatsby-plugin-react-helmet": "3.1.8",
+    "gatsby-plugin-sharp": "2.2.25",
+    "gatsby-plugin-sitemap": "^2.2.14",
+    "gatsby-remark-autolink-headers": "^2.1.11",
+    "gatsby-source-filesystem": "2.1.26",
+    "gatsby-transformer-remark": "^2.6.24",
+    "gatsby-transformer-sharp": "2.2.16",
+    "is-absolute-url": "^3.0.2",
+    "prop-types": "15.7.2",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
+    "react-helmet": "5.2.1",
+    "remark-react": "^6.0.0"
+  },
   "devDependencies": {
-    "gh-pages": "^1.1.0",
-    "gitbook": "^3.2.3",
-    "gitbook-cli": "^2.3.2",
-    "gitbook-plugin-expandable-chapters": "^0.2.0",
-    "gitbook-plugin-github": "2",
-    "@mockyeah/tools": "^0.24.0-alpha.0",
-    "nyc": "^11.4.1",
-    "prettier": "^1.18.2"
+    "prettier": "1.18.2"
   }
 }
