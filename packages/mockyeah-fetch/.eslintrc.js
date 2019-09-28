@@ -14,7 +14,7 @@ module.exports = {
   ...tools,
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: ['airbnb/base', 'prettier', 'plugin:@typescript-eslint/recommended'],
+  extends: ['airbnb-base', 'prettier', 'plugin:@typescript-eslint/recommended'],
   env: {
     browser: true,
     es6: true,

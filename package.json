@@ -1,8 +1,15 @@
 {
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/gatsby",
+      "**/eslint",
+      "**/eslint*"
+    ]
+  },
   "scripts": {
     "start": "lerna run start",
     "test": "lerna run build:ci && lerna run test",

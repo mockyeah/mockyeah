@@ -1,7 +1,7 @@
 'use strict';
 
-const MockYeahServer = require('../../server');
 const supertest = require('supertest');
+const MockYeahServer = require('../../server');
 
 describe('Dynamic Suites', function() {
   let mockyeah;

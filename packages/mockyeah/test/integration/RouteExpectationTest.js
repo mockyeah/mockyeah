@@ -455,7 +455,7 @@ describe('Route expectation', () => {
       .get('/foo', { text: 'bar' })
       .expect()
       .params(params =>
-        assert.deepEqual(params, {
+        assert.deepStrictEqual(params, {
           id: '9999'
         })
       );
@@ -548,7 +548,7 @@ describe('Route expectation', () => {
       .post('/foo', { text: 'bar' })
       .expect()
       .body(body =>
-        assert.deepEqual(body, {
+        assert.deepStrictEqual(body, {
           foo: 'bar'
         })
       );

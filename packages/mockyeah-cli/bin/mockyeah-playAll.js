@@ -8,9 +8,9 @@
 
 const fs = require('fs');
 const program = require('commander');
-const boot = require('../lib/boot');
 const chalk = require('chalk');
 const request = require('request');
+const boot = require('../lib/boot');
 
 program.option('-v, --verbose', 'verbose output').parse(process.argv);
 

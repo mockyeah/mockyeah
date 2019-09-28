@@ -7,11 +7,11 @@
  */
 
 const program = require('commander');
-const boot = require('../lib/boot');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const request = require('request');
 const querystring = require('querystring');
+const boot = require('../lib/boot');
 
 // TODO: write tests for this
 const collectHeaders = (val, memo = {}) => {
