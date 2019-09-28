@@ -7,7 +7,11 @@ const execAndWait = filePaths => {
   if (!next) process.exit();
   mockyeah.close = () => setTimeout(execAndWait.bind(null, filePaths), 2000);
   console.log('\nRUNNING ' + next + '\n');
-  require(next);
+  try {
+    require(next);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 fs.readdir(__dirname, (err, files) => {

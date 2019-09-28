@@ -5,7 +5,7 @@ const mockyeah = require('./mockyeah-https');
 const expectation = mockyeah
   .get('/', { text: 'it worked!' })
   .expect()
-  .header('host', 'example.com')
+  .header('x-test', 'example.com')
   .params({
     foo: 'bar'
   })
