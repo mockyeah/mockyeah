@@ -1,9 +1,9 @@
 'use strict';
 
-require('../TestHelper');
-const MockYeahServer = require('../../server');
 const supertest = require('supertest');
 const async = require('async');
+require('../TestHelper');
+const MockYeahServer = require('../../server');
 
 describe('Route reset', () => {
   let mockyeah;

@@ -9,10 +9,10 @@
 const fs = require('fs');
 const path = require('path');
 const program = require('commander');
-const boot = require('../lib/boot');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const request = require('request');
+const boot = require('../lib/boot');
 
 program
   .arguments('[suiteNames]')
