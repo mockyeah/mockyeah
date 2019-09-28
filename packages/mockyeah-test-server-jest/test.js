@@ -3,7 +3,7 @@ const mockyeah = require('.');
 describe('mockyeah', () => {
   it('should work', () =>
     mockyeah.get('/').expect().once().run(
-      fetch('/')
+      fetch(mockyeah.server.url)
     ).verify()
   );
 });
