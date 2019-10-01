@@ -1,16 +1,8 @@
-const MockyeahServer = require('@mockyeah/server/server');
+require('isomorphic-fetch');
+const Mockyeah = require('@mockyeah/fetch');
 
-const mockyeah = new MockyeahServer({
-  port: 0,
-  adminServer: false,
-  start: false,
-  watch: false
-});
-
-before(() => mockyeah.start());
+const mockyeah = new Mockyeah();
 
 afterEach(() => mockyeah.reset());
-
-after(() => mockyeah.close());
 
 module.exports = mockyeah;

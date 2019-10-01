@@ -6,6 +6,6 @@ describe('mockyeah', () => {
       .get('/')
       .expect()
       .once()
-      .run(fetch('/'))
+      .run(fetch(mockyeah.server.url))
       .verify());
 });

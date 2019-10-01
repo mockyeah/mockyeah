@@ -1,10 +1,10 @@
 {
-  "name": "@mockyeah/test-jest",
+  "name": "@mockyeah/test-server-mocha",
   "version": "0.24.0-alpha.0",
-  "description": "Jest unit test setup for mockyeah request mocking utility.",
+  "description": "Mocha unit test setup for mockyeah server request mocking utility.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "mocha"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
@@ -48,15 +48,14 @@
     "web service"
   ],
   "devDependencies": {
+    "mocha": "^6.1.4",
     "@mockyeah/tools": "^0.24.0-alpha.0",
-    "isomorphic-fetch": "^2.2.1",
-    "jest": "^24.8.0",
     "prettier": "^1.18.2"
   },
   "engines": {
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "@mockyeah/fetch": "^0.24.0-alpha.0"
+    "@mockyeah/server": "^0.24.0-alpha.0"
   }
 }

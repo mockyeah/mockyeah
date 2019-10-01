@@ -13,9 +13,13 @@ All you need to do is:
 import mockyeah from '@mockyeah/test-mocha';
 
 describe('test', () => {
-  it('should work', () => {
-    mockyeah.get('/');
-  });
+  it('should work', () =>
+    mockyeah
+      .get('/')
+      .expect()
+      .once()
+      .run(fetch('/'))
+      .verify());
 });
 ```
 

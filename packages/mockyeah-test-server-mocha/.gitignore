@@ -1,18 +1,11 @@
-test
-test.js
+suites
+mockyeah
 fixtures
-*.config.js
-docs
-tasks
-packages
 
-*.map
-
-.*
+test/fixtures/test-*
+test/mockyeah/test-*
 
 .nyc_output
-
-package-lock.json
 
 # Editor configurations
 .idea
