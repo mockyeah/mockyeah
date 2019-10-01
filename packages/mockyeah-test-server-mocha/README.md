@@ -14,10 +14,12 @@ import mockyeah from '@mockyeah/test-server-mocha';
 
 describe('test', () => {
   it('should work', () =>
-    mockyeah.get('/').expect().once().run(
-      fetch(mockyeah.server.url)
-    ).verify()
-  );
+    mockyeah
+      .get('/')
+      .expect()
+      .once()
+      .run(fetch(mockyeah.server.url))
+      .verify());
 });
 ```
 
