@@ -1,4 +1,5 @@
 test
+__tests__
 fixtures
 *.config.js
 docs
