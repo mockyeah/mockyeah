@@ -41,6 +41,18 @@ describe('app helpers', () => {
         }
       });
     });
+
+    it('gives json if already object (no parsing)', () => {
+      const body = {
+        foo: 'bar'
+      };
+      const headers = {};
+      expect(handleContentType(body, headers)).to.deep.equal({
+        raw: {
+          foo: 'bar'
+        }
+      });
+    });
   });
 
   describe('compileRoute', () => {
