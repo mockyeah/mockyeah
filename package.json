@@ -1,11 +1,18 @@
 {
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/gatsby",
+      "**/eslint",
+      "**/eslint*"
+    ]
+  },
   "scripts": {
     "start": "lerna run start",
-    "test": "lerna run test",
+    "test": "lerna run build:ci && lerna run test",
     "test:watch": "lerna run test:watch",
     "test:unit": "lerna run test:unit",
     "test:coverage": "lerna run test:coverage",
@@ -14,7 +21,8 @@
     "lint:watch": "lerna run lint:watch"
   },
   "devDependencies": {
-    "lerna": "^3.3.1"
+    "lerna": "^3.3.1",
+    "prettier": "^1.18.2"
   },
   "name": "mockyeah"
 }

@@ -1,7 +1,11 @@
 const mockyeah = require('.');
 
 describe('mockyeah', () => {
-  test('should work', () => {
-    mockyeah.get('/');
-  });
+  it('should work', () =>
+    mockyeah
+      .get('/')
+      .expect()
+      .once()
+      .run(fetch('/'))
+      .verify());
 });

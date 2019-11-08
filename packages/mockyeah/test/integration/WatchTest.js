@@ -3,9 +3,9 @@
 const fs = require('fs-extra');
 const chokidar = require('chokidar');
 const async = require('async');
+const supertest = require('supertest');
 require('../TestHelper');
 const MockYeahServer = require('../../server');
-const supertest = require('supertest');
 
 const watchedSuiteDir = `${__dirname}/../mockyeah/test-some-custom-watcher-suite`;
 const watchedSuiteFile = `${watchedSuiteDir}/index.js`;
@@ -60,8 +60,8 @@ describe('Watcher Test', () => {
         setTimeout(() => {
           supertest(mockyeah.server)
             .get('/watched')
-            .expect(200, 'watched!', err => {
-              mockyeah.close(shutErr => done(err || shutErr));
+            .expect(200, 'watched!', err2 => {
+              mockyeah.close(shutErr => done(err2 || shutErr));
             });
         }, 1000);
       }, 1000);

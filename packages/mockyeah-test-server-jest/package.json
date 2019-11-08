@@ -1,0 +1,61 @@
+{
+  "name": "@mockyeah/test-server-jest",
+  "version": "0.24.0-alpha.0",
+  "description": "Jest unit test setup for mockyeah server request mocking utility.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": "git@github.com:mockyeah/mockyeah.git",
+  "author": "Ryan Ricard",
+  "license": "MIT",
+  "keywords": [
+    "assert",
+    "assertion",
+    "bdd",
+    "cli",
+    "express",
+    "expect",
+    "expectation",
+    "fixture",
+    "http",
+    "integration",
+    "jest",
+    "mocha",
+    "mock",
+    "mock integration",
+    "mock server",
+    "mock service",
+    "mock http",
+    "mockserver",
+    "mocking",
+    "proxy",
+    "record",
+    "request",
+    "server",
+    "service",
+    "sinon",
+    "snapshot",
+    "stub",
+    "supertest",
+    "superagent",
+    "tdd",
+    "test",
+    "test double",
+    "test framework",
+    "testing",
+    "utility",
+    "web service"
+  ],
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "@mockyeah/tools": "^0.24.0-alpha.0",
+    "prettier": "^1.18.2"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "dependencies": {
+    "@mockyeah/server": "^0.24.0-alpha.0"
+  }
+}

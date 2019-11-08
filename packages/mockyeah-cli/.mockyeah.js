@@ -1,3 +1,3 @@
 module.exports = {
-  name: 'mockyeah-cli'
+  name: '@mockyeah/cli'
 };

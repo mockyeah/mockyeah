@@ -1,5 +1,5 @@
 {
-  "name": "mockyeah-cli",
+  "name": "@mockyeah/cli",
   "version": "0.24.0-alpha.0",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
@@ -9,7 +9,7 @@
   "preferGlobal": true,
   "scripts": {
     "test": "yarn lint && jest",
-    "lint": "eslint .js ./bin ./lib"
+    "lint": "eslint --max-warnings 0 *.js ./bin ./lib"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
@@ -53,18 +53,25 @@
     "web service"
   ],
   "dependencies": {
+    "@mockyeah/server": "^0.24.0-alpha.0",
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "inquirer": "^6.3.1",
     "liftoff": "^2.2.0",
-    "mockyeah": "^0.24.0-alpha.0",
     "read-pkg-up": "^6.0.0",
     "request": "^2.87.0",
     "tildify": "^1.1.2",
     "v8flags": "^2.0.11"
   },
   "devDependencies": {
-    "jest": "^24.8.0"
+    "@mockyeah/tools": "^0.24.0-alpha.0",
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2"
   },
   "engines": {
     "node": ">=8.0.0"

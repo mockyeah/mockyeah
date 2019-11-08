@@ -1,18 +1,17 @@
 'use strict';
 
+const request = require('supertest');
+const Server = require('../server');
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 global.MOCKYEAH_ROOT = __dirname;
 global.MOCKYEAH_SUPPRESS_OUTPUT = true;
 global.MOCKYEAH_VERBOSE_OUTPUT = false;
 
-const Server = require('../server');
-
 const mockyeah = new Server({
   root: __dirname
 });
-
-const request = require('supertest');
 
 const configHttps = Object.assign({}, mockyeah.config, {
   port: undefined,

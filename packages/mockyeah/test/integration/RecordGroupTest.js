@@ -7,8 +7,8 @@ const path = require('path');
 const async = require('async');
 const supertest = require('supertest');
 const rimraf = require('rimraf');
-const MockYeahServer = require('../../server');
 const { expect } = require('chai');
+const MockYeahServer = require('../../server');
 
 const ROOT = path.resolve(__dirname, '../.tmp/proxy');
 
@@ -82,7 +82,7 @@ describe('Record Group Test', function() {
   }
 
   it('should record fixture to group subdirectory', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-group-file';
 

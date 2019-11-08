@@ -7,7 +7,7 @@ describe('checkVerisonMatch', () => {
         const env = {};
         const pkgUp = {};
         checkVersionMatch(env, pkgUp);
-      }).toThrow('Could not find `mockyeah-cli` package version to check against core.');
+      }).toThrow('Could not find `@mockyeah/cli` package version to check against core.');
     });
 
     test('throws on missing env package version', () => {

@@ -3,9 +3,9 @@
 /* eslint-disable consistent-return */
 
 const async = require('async');
+const supertest = require('supertest');
 require('../TestHelper');
 const MockYeahServer = require('../../server');
-const supertest = require('supertest');
 
 describe('Route register', () => {
   let mockyeah;

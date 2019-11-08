@@ -7,8 +7,8 @@ const path = require('path');
 const async = require('async');
 const supertest = require('supertest');
 const rimraf = require('rimraf');
-const MockYeahServer = require('../../server');
 const { expect } = require('chai');
+const MockYeahServer = require('../../server');
 const formatScript = require('../formatter');
 
 const PROXY_SUITES_DIR = path.resolve(__dirname, '../.tmp/proxy/mockyeah');
@@ -68,7 +68,7 @@ describe('Record Format Script Function Test', function() {
   }
 
   it('should record and format script', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-format-script-function';
 

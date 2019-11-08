@@ -28,7 +28,7 @@ module.exports = function boot(callback) {
     // check for local mockyeah
     if (!env.modulePath) {
       console.log(chalk.red(`Local mockyeah not found in ${env.cwd}`));
-      console.log(chalk.red('Try running: npm install mockyeah --save-dev'));
+      console.log(chalk.red('Try running: npm install @mockyeah/server --save-dev'));
       process.exit(1);
     }
 

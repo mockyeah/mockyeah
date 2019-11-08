@@ -1,6 +1,6 @@
 module.exports = {
   plugins: ['node'],
-  extends: ['airbnb/base', 'prettier', 'plugin:node/recommended'],
+  extends: ['airbnb-base', 'prettier', 'plugin:node/recommended'],
   parserOptions: {
     ecmaVersion: 2015
   },
@@ -29,6 +29,8 @@ module.exports = {
     'no-mixed-requires': 1,
     'callback-return': 0,
     'handle-callback-err': 0,
-    'node/no-unpublished-require': 0
+    'node/no-unpublished-require': 0,
+    'import/prefer-default-export': 0,
+    'prefer-object-spread': 0
   }
 };

@@ -1,7 +1,7 @@
 const { isEmpty } = require('lodash');
 const { handleContentType } = require('./helpers');
 
-const proxyRecord = ({ app, req, res, reqUrl, startTime, body }) => {
+const proxyRecord = ({ app, req, reqUrl, startTime, body, headers, status }) => {
   const { recordMeta } = app.locals;
 
   const {
@@ -18,8 +18,6 @@ const proxyRecord = ({ app, req, res, reqUrl, startTime, body }) => {
   }
 
   const { method, body: reqBody } = req;
-
-  const { statusCode: status, _headers: __headers } = res;
 
   const latency = new Date().getTime() - startTime;
 
@@ -43,8 +41,6 @@ const proxyRecord = ({ app, req, res, reqUrl, startTime, body }) => {
   if (Object.keys(match).length === 1) {
     match = match.url;
   }
-
-  const headers = Object.assign({}, __headers);
 
   // Don't forward the suite header onto the proxied service.
   delete headers['x-mockyeah-suite'];

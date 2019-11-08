@@ -1,6 +1,5 @@
 'use strict';
 
-const { expect } = require('chai');
 const TestHelper = require('../TestHelper');
 
 const { mockyeah, request } = TestHelper;
@@ -135,47 +134,6 @@ describe('Route Patterns', () => {
     request.get('/service/exists').expect(200, done);
   });
 
-  it('should expose path parameters to custom middleware as keyed object', done => {
-    let report = true;
-    mockyeah.get('/service/:one/:two/other/:three', (req, res) => {
-      try {
-        expect(req.params).to.deep.equal({
-          one: 'exists',
-          two: 'ok',
-          three: 'yes',
-          0: 'exists',
-          1: 'ok',
-          2: 'yes'
-        });
-      } catch (err) {
-        done(err);
-        report = false;
-      }
-      res.send();
-    });
-
-    request.get('/service/exists/ok/other/yes').expect(200, () => {
-      if (report) done();
-    });
-  });
-
-  it('should expose path parameters to custom middleware as indexed array', done => {
-    let report = true;
-    mockyeah.get('/service/:one/:two/other/:three', (req, res) => {
-      try {
-        expect(req.params[1]).to.equal('ok');
-      } catch (err) {
-        done(err);
-        report = false;
-      }
-      res.send();
-    });
-
-    request.get('/service/exists/ok/other/yes').expect(200, () => {
-      if (report) done();
-    });
-  });
-
   it('should match path as function', done => {
     mockyeah.get(p => p === '/service/exists');
 
@@ -216,12 +174,6 @@ describe('Route Patterns', () => {
     request.get('/https://example.com/service/exists').expect(200, done);
   });
 
-  it('should not match with actual regular expression and absolute url with caret without slash prefix', done => {
-    mockyeah.get(/^https:\/\/example.com\/service\/(.{0,})/);
-
-    request.get('/https://example.com/service/exists').expect(404, done);
-  });
-
   it('should work with actual regular expression and absolute url in object', done => {
     mockyeah.get({
       path: /\/https:\/\/example.com\/service\/(.{0,})/
@@ -231,7 +183,7 @@ describe('Route Patterns', () => {
   });
 
   it('should work with regular expression slash any count', done => {
-    mockyeah.get('/service/(.{0,})');
+    mockyeah.get('/service/(.*)');
 
     request.get('/service/exists').expect(200, done);
   });

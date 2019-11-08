@@ -7,8 +7,8 @@ const path = require('path');
 const async = require('async');
 const supertest = require('supertest');
 const rimraf = require('rimraf');
-const MockYeahServer = require('../../server');
 const { expect } = require('chai');
+const MockYeahServer = require('../../server');
 
 const ROOT = path.resolve(__dirname, '../.tmp/proxy');
 
@@ -62,7 +62,7 @@ describe('Record Nothing Test', function() {
   }
 
   it('should not record files when no matches', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-group-file';
 

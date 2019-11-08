@@ -66,7 +66,7 @@ describe('Record and Playback', function() {
   }
 
   it('should record and playback suite', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite';
 
@@ -177,7 +177,7 @@ describe('Record and Playback', function() {
   });
 
   it('should record and playback calls matching `only` option', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-2';
 
@@ -265,7 +265,7 @@ describe('Record and Playback', function() {
   });
 
   it('should record and playback calls matching `headers` option', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-3';
 
@@ -350,7 +350,7 @@ describe('Record and Playback', function() {
   });
 
   it('should record and playback calls with empty `headers` option', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-3';
 
@@ -426,7 +426,7 @@ describe('Record and Playback', function() {
   });
 
   it('should record and playback call headers with `useHeaders` option', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-using-headers';
 
@@ -491,7 +491,7 @@ describe('Record and Playback', function() {
   });
 
   it('should record and playback call latency with `useLatency` option', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-using-latency';
 
@@ -554,18 +554,18 @@ describe('Record and Playback', function() {
   });
 
   it('should record and playback call using full URLs, including custom-encoded', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-full-urls';
 
     // Construct remote service urls
     const path1 = '/http://example.com/some/service/one';
-    const path2 = '/http://www.example.com/some/service/one';
-    const path3 = '/http://www.example.com:80/some/service/one';
+    const path2 = '/http://www.example.com/some/service/two';
+    const path3 = '/http://www.example.com:80/some/service/three';
 
     const path1encoded = '/http~~~example.com/some/service/one';
-    const path2encoded = '/http~~~www.example.com/some/service/one';
-    const path3encoded = '/http~~~www.example.com~80/some/service/one';
+    const path2encoded = '/http~~~www.example.com/some/service/two';
+    const path3encoded = '/http~~~www.example.com~80/some/service/three';
 
     // Mount remote service end points
     remote.get(path1, { text: 'first' });
@@ -634,7 +634,7 @@ describe('Record and Playback', function() {
   });
 
   it('should record and playback call with playAll', function(done) {
-    this.timeout = 10000;
+    this.timeout(10000);
 
     const suiteName = 'test-some-fancy-suite-all';
 

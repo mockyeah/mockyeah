@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
+const _ = require('lodash');
 const relativeRoot = require('../../lib/relativeRoot');
 const {
   resolveFilePath,
@@ -94,15 +95,29 @@ const makeRecordStop = app => {
           // eslint-disable-next-line no-sync
           mkdirp.sync(path.resolve(fixturesPath, '..'));
 
+          app.log(['record', 'fixture'], fixturesPath);
+
           // TODO: Any easy way to coordinate this asynchronously?
           // eslint-disable-next-line no-sync
           fs.writeFileSync(fixturesPath, body);
         }
 
-        return [match, newResponseOptions];
+        const mock = [match];
+
+        if (!_.isEmpty(newResponseOptions)) {
+          mock.push(newResponseOptions);
+        }
+
+        return mock;
       }
 
-      return [match, responseOptions];
+      const mock = [match];
+
+      if (!_.isEmpty(responseOptions)) {
+        mock.push(responseOptions);
+      }
+
+      return mock;
     });
 
     if (newSet.length) {
