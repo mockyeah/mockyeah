@@ -53,7 +53,7 @@ const handleContentType = (body, headers) => {
   // TODO: More spec-conformant detection of JSON content type.
   if (contentType && contentType.includes('/json')) {
     return {
-      json: JSONparseSafe(body).value
+      json: _.isPlainObject(body) ? body : JSONparseSafe(body).value
     };
   }
 
