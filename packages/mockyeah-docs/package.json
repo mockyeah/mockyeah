@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/docs",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "Documentation for a powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
