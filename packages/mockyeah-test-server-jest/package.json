@@ -7,7 +7,6 @@
     "test": "jest"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
-  "author": "Ryan Ricard",
   "license": "MIT",
   "keywords": [
     "assert",
