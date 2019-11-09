@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/cli",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "bin": {
@@ -56,7 +56,7 @@
     "web service"
   ],
   "dependencies": {
-    "@mockyeah/server": "^1.0.0-alpha.0",
+    "@mockyeah/server": "^1.0.0-alpha.2",
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "inquirer": "^6.3.1",
