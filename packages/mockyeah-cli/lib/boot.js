@@ -10,6 +10,7 @@ const checkVersionMatch = require('./checkVersionMatch');
 
 const liftoff = new Liftoff({
   name: 'mockyeah',
+  moduleName: '@mockyeah/server',
   configName: '.mockyeah',
   extensions: {},
   v8flags
