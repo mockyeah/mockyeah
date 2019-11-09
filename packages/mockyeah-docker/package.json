@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/docker",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "A Docker image for mockyeah, a powerful service mocking, recording, and playback utility.",
   "private": true,
   "repository": "git@github.com:mockyeah/mockyeah.git",
@@ -45,6 +45,6 @@
     "docker"
   ],
   "dependencies": {
-    "@mockyeah/cli": "^1.0.0-alpha.0"
+    "@mockyeah/cli": "^1.0.0-alpha.1"
   }
 }
