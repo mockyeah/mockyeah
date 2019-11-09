@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/test-server-mocha",
-  "version": "0.24.0-alpha.0",
+  "version": "1.0.0-alpha.0",
   "description": "Mocha unit test setup for mockyeah server request mocking utility.",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,9 @@
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "assert",
     "assertion",
@@ -47,14 +50,14 @@
     "web service"
   ],
   "devDependencies": {
+    "@mockyeah/tools": "^1.0.0-alpha.0",
     "mocha": "^6.1.4",
-    "@mockyeah/tools": "^0.24.0-alpha.0",
     "prettier": "^1.18.2"
   },
   "engines": {
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "@mockyeah/server": "^0.24.0-alpha.0"
+    "@mockyeah/server": "^1.0.0-alpha.0"
   }
 }

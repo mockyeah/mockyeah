@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/fetch",
-  "version": "0.24.0-alpha.0",
+  "version": "1.0.0-alpha.0",
   "description": "fetch integration for mockyeah request mocking utility.",
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
@@ -15,6 +15,9 @@
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "assert",
     "assertion",
@@ -60,7 +63,7 @@
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.4.4",
-    "@mockyeah/tools": "^0.24.0-alpha.0",
+    "@mockyeah/tools": "^1.0.0-alpha.0",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.137",
     "@types/mime": "^2.0.1",
@@ -91,7 +94,7 @@
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "lodash": "^4.17.15",
-    "match-deep": "^0.24.0-alpha.0",
+    "match-deep": "^1.0.0-alpha.0",
     "mime": "^2.4.4",
     "path-to-regexp": "^3.1.0",
     "qs": "^6.7.0"

@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/cli",
-  "version": "0.24.0-alpha.0",
+  "version": "1.0.0-alpha.0",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "bin": {
@@ -14,6 +14,9 @@
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "author": "Ryan Ricard",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "assert",
     "assertion",
@@ -53,7 +56,7 @@
     "web service"
   ],
   "dependencies": {
-    "@mockyeah/server": "^0.24.0-alpha.0",
+    "@mockyeah/server": "^1.0.0-alpha.0",
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "inquirer": "^6.3.1",
@@ -64,7 +67,7 @@
     "v8flags": "^2.0.11"
   },
   "devDependencies": {
-    "@mockyeah/tools": "^0.24.0-alpha.0",
+    "@mockyeah/tools": "^1.0.0-alpha.0",
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.3.0",
