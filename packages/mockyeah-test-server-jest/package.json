@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/test-server-jest",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.2",
   "description": "Jest unit test setup for mockyeah server request mocking utility.",
   "main": "index.js",
   "scripts": {
@@ -58,6 +58,6 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "@mockyeah/server": "^1.0.0-alpha.0"
+    "@mockyeah/server": "^1.0.0-alpha.2"
   }
 }
