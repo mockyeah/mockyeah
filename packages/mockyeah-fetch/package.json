@@ -15,6 +15,9 @@
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "assert",
     "assertion",
