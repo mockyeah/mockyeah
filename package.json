@@ -13,6 +13,7 @@
   "scripts": {
     "start": "lerna run start",
     "test": "lerna run build && lerna run test",
+    "build": "lerna run build",
     "test:watch": "lerna run test:watch",
     "test:unit": "lerna run test:unit",
     "test:coverage": "lerna run test:coverage",
