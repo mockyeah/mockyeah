@@ -1,6 +1,7 @@
 'use strict';
 
 const chalk = require('chalk');
+const semver = require('semver');
 
 const checkVersionMatch = (env, pkgUp) => {
   if (!pkgUp || !pkgUp.package || !pkgUp.package.version) {
@@ -14,12 +15,14 @@ const checkVersionMatch = (env, pkgUp) => {
   }
 
   const cliVersion = pkgUp.package.version;
-  const coreVersion = env.modulePackage.version;
+  const serverVersion = env.modulePackage.version;
 
-  if (cliVersion !== coreVersion) {
+  const diff = semver.diff(cliVersion, serverVersion);
+
+  if (['minor', 'major', 'preminor', 'premajor'].includes(diff)) {
     throw new Error(
       chalk.red(
-        `Version mismatch between CLI (${cliVersion}) and core (${coreVersion}) - please install same versions.`
+        `Version mismatch between @mockyeah/cli@${cliVersion} and @mockyeah/server@${serverVersion} - please install compatible versions.`
       )
     );
   }
