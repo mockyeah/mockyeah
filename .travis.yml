@@ -3,9 +3,11 @@ node_js:
   - "node"
   - "lts/*"
   - "8"
-cache: yarn
+install:
+ - npm ci
+ - lerna bootstrap --ci
 script:
   - ./packages/mockyeah-tools/node_modules/.bin/prettier --check $(git ls-files | grep -E '.(js|json|md)$')
-  - yarn test
+  - npm test
 after_success:
-  - yarn test:coverage:report
+  - npm run test:coverage:report
