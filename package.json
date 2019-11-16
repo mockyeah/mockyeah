@@ -22,7 +22,7 @@
     "lint:watch": "lerna run lint:watch"
   },
   "devDependencies": {
-    "lerna": "^3.3.1",
+    "lerna": "^3.18.4",
     "prettier": "^1.18.2"
   },
   "name": "mockyeah"
