@@ -59,6 +59,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "@mockyeah/fetch": "^1.0.0-alpha.0"
+    "@mockyeah/fetch": "^1.0.0-alpha.0",
+    "isomorphic-fetch": "^2.2.1"
   }
 }
