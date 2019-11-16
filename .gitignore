@@ -16,7 +16,7 @@
 
 .nyc_output
 
-package-lock.json
+*.lerna_backup
 
 # Editor configurations
 .idea
