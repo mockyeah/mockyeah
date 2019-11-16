@@ -10,7 +10,7 @@ interface BootOptions {
   suiteHeader?: string;
   suiteCookie?: string;
   ignorePrefix?: string;
-  fetch?: GlobalFetch['fetch'];
+  fetch?: WindowOrWorkerGlobalScope['fetch'];
   aliases?: string[][];
   responseHeaders?: boolean;
   fileResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any

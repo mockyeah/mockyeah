@@ -1,4 +1,3 @@
-import '@babel/polyfill';
 import { parse } from 'url';
 import qs from 'qs';
 import isPlainObject from 'lodash/isPlainObject';

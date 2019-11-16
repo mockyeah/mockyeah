@@ -63,7 +63,6 @@
     "liftoff": "^2.2.0",
     "read-pkg-up": "^6.0.0",
     "request": "^2.87.0",
-    "tildify": "^1.1.2",
     "v8flags": "^2.0.11"
   },
   "devDependencies": {

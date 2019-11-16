@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "lerna run start",
-    "test": "lerna run build:ci && lerna run test",
+    "test": "lerna run build && lerna run test",
     "test:watch": "lerna run test:watch",
     "test:unit": "lerna run test:unit",
     "test:coverage": "lerna run test:coverage",

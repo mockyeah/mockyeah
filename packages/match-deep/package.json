@@ -6,8 +6,7 @@
   "types": "dist/index.d.ts",
   "module": "src/index.js",
   "scripts": {
-    "build": "webpack",
-    "build:ci": "yarn build && yarn build:types",
+    "build": "webpack && yarn build:types",
     "build:types": "tsc --emitDeclarationOnly",
     "type-check": "tsc --noEmit",
     "lint": "eslint --max-warnings 0 src/**/*.ts",
@@ -20,15 +19,18 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.6.2",
     "lodash": "^4.17.5"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",
+    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.4.4",
     "@mockyeah/tools": "^1.0.0-alpha.0",
     "@types/lodash": "^4.14.137",
+    "@types/vfile-message": "^1",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "babel-loader": "^8.0.6",
