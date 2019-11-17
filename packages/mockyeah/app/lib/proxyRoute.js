@@ -86,7 +86,7 @@ const proxyRoute = (req, res, next) => {
       if (!fetchRes.body) {
         return { fetchRes };
       }
-      return fetchRes.text().then(body => ({ fetchRes, body }))
+      return fetchRes.text().then(body => ({ fetchRes, body }));
     })
     .then(({ fetchRes, body }) => {
       // TODO: Handle all forms of headers including object, tuple array, Headers instance, etc.
