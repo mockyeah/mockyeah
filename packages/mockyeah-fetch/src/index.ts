@@ -97,28 +97,39 @@ class Mockyeah {
     };
 
     const fallbackFetch = async (
-      url: string,
+      input: RequestInfo,
       init: RequestInit,
       fetchOptions: FetchOptions = {}
     ) => {
       const { proxy } = fetchOptions;
 
-      if (!url.startsWith('http') || !proxy) {
+      const url = typeof input === 'string' ? input : input.url;
+
+      if (!proxy || !url.startsWith('http')) {
         const headers: Record<string, string> = {};
         if (responseHeaders) {
           headers['x-mockyeah-missed'] = 'true';
         }
-        return new Response('asd', {
+        return new Response(undefined, {
           status: 404,
           headers
         });
       }
 
-      const res = await fetch(url, init);
+      let res = await fetch(input, init);
 
       if (responseHeaders) {
-        res.headers.set('x-mockyeah-proxied', 'true');
-        res.headers.set('x-mockyeah-missed', 'true');
+        const { status, statusText, headers } = res;
+        const newHeaders = headers && new Headers(headers);
+        if (newHeaders) {
+          newHeaders.set('x-mockyeah-proxied', 'true');
+          newHeaders.set('x-mockyeah-missed', 'true');
+        }
+        res = new Response(res.body, {
+          headers: newHeaders,
+          status,
+          statusText
+        });
       }
 
       return res;
@@ -134,121 +145,119 @@ class Mockyeah {
 
     const mockyeahFetch = async (
       input: RequestInfo,
-      init: RequestInit = {},
+      init: RequestInit,
       { dynamicMocks, proxy = defaultProxy }: FetchOptions = {}
     ): Promise<Response> => {
-      const options = init;
-      let url = typeof input === 'string' ? input : input.toString();
+      // TODO: Support `Request` `input` object instead of `init`.
+
+      let url = typeof input === 'string' ? input : input.url;
+
+      const options = init || {};
 
       const dynamicMocksNormal = (dynamicMocks || [])
         .map(dynamicMock => dynamicMock && makeMock(...dynamicMock))
         .filter(Boolean);
 
-      try {
-        // TODO: Support `Request` object.
-        const parsed = parse(url);
+      const parsed = parse(url);
 
-        // eslint-disable-next-line no-nested-ternary
-        const inHeaders = options.headers
-          ? options.headers instanceof Headers
-            ? options.headers
-            : new Headers(options.headers)
-          : undefined;
+      // eslint-disable-next-line no-nested-ternary
+      const inHeaders = options.headers
+        ? options.headers instanceof Headers
+          ? options.headers
+          : new Headers(options.headers)
+        : undefined;
 
-        // TODO: Handle non-string bodies (Buffer, Form, etc.).
-        if (options.body && typeof options.body !== 'string') {
-          // eslint-disable-next-line no-console
-          console.error('@mockyeah/fetch does not yet support non-string request bodies');
-          return await fallbackFetch(url, init);
-        }
+      // TODO: Handle non-string bodies (Buffer, Form, etc.).
+      if (options.body && typeof options.body !== 'string') {
+        // eslint-disable-next-line no-console
+        console.error('@mockyeah/fetch does not yet support non-string request bodies');
+        return fallbackFetch(url, init);
+      }
 
-        // TODO: Does this handle lowercase `content-type`?
-        const contentType = inHeaders && inHeaders.get('Content-Type');
-        // TODO: More robust content-type parsing.
-        const isBodyJson = contentType && contentType.includes('application/json');
+      // TODO: Does this handle lowercase `content-type`?
+      const contentType = inHeaders && inHeaders.get('Content-Type');
+      // TODO: More robust content-type parsing.
+      const isBodyJson = contentType && contentType.includes('application/json');
 
-        const inBody =
-          options.body && isBodyJson
-            ? JSON.parse(options.body)
-            : // TODO: Support forms as key/value object (see https://expressjs.com/en/api.html#req.body)
-              options.body;
+      const inBody =
+        options.body && isBodyJson
+          ? JSON.parse(options.body)
+          : // TODO: Support forms as key/value object (see https://expressjs.com/en/api.html#req.body)
+            options.body;
 
-        const query = parsed.query ? qs.parse(parsed.query) : undefined;
-        const method: Method = options.method ? (options.method.toLowerCase() as Method) : 'get';
+      const query = parsed.query ? qs.parse(parsed.query) : undefined;
+      const method: Method = options.method ? (options.method.toLowerCase() as Method) : 'get';
 
-        // TODO: Handle `Headers` type.
-        if (options.headers && !isPlainObject(options.headers)) {
-          // eslint-disable-next-line no-console
-          console.error('@mockyeah/fetch does not yet support non-object request headers');
-          return await fallbackFetch(url, init);
-        }
+      // TODO: Handle `Headers` type.
+      if (options.headers && !isPlainObject(options.headers)) {
+        // eslint-disable-next-line no-console
+        console.error('@mockyeah/fetch does not yet support non-object request headers');
+        return fallbackFetch(url, init);
+      }
 
-        const headers = options.headers as Record<string, string>;
+      const headers = options.headers as Record<string, string>;
 
-        const incoming = {
-          url: url.replace(ignorePrefix, ''),
-          query,
-          headers,
-          body: inBody,
-          method
-        };
+      const incoming = {
+        url: url.replace(ignorePrefix, ''),
+        query,
+        headers,
+        body: inBody,
+        method
+      };
 
-        let matchingMock: MockNormal | undefined;
+      let matchingMock: MockNormal | undefined;
 
-        [
-          incoming,
-          ...flatten(
-            Object.entries(aliasReplacements).map(([alias, aliasSet]) => {
-              if (incoming.url.replace(/^\//, '').startsWith(alias)) {
-                return aliasSet.map(alias2 => ({
-                  ...incoming,
-                  url: url.replace(alias, alias2)
-                }));
-              }
-              return [];
-            })
-          )
-        ]
-          .filter(Boolean)
-          .find(inc => {
-            const incNorm = normalize(inc, true);
+      [
+        incoming,
+        ...flatten(
+          Object.entries(aliasReplacements).map(([alias, aliasSet]) => {
+            if (incoming.url.replace(/^\//, '').startsWith(alias)) {
+              return aliasSet.map(alias2 => ({
+                ...incoming,
+                url: url.replace(alias, alias2)
+              }));
+            }
+            return [];
+          })
+        )
+      ]
+        .filter(Boolean)
+        .find(inc => {
+          const incNorm = normalize(inc, true);
 
-            return [...(dynamicMocksNormal || []).filter(Boolean), ...mocks].find(m => {
-              const match = normalize(m[0]);
+          return [...(dynamicMocksNormal || []).filter(Boolean), ...mocks].find(m => {
+            const match = normalize(m[0]);
 
-              const matchResult = matches(incNorm, match, { skipKeys: ['$meta'] });
+            const matchResult = matches(incNorm, match, { skipKeys: ['$meta'] });
 
-              if (matchResult.result) {
-                matchingMock = m;
-                return true;
-              }
+            if (matchResult.result) {
+              matchingMock = m;
+              return true;
+            }
 
-              return false;
-            });
+            return false;
           });
+        });
 
-        const pathname = parsed.pathname || '/';
+      const pathname = parsed.pathname || '/';
 
-        const requestForHandler: RequestForHandler = {
-          url: pathname,
-          path: pathname,
-          query,
-          method,
-          headers,
-          body: inBody
-          // TODO: `cookies, etc.
-        };
+      const requestForHandler: RequestForHandler = {
+        url: pathname,
+        path: pathname,
+        query,
+        method,
+        headers,
+        body: inBody
+        // TODO: `cookies, etc.
+      };
 
-        if (matchingMock) {
-          if (matchingMock[0] && matchingMock[0].$meta && matchingMock[0].$meta.expectation) {
-            // May throw error, which will cause the promise to reject.
-            matchingMock[0].$meta.expectation.request(requestForHandler);
-          }
-
-          return await respond(matchingMock, requestForHandler, bootOptions);
+      if (matchingMock) {
+        if (matchingMock[0] && matchingMock[0].$meta && matchingMock[0].$meta.expectation) {
+          // May throw error, which will cause the promise to reject.
+          matchingMock[0].$meta.expectation.request(requestForHandler);
         }
-      } catch (error) {
-        throw error;
+
+        return respond(matchingMock, requestForHandler, bootOptions);
       }
 
       // Consider removing this `prependServerURL` feature.
