@@ -8,6 +8,6 @@ install:
  - lerna bootstrap --ci
 script:
   - ./packages/mockyeah-tools/node_modules/.bin/prettier --check $(git ls-files | grep -E '.(js|json|md)$')
-  - npm test
+  - npm run test:ci
 after_success:
   - npm run test:coverage:report
