@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/test-server-mocha",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "Mocha unit test setup for mockyeah server request mocking utility.",
   "main": "index.js",
   "scripts": {
@@ -50,7 +50,7 @@
     "web service"
   ],
   "devDependencies": {
-    "@mockyeah/tools": "^1.0.0-alpha.3",
+    "@mockyeah/tools": "^1.0.0-alpha.4",
     "mocha": "^6.1.4",
     "prettier": "^1.18.2"
   },
@@ -58,6 +58,6 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "@mockyeah/server": "^1.0.0-alpha.3"
+    "@mockyeah/server": "^1.0.0-alpha.4"
   }
 }
