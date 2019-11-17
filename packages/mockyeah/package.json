@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "MOCKYEAH_ROOT=. nodemon --inspect index.js",
-    "test": "yarn lint && yarn test:coverage",
-    "test:watch": "yarn test:unit --watch",
+    "test": "npm run lint && npm run test:coverage",
+    "test:watch": "npm run test:unit --watch",
     "test:unit": "mocha test/**/*Test.js test/**/*.test.js",
-    "test:coverage": "nyc yarn test:unit",
-    "test:coverage:report:html": "nyc yarn test:unit && nyc report --reporter=html",
+    "test:coverage": "nyc npm run test:unit",
+    "test:coverage:report:html": "nyc npm run test:unit && nyc report --reporter=html",
     "test:coverage:report": "nyc report --reporter=text-lcov | coveralls ../..",
     "lint": "eslint --max-warnings 0 ./app ./lib ./server ./test"
   },

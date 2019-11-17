@@ -8,7 +8,7 @@
   },
   "preferGlobal": true,
   "scripts": {
-    "test": "yarn lint && jest",
+    "test": "npm run lint && jest",
     "lint": "eslint --max-warnings 0 *.js ./bin ./lib"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",

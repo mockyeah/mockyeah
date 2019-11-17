@@ -5,11 +5,12 @@
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "webpack && yarn build:types",
+    "build": "webpack && npm run build:types",
+    "build:ci": "npm run build",
     "build:types": "tsc --emitDeclarationOnly",
     "type-check": "tsc --noEmit",
     "lint": "eslint --max-warnings 0 src/**/*.ts",
-    "test": "yarn type-check && yarn lint && yarn test:unit",
+    "test": "npm run type-check && npm run lint && npm run test:unit",
     "test:unit": "jest"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
