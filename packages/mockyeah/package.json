@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/server",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
@@ -61,7 +61,7 @@
     "web service"
   ],
   "devDependencies": {
-    "@mockyeah/tools": "^1.0.0-alpha.3",
+    "@mockyeah/tools": "^1.0.0-alpha.4",
     "chai": "^3.4.1",
     "clear-require": "^2.0.0",
     "coveralls": "^3.0.0",
@@ -80,7 +80,7 @@
     "supertest": "^3.4.2"
   },
   "dependencies": {
-    "@mockyeah/fetch": "^1.0.0-alpha.3",
+    "@mockyeah/fetch": "^1.0.0-alpha.4",
     "async": "^1.5.2",
     "body-parser": "^1.15.2",
     "chokidar": "^2.0.4",
@@ -94,7 +94,7 @@
     "isomorphic-fetch": "^2.2.1",
     "json-parse-safe": "^1.0.5",
     "lodash": "^4.17.5",
-    "match-deep": "^1.0.0-alpha.3",
+    "match-deep": "^1.0.0-alpha.4",
     "mkdirp": "^0.5.1",
     "request": "^2.69.0",
     "tildify": "^1.1.2"

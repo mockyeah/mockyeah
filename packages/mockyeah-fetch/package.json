@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/fetch",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "fetch integration for mockyeah request mocking utility.",
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
@@ -62,7 +62,7 @@
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.4.4",
-    "@mockyeah/tools": "^1.0.0-alpha.3",
+    "@mockyeah/tools": "^1.0.0-alpha.4",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.137",
     "@types/mime": "^2.0.1",
@@ -92,7 +92,7 @@
   "dependencies": {
     "@babel/runtime": "^7.6.2",
     "lodash": "^4.17.15",
-    "match-deep": "^1.0.0-alpha.3",
+    "match-deep": "^1.0.0-alpha.4",
     "mime": "^2.4.4",
     "path-to-regexp": "^3.1.0",
     "qs": "^6.7.0"
