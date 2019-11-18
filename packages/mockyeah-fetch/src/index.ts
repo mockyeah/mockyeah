@@ -3,6 +3,7 @@ import qs from 'qs';
 import isPlainObject from 'lodash/isPlainObject';
 import flatten from 'lodash/flatten';
 import cookie from 'cookie';
+import debug from 'debug';
 import matches from 'match-deep';
 import { normalize } from './normalize';
 import { isMockEqual } from './isMockEqual';
@@ -20,6 +21,9 @@ import {
   responseOptionsKeys,
   RequestForHandler
 } from './types';
+
+const debugLog = debug('mockyeah:fetch:log');
+const debugError = debug('mockyeah:fetch:error');
 
 const DEFAULT_BOOT_OPTIONS: BootOptions = {};
 
@@ -170,8 +174,7 @@ class Mockyeah {
 
       // TODO: Handle non-string bodies (Buffer, Form, etc.).
       if (options.body && typeof options.body !== 'string') {
-        // eslint-disable-next-line no-console
-        console.error('@mockyeah/fetch does not yet support non-string request bodies');
+        debugError('@mockyeah/fetch does not yet support non-string request bodies');
         return fallbackFetch(url, init);
       }
 
@@ -191,8 +194,7 @@ class Mockyeah {
 
       // TODO: Handle `Headers` type.
       if (options.headers && !isPlainObject(options.headers)) {
-        // eslint-disable-next-line no-console
-        console.error('@mockyeah/fetch does not yet support non-object request headers');
+        debugError('@mockyeah/fetch does not yet support non-object request headers');
         return fallbackFetch(url, init);
       }
 
@@ -262,6 +264,11 @@ class Mockyeah {
       };
 
       if (matchingMock) {
+        debugLog('@mockyeah/fetch matched mock for URL', url, {
+          request: requestForHandler,
+          mock: matchingMock
+        });
+
         if (matchingMock[0] && matchingMock[0].$meta && matchingMock[0].$meta.expectation) {
           // May throw error, which will cause the promise to reject.
           matchingMock[0].$meta.expectation.request(requestForHandler);
@@ -269,6 +276,10 @@ class Mockyeah {
 
         return respond(matchingMock, requestForHandler, bootOptions);
       }
+
+      debugLog('@mockyeah/fetch missed mocks for URL', url, {
+        request: requestForHandler
+      });
 
       // Consider removing this `prependServerURL` feature.
       if (prependServerURL && serverUrl) {
