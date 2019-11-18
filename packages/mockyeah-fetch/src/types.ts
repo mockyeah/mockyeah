@@ -32,6 +32,7 @@ interface RequestForHandler {
   method: Method;
   query?: Record<string, string>;
   headers?: Record<string, string>;
+  cookies?: Record<string, string>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
 }

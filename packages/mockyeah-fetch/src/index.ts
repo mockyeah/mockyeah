@@ -2,6 +2,7 @@ import { parse } from 'url';
 import qs from 'qs';
 import isPlainObject from 'lodash/isPlainObject';
 import flatten from 'lodash/flatten';
+import cookie from 'cookie';
 import matches from 'match-deep';
 import { normalize } from './normalize';
 import { isMockEqual } from './isMockEqual';
@@ -241,14 +242,23 @@ class Mockyeah {
 
       const pathname = parsed.pathname || '/';
 
+      let cookies;
+
+      const cookieHeader = headers && (headers.cookie || headers.Cookie);
+      if (cookieHeader) {
+        cookies = cookie.parse(cookieHeader);
+      } else if (typeof window !== 'undefined') {
+        cookies = cookie.parse(window.document.cookie);
+      }
+
       const requestForHandler: RequestForHandler = {
         url: pathname,
         path: pathname,
         query,
         method,
         headers,
-        body: inBody
-        // TODO: `cookies, etc.
+        body: inBody,
+        cookies
       };
 
       if (matchingMock) {

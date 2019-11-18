@@ -140,4 +140,23 @@ describe('@mockyeah/fetch', () => {
     expect(response.headers.get('content-type')).toMatch('application/json');
     expect(data).toEqual({ ok: 'yes', hmm: 'sure', method: 'post' });
   });
+
+  test('should work with dynamic response checking request cookies', async () => {
+    mockyeah = new Mockyeah();
+
+    mockyeah.post('https://example.local/v1?', {
+      json: req => ({ cookieA: req.cookies.a, cookieB: req.cookies.b })
+    });
+
+    const response = await mockyeah.fetch('https://example.local/v1?ok=yes', {
+      method: 'post',
+      body: '{"hmm":"sure"}',
+      headers: {
+        'Cookie': 'a=1; b=2'
+      }
+    });
+    const data = await response.json();
+
+    expect(data).toEqual({ cookieA: '1', cookieB: '2' });
+  });
 });
