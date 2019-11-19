@@ -5,17 +5,23 @@ import {
   Responder,
   ResponderFunction,
   RequestForHandler,
-  BootOptions
+  BootOptions,
+  Json
 } from './types';
 
 const handler = <T>(value: Responder<T>, requestForHandler: RequestForHandler) =>
   typeof value === 'function' ? (value as ResponderFunction<T>)(requestForHandler) : value;
 
+interface Respond {
+  response: Response;
+  json?: Json;
+}
+
 const respond = async (
   matchingMock: MockNormal,
   requestForHandler: RequestForHandler,
   options: BootOptions
-): Promise<Response> => {
+): Promise<Respond> => {
   const { responseHeaders } = options;
 
   const resOpts: ResponseOptionsObject = matchingMock[1];
@@ -39,6 +45,8 @@ const respond = async (
 
   let contentType: string | null | undefined;
 
+  let json;
+
   if (resOpts.fixture) {
     if (!options.fixtureResolver) {
       throw new Error('Using `fixture` in mock response options requires a `fixtureResolver`.');
@@ -54,8 +62,7 @@ const respond = async (
     type = type || filePath; // TODO: Use base name only to conceal file path?
     body = filePath ? await options.fileResolver(filePath) : undefined;
   } else if (resOpts.json) {
-    const json = await handler(resOpts.json, requestForHandler);
-    // body = JSON.stringify(json, undefined, 2);
+    json = await handler(resOpts.json, requestForHandler);
     body = JSON.stringify(json);
     contentType = 'application/json; charset=UTF-8';
   } else if (resOpts.text) {
@@ -96,8 +103,13 @@ const respond = async (
     await new Promise(resolve => setTimeout(resolve, latency));
   }
 
+  const response = new Response(body, responseInit);
+
   // eslint-disable-next-line consistent-return
-  return new Response(body, responseInit);
+  return {
+    response,
+    json
+  };
 };
 
 export { respond };

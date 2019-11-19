@@ -22,7 +22,9 @@ import {
   RequestForHandler
 } from './types';
 
-const debugLog = debug('mockyeah:fetch:log');
+const debugMock = debug('mockyeah:fetch:mock');
+const debugMiss = debug('mockyeah:fetch:miss');
+const debugMissEach = debug('mockyeah:fetch:miss:each');
 const debugError = debug('mockyeah:fetch:error');
 
 const DEFAULT_BOOT_OPTIONS: BootOptions = {};
@@ -47,7 +49,9 @@ class Mockyeah {
     } = bootOptions;
 
     if (!fetch) {
-      throw new Error('@mockyeah/fetch requires a fetch implementation');
+      const errorMessage = '@mockyeah/fetch requires a fetch implementation';
+      debugError(errorMessage);
+      throw new Error(errorMessage);
     }
 
     const serverUrl = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}`;
@@ -66,11 +70,12 @@ class Mockyeah {
       resObj = resObj || ({ status: 200 } as ResponseOptionsObject);
 
       if (Object.keys(resObj).some(key => !responseOptionsKeys.includes(key))) {
-        throw new Error(
-          `Response option(s) invalid. Options must include one of the following: ${responseOptionsKeys.join(
-            ', '
-          )}`
-        );
+        const errorMessage = `Response option(s) invalid. Options must include one of the following: ${responseOptionsKeys.join(
+          ', '
+        )}`;
+
+        debugError(errorMessage);
+        throw new Error(errorMessage);
       }
 
       if (matchNormal.$meta) {
@@ -174,7 +179,7 @@ class Mockyeah {
 
       // TODO: Handle non-string bodies (Buffer, Form, etc.).
       if (options.body && typeof options.body !== 'string') {
-        debugError('@mockyeah/fetch does not yet support non-string request bodies');
+        debugError('@mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch');
         return fallbackFetch(url, init);
       }
 
@@ -194,7 +199,7 @@ class Mockyeah {
 
       // TODO: Handle `Headers` type.
       if (options.headers && !isPlainObject(options.headers)) {
-        debugError('@mockyeah/fetch does not yet support non-object request headers');
+        debugError('@mockyeah/fetch does not yet support non-object request headers, falling back to normal fetch');
         return fallbackFetch(url, init);
       }
 
@@ -238,6 +243,11 @@ class Mockyeah {
               return true;
             }
 
+            debugMissEach('@mockyeah/fetch missed mock for', url, {
+              request: incoming,
+              mock: matchingMock
+            });
+
             return false;
           });
         });
@@ -264,20 +274,24 @@ class Mockyeah {
       };
 
       if (matchingMock) {
-        debugLog('@mockyeah/fetch matched mock for URL', url, {
-          request: requestForHandler,
-          mock: matchingMock
-        });
-
         if (matchingMock[0] && matchingMock[0].$meta && matchingMock[0].$meta.expectation) {
           // May throw error, which will cause the promise to reject.
           matchingMock[0].$meta.expectation.request(requestForHandler);
         }
 
-        return respond(matchingMock, requestForHandler, bootOptions);
+        const { response, json } = await respond(matchingMock, requestForHandler, bootOptions);
+
+        debugMock('@mockyeah/fetch matched mock for', url, {
+          request: requestForHandler,
+          response,
+          json,
+          mock: matchingMock
+        });
+
+        return response;
       }
 
-      debugLog('@mockyeah/fetch missed mocks for URL', url, {
+      debugMiss('@mockyeah/fetch missed all mocks for', url, {
         request: requestForHandler
       });
 
