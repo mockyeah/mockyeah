@@ -24,7 +24,7 @@ type Method = MethodLower | MethodUpper;
 type MethodOrAll = Method | 'all' | 'ALL' | '*';
 
 // TODO: Better JSON type.
-type JSON = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+type Json = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 interface RequestForHandler {
   url: string;
@@ -46,7 +46,7 @@ type ResponderFunction<T> =
 type Responder<T> = ResponderResult<T> | ResponderFunction<T>;
 
 interface ResponseOptionsObject {
-  json?: Responder<JSON>;
+  json?: Responder<Json>;
   text?: Responder<string>;
   html?: Responder<string>;
   raw?: Responder<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -144,6 +144,7 @@ interface FetchOptions {
 }
 
 export {
+  Json,
   BootOptions,
   FetchOptions,
   Method,
