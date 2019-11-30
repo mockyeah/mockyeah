@@ -14,6 +14,7 @@
 | Node.js support | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x: |
 | Recording suites | :white_check_mark: | :x: | :x: | :x: | :x: |
 | Shareable recordings | :white_check_mark: | :x: | :x: | :x: | :x: |
+| Hot-reloading suites | on roadmap | :x: | :x: | :x: | :x: |
 | CLI dynamic record & play (server) | :white_check_mark: | :x: | :x: | :x: | :x: |
 | CLI dynamic record & play (client) | on roadmap | :x: | :x: | :x: | :x: |
 | CLI record groups | :white_check_mark: | :x: | :x: | :x: | :x: |
