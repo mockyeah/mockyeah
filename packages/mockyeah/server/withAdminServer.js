@@ -2,16 +2,15 @@ const WebSocket = require('ws');
 const proxyRecord = require('../app/lib/proxyRecord');
 
 const withAdminServer = ({ app, instance }) => {
-
   if (!app.config.noWebSocket) {
-    const wss = new WebSocket.Server({server: instance.adminServer});
+    const wss = new WebSocket.Server({ server: instance.adminServer });
 
     wss.on('connection', ws => {
       ws.on('message', message => {
         const action = JSON.parse(message);
 
         if (action.type === 'recordPush') {
-          const {req, reqUrl, startTime, body, headers, status} = action.payload;
+          const { req, reqUrl, startTime, body, headers, status } = action.payload;
 
           proxyRecord({
             app,
@@ -25,23 +24,23 @@ const withAdminServer = ({ app, instance }) => {
         }
       });
 
-      const onRecord = payload => {
-        ws.send(JSON.stringify({type: 'record', payload}));
+      const onRecord = () => {
+        ws.send(JSON.stringify({ type: 'record' }));
       };
 
       const onRecordStop = () => {
-        ws.send(JSON.stringify({type: 'recordStop'}));
+        ws.send(JSON.stringify({ type: 'recordStop' }));
       };
 
       app.on('record', onRecord);
       app.on('recordStop', onRecordStop);
 
       ws.on('close', () => {
-        app.off('record', onRecord)
+        app.off('record', onRecord);
         app.off('recordStop', onRecordStop);
       });
 
-      ws.send(JSON.stringify({type: 'connected'}));
+      ws.send(JSON.stringify({ type: 'connected' }));
     });
   }
 };
