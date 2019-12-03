@@ -424,21 +424,6 @@ class Mockyeah {
     });
   }
 
-  retryConnectWebSocket({
-    noWebSocket,
-    webSocketReconnectInterval,
-    adminPort,
-    adminHost
-  }: Required<
-    Pick<BootOptions, 'noWebSocket' | 'webSocketReconnectInterval' | 'adminPort' | 'adminHost'>
-  >) {
-    debugAdmin(`WebSocket will try to re-connect in ${webSocketReconnectInterval} milliseconds.`);
-    delete this.__private.ws;
-    setTimeout(() => {''
-      this.connectWebSocket({ noWebSocket, webSocketReconnectInterval, adminHost, adminPort });
-    }, webSocketReconnectInterval);
-  }
-
   async connectWebSocket({
     noWebSocket,
     webSocketReconnectInterval,
@@ -478,7 +463,21 @@ class Mockyeah {
 
         ws.onclose = () => {
           debugAdminError('WebSocket closed');
-          this.retryConnectWebSocket({ noWebSocket, adminPort, adminHost, webSocketReconnectInterval });
+          debugAdmin(
+            `WebSocket will try to re-connect in ${webSocketReconnectInterval} milliseconds.`
+          );
+
+          delete this.__private.ws;
+
+          setTimeout(() => {
+            this.connectWebSocket({
+              noWebSocket,
+              webSocketReconnectInterval,
+              adminHost,
+              adminPort
+            });
+          }, webSocketReconnectInterval);
+
           reject();
         };
 
