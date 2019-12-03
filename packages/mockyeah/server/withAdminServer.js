@@ -4,9 +4,8 @@ const proxyRecord = require('../app/lib/proxyRecord');
 const withAdminServer = ({ app, instance }) => {
   const wss = new WebSocket.Server({ server: instance.adminServer });
 
-  wss.on('connection', function connection(ws) {
-    console.log('connection')
-    ws.on('message', function incoming(message) {
+  wss.on('connection', ws => {
+    ws.on('message', message => {
       const action = JSON.parse(message);
 
       if (action.type === 'recordPush') {
@@ -28,12 +27,11 @@ const withAdminServer = ({ app, instance }) => {
       ws.send(JSON.stringify({ type: 'record', payload }));
     };
 
-    app.on('record', onRecord);
-
     const onRecordStop = () => {
       ws.send(JSON.stringify({ type: 'recordStop' }));
     };
 
+    app.on('record', onRecord);
     app.on('recordStop', onRecordStop);
 
     ws.on('close', () => {

@@ -160,7 +160,7 @@ class Mockyeah {
       if (recording) {
         const { status } = res;
 
-        const headers = fromPairs([...res.headers.entries()]);
+        const headers = fromPairs([...res.headers.entries()].map(e => [e[0].toLowerCase(), e[1]]));
 
         if (ws) {
           const action: Action = {

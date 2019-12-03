@@ -30,7 +30,7 @@ module.exports = function Server(config, onStart) {
   // Enable CORS for all routes
   app.use(cors());
 
-  const { proxy, reset, play, playAll, record, recordStop, watch, unwatch, on } = app;
+  const { proxy, reset, play, playAll, record, recordStop, watch, unwatch } = app;
 
   // Construct and return mockyeah API
   const instance = Object.assign({}, app.locals.methods, {

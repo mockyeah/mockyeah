@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server --env.dev"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "license": "MIT",

@@ -31,7 +31,7 @@ const requireSuite = (app, name) => {
 };
 
 const handleContentType = (body, headers) => {
-  let contentType = headers['content-type'] || headers['Content-Type'];
+  let contentType = headers['content-type'];
   contentType = Array.isArray(contentType) ? contentType[0] : contentType;
 
   // TODO: More spec-conformant detection of JSON content type.
