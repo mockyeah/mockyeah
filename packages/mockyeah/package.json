@@ -4,7 +4,7 @@
   "description": "A powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
-    "start": "MOCKYEAH_ROOT=. nodemon --inspect index.js",
+    "start": "MOCKYEAH_ROOT=. nodemon --ignore suites --ignore fixtures --inspect index.js",
     "test": "npm run lint && npm run test:coverage",
     "test:watch": "npm run test:unit --watch",
     "test:unit": "mocha test/**/*Test.js test/**/*.test.js",
@@ -97,7 +97,8 @@
     "match-deep": "^1.0.0-alpha.4",
     "mkdirp": "^0.5.1",
     "request": "^2.69.0",
-    "tildify": "^1.1.2"
+    "tildify": "^1.1.2",
+    "ws": "^7.2.0"
   },
   "private": false
 }

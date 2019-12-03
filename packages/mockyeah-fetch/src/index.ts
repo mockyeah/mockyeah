@@ -1,7 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 import { parse } from 'url';
 import qs from 'qs';
 import isPlainObject from 'lodash/isPlainObject';
 import flatten from 'lodash/flatten';
+import fromPairs from 'lodash/fromPairs';
 import cookie from 'cookie';
 import debug from 'debug';
 import matches from 'match-deep';
@@ -9,6 +11,7 @@ import { normalize } from './normalize';
 import { isMockEqual } from './isMockEqual';
 import { respond } from './respond';
 import { Expectation } from './Expectation';
+import { parseBody } from './parseBody';
 import {
   BootOptions,
   FetchOptions,
@@ -19,25 +22,39 @@ import {
   ResponseOptions,
   ResponseOptionsObject,
   responseOptionsKeys,
-  RequestForHandler
+  RequestForHandler,
+  Action
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
 const debugMiss = debug('mockyeah:fetch:miss');
 const debugMissEach = debug('mockyeah:fetch:miss:each');
 const debugError = debug('mockyeah:fetch:error');
+const debugAdmin = debug('mockyeah:fetch:admin');
+const debugAdminError = debug('mockyeah:fetch:admin:error');
 
-const DEFAULT_BOOT_OPTIONS: BootOptions = {};
+const DEFAULT_BOOT_OPTIONS: Readonly<BootOptions> = {};
 
 class Mockyeah {
-  constructor(bootOptions = DEFAULT_BOOT_OPTIONS) {
+  private __private: {
+    recording: boolean;
+    ws?: WebSocket;
+  };
+
+  constructor(bootOptions: Readonly<BootOptions> = DEFAULT_BOOT_OPTIONS) {
+    this.__private = { recording: false };
+
     const {
       proxy: defaultProxy,
       prependServerURL,
-      noPolyfill,
+      noPolyfill = false,
+      noWebSocket = false,
+      webSocketReconnectInterval = 5000,
       host = 'localhost',
       port = 4001,
       portHttps, // e.g., 4443
+      adminHost = host,
+      adminPort = 4777,
       suiteHeader = 'x-mockyeah-suite',
       suiteCookie = 'mockyeahSuite',
       ignorePrefix = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}/`,
@@ -52,6 +69,12 @@ class Mockyeah {
       const errorMessage = '@mockyeah/fetch requires a fetch implementation';
       debugError(errorMessage);
       throw new Error(errorMessage);
+    }
+
+    try {
+      this.connectWebSocket({ adminHost, adminPort, noWebSocket, webSocketReconnectInterval });
+    } catch (error) {
+      // silence
     }
 
     const serverUrl = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}`;
@@ -126,7 +149,38 @@ class Mockyeah {
         });
       }
 
+      const startTime = new Date().getTime();
+
       let res = await fetch(input, init);
+
+      const body = await parseBody(res);
+
+      const { ws, recording } = this.__private;
+
+      if (recording) {
+        const { status } = res;
+
+        const headers = fromPairs([...res.headers.entries()]);
+
+        if (ws) {
+          const action: Action = {
+            type: 'recordPush',
+            payload: {
+              reqUrl: url,
+              req: {
+                method: init && init.method,
+                body: init && init.body
+              },
+              startTime,
+              body,
+              headers,
+              status
+            }
+          };
+
+          ws.send(JSON.stringify(action));
+        }
+      }
 
       if (responseHeaders) {
         const { status, statusText, headers } = res;
@@ -135,7 +189,7 @@ class Mockyeah {
           newHeaders.set('x-mockyeah-proxied', 'true');
           newHeaders.set('x-mockyeah-missed', 'true');
         }
-        res = new Response(res.body, {
+        res = new Response(body, {
           headers: newHeaders,
           status,
           statusText
@@ -158,6 +212,12 @@ class Mockyeah {
       init: RequestInit,
       { dynamicMocks, proxy = defaultProxy }: FetchOptions = {}
     ): Promise<Response> => {
+      try {
+        await this.connectWebSocket({ adminHost, adminPort, noWebSocket });
+      } catch (error) {
+        // silence
+      }
+
       // TODO: Support `Request` `input` object instead of `init`.
 
       let url = typeof input === 'string' ? input : input.url;
@@ -179,7 +239,9 @@ class Mockyeah {
 
       // TODO: Handle non-string bodies (Buffer, Form, etc.).
       if (options.body && typeof options.body !== 'string') {
-        debugError('@mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch');
+        debugError(
+          '@mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch'
+        );
         return fallbackFetch(url, init);
       }
 
@@ -199,7 +261,9 @@ class Mockyeah {
 
       // TODO: Handle `Headers` type.
       if (options.headers && !isPlainObject(options.headers)) {
-        debugError('@mockyeah/fetch does not yet support non-object request headers, falling back to normal fetch');
+        debugError(
+          '@mockyeah/fetch does not yet support non-object request headers, falling back to normal fetch'
+        );
         return fallbackFetch(url, init);
       }
 
@@ -357,6 +421,89 @@ class Mockyeah {
       methods,
       expect,
       ...methods
+    });
+  }
+
+  retryConnectWebSocket({
+    noWebSocket,
+    webSocketReconnectInterval,
+    adminPort,
+    adminHost
+  }: Required<
+    Pick<BootOptions, 'noWebSocket' | 'webSocketReconnectInterval' | 'adminPort' | 'adminHost'>
+  >) {
+    debugAdmin(`WebSocket will try to re-connect in ${webSocketReconnectInterval} milliseconds.`);
+    delete this.__private.ws;
+    setTimeout(() => {''
+      this.connectWebSocket({ noWebSocket, webSocketReconnectInterval, adminHost, adminPort });
+    }, webSocketReconnectInterval);
+  }
+
+  async connectWebSocket({
+    noWebSocket,
+    webSocketReconnectInterval,
+    adminPort,
+    adminHost
+  }: Required<
+    Pick<BootOptions, 'noWebSocket' | 'webSocketReconnectInterval' | 'adminPort' | 'adminHost'>
+  >) {
+    if (noWebSocket) return;
+    if (typeof WebSocket === 'undefined') return;
+    if (this.__private.ws) return;
+
+    const webSocketUrl = `ws://${adminHost}:${adminPort}`;
+
+    debugAdmin(`WebSocket trying to connect to '${webSocketUrl}'.`);
+
+    await new Promise((resolve, reject) => {
+      try {
+        this.__private.ws = new WebSocket(webSocketUrl);
+      } catch (error) {
+        debugAdminError(`WebSocket couldn't connect to '${webSocketUrl}':`, error);
+      }
+
+      const { ws } = this.__private;
+
+      if (ws) {
+        ws.onopen = () => {
+          debugAdmin('WebSocket opened');
+          ws.send(JSON.stringify({ type: 'opened' }));
+          resolve();
+        };
+
+        ws.onerror = error => {
+          debugAdminError('WebSocket errored', error);
+          reject();
+        };
+
+        ws.onclose = () => {
+          debugAdminError('WebSocket closed');
+          this.retryConnectWebSocket({ noWebSocket, adminPort, adminHost, webSocketReconnectInterval });
+          reject();
+        };
+
+        ws.onmessage = (event: MessageEvent) => {
+          debugAdmin('WebSocket message', event);
+
+          let action: Action | undefined;
+          try {
+            action = JSON.parse(event.data);
+          } catch (error) {
+            debugAdminError(`Couldn't parse WebSocket message data '${event.data}':`, error);
+            return;
+          }
+
+          if (!action) return;
+
+          debugAdmin('WebSocket action', action);
+
+          if (action.type === 'record') {
+            this.__private.recording = true;
+          } else if (action.type === 'recordStop') {
+            this.__private.recording = false;
+          }
+        };
+      }
     });
   }
 }

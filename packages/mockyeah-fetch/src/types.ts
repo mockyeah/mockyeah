@@ -4,8 +4,12 @@ interface BootOptions {
   proxy?: boolean;
   prependServerURL?: boolean;
   noPolyfill?: boolean;
+  noWebSocket?: boolean;
+  webSocketReconnectInterval?: number;
   host?: string;
   port?: number;
+  adminHost?: string;
+  adminPort?: number;
   portHttps?: number;
   suiteHeader?: string;
   suiteCookie?: string;
@@ -143,6 +147,11 @@ interface FetchOptions {
   proxy?: boolean;
 }
 
+interface Action {
+  type?: string;
+  payload?: Record<string, any>;
+}
+
 export {
   Json,
   BootOptions,
@@ -166,5 +175,6 @@ export {
   Expectation,
   VerifyCallback,
   RunHandler,
-  RunHandlerOrPromise
+  RunHandlerOrPromise,
+  Action
 };

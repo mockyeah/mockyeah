@@ -152,7 +152,7 @@ describe('@mockyeah/fetch', () => {
       method: 'post',
       body: '{"hmm":"sure"}',
       headers: {
-        'Cookie': 'a=1; b=2'
+        Cookie: 'a=1; b=2'
       }
     });
     const data = await response.json();
