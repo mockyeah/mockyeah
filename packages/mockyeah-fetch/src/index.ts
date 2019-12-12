@@ -14,6 +14,7 @@ import { Expectation } from './Expectation';
 import { parseBody } from './parseBody';
 import {
   BootOptions,
+  ConnectWebSocketOptions,
   FetchOptions,
   MockNormal,
   Match,
@@ -429,9 +430,7 @@ class Mockyeah {
     webSocketReconnectInterval,
     adminPort,
     adminHost
-  }: Required<
-    Pick<BootOptions, 'noWebSocket' | 'webSocketReconnectInterval' | 'adminPort' | 'adminHost'>
-  >) {
+  }: ConnectWebSocketOptions) {
     if (noWebSocket) return;
     if (typeof WebSocket === 'undefined') return;
     if (this.__private.ws) return;
