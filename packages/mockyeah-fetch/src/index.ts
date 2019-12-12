@@ -72,10 +72,12 @@ class Mockyeah {
       throw new Error(errorMessage);
     }
 
-    try {
-      this.connectWebSocket({ adminHost, adminPort, noWebSocket, webSocketReconnectInterval });
-    } catch (error) {
-      // silence
+    if (!noWebSocket) {
+      try {
+        this.connectWebSocket({ adminHost, adminPort, webSocketReconnectInterval });
+      } catch (error) {
+        // silence
+      }
     }
 
     const serverUrl = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}`;
@@ -213,10 +215,12 @@ class Mockyeah {
       init: RequestInit,
       { dynamicMocks, proxy = defaultProxy }: FetchOptions = {}
     ): Promise<Response> => {
-      try {
-        await this.connectWebSocket({ adminHost, adminPort, noWebSocket });
-      } catch (error) {
-        // silence
+      if (!noWebSocket) {
+        try {
+          await this.connectWebSocket({ adminHost, adminPort, webSocketReconnectInterval });
+        } catch (error) {
+          // silence
+        }
       }
 
       // TODO: Support `Request` `input` object instead of `init`.
@@ -426,12 +430,10 @@ class Mockyeah {
   }
 
   async connectWebSocket({
-    noWebSocket,
     webSocketReconnectInterval,
     adminPort,
     adminHost
   }: ConnectWebSocketOptions) {
-    if (noWebSocket) return;
     if (typeof WebSocket === 'undefined') return;
     if (this.__private.ws) return;
 
@@ -470,7 +472,6 @@ class Mockyeah {
 
           setTimeout(() => {
             this.connectWebSocket({
-              noWebSocket,
               webSocketReconnectInterval,
               adminHost,
               adminPort

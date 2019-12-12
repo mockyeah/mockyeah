@@ -22,7 +22,7 @@ interface BootOptions {
 }
 
 type ConnectWebSocketOptions = Required<Pick<BootOptions, 'adminPort' | 'adminHost'>> &
-  Pick<BootOptions, 'noWebSocket' | 'webSocketReconnectInterval'>;
+  Pick<BootOptions, 'webSocketReconnectInterval'>;
 
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
 type MethodUpper = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'OPTIONS' | 'PATCH';
