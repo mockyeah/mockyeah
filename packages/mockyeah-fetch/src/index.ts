@@ -33,7 +33,7 @@ const DEFAULT_BOOT_OPTIONS: BootOptions = {};
 class Mockyeah {
   constructor(bootOptions = DEFAULT_BOOT_OPTIONS) {
     const {
-      name,
+      name = 'default',
       proxy: defaultProxy,
       prependServerURL,
       noPolyfill,
