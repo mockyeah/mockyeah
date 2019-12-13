@@ -28,6 +28,7 @@ import {
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
+const debugHit = debug('mockyeah:fetch:hit');
 const debugMiss = debug('mockyeah:fetch:miss');
 const debugMissEach = debug('mockyeah:fetch:miss:each');
 const debugError = debug('mockyeah:fetch:error');
@@ -45,6 +46,7 @@ class Mockyeah {
 
   static getDefaultBootOptions(bootOptions: Readonly<BootOptions>) {
     const {
+      name = 'default',
       noProxy,
       prependServerURL,
       noPolyfill = false,
@@ -109,9 +111,10 @@ class Mockyeah {
       bootOptions: defaultBootOptions
     };
 
+    const logPrefix = `[${name}]`;
 
     if (!fetch) {
-      const errorMessage = '@mockyeah/fetch requires a fetch implementation';
+      const errorMessage = `${logPrefix} @mockyeah/fetch requires a fetch implementation`;
       debugError(errorMessage);
       throw new Error(errorMessage);
     }
@@ -140,7 +143,7 @@ class Mockyeah {
       resObj = resObj || ({ status: 200 } as ResponseOptionsObject);
 
       if (Object.keys(resObj).some(key => !responseOptionsKeys.includes(key))) {
-        const errorMessage = `Response option(s) invalid. Options must include one of the following: ${responseOptionsKeys.join(
+        const errorMessage = `(${name}) Response option(s) invalid. Options must include one of the following: ${responseOptionsKeys.join(
           ', '
         )}`;
 
@@ -157,6 +160,9 @@ class Mockyeah {
 
     const mock = (match: Match, res?: ResponseOptions) => {
       const mockNormal = makeMock(match, res);
+
+      debugMock(`${logPrefix} mocked`, match, res);
+
       mocks.push(mockNormal);
 
       const expectation = mockNormal[0].$meta && mockNormal[0].$meta.expectation;
@@ -289,7 +295,7 @@ class Mockyeah {
       // TODO: Handle non-string bodies (Buffer, Form, etc.).
       if (options.body && typeof options.body !== 'string') {
         debugError(
-          '@mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch'
+          `${logPrefix} @mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch`
         );
         return fallbackFetch(url, init, { noProxy });
       }
@@ -311,7 +317,7 @@ class Mockyeah {
       // TODO: Handle `Headers` type.
       if (options.headers && !isPlainObject(options.headers)) {
         debugError(
-          '@mockyeah/fetch does not yet support non-object request headers, falling back to normal fetch'
+          `${logPrefix} @mockyeah/fetch does not yet support non-object request headers, falling back to normal fetch`
         );
         return fallbackFetch(url, init, { noProxy });
       }
@@ -356,10 +362,14 @@ class Mockyeah {
               return true;
             }
 
-            debugMissEach('@mockyeah/fetch missed mock for', url, {
-              request: incoming,
-              mock: matchingMock
-            });
+            debugMissEach(
+              `${logPrefix} @mockyeah/fetch missed mock for`,
+              url,
+              matchResult.message,
+              {
+                request: incoming
+              }
+            );
 
             return false;
           });
@@ -394,7 +404,7 @@ class Mockyeah {
 
         const { response, json } = await respond(matchingMock, requestForHandler, bootOptions);
 
-        debugMock('@mockyeah/fetch matched mock for', url, {
+        debugHit(`${logPrefix} @mockyeah/fetch matched mock for`, url, {
           request: requestForHandler,
           response,
           json,
@@ -404,7 +414,7 @@ class Mockyeah {
         return response;
       }
 
-      debugMiss('@mockyeah/fetch missed all mocks for', url, {
+      debugMiss(`${logPrefix} @mockyeah/fetch missed all mocks for`, url, {
         request: requestForHandler
       });
 
