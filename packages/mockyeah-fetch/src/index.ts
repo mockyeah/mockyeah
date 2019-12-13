@@ -39,11 +39,15 @@ const DEFAULT_BOOT_OPTIONS: Readonly<BootOptions> = {};
 class Mockyeah {
   private __private: {
     recording: boolean;
+    bootOptions: Readonly<BootOptions>;
     ws?: WebSocket;
   };
 
   constructor(bootOptions: Readonly<BootOptions> = DEFAULT_BOOT_OPTIONS) {
-    this.__private = { recording: false };
+    this.__private = {
+      recording: false,
+      bootOptions
+    };
 
     const {
       proxy: defaultProxy,
@@ -74,7 +78,7 @@ class Mockyeah {
 
     if (!noWebSocket) {
       try {
-        this.connectWebSocket({ adminHost, adminPort, webSocketReconnectInterval });
+        this.connectWebSocket();
       } catch (error) {
         // silence
       }
@@ -217,7 +221,7 @@ class Mockyeah {
     ): Promise<Response> => {
       if (!noWebSocket) {
         try {
-          await this.connectWebSocket({ adminHost, adminPort, webSocketReconnectInterval });
+          await this.connectWebSocket();
         } catch (error) {
           // silence
         }
@@ -429,13 +433,11 @@ class Mockyeah {
     });
   }
 
-  async connectWebSocket({
-    webSocketReconnectInterval,
-    adminPort,
-    adminHost
-  }: ConnectWebSocketOptions) {
+  async connectWebSocket({ retries = Infinity }: ConnectWebSocketOptions = {}) {
     if (typeof WebSocket === 'undefined') return;
     if (this.__private.ws) return;
+
+    const { webSocketReconnectInterval, adminPort, adminHost } = this.__private.bootOptions;
 
     const webSocketUrl = `ws://${adminHost}:${adminPort}`;
 
@@ -470,13 +472,11 @@ class Mockyeah {
 
           delete this.__private.ws;
 
-          setTimeout(() => {
-            this.connectWebSocket({
-              webSocketReconnectInterval,
-              adminHost,
-              adminPort
-            });
-          }, webSocketReconnectInterval);
+          if (retries > 0) {
+            setTimeout(() => {
+              this.connectWebSocket({ retries: retries - 1 });
+            }, webSocketReconnectInterval);
+          }
 
           reject();
         };

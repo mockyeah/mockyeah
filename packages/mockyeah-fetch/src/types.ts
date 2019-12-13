@@ -21,8 +21,9 @@ interface BootOptions {
   fixtureResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-type ConnectWebSocketOptions = Required<Pick<BootOptions, 'adminPort' | 'adminHost'>> &
-  Pick<BootOptions, 'webSocketReconnectInterval'>;
+interface ConnectWebSocketOptions {
+  retries?: number;
+}
 
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
 type MethodUpper = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'OPTIONS' | 'PATCH';
