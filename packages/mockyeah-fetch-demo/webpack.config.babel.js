@@ -1,7 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-export default
-(env = {}) => ({
+export default (env = {}) => ({
   mode: env.dev ? 'development' : 'production',
   devtool: env.dev ? 'source-map' : undefined,
   entry: './src/index.ts',
@@ -22,7 +21,5 @@ export default
       }
     ]
   },
-    plugins: [
-      new HtmlWebpackPlugin()
-    ]
-})
+  plugins: [new HtmlWebpackPlugin()]
+});

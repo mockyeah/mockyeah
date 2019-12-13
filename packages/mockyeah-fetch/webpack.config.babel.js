@@ -1,7 +1,6 @@
 import nodeExternals from 'webpack-node-externals';
 
-const common =
-  (env = {}) => ({
+const common = (env = {}) => ({
   mode: env.dev ? 'development' : 'production',
   devtool: env.dev ? 'source-map' : undefined,
   entry: './src/index.ts',
