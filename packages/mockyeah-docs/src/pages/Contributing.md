@@ -14,7 +14,7 @@ $ git clone git@github.com:mockyeah/mockyeah.git
 $ cd mockyeah
 
 # install proper Node version
-$ nvm install v6
+$ nvm install v8.16.0
 $ nvm use
 
 # if tests pass, you're good to go
