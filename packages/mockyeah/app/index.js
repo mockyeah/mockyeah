@@ -78,7 +78,7 @@ module.exports = function App(config) {
     fetch,
     aliases: app.config.aliases,
     responseHeaders: true, // we'll use these to coordinate logging and manually delete from response
-    proxy: app.config.proxy,
+    noProxy: !app.config.proxy,
     host: app.config.host,
     port: app.config.port,
     portHttps: app.config.portHttps,
