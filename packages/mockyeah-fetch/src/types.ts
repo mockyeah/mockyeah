@@ -1,7 +1,7 @@
 import pathToRegexp from 'path-to-regexp';
 
 interface BootOptions {
-  proxy?: boolean;
+  noProxy?: boolean;
   prependServerURL?: boolean;
   noPolyfill?: boolean;
   noWebSocket?: boolean;
@@ -148,7 +148,7 @@ type MockNormal = [MatchNormal, ResponseOptionsObject];
 
 interface FetchOptions {
   dynamicMocks?: Mock[];
-  proxy?: boolean;
+  noProxy?: boolean;
 }
 
 interface Action {
