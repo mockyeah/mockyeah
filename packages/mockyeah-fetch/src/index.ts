@@ -188,7 +188,7 @@ class Mockyeah {
       if (options.body && typeof options.body !== 'string') {
         debugError(
           `${logPrefix} @mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch`
-        );;
+        );
         return fallbackFetch(url, init);
       }
 
