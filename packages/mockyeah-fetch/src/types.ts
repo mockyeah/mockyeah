@@ -1,6 +1,7 @@
 import pathToRegexp from 'path-to-regexp';
 
 interface BootOptions {
+  name?: string;
   proxy?: boolean;
   prependServerURL?: boolean;
   noPolyfill?: boolean;
