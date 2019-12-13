@@ -3,7 +3,7 @@ const parseBody = async (res: Response) => {
 
   if (status === 204) return undefined;
 
-  return res.text();
+  return res.text() || undefined;
 };
 
 export { parseBody };
