@@ -32,7 +32,7 @@ const DEFAULT_BOOT_OPTIONS: BootOptions = {};
 class Mockyeah {
   constructor(bootOptions = DEFAULT_BOOT_OPTIONS) {
     const {
-      proxy: defaultProxy,
+      noProxy: globalNoProxy,
       prependServerURL,
       noPolyfill,
       host = 'localhost',
@@ -111,11 +111,11 @@ class Mockyeah {
       init: RequestInit,
       fetchOptions: FetchOptions = {}
     ) => {
-      const { proxy } = fetchOptions;
+      const { noProxy } = fetchOptions;
 
       const url = typeof input === 'string' ? input : input.url;
 
-      if (!proxy || !url.startsWith('http')) {
+      if (noProxy || !url.startsWith('http')) {
         const headers: Record<string, string> = {};
         if (responseHeaders) {
           headers['x-mockyeah-missed'] = 'true';
@@ -156,7 +156,7 @@ class Mockyeah {
     const mockyeahFetch = async (
       input: RequestInfo,
       init: RequestInit,
-      { dynamicMocks, proxy = defaultProxy }: FetchOptions = {}
+      { dynamicMocks, noProxy = globalNoProxy }: FetchOptions = {}
     ): Promise<Response> => {
       // TODO: Support `Request` `input` object instead of `init`.
 
@@ -180,7 +180,7 @@ class Mockyeah {
       // TODO: Handle non-string bodies (Buffer, Form, etc.).
       if (options.body && typeof options.body !== 'string') {
         debugError('@mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch');
-        return fallbackFetch(url, init);
+        return fallbackFetch(url, init, { noProxy });
       }
 
       // TODO: Does this handle lowercase `content-type`?
@@ -200,7 +200,7 @@ class Mockyeah {
       // TODO: Handle `Headers` type.
       if (options.headers && !isPlainObject(options.headers)) {
         debugError('@mockyeah/fetch does not yet support non-object request headers, falling back to normal fetch');
-        return fallbackFetch(url, init);
+        return fallbackFetch(url, init, { noProxy });
       }
 
       const headers = options.headers as Record<string, string>;
@@ -316,7 +316,7 @@ class Mockyeah {
         }
       };
 
-      return fallbackFetch(url, newOptions, { proxy });
+      return fallbackFetch(url, newOptions, { noProxy });
     };
 
     if (!noPolyfill) {
