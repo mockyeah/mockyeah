@@ -43,14 +43,9 @@ class Mockyeah {
     ws?: WebSocket;
   };
 
-  constructor(bootOptions: Readonly<BootOptions> = DEFAULT_BOOT_OPTIONS) {
-    this.__private = {
-      recording: false,
-      bootOptions
-    };
-
+  static getDefaultBootOptions(bootOptions: Readonly<BootOptions>) {
     const {
-      noProxy: globalNoProxy,
+      noProxy,
       prependServerURL,
       noPolyfill = false,
       noWebSocket = false,
@@ -69,6 +64,51 @@ class Mockyeah {
       // @ts-ignore
       fetch = global.fetch
     } = bootOptions;
+
+    return {
+      noProxy,
+      prependServerURL,
+      noPolyfill,
+      noWebSocket,
+      webSocketReconnectInterval,
+      host,
+      port,
+      portHttps,
+      adminHost,
+      adminPort,
+      suiteHeader,
+      suiteCookie,
+      ignorePrefix,
+      aliases,
+      responseHeaders,
+      fetch
+    };
+  }
+
+  constructor(bootOptions: Readonly<BootOptions> = DEFAULT_BOOT_OPTIONS) {
+    const defaultBootOptions = Mockyeah.getDefaultBootOptions(bootOptions);
+
+    const {
+      noProxy: globalNoProxy,
+      prependServerURL,
+      noPolyfill,
+      noWebSocket,
+      host,
+      port,
+      portHttps,
+      suiteHeader,
+      suiteCookie,
+      ignorePrefix,
+      aliases,
+      responseHeaders,
+      fetch
+    } = defaultBootOptions;
+
+    this.__private = {
+      recording: false,
+      bootOptions: defaultBootOptions
+    };
+
 
     if (!fetch) {
       const errorMessage = '@mockyeah/fetch requires a fetch implementation';
