@@ -76,9 +76,10 @@ module.exports = function App(config) {
   const mockyeahFetch = new MockyeahFetch({
     noPolyfill: true,
     fetch,
+    name: app.config.name,
     aliases: app.config.aliases,
     responseHeaders: true, // we'll use these to coordinate logging and manually delete from response
-    proxy: app.config.proxy,
+    noProxy: !app.config.proxy,
     host: app.config.host,
     port: app.config.port,
     portHttps: app.config.portHttps,

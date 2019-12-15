@@ -3,9 +3,6 @@ node_js:
   - "node"
   - "lts/*"
   - "8"
-install:
- - npm ci
- - lerna bootstrap --ci
 script:
   - ./packages/mockyeah-tools/node_modules/.bin/prettier --check $(git ls-files | grep -E '.(js|json|md)$')
   - npm run test:ci
