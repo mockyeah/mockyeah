@@ -31,7 +31,6 @@ const requireSuite = (app, name) => {
 };
 
 const handleContentType = (body, headers) => {
-  // eslint-disable-next-line consistent-return
   if (!body) return {};
 
   let contentType = headers['content-type'];
