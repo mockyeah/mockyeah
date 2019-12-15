@@ -47,8 +47,8 @@ class Mockyeah {
   static getDefaultBootOptions(bootOptions: Readonly<BootOptions>) {
     const {
       name = 'default',
-      noProxy,
-      prependServerURL,
+      noProxy = false,
+      prependServerURL = false,
       noPolyfill = false,
       noWebSocket = false,
       webSocketReconnectInterval = 5000,
@@ -60,14 +60,15 @@ class Mockyeah {
       suiteHeader = 'x-mockyeah-suite',
       suiteCookie = 'mockyeahSuite',
       ignorePrefix = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}/`,
-      aliases,
+      aliases = [],
       responseHeaders = true,
       // This is the fallback fetch when no mocks match.
       // @ts-ignore
       fetch = global.fetch
     } = bootOptions;
 
-    return {
+    const defaultBootOptions = {
+      name,
       noProxy,
       prependServerURL,
       noPolyfill,
@@ -85,12 +86,15 @@ class Mockyeah {
       responseHeaders,
       fetch
     };
+
+    return defaultBootOptions;
   }
 
   constructor(bootOptions: Readonly<BootOptions> = DEFAULT_BOOT_OPTIONS) {
     const defaultBootOptions = Mockyeah.getDefaultBootOptions(bootOptions);
 
     const {
+      name,
       noProxy: globalNoProxy,
       prependServerURL,
       noPolyfill,
