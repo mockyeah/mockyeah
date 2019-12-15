@@ -20,7 +20,7 @@
     "@mdx-js/mdx": "^1.4.5",
     "@mdx-js/react": "^1.4.5",
     "@mockyeah/tools": "^1.0.0-alpha.4",
-    "gatsby": "2.15.20",
+    "gatsby": "^2.18.11",
     "gatsby-image": "2.2.20",
     "gatsby-plugin-catch-links": "^2.1.10",
     "gatsby-plugin-manifest": "2.2.18",
@@ -36,12 +36,13 @@
     "gatsby-transformer-sharp": "2.2.16",
     "is-absolute-url": "^3.0.2",
     "prop-types": "15.7.2",
-    "react": "16.9.0",
-    "react-dom": "16.9.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-helmet": "5.2.1",
     "remark-react": "^6.0.0"
   },
   "devDependencies": {
+    "gatsby-cli": "^2.8.18",
     "prettier": "1.18.2"
   }
 }

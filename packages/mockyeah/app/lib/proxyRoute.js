@@ -79,7 +79,7 @@ const proxyRoute = (req, res, next) => {
 
   app.locals.mockyeahFetch
     .fetch(reqUrl, fetchOptions, {
-      proxy: app.locals.proxying,
+      noProxy: !app.locals.proxying,
       dynamicMocks
     })
     .then(fetchRes => {
