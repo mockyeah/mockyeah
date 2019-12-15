@@ -69,15 +69,6 @@ class Mockyeah {
       let resObj = typeof res === 'string' ? ({ text: res } as ResponseOptionsObject) : res;
       resObj = resObj || ({ status: 200 } as ResponseOptionsObject);
 
-      if (Object.keys(resObj).some(key => !responseOptionsKeys.includes(key))) {
-        const errorMessage = `Response option(s) invalid. Options must include one of the following: ${responseOptionsKeys.join(
-          ', '
-        )}`;
-
-        debugError(errorMessage);
-        throw new Error(errorMessage);
-      }
-
       if (matchNormal.$meta) {
         matchNormal.$meta.expectation = new Expectation(matchNormal);
       }

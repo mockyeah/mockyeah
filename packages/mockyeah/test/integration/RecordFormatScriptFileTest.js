@@ -101,7 +101,7 @@ describe('Record Format Script File Test', function() {
           const contents = fs.readFileSync(getSuiteFilePath(suiteName), 'utf8');
           expect(contents).to.match(
             // eslint-disable-next-line no-regex-spaces
-            /module\.exports = \[   \[     ".*\/some\/service\/one",     {       "raw": ""     }   \] ];/
+            /module\.exports = \[   \[\s+".*\/some\/service\/one"\s+\] ];/
           );
           cb();
         },
@@ -164,7 +164,7 @@ describe('Record Format Script File Test', function() {
           const contents = fs.readFileSync(getSuiteFilePath(suiteName), 'utf8');
           expect(contents).to.match(
             // eslint-disable-next-line no-regex-spaces
-            /module\.exports = \[   \[     ".*\/some\/service\/one",     {\s+"status": 206,\s+"raw": ""     }   \] ];/
+            /module\.exports = \[   \[     ".*\/some\/service\/one",     {\s+"status": 206\s+}   \] ];/
           );
           cb();
         },
