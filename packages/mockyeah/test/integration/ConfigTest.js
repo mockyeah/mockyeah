@@ -18,7 +18,10 @@ describe('Config', () => {
       }, 500)
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.include('mockyeah');
           done();
@@ -35,7 +38,10 @@ describe('Config', () => {
       const mockyeah = new require('${ROOT}/server')({ port: 0, adminPort: 0 }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.include('mockyeah');
           done();
@@ -52,7 +58,10 @@ describe('Config', () => {
       const mockyeah = new require('${ROOT}/server')({ port: 0, adminPort: 0, output: true }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.include('mockyeah');
           done();
@@ -69,7 +78,10 @@ describe('Config', () => {
       const mockyeah = new require('${ROOT}/server')({ port: 0, adminPort: 0, output: false }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.not.include('mockyeah');
           done();
@@ -91,7 +103,10 @@ describe('Config', () => {
       .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.not.include('verbose output enabled');
           done();
@@ -113,7 +128,10 @@ describe('Config', () => {
       .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.include('verbose output enabled');
           done();
@@ -137,7 +155,10 @@ describe('Config', () => {
       }, 1000);
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.not.include('verbose output enabled');
           done();
@@ -159,7 +180,10 @@ describe('Config', () => {
         .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.not.include('journal');
           done();
@@ -181,7 +205,10 @@ describe('Config', () => {
         .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.include('journal');
           done();
@@ -203,7 +230,10 @@ describe('Config', () => {
         .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        if (err) return done(err);
+        if (err) {
+          done(err);
+          return;
+        }
         try {
           expect(stdout).to.not.include('journal');
           done();
