@@ -15,11 +15,16 @@ describe('Config', () => {
       const mockyeah = require('${ROOT}/index');
       setTimeout(() => {
         process.exit();
-      }, 1000)
+      }, 500)
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.include('mockyeah');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.include('mockyeah');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -30,8 +35,13 @@ describe('Config', () => {
       const mockyeah = new require('${ROOT}/server')({ port: 0, adminPort: 0 }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.include('mockyeah');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.include('mockyeah');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -42,8 +52,13 @@ describe('Config', () => {
       const mockyeah = new require('${ROOT}/server')({ port: 0, adminPort: 0, output: true }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.include('mockyeah');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.include('mockyeah');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -54,8 +69,13 @@ describe('Config', () => {
       const mockyeah = new require('${ROOT}/server')({ port: 0, adminPort: 0, output: false }, function() { process.exit() });
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.not.include('mockyeah');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.not.include('mockyeah');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -71,8 +91,13 @@ describe('Config', () => {
       .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.not.include('verbose output enabled');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.not.include('verbose output enabled');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -88,8 +113,13 @@ describe('Config', () => {
       .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.include('verbose output enabled');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.include('verbose output enabled');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -107,8 +137,13 @@ describe('Config', () => {
       }, 1000);
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.not.include('verbose output enabled');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.not.include('verbose output enabled');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -124,8 +159,13 @@ describe('Config', () => {
         .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.not.include('journal');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.not.include('journal');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -141,8 +181,13 @@ describe('Config', () => {
         .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.include('journal');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.include('journal');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
@@ -158,8 +203,13 @@ describe('Config', () => {
         .expect(200, /bar/, process.exit);
       " | node`,
       function(err, stdout) {
-        expect(stdout).to.not.include('journal');
-        done();
+        if (err) return done(err);
+        try {
+          expect(stdout).to.not.include('journal');
+          done();
+        } catch (err) {
+          done(err);
+        }
       }
     );
   });
