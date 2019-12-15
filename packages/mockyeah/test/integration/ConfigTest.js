@@ -22,8 +22,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.include('mockyeah');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -39,8 +39,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.include('mockyeah');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -56,8 +56,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.include('mockyeah');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -73,8 +73,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.not.include('mockyeah');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -95,8 +95,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.not.include('verbose output enabled');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -117,8 +117,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.include('verbose output enabled');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -141,8 +141,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.not.include('verbose output enabled');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -163,8 +163,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.not.include('journal');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -185,8 +185,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.include('journal');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
@@ -207,8 +207,8 @@ describe('Config', () => {
         try {
           expect(stdout).to.not.include('journal');
           done();
-        } catch (err) {
-          done(err);
+        } catch (err2) {
+          done(err2);
         }
       }
     );
