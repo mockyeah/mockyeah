@@ -8,6 +8,10 @@ const { expect } = require('chai');
 const ROOT = `${__dirname}/../..`;
 
 describe('Config', () => {
+  it('wait', done => {
+    setTimeout(done, 1000);
+  });
+
   it('should work without config', function(done) {
     exec(
       `echo "
