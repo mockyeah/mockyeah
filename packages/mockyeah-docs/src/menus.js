@@ -99,7 +99,7 @@ const menus = {
     { title: 'Integration', url: 'Integration' },
     {
       title: 'Recipes & Examples',
-      url: 'https://github.com/mockyeah/mockyeah/tree/master/packages/mockyeah/examples'
+      url: 'Recipes-and-Examples'
     },
     { title: 'Contributing', url: 'Contributing' }
   ]
