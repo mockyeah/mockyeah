@@ -23,6 +23,7 @@ import {
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
+const debugHit = debug('mockyeah:fetch:hit');
 const debugMiss = debug('mockyeah:fetch:miss');
 const debugMissEach = debug('mockyeah:fetch:miss:each');
 const debugError = debug('mockyeah:fetch:error');
@@ -32,7 +33,8 @@ const DEFAULT_BOOT_OPTIONS: BootOptions = {};
 class Mockyeah {
   constructor(bootOptions = DEFAULT_BOOT_OPTIONS) {
     const {
-      proxy: defaultProxy,
+      name = 'default',
+      noProxy: globalNoProxy,
       prependServerURL,
       noPolyfill,
       host = 'localhost',
@@ -48,8 +50,10 @@ class Mockyeah {
       fetch = global.fetch
     } = bootOptions;
 
+    const logPrefix = `[${name}]`;
+
     if (!fetch) {
-      const errorMessage = '@mockyeah/fetch requires a fetch implementation';
+      const errorMessage = `${logPrefix} @mockyeah/fetch requires a fetch implementation`;
       debugError(errorMessage);
       throw new Error(errorMessage);
     }
@@ -78,6 +82,9 @@ class Mockyeah {
 
     const mock = (match: Match, res?: ResponseOptions) => {
       const mockNormal = makeMock(match, res);
+
+      debugMock(`${logPrefix} mocked`, match, res);
+
       mocks.push(mockNormal);
 
       const expectation = mockNormal[0].$meta && mockNormal[0].$meta.expectation;
@@ -102,11 +109,11 @@ class Mockyeah {
       init: RequestInit,
       fetchOptions: FetchOptions = {}
     ) => {
-      const { proxy } = fetchOptions;
+      const { noProxy } = fetchOptions;
 
       const url = typeof input === 'string' ? input : input.url;
 
-      if (!proxy || !url.startsWith('http')) {
+      if (noProxy || !url.startsWith('http')) {
         const headers: Record<string, string> = {};
         if (responseHeaders) {
           headers['x-mockyeah-missed'] = 'true';
@@ -147,7 +154,7 @@ class Mockyeah {
     const mockyeahFetch = async (
       input: RequestInfo,
       init: RequestInit,
-      { dynamicMocks, proxy = defaultProxy }: FetchOptions = {}
+      { dynamicMocks, noProxy = globalNoProxy }: FetchOptions = {}
     ): Promise<Response> => {
       // TODO: Support `Request` `input` object instead of `init`.
 
@@ -170,8 +177,10 @@ class Mockyeah {
 
       // TODO: Handle non-string bodies (Buffer, Form, etc.).
       if (options.body && typeof options.body !== 'string') {
-        debugError('@mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch');
-        return fallbackFetch(url, init);
+        debugError(
+          `${logPrefix} @mockyeah/fetch does not yet support non-string request bodies, falling back to normal fetch`
+        );
+        return fallbackFetch(url, init, { noProxy });
       }
 
       // TODO: Does this handle lowercase `content-type`?
@@ -190,8 +199,10 @@ class Mockyeah {
 
       // TODO: Handle `Headers` type.
       if (options.headers && !isPlainObject(options.headers)) {
-        debugError('@mockyeah/fetch does not yet support non-object request headers, falling back to normal fetch');
-        return fallbackFetch(url, init);
+        debugError(
+          `${logPrefix} @mockyeah/fetch does not yet support non-object request headers, falling back to normal fetch`
+        );
+        return fallbackFetch(url, init, { noProxy });
       }
 
       const headers = options.headers as Record<string, string>;
@@ -234,10 +245,14 @@ class Mockyeah {
               return true;
             }
 
-            debugMissEach('@mockyeah/fetch missed mock for', url, {
-              request: incoming,
-              mock: matchingMock
-            });
+            debugMissEach(
+              `${logPrefix} @mockyeah/fetch missed mock for`,
+              url,
+              matchResult.message,
+              {
+                request: incoming
+              }
+            );
 
             return false;
           });
@@ -272,7 +287,7 @@ class Mockyeah {
 
         const { response, json } = await respond(matchingMock, requestForHandler, bootOptions);
 
-        debugMock('@mockyeah/fetch matched mock for', url, {
+        debugHit(`${logPrefix} @mockyeah/fetch matched mock for`, url, {
           request: requestForHandler,
           response,
           json,
@@ -282,7 +297,7 @@ class Mockyeah {
         return response;
       }
 
-      debugMiss('@mockyeah/fetch missed all mocks for', url, {
+      debugMiss(`${logPrefix} @mockyeah/fetch missed all mocks for`, url, {
         request: requestForHandler
       });
 
@@ -307,7 +322,7 @@ class Mockyeah {
         }
       };
 
-      return fallbackFetch(url, newOptions, { proxy });
+      return fallbackFetch(url, newOptions, { noProxy });
     };
 
     if (!noPolyfill) {
