@@ -39,6 +39,8 @@ const makeRecordStop = app => {
       throw error;
     }
 
+    app.emit('recordStop');
+
     if (noWrite) {
       delete app.locals.recordMeta;
 

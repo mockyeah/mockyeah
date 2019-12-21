@@ -5,8 +5,12 @@ interface BootOptions {
   noProxy?: boolean;
   prependServerURL?: boolean;
   noPolyfill?: boolean;
+  noWebSocket?: boolean;
+  webSocketReconnectInterval?: number;
   host?: string;
   port?: number;
+  adminHost?: string;
+  adminPort?: number;
   portHttps?: number;
   suiteHeader?: string;
   suiteCookie?: string;
@@ -16,6 +20,10 @@ interface BootOptions {
   responseHeaders?: boolean;
   fileResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   fixtureResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+interface ConnectWebSocketOptions {
+  retries?: number;
 }
 
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
@@ -144,9 +152,15 @@ interface FetchOptions {
   noProxy?: boolean;
 }
 
+interface Action {
+  type?: string;
+  payload?: Record<string, any>;
+}
+
 export {
   Json,
   BootOptions,
+  ConnectWebSocketOptions,
   FetchOptions,
   Method,
   MethodOrAll,
@@ -167,5 +181,6 @@ export {
   Expectation,
   VerifyCallback,
   RunHandler,
-  RunHandlerOrPromise
+  RunHandlerOrPromise,
+  Action
 };

@@ -1,5 +1,6 @@
 'use strict';
 
+const EventEmitter = require('events');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -75,6 +76,7 @@ module.exports = function App(config) {
 
   const mockyeahFetch = new MockyeahFetch({
     noPolyfill: true,
+    noWebSocket: true,
     fetch,
     name: app.config.name,
     aliases: app.config.aliases,
@@ -107,6 +109,11 @@ module.exports = function App(config) {
   app.proxy = on => {
     app.locals.proxying = typeof on !== 'undefined' ? on : true;
   };
+
+  const eventEmitter = new EventEmitter();
+
+  app.on = eventEmitter.on.bind(eventEmitter);
+  app.emit = eventEmitter.emit.bind(eventEmitter);
 
   app.record = makeRecord(app);
   app.recordStop = makeRecordStop(app);

@@ -4,6 +4,11 @@ const makeRecord = app => {
 
     if (!name) throw new Error('Must provide a recording name.');
 
+    app.emit('record', {
+      name,
+      options
+    });
+
     app.log(['serve', 'record'], name);
 
     const only =

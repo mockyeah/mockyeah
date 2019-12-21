@@ -1,7 +1,8 @@
 import nodeExternals from 'webpack-node-externals';
 
-const common = {
-  mode: 'production',
+const common = (env = {}) => ({
+  mode: env.dev ? 'development' : 'production',
+  devtool: env.dev ? 'source-map' : undefined,
   entry: './src/index.ts',
   resolve: {
     extensions: ['.ts', '.js', '.json']
@@ -20,11 +21,11 @@ const common = {
       }
     ]
   }
-};
+});
 
 export default [
-  {
-    ...common,
+  env => ({
+    ...common(env),
     entry: './src/normalize.ts',
     target: 'node',
     externals: [nodeExternals()],
@@ -33,23 +34,23 @@ export default [
       libraryTarget: 'commonjs2',
       libraryExport: 'default'
     }
-  },
-  {
-    ...common,
+  }),
+  env => ({
+    ...common(env),
     target: 'node',
     externals: [nodeExternals()],
     output: {
       libraryTarget: 'commonjs2',
       libraryExport: 'default'
     }
-  },
-  {
-    ...common,
+  }),
+  env => ({
+    ...common(env),
     output: {
       filename: 'browser.js',
       library: 'Mockyeah',
       libraryTarget: 'var',
       libraryExport: 'default'
     }
-  }
+  })
 ];

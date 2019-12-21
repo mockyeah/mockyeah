@@ -17,6 +17,7 @@ title: Configuration
   "verbose": false,
   "proxy": true,
   "record": false,
+  "noWebSocket": false,
   "adminServer": true,
   "adminProtocol": "http",
   "adminHost": "localhost",
@@ -94,6 +95,7 @@ mockyeah.get('https://service.example.com/foo/bar', {
 
 Internally, this mounts with a leading slash, i.e., `'/https://service.example.com/foo/bar'`.
 
+- `noWebSocket`: Boolean to disable automatic connection over WebSocket to talk to client-side `@mockyeah/fetch`.
 - `record`: Boolean to enable recording on startup.
 - `watch`: Boolean to enable watch more on startup. See [`watch()`](API/watch).
 - `suiteHeader`: String for the header name to use to opt-in to suites dynamically.

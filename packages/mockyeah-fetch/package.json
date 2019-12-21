@@ -6,6 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "webpack && npm run build:types",
+    "build:watch": "webpack --watch --env.dev",
     "build:ci": "npm run build",
     "build:types": "tsc --emitDeclarationOnly",
     "type-check": "tsc --noEmit",
@@ -58,9 +59,10 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.4",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.4.3",
-    "@babel/preset-typescript": "^7.3.3",
+    "@babel/preset-typescript": "^7.7.4",
     "@babel/register": "^7.4.4",
     "@mockyeah/tools": "^1.0.0-alpha.4",
     "@types/cookie": "^0.3.3",
@@ -83,7 +85,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jest": "^24.8.0",
     "source-map-loader": "^0.2.4",
-    "typescript": "^3.5.3",
+    "typescript": "^3.7.2",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.0",
     "webpack-node-externals": "^1.7.2"
