@@ -83,7 +83,7 @@
     "@mockyeah/fetch": "^1.0.0-alpha.4",
     "async": "^1.5.2",
     "body-parser": "^1.15.2",
-    "chokidar": "^2.0.4",
+    "chokidar": "^3.3.1",
     "clear-module": "^3.1.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.7.1",

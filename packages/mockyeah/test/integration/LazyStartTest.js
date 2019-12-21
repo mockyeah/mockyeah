@@ -1,7 +1,6 @@
 'use strict';
 
 const { expect } = require('chai');
-require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 /**

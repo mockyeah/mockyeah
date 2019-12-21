@@ -5,7 +5,6 @@ const async = require('async');
 const express = require('express');
 const bodyParser = require('body-parser');
 const supertest = require('supertest');
-require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 describe('Route proxy', () => {

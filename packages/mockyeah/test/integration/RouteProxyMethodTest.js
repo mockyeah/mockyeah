@@ -1,6 +1,5 @@
 'use strict';
 
-require('../TestHelper');
 const async = require('async');
 const express = require('express');
 const supertest = require('supertest');
