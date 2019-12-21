@@ -16,7 +16,8 @@
 | Shareable recordings                          | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Hot-reloading suites                          | on roadmap         | :x:                | :x:                | :x:                | :x:                |
 | CLI dynamic record & play (server)            | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
-| CLI dynamic record & play (client)            | on roadmap         | :x:                | :x:                | :x:                | :x:                |
+| CLI dynamic record (client)                   | on roadmap         | :x:                | :x:                | :x:                | :x:                |
+| CLI dynamic play (client)                     | on roadmap         | :x:                | :x:                | :x:                | :x:                |
 | CLI record groups                             | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Pass-thru/proxy                               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | ?                  |
 | Pass-thru as default                          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:?               |
