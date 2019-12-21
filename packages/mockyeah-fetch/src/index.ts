@@ -143,7 +143,7 @@ class Mockyeah {
 
     if (!noPolyfill) {
       // @ts-ignore
-      global.fetch = this.fetch;
+      global.fetch = this.fetch.bind(this);
     }
 
     const methods = {
