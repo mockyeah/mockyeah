@@ -4,7 +4,6 @@
 
 const async = require('async');
 const supertest = require('supertest');
-require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 describe('Route register', () => {

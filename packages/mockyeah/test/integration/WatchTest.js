@@ -4,7 +4,6 @@ const fs = require('fs-extra');
 const chokidar = require('chokidar');
 const async = require('async');
 const supertest = require('supertest');
-require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 const watchedSuiteDir = `${__dirname}/../mockyeah/test-some-custom-watcher-suite`;
