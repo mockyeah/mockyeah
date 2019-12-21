@@ -146,15 +146,15 @@ class Mockyeah {
       global.fetch = this.fetch.bind(this);
     }
 
-    const methods = {
-      all: this.all,
-      get: this.get,
-      post: this.post,
-      put: this.put,
-      delete: this.delete,
-      options: this.options,
-      patch: this.patch
-    };
+    const methods = ({
+      all: this.all.bind(this),
+      get: this.get.bind(this),
+      post: this.post.bind(this),
+      put: this.put.bind(this),
+      delete: this.delete.bind(this),
+      options: this.options.bind(this),
+      patch: this.patch.bind(this)
+    });
 
     this.methods = methods;
   }
