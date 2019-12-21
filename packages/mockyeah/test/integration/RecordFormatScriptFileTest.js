@@ -19,6 +19,7 @@ describe('Record Format Script File Test', function() {
   let remoteReq;
 
   before(done => {
+    this.timeout(5000);
     async.parallel(
       [
         function(cb) {

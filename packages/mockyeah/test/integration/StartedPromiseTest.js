@@ -1,6 +1,5 @@
 'use strict';
 
-require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 describe('started promise', () => {

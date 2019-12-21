@@ -4,7 +4,6 @@ const supertest = require('supertest');
 const async = require('async');
 const { expect } = require('chai');
 const assert = require('assert');
-require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 describe('Route expectation', () => {

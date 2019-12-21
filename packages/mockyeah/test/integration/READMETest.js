@@ -1,7 +1,6 @@
 'use strict';
 
 const supertest = require('supertest');
-require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 /**

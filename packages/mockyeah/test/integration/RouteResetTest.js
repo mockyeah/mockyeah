@@ -2,7 +2,6 @@
 
 const supertest = require('supertest');
 const async = require('async');
-require('../TestHelper');
 const MockYeahServer = require('../../server');
 
 describe('Route reset', () => {
