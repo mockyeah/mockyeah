@@ -9,6 +9,7 @@ const async = require('async');
 const App = require('../app');
 const prepareConfig = require('../lib/prepareConfig');
 const AdminServer = require('./admin');
+const withAdminServer = require('./withAdminServer');
 
 const isErrorServerNotRunning = error =>
   error && (error.code === 'ERR_SERVER_NOT_RUNNING' || error.message.includes('Not running'));
@@ -130,6 +131,7 @@ module.exports = function Server(config, onStart) {
           app.log(['serve', 'admin'], `Admin server listening at ${instance.adminServer.url}`);
         }
       );
+      withAdminServer({ app, instance });
     };
 
     instance.start = argLazyOnStart => {

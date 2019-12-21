@@ -78,13 +78,10 @@ const normalize = (match: Match, incoming?: boolean) => {
   match.query = isEmpty(match.query) ? undefined : match.query;
   match.headers = isEmpty(match.headers)
     ? undefined
-    : Object.entries(match.headers as Record<string, MatchString>).reduce(
-        (acc, [k, v]) => {
-          acc[k.toLowerCase()] = v;
-          return acc;
-        },
-        {} as Record<string, MatchString>
-      );
+    : Object.entries(match.headers as Record<string, MatchString>).reduce((acc, [k, v]) => {
+        acc[k.toLowerCase()] = v;
+        return acc;
+      }, {} as Record<string, MatchString>);
 
   if (!match.method) {
     match.method = 'get';

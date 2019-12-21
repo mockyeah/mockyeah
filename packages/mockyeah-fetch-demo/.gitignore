@@ -1,25 +1,9 @@
-.cache
-public
+src/**/*.js
+dist
 
-/suites
-/mockyeah
-/fixtures
-
-/packages/mockyeah-cli/suites
-/packages/mockyeah-cli/mockyeah
-/packages/mockyeah-cli/fixtures
-
-/packages/mockyeah/suites
-/packages/mockyeah/mockyeah
-/packages/mockyeah/fixtures
-/packages/mockyeah/test/fixtures/test-*
-/packages/mockyeah/test/mockyeah/test-*
-
-/packages/mockyeah-docs/_book
+*.map
 
 .nyc_output
-
-*.lerna_backup
 
 # Editor configurations
 .idea

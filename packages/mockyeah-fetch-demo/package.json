@@ -1,0 +1,34 @@
+{
+  "name": "@mockyeah/fetch-demo",
+  "version": "1.0.0-alpha.4",
+  "description": "demoing fetch integration for mockyeah request mocking utility.",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server --env.dev"
+  },
+  "repository": "git@github.com:mockyeah/mockyeah.git",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-transform-runtime": "^7.7.4",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-typescript": "^7.7.4",
+    "@babel/register": "^7.4.4",
+    "@mockyeah/tools": "^1.0.0-alpha.4",
+    "babel-loader": "^8.0.5",
+    "html-webpack-plugin": "^3.2.0",
+    "source-map-loader": "^0.2.4",
+    "typescript": "^3.7.2",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.7.4",
+    "@mockyeah/fetch": "^1.0.0-alpha.4"
+  }
+}

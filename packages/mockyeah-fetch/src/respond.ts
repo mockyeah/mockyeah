@@ -38,7 +38,7 @@ const respond = async (
   let type: string | undefined;
 
   if (typeof awaitedType === 'function') {
-    type = awaitedType(requestForHandler) as (string | undefined);
+    type = awaitedType(requestForHandler) as string | undefined;
   } else {
     type = awaitedType;
   }

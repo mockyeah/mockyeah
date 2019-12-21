@@ -1,7 +1,15 @@
 const { isEmpty } = require('lodash');
 const { handleContentType } = require('./helpers');
 
-const proxyRecord = ({ app, req, reqUrl, startTime, body, headers, status }) => {
+const proxyRecord = ({
+  app,
+  req: { method, body: reqBody },
+  reqUrl,
+  startTime,
+  body,
+  headers,
+  status
+}) => {
   const { recordMeta } = app.locals;
 
   const {
@@ -16,8 +24,6 @@ const proxyRecord = ({ app, req, reqUrl, startTime, body, headers, status }) => 
 
     if (!group) return;
   }
-
-  const { method, body: reqBody } = req;
 
   const latency = new Date().getTime() - startTime;
 
