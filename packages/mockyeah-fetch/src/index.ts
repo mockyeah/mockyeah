@@ -65,10 +65,12 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     responseHeaders = true,
     // This is the fallback fetch when no mocks match.
     // @ts-ignore
-    fetch = global.fetch
+    fetch = global.fetch,
+    fileResolver,
+    fixtureResolver
   } = bootOptions;
 
-  const defaultBootOptions = {
+  const defaultBootOptions: Readonly<BootOptions> = {
     name,
     noProxy,
     prependServerURL,
@@ -85,7 +87,9 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     ignorePrefix,
     aliases,
     responseHeaders,
-    fetch
+    fetch,
+    fileResolver,
+    fixtureResolver
   };
 
   return defaultBootOptions;
