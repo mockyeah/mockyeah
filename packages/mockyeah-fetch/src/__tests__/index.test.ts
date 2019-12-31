@@ -14,7 +14,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with new constructor', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.mock('https://example.local', { json: { a: 1 } });
 
@@ -26,7 +26,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should ignore prefix with defaults', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.mock('https://example.local', { json: { a: 2 } });
 
@@ -53,7 +53,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with no response options', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.mock('*');
 
@@ -65,7 +65,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with only wildcard', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.mock('*', { json: { a: 1 } });
 
@@ -77,7 +77,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with regex', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.mock(/https:\/\/e.*?e\.local/, { json: { a: 1 } });
 
@@ -88,8 +88,18 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
+  test('should work with regex not matching', async () => {
+    mockyeah = new Mockyeah({ noProxy: true });
+
+    mockyeah.mock(/oops/, { json: { a: 1 } });
+
+    const response = await mockyeah.fetch('https://example.local');
+
+    expect(response.status).toBe(404);
+  });
+
   test('should work with express wildcard in path', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.mock('https://example.local/v(.*)/ok', { json: { a: 1 } });
 
@@ -103,7 +113,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with post method, query and text', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.mock(
       {
@@ -134,7 +144,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with dynamic response', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.post('https://example.local/v1?', {
       json: req => ({ ok: req.query.ok, hmm: req.body.hmm, method: req.method })
@@ -154,7 +164,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with dynamic response checking request cookies', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah({ noProxy: true });
 
     mockyeah.post('https://example.local/v1?', {
       json: req => ({ cookieA: req.cookies.a, cookieB: req.cookies.b })
