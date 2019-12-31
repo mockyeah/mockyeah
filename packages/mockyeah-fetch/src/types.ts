@@ -80,7 +80,7 @@ const responseOptionsKeys = [
   'type'
 ];
 
-type ResponseOptions = string | ResponseOptionsObject | undefined;
+type ResponseOptions = string | ResponseOptionsObject;
 
 type Matcher<T> = T | ((arg: T) => boolean | undefined);
 type MatchString<T = string> = Matcher<T> | RegExp;
