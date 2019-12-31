@@ -70,7 +70,7 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     fixtureResolver
   } = bootOptions;
 
-  const defaultBootOptions: Readonly<BootOptions> = {
+  const defaultBootOptions = {
     name,
     noProxy,
     prependServerURL,
@@ -98,7 +98,7 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
 class Mockyeah {
   private __private: {
     recording: boolean;
-    bootOptions: ReturnType<typeof getDefaultBootOptions>;
+    bootOptions: Readonly<ReturnType<typeof getDefaultBootOptions>>;
     ws?: WebSocket;
     logPrefix: string;
     mocks: MockNormal[];
