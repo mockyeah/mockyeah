@@ -12,7 +12,7 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint --max-warnings 0 src/**/*.ts",
     "test": "npm run type-check && npm run lint && npm run test:unit",
-    "test:unit": "jest"
+    "test:unit": "rm -rf src/**/*.js && jest"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
   "license": "MIT",
