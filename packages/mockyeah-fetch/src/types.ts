@@ -118,9 +118,7 @@ interface MatchMeta {
   matchKeys?: pathToRegexp.Key[];
   original?: Match;
   originalNormal?: MatchObject;
-  // expectation?: Expectation;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  expectation?: any;
+  expectation?: Expectation;
 }
 
 interface MatchObject {
@@ -146,6 +144,12 @@ type Match = string | RegExp | MatchNormal;
 type Mock = [Match, ResponseOptions];
 
 type MockNormal = [MatchNormal, ResponseOptionsObject];
+
+interface MockReturn {
+  expect(match: Match): Expectation;
+}
+
+type MockFunction = (match: Match, res?: ResponseOptions) => MockReturn;
 
 interface FetchOptions {
   dynamicMocks?: Mock[];
@@ -176,6 +180,8 @@ export {
   MatchString,
   Mock,
   MockNormal,
+  MockFunction,
+  MockReturn,
   RequestForHandler,
   responseOptionsKeys,
   Expectation,

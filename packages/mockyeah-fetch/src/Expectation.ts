@@ -7,7 +7,8 @@ import {
   VerifyCallback,
   RunHandlerOrPromise,
   RunHandler,
-  RequestForHandler
+  RequestForHandler,
+  MatchString
 } from './types';
 import { normalize } from './normalize';
 
@@ -23,9 +24,13 @@ const matchesAssertion = (value: any, source: any, prefixMessage: string): void 
 
 class Expectation {
   prefix: string;
+
   called: number;
+
   assertions: (() => void)[];
+
   handlers: ((req: RequestForHandler) => void)[];
+
   runPromise?: Promise<void>;
 
   constructor(match: MatchObject) {
@@ -88,6 +93,7 @@ class Expectation {
     });
     return this;
   }
+
   atMost(num: number) {
     this.assertions.push(() => {
       assert(
@@ -97,6 +103,7 @@ class Expectation {
     });
     return this;
   }
+
   never() {
     this.assertions.push(() => {
       assert(
@@ -106,6 +113,7 @@ class Expectation {
     });
     return this;
   }
+
   once() {
     this.assertions.push(() => {
       assert(
@@ -115,6 +123,7 @@ class Expectation {
     });
     return this;
   }
+
   twice() {
     this.assertions.push(() => {
       assert(
@@ -124,6 +133,7 @@ class Expectation {
     });
     return this;
   }
+
   thrice() {
     this.assertions.push(() => {
       assert(
@@ -133,6 +143,7 @@ class Expectation {
     });
     return this;
   }
+
   exactly(num: number) {
     this.assertions.push(() => {
       assert(
@@ -142,6 +153,7 @@ class Expectation {
     });
     return this;
   }
+
   path(value: Matcher<string>) {
     const message = `${this.prefix} Path did not match expected`;
 
@@ -152,9 +164,11 @@ class Expectation {
 
     return this;
   }
+
   url(value: Matcher<string>) {
     return this.path(value);
   }
+
   header(name: string, value: Matcher<string>) {
     const message = `${this.prefix} Header "${name}" did not match expected`;
 
@@ -168,7 +182,8 @@ class Expectation {
 
     return this;
   }
-  params(value: Matcher<Record<string, string>>) {
+
+  params(value: Matcher<Record<string, MatchString>>) {
     const message = `${this.prefix} Params did not match expected`;
 
     this.handlers.push(req => {
@@ -177,9 +192,11 @@ class Expectation {
 
     return this;
   }
-  query(value: Matcher<Record<string, string>>) {
+
+  query(value: Matcher<Record<string, MatchString>>) {
     return this.params(value);
   }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body(value: any) {
     const message = `${this.prefix} Body did not match expected`;
@@ -190,6 +207,7 @@ class Expectation {
 
     return this;
   }
+
   verifier(done: (err?: Error) => void) {
     return (err?: Error): void => {
       if (err) {
@@ -199,6 +217,7 @@ class Expectation {
       this.verify(done);
     };
   }
+
   run(handlerOrPromise: RunHandlerOrPromise) {
     if (isPromise(handlerOrPromise)) {
       this.runPromise = handlerOrPromise as Promise<void>;
@@ -223,6 +242,7 @@ class Expectation {
 
     return this;
   }
+
   // eslint-disable-next-line consistent-return
   verify(callback?: VerifyCallback) {
     const onError = (err: Error) => {
