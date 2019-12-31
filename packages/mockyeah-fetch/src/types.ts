@@ -15,6 +15,7 @@ interface BootOptions {
   suiteHeader?: string;
   suiteCookie?: string;
   ignorePrefix?: string;
+  latency?: Responder<number>;
   fetch?: WindowOrWorkerGlobalScope['fetch'];
   aliases?: string[][];
   responseHeaders?: boolean;

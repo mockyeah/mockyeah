@@ -100,9 +100,11 @@ const respond = async (
     headers
   };
 
-  if (resOpts.latency) {
-    const latency = await handler<number>(resOpts.latency, requestForHandler);
-    await new Promise(resolve => setTimeout(resolve, latency));
+  const latency = resOpts.latency || options.latency;
+
+  if (latency) {
+    const latencyActual = await handler<number>(latency, requestForHandler);
+    await new Promise(resolve => setTimeout(resolve, latencyActual));
   }
 
   const response = new Response(body, responseInit);
