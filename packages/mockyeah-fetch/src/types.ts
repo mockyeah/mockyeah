@@ -127,6 +127,7 @@ interface MatchObject {
   method?: MatchString<MethodOrAll>;
   query?: Matcher<Record<string, MatchString>>;
   headers?: Matcher<Record<string, MatchString>>;
+  cookies?: Matcher<Record<string, MatchString>>;
   // TODO: Type out `body`.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
