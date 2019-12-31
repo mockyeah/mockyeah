@@ -115,6 +115,14 @@ const normalize = (match: Match, incoming?: boolean): MatchObject => {
       : match.query || stripped.query;
   }
 
+  if (isEmpty(match.query)) {
+    delete match.query;
+  }
+
+  if (isEmpty(match.cookies)) {
+    delete match.cookies;
+  }
+
   const originalNormal = {
     ...match
   };

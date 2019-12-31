@@ -242,12 +242,26 @@ class Mockyeah {
 
     const headers = options.headers as Record<string, string>;
 
+    let cookies;
+
+    try {
+      const cookieHeader = headers && (headers.cookie || headers.Cookie);
+      if (cookieHeader) {
+        cookies = cookie.parse(cookieHeader);
+      } else if (typeof window !== 'undefined') {
+        cookies = cookie.parse(window.document.cookie);
+      }
+    } catch (error) {
+      debugError(`${logPrefix} @mockyeah/fetch couldn't parse cookies: ${error.message}`);
+    }
+
     const incoming = {
       url: url.replace(ignorePrefix, ''),
       query,
       headers,
       body: inBody,
-      method
+      method,
+      cookies
     };
 
     let matchingMock: MockNormal | undefined;
@@ -290,15 +304,6 @@ class Mockyeah {
       });
 
     const pathname = parsed.pathname || '/';
-
-    let cookies;
-
-    const cookieHeader = headers && (headers.cookie || headers.Cookie);
-    if (cookieHeader) {
-      cookies = cookie.parse(cookieHeader);
-    } else if (typeof window !== 'undefined') {
-      cookies = cookie.parse(window.document.cookie);
-    }
 
     const requestForHandler: RequestForHandler = {
       url: pathname,

@@ -76,6 +76,43 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
+  test('should match cookie header', async () => {
+    mockyeah = new Mockyeah({ noProxy: true });
+
+    mockyeah.mock({
+      cookies: {
+        ok: 'yes'
+      }
+    }, { text: 'ok' });
+
+    const response = await mockyeah.fetch('https://example.local', {
+      headers: {
+        Cookie: 'ok=yes'
+      }
+    });
+    const data = await response.text();
+
+    expect(data).toEqual('ok');
+  });
+
+  test('should fail to match cookie header', async () => {
+    mockyeah = new Mockyeah({ noProxy: true });
+
+    mockyeah.mock({
+      cookies: {
+        ok: 'yes'
+      }
+    }, { text: 'ok' });
+
+    const response = await mockyeah.fetch('https://example.local', {
+      headers: {
+        Cookie: 'ok=no'
+      }
+    });
+
+    expect(response.status).toEqual(404);
+  });
+
   test('should work with regex', async () => {
     mockyeah = new Mockyeah({ noProxy: true });
 
