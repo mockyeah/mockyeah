@@ -187,7 +187,7 @@ class Expectation {
     const message = `${this.prefix} Params did not match expected`;
 
     this.handlers.push(req => {
-      matchesAssertion(req.query, value, message);
+      matchesAssertion(req.query || {}, value || {}, message);
     });
 
     return this;
