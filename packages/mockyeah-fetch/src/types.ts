@@ -59,12 +59,12 @@ interface ResponseOptionsObject {
   text?: Responder<string>;
   html?: Responder<string>;
   raw?: Responder<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  filePath: Responder<string>;
-  fixture: Responder<string>;
+  filePath?: Responder<string>;
+  fixture?: Responder<string>;
   status?: Responder<number>;
   type?: Responder<string>;
   latency?: Responder<number>;
-  headers: Record<string, string>;
+  headers?: Record<string, string>;
 }
 
 const responseOptionsKeys = [

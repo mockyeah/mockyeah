@@ -24,7 +24,7 @@ const respond = async (
 ): Promise<Respond> => {
   const { responseHeaders } = options;
 
-  const resOpts: ResponseOptionsObject = matchingMock[1];
+  const resOpts: ResponseOptionsObject = matchingMock[1] || {};
 
   const status =
     (resOpts.status && (await handler<number>(resOpts.status, requestForHandler))) || 200;
@@ -81,9 +81,11 @@ const respond = async (
 
   contentType = type ? mime.getType(type) : contentType;
 
-  const headers: RequestInit['headers'] = {
-    ...(await handler<Record<string, string>>(resOpts.headers, requestForHandler))
-  };
+  const headers: RequestInit['headers'] = resOpts.headers
+    ? {
+        ...(await handler<Record<string, string>>(resOpts.headers, requestForHandler))
+      }
+    : {};
 
   if (responseHeaders) {
     headers['x-mockyeah-mocked'] = 'true';
