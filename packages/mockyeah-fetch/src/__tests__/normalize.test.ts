@@ -8,5 +8,17 @@ describe('normalize', () => {
       }
     });
   });
+
+  test('original normal', () => {
+    expect(normalize('/v1?ok=yes')).toMatchObject({
+      $meta: {
+        originalNormal: {
+          url: '/v1',
+          query: {
+            ok: 'yes'
+          }
+        }
+      }
+    });
+  });
 });
-g;
