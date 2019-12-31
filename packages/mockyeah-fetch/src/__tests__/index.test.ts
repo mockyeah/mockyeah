@@ -7,7 +7,7 @@ global.fetch = jest.fn();
 window.fetch = global.fetch;
 
 describe('@mockyeah/fetch', () => {
-  let mockyeah;
+  let mockyeah: Mockyeah;
 
   afterEach(() => {
     if (mockyeah) mockyeah.reset();
@@ -50,6 +50,18 @@ describe('@mockyeah/fetch', () => {
 
     expect(response.headers.get('content-type')).toMatch('application/json');
     expect(data).toEqual({ a: 1 });
+  });
+
+  test('should work with no response options', async () => {
+    mockyeah = new Mockyeah();
+
+    mockyeah.mock('*');
+
+    const response = await mockyeah.fetch('https://example.local');
+    const data = await response.text();
+
+    expect(response.status).toEqual(200);
+    expect(data).toEqual('');
   });
 
   test('should work with only wildcard', async () => {

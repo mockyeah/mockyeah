@@ -150,7 +150,7 @@ class Mockyeah {
       global.fetch = this.fetch.bind(this);
     }
 
-    const methods = ({
+    const methods = {
       all: this.all.bind(this),
       get: this.get.bind(this),
       post: this.post.bind(this),
@@ -158,14 +158,14 @@ class Mockyeah {
       delete: this.delete.bind(this),
       options: this.options.bind(this),
       patch: this.patch.bind(this)
-    });
+    };
 
     this.methods = methods;
   }
 
   async fetch(
     input: RequestInfo,
-    init: RequestInit,
+    init?: RequestInit,
     fetchOptions: FetchOptions = {}
   ): Promise<Response> {
     const { logPrefix, mocks, bootOptions, aliasReplacements } = this.__private;
@@ -358,7 +358,7 @@ class Mockyeah {
     return this.fallbackFetch(url, newOptions, { noProxy });
   }
 
-  async fallbackFetch(input: RequestInfo, init: RequestInit, fetchOptions: FetchOptions = {}) {
+  async fallbackFetch(input: RequestInfo, init?: RequestInit, fetchOptions: FetchOptions = {}) {
     const { noProxy } = fetchOptions;
     const { responseHeaders } = this.__private.bootOptions;
 
