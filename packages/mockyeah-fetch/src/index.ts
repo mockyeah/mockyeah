@@ -369,7 +369,7 @@ class Mockyeah {
       if (responseHeaders) {
         headers['x-mockyeah-missed'] = 'true';
       }
-      return new Response(undefined, {
+      return new Response('', {
         status: 404,
         headers
       });
