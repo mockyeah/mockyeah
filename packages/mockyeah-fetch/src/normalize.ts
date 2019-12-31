@@ -58,7 +58,7 @@ const makeRequestUrl = (url: string) => {
     : url;
 };
 
-const normalize = (match: Match, incoming?: boolean) => {
+const normalize = (match: Match, incoming?: boolean): MatchObject => {
   if (typeof match === 'function') return match;
 
   const originalMatch = isPlainObject(match) ? { ...(match as MatchObject) } : match;
@@ -91,14 +91,7 @@ const normalize = (match: Match, incoming?: boolean) => {
     match.method = match.method.toLowerCase() as Method;
   }
 
-  const originalNormal = {
-    ...match
-  };
-
   const $meta = { ...(match.$meta || {}) };
-
-  $meta.original = originalMatch;
-  $meta.originalNormal = originalNormal;
 
   if (match.path) {
     match.url = match.path;
@@ -117,8 +110,19 @@ const normalize = (match: Match, incoming?: boolean) => {
     match.url = stripped.url.replace(/\/+$/, '');
     match.url = match.url || '/';
 
-    originalNormal.url = match.url;
+    match.query = isPlainObject(match.query)
+      ? { ...stripped.query, ...match.query }
+      : match.query || stripped.query;
+  }
 
+  const originalNormal = {
+    ...match
+  };
+
+  $meta.original = originalMatch;
+  $meta.originalNormal = originalNormal;
+
+  if (typeof match.url === 'string') {
     if (!incoming) {
       const matchKeys: pathToRegexp.Key[] = [];
       // `pathToRegexp` mutates `matchKeys` to contain a list of named parameters
@@ -128,10 +132,6 @@ const normalize = (match: Match, incoming?: boolean) => {
       $meta.matchKeys = matchKeys;
       $meta.fn = match.url.toString();
     }
-
-    match.query = isPlainObject(match.query)
-      ? { ...stripped.query, ...match.query }
-      : match.query || stripped.query;
   } else if (isRegExp(match.url)) {
     if (!incoming) {
       const regex = match.url;
