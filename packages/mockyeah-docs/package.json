@@ -9,7 +9,6 @@
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
     "docs:publish": "npm run build && cp CNAME public/CNAME && gh-pages -d public"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
