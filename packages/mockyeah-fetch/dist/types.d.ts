@@ -104,8 +104,10 @@ interface MatchFunction {
     (req: RequestForHandler): boolean;
     $meta?: MatchMeta;
 }
-declare type MatchNormal = MatchObject | MatchFunction;
-declare type Match = string | RegExp | MatchNormal;
+declare type MatchNormal = (MatchObject & {
+    url(value: string): boolean;
+}) | MatchFunction;
+declare type Match = string | RegExp | MatchObject | MatchFunction;
 declare type Mock = [Match, ResponseOptions];
 declare type MockSuite = Mock[];
 declare type MockSuiteResolver = (suiteName: string) => Promise<{
@@ -125,4 +127,4 @@ interface Action {
     type?: string;
     payload?: Record<string, any>;
 }
-export { Json, BootOptions, ConnectWebSocketOptions, FetchOptions, Method, MethodOrAll, ResponseOptions, ResponseOptionsObject, Responder, ResponderFunction, ResponderResult, Matcher, Match, MatchFunction, MatchObject, MatchString, Mock, MockSuite, MockSuiteResolver, MockNormal, MockFunction, MockReturn, RequestForHandler, responseOptionsKeys, Expectation, VerifyCallback, RunHandler, RunHandlerOrPromise, Action };
+export { Json, BootOptions, ConnectWebSocketOptions, FetchOptions, Method, MethodOrAll, ResponseOptions, ResponseOptionsObject, Responder, ResponderFunction, ResponderResult, Matcher, Match, MatchFunction, MatchObject, MatchString, MatchNormal, Mock, MockSuite, MockSuiteResolver, MockNormal, MockFunction, MockReturn, RequestForHandler, responseOptionsKeys, Expectation, VerifyCallback, RunHandler, RunHandlerOrPromise, Action };

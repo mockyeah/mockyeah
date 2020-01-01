@@ -260,8 +260,7 @@ var normalize = function normalize(match, incoming) {
   if (typeof match.url === 'string') {
     match.url = makeRequestUrl(match.url);
     var stripped = stripQuery(match.url);
-    match.url = stripped.url.replace(/\/+$/, '');
-    match.url = match.url || '/';
+    match.url = stripped.url.replace(/\/+$/, '') || '/';
     match.query = lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_5___default()(match.query) ? _objectSpread({}, stripped.query, {}, match.query) : match.query || stripped.query;
   }
 
@@ -311,8 +310,9 @@ var normalize = function normalize(match, incoming) {
     };
   }
 
-  match.$meta = $meta;
-  return match;
+  return _objectSpread({}, match, {
+    $meta: $meta
+  });
 };
 
 
