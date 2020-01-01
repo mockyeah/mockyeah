@@ -4,7 +4,7 @@ import pathToRegexp from 'path-to-regexp';
 import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
 import isRegExp from 'lodash/isRegExp';
-import { MatchNormal, MatchObject, MatchString, Match, Method } from './types';
+import { MatchNormal, MatchObject, MatchFunction, MatchString, Match, Method } from './types';
 
 const decodedPortRegex = /^(\/?https?.{3}[^/:?]+):/;
 const decodedProtocolRegex = /^(\/?https?).{3}/;
