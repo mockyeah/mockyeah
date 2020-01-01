@@ -9,7 +9,7 @@ import {
   Json
 } from './types';
 
-const handler = <T>(value: Responder<T>, requestForHandler: RequestForHandler) =>
+const handler = <T>(value: Responder<T>, requestForHandler: RequestForHandler): T | Promise<T> =>
   typeof value === 'function' ? (value as ResponderFunction<T>)(requestForHandler) : value;
 
 interface Respond {
