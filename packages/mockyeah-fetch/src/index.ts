@@ -25,7 +25,9 @@ import {
   ResponseOptions,
   ResponseOptionsObject,
   RequestForHandler,
-  Action
+  Action,
+  MockSuite,
+  MockSuiteResolver
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
@@ -67,7 +69,8 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     // @ts-ignore
     fetch = global.fetch,
     fileResolver,
-    fixtureResolver
+    fixtureResolver,
+    mockSuiteResolver
   } = bootOptions;
 
   const defaultBootOptions = {
@@ -89,7 +92,8 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     responseHeaders,
     fetch,
     fileResolver,
-    fixtureResolver
+    fixtureResolver,
+    mockSuiteResolver
   };
 
   return defaultBootOptions;
@@ -178,10 +182,11 @@ class Mockyeah {
       suiteHeader,
       port,
       portHttps,
-      host
+      host,
+      mockSuiteResolver
     } = bootOptions;
 
-    const { dynamicMocks, noProxy = bootNoProxy } = fetchOptions;
+    const { dynamicMocks, dynamicMockSuite, noProxy = bootNoProxy } = fetchOptions;
 
     if (!noWebSocket) {
       try {
@@ -253,6 +258,35 @@ class Mockyeah {
       }
     } catch (error) {
       debugError(`${logPrefix} @mockyeah/fetch couldn't parse cookies: ${error.message}`);
+    }
+
+    const mockSuiteName = dynamicMockSuite || (cookies && cookies[suiteCookie]);
+
+    if (mockSuiteName && mockSuiteResolver) {
+      const mockSuiteNames = mockSuiteName.split(',').map(s => s.trim());
+      const mockSuiteLoads = mockSuiteNames.map(mockSuiteResolver);
+      const mockSuiteLoadeds = await Promise.all(mockSuiteLoads);
+      mockSuiteLoadeds.forEach((mockSuiteLoaded, index) => {
+        const name = mockSuiteNames[index];
+        const { default: mockSuite } = mockSuiteLoaded;
+        mockSuite.forEach(mock => {
+          const [match, response] = mock;
+          const newMatch = (isPlainObject(match)
+            ? { ...(match as MatchObject) }
+            : { url: match }) as MatchObject;
+          newMatch.cookies = {
+            ...newMatch.cookies,
+            mockSuite: (value?: string): boolean =>
+              value
+                ? value
+                    .split(',')
+                    .map(s => s.trim())
+                    .includes(name)
+                : false
+          };
+          dynamicMocksNormal.push(this.makeMock(newMatch, response));
+        });
+      });
     }
 
     const incoming = {
