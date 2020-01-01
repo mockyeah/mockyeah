@@ -21,6 +21,7 @@ interface BootOptions {
   responseHeaders?: boolean;
   fileResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   fixtureResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  mockSuiteResolver?: MockSuiteResolver;
 }
 
 interface ConnectWebSocketOptions {
@@ -145,6 +146,10 @@ type Match = string | RegExp | MatchNormal;
 
 type Mock = [Match, ResponseOptions];
 
+type MockSuite = Mock[];
+
+type MockSuiteResolver = (suiteName: string) => Promise<{ default: MockSuite }>;
+
 type MockNormal = [MatchNormal, ResponseOptionsObject];
 
 interface MockReturn {
@@ -155,6 +160,7 @@ type MockFunction = (match: Match, res?: ResponseOptions) => MockReturn;
 
 interface FetchOptions {
   dynamicMocks?: Mock[];
+  dynamicMockSuite?: string;
   noProxy?: boolean;
 }
 
@@ -181,6 +187,8 @@ export {
   MatchObject,
   MatchString,
   Mock,
+  MockSuite,
+  MockSuiteResolver,
   MockNormal,
   MockFunction,
   MockReturn,
