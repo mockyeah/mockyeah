@@ -9,7 +9,7 @@ import {
   Json
 } from './types';
 
-const handler = <T>(value: Responder<T>, requestForHandler: RequestForHandler) =>
+const handler = <T>(value: Responder<T>, requestForHandler: RequestForHandler): T | Promise<T> =>
   typeof value === 'function' ? (value as ResponderFunction<T>)(requestForHandler) : value;
 
 interface Respond {
@@ -100,9 +100,11 @@ const respond = async (
     headers
   };
 
-  if (resOpts.latency) {
-    const latency = await handler<number>(resOpts.latency, requestForHandler);
-    await new Promise(resolve => setTimeout(resolve, latency));
+  const latency = resOpts.latency || options.latency;
+
+  if (latency) {
+    const latencyActual = await handler<number>(latency, requestForHandler);
+    await new Promise(resolve => setTimeout(resolve, latencyActual));
   }
 
   const response = new Response(body, responseInit);
