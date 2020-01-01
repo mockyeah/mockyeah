@@ -4,7 +4,7 @@ import pathToRegexp from 'path-to-regexp';
 import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
 import isRegExp from 'lodash/isRegExp';
-import { MatchObject, MatchString, Match, Method } from './types';
+import { MatchNormal, MatchObject, MatchString, Match, Method } from './types';
 
 const decodedPortRegex = /^(\/?https?.{3}[^/:?]+):/;
 const decodedProtocolRegex = /^(\/?https?).{3}/;
@@ -58,7 +58,7 @@ const makeRequestUrl = (url: string) => {
     : url;
 };
 
-const normalize = (match: Match, incoming?: boolean): MatchObject => {
+const normalize = (match: Match, incoming?: boolean): MatchNormal => {
   if (typeof match === 'function') return match;
 
   const originalMatch = isPlainObject(match) ? { ...(match as MatchObject) } : match;
@@ -107,8 +107,7 @@ const normalize = (match: Match, incoming?: boolean): MatchObject => {
 
     const stripped = stripQuery(match.url);
 
-    match.url = stripped.url.replace(/\/+$/, '');
-    match.url = match.url || '/';
+    match.url = stripped.url.replace(/\/+$/, '') || '/';
 
     match.query = isPlainObject(match.query)
       ? { ...stripped.query, ...match.query }
@@ -151,11 +150,11 @@ const normalize = (match: Match, incoming?: boolean): MatchObject => {
   } else if (typeof match.url === 'function') {
     const fn = match.url;
     match.url = u => fn(u) || fn(`/${u}`);
+  } else {
+    match.url = () => false;
   }
 
-  match.$meta = $meta;
-
-  return match;
+  return { ...match, $meta } as MatchNormal;
 };
 
 export { stripQuery };

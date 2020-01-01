@@ -141,8 +141,12 @@ interface MatchFunction {
   (req: RequestForHandler): boolean;
   $meta?: MatchMeta;
 }
-type MatchNormal = MatchObject | MatchFunction;
-type Match = string | RegExp | MatchNormal;
+type MatchNormal =
+  | (MatchObject & {
+      url(value: string): boolean;
+    })
+  | MatchFunction;
+type Match = string | RegExp | MatchObject | MatchFunction;
 
 type Mock = [Match, ResponseOptions];
 
@@ -186,6 +190,7 @@ export {
   MatchFunction,
   MatchObject,
   MatchString,
+  MatchNormal,
   Mock,
   MockSuite,
   MockSuiteResolver,
