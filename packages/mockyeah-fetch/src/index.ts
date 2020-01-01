@@ -188,7 +188,7 @@ class Mockyeah {
 
     if (!noWebSocket) {
       try {
-        await this.connectWebSocket();
+        await this.connectWebSocket({ retries: 0 });
       } catch (error) {
         // silence
       }
@@ -554,13 +554,17 @@ class Mockyeah {
 
     debugAdmin(`WebSocket trying to connect to '${webSocketUrl}'.`);
 
-    await new Promise((resolve, reject) => {
-      try {
-        this.__private.ws = new WebSocket(webSocketUrl);
-      } catch (error) {
-        debugAdminError(`WebSocket couldn't connect to '${webSocketUrl}':`, error);
-      }
+    try {
+      this.__private.ws = new WebSocket(webSocketUrl);
+    } catch (error) {
+      debugAdminError(`WebSocket couldn't connect to '${webSocketUrl}':`, error);
 
+      delete this.__private.ws;
+
+      throw error;
+    }
+
+    await new Promise((resolve, reject) => {
       const { ws } = this.__private;
 
       if (ws) {
@@ -572,7 +576,7 @@ class Mockyeah {
 
         ws.onerror = error => {
           debugAdminError('WebSocket errored', error);
-          reject();
+          reject(error);
         };
 
         ws.onclose = () => {
@@ -589,7 +593,7 @@ class Mockyeah {
             }, webSocketReconnectInterval);
           }
 
-          reject();
+          reject(new Error('WebSocket closed'));
         };
 
         ws.onmessage = (event: MessageEvent) => {
