@@ -25,9 +25,7 @@ import {
   ResponseOptions,
   ResponseOptionsObject,
   RequestForHandler,
-  Action,
-  MockSuite,
-  MockSuiteResolver
+  Action
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
@@ -298,31 +296,34 @@ class Mockyeah {
       cookies
     };
 
+    const incomingNormal = normalize(incoming, true);
+
     let matchingMock: MockNormal | undefined;
 
     [
-      incoming,
-      ...flatten(
-        aliasReplacements &&
-          Object.entries(aliasReplacements).map(([alias, aliasSet]) => {
-            if (incoming.url.replace(/^\//, '').startsWith(alias)) {
-              return aliasSet.map(alias2 => ({
-                ...incoming,
-                url: url.replace(alias, alias2)
-              }));
-            }
-            return [];
-          })
-      )
+      incomingNormal,
+      ...(isPlainObject(incomingNormal)
+        ? flatten(
+            aliasReplacements &&
+              Object.entries(aliasReplacements).map(([alias, aliasSet]) => {
+                const { url } = incomingNormal as MatchObject;
+                if (typeof url === 'string' && url.replace(/^\//, '').startsWith(alias)) {
+                  return aliasSet.map(alias2 => ({
+                    ...incomingNormal,
+                    url: url.replace(alias, alias2)
+                  }));
+                }
+                return [];
+              })
+          )
+        : [])
     ]
       .filter(Boolean)
       .find(inc => {
-        const incNorm = normalize(inc, true);
-
         return [...(dynamicMocksNormal || []).filter(Boolean), ...mocks].find(m => {
           const match = normalize(m[0]);
 
-          const matchResult = matches(incNorm, match, { skipKeys: ['$meta'] });
+          const matchResult = matches(inc, match, { skipKeys: ['$meta'] });
 
           if (matchResult.result) {
             matchingMock = m;
