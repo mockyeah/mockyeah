@@ -150,8 +150,6 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
   } else if (typeof match.url === 'function') {
     const fn = match.url;
     match.url = u => fn(u) || fn(`/${u}`);
-  } else {
-    match.url = () => false;
   }
 
   return { ...match, $meta } as MatchNormal;
