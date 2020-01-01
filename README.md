@@ -24,7 +24,7 @@
 | Real server                                   | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :x:                |
 | Programmatic mocked responses                 | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Delay mocked response                         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Default delay                                 | on roadmap         | :x:                | ?                  | :x:                | :x:                |
+| Default delay                                 | :white_check_mark: | :x:                | ?                  | :x:                | :x:                |
 | Modify real responses                         | on roadmap         | :white_check_mark: | :x:                | :x:?               |
 | Delay real response                           | on roadmap         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Domain aliases                                | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
