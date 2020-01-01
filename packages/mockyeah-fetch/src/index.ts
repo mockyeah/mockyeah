@@ -554,19 +554,17 @@ class Mockyeah {
 
     debugAdmin(`WebSocket trying to connect to '${webSocketUrl}'.`);
 
+    try {
+      this.__private.ws = new WebSocket(webSocketUrl);
+    } catch (error) {
+      debugAdminError(`WebSocket couldn't connect to '${webSocketUrl}':`, error);
+
+      delete this.__private.ws;
+
+      throw error;
+    }
+
     await new Promise((resolve, reject) => {
-      try {
-        this.__private.ws = new WebSocket(webSocketUrl);
-      } catch (error) {
-        debugAdminError(`WebSocket couldn't connect to '${webSocketUrl}':`, error);
-
-        delete this.__private.ws;
-
-        reject(error);
-
-        return;
-      }
-
       const { ws } = this.__private;
 
       if (ws) {
