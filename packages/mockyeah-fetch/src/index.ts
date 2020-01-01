@@ -373,26 +373,28 @@ class Mockyeah {
 
     const serverUrl = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}`;
 
+    let newOptions = options;
+
     // Consider removing this `prependServerURL` feature.
     if (prependServerURL && serverUrl) {
       url = `${serverUrl}/${url.replace('://', '~~~')}`;
-    }
 
-    let suiteName;
-    if (typeof document !== 'undefined') {
-      const m = document.cookie.match(`\\b${suiteCookie}=([^;]+)\\b`);
-      suiteName = m && m[1];
-    }
-
-    const newOptions = {
-      ...options,
-      headers: {
-        ...options.headers,
-        ...(suiteName && {
-          [suiteHeader]: suiteName
-        })
+      let suiteName;
+      if (typeof document !== 'undefined') {
+        const m = document.cookie.match(`\\b${suiteCookie}=([^;]+)\\b`);
+        suiteName = m && m[1];
       }
-    };
+
+      newOptions = {
+        ...options,
+        headers: {
+          ...options.headers,
+          ...(suiteName && {
+            [suiteHeader]: suiteName
+          })
+        }
+      };
+    }
 
     return this.fallbackFetch(url, newOptions, { noProxy });
   }
