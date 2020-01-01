@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/docs",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "Documentation for a powerful service mocking, recording, and playback utility.",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "dependencies": {
     "@mdx-js/mdx": "^1.4.5",
     "@mdx-js/react": "^1.4.5",
-    "@mockyeah/tools": "^1.0.0-alpha.4",
+    "@mockyeah/tools": "^1.0.0-alpha.5",
     "gatsby": "^2.18.11",
     "gatsby-image": "2.2.20",
     "gatsby-plugin-catch-links": "^2.1.10",
