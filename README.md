@@ -14,9 +14,9 @@
 | Node.js support                               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:                |
 | Recording suites                              | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Shareable recordings                          | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
-| Hot-reloading suites                          | on roadmap         | :x:                | :x:                | :x:                | :x:                |
+| Hot-reloading client-side suites              | on roadmap         | :x:                | :x:                | :x:                | :x:                |
 | CLI dynamic record & play (server)            | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
-| CLI dynamic record (client)                   | on roadmap         | :x:                | :x:                | :x:                | :x:                |
+| CLI dynamic record (client)                   | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | CLI dynamic play (client)                     | on roadmap         | :x:                | :x:                | :x:                | :x:                |
 | CLI record groups                             | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Pass-thru/proxy                               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | ?                  |
@@ -29,13 +29,13 @@
 | Delay real response                           | on roadmap         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Domain aliases                                | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Record to disk                                | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :x:                |
-| Record to disk from client-side               | on roadmap         | :white_check_mark: | :x:                | :x:                | :x:                |
+| Record to disk from client-side               | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :x:                |
 | Record to local storage                       | on roadmap         | :white_check_mark: | :x:                | :x:                | :x:                |
 | `fetch` mocking                               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | XHR mocking                                   | on roadmap         | :white_check_mark: | :x:                | :x:                | :white_check_mark: |
 | Events                                        | on roadmap         | :white_check_mark: | :x:?               | :x:?               | :x:?               |
 | Middleware                                    | on roadmap         | :white_check_mark: | :x:?               | :x:?               | :x:                |
-| Dynamic mock opt-in                           | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
+| Dynamic mock opt-in (server)                  | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | `n`th mocking                                 | on roadmap         | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
 | Sessions                                      | on roadmap         | :x:                | :x:                | :x:                | :x:                |
 | Browser extension                             | on roadmap         | :x:                | :x:                | :x:                | :x:                |
@@ -43,6 +43,7 @@
 | Unit test assertions                          | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Declarative request matching (more than path) | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Programmatic request matching                 | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:?               |
+| GraphQL-aware mocking   | on roadmap          | :x:                | :x:                | :x:                | :x:                | :x:                |
 
 More at **https://mockyeah.js.org**.
 
