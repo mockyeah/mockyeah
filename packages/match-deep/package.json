@@ -1,6 +1,6 @@
 {
   "name": "match-deep",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "deep object matcher",
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
@@ -29,7 +29,7 @@
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.4.4",
-    "@mockyeah/tools": "^1.0.0-alpha.4",
+    "@mockyeah/tools": "^1.0.0-alpha.5",
     "@types/lodash": "^4.14.137",
     "@types/vfile-message": "^1",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
