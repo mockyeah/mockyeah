@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/fetch-demo",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "demoing fetch integration for mockyeah request mocking utility.",
   "private": true,
   "scripts": {
@@ -18,7 +18,7 @@
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "^7.7.4",
     "@babel/register": "^7.4.4",
-    "@mockyeah/tools": "^1.0.0-alpha.5",
+    "@mockyeah/tools": "^1.0.0-alpha.6",
     "babel-loader": "^8.0.5",
     "html-webpack-plugin": "^3.2.0",
     "source-map-loader": "^0.2.4",
@@ -29,6 +29,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.7.4",
-    "@mockyeah/fetch": "^1.0.0-alpha.5"
+    "@mockyeah/fetch": "^1.0.0-alpha.6"
   }
 }
