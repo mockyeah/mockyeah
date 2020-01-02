@@ -14,7 +14,6 @@ import { Expectation } from './Expectation';
 import { parseBody } from './parseBody';
 import {
   BootOptions,
-  ConnectWebSocketOptions,
   FetchOptions,
   MockNormal,
   MockFunction,
@@ -112,7 +111,7 @@ class Mockyeah {
   constructor(bootOptions: Readonly<BootOptions> = DEFAULT_BOOT_OPTIONS) {
     const defaultBootOptions = getDefaultBootOptions(bootOptions);
 
-    const { name, noPolyfill, noWebSocket, aliases, fetch } = defaultBootOptions;
+    const { name, noPolyfill, aliases, fetch } = defaultBootOptions;
 
     this.__private = {
       recording: false,
@@ -127,14 +126,6 @@ class Mockyeah {
       const errorMessage = `${logPrefix} @mockyeah/fetch requires a fetch implementation`;
       debugError(errorMessage);
       throw new Error(errorMessage);
-    }
-
-    if (!noWebSocket) {
-      try {
-        this.connectWebSocket();
-      } catch (error) {
-        // silence
-      }
     }
 
     const aliasReplacements: Record<string, string[]> = {};
@@ -188,7 +179,7 @@ class Mockyeah {
 
     if (!noWebSocket) {
       try {
-        await this.connectWebSocket({ retries: 0 });
+        await this.connectWebSocket();
       } catch (error) {
         // silence
       }
@@ -544,7 +535,7 @@ class Mockyeah {
     };
   }
 
-  async connectWebSocket({ retries = Infinity }: ConnectWebSocketOptions = {}) {
+  async connectWebSocket() {
     if (typeof WebSocket === 'undefined') return;
     if (this.__private.ws) return;
 
@@ -586,12 +577,6 @@ class Mockyeah {
           );
 
           delete this.__private.ws;
-
-          if (retries > 0) {
-            setTimeout(() => {
-              this.connectWebSocket({ retries: retries - 1 });
-            }, webSocketReconnectInterval);
-          }
 
           reject(new Error('WebSocket closed'));
         };
