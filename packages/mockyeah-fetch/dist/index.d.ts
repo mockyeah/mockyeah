@@ -1,4 +1,4 @@
-import { BootOptions, ConnectWebSocketOptions, FetchOptions, MockNormal, MockFunction, MockReturn, Match, ResponseOptions } from './types';
+import { BootOptions, FetchOptions, MockNormal, MockFunction, MockReturn, Match, ResponseOptions } from './types';
 declare class Mockyeah {
     private __private;
     methods: Record<string, MockFunction>;
@@ -16,6 +16,6 @@ declare class Mockyeah {
     reset(): void;
     makeMock(match: Match, res?: ResponseOptions): MockNormal;
     mock(match: Match, res?: ResponseOptions): MockReturn;
-    connectWebSocket({ retries }?: ConnectWebSocketOptions): Promise<void>;
+    connectWebSocket(): Promise<void>;
 }
 export default Mockyeah;

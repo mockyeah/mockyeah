@@ -22,9 +22,6 @@ interface BootOptions {
     fixtureResolver?: (filePath: string) => Promise<any>;
     mockSuiteResolver?: MockSuiteResolver;
 }
-interface ConnectWebSocketOptions {
-    retries?: number;
-}
 declare type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
 declare type MethodUpper = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'OPTIONS' | 'PATCH';
 declare type Method = MethodLower | MethodUpper;
@@ -127,4 +124,4 @@ interface Action {
     type?: string;
     payload?: Record<string, any>;
 }
-export { Json, BootOptions, ConnectWebSocketOptions, FetchOptions, Method, MethodOrAll, ResponseOptions, ResponseOptionsObject, Responder, ResponderFunction, ResponderResult, Matcher, Match, MatchFunction, MatchObject, MatchString, MatchNormal, Mock, MockSuite, MockSuiteResolver, MockNormal, MockFunction, MockReturn, RequestForHandler, responseOptionsKeys, Expectation, VerifyCallback, RunHandler, RunHandlerOrPromise, Action };
+export { Json, BootOptions, FetchOptions, Method, MethodOrAll, ResponseOptions, ResponseOptionsObject, Responder, ResponderFunction, ResponderResult, Matcher, Match, MatchFunction, MatchObject, MatchString, MatchNormal, Mock, MockSuite, MockSuiteResolver, MockNormal, MockFunction, MockReturn, RequestForHandler, responseOptionsKeys, Expectation, VerifyCallback, RunHandler, RunHandlerOrPromise, Action };
