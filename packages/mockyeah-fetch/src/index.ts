@@ -572,9 +572,6 @@ class Mockyeah {
 
         ws.onclose = () => {
           debugAdminError('WebSocket closed');
-          debugAdmin(
-            `WebSocket will try to re-connect in ${webSocketReconnectInterval} milliseconds.`
-          );
 
           delete this.__private.ws;
 
