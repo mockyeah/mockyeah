@@ -51,7 +51,6 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     prependServerURL = false,
     noPolyfill = false,
     noWebSocket = false,
-    webSocketReconnectInterval = 5000,
     host = 'localhost',
     port = 4001,
     portHttps, // e.g., 4443
@@ -76,7 +75,6 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     prependServerURL,
     noPolyfill,
     noWebSocket,
-    webSocketReconnectInterval,
     host,
     port,
     portHttps,
@@ -539,7 +537,7 @@ class Mockyeah {
     if (typeof WebSocket === 'undefined') return;
     if (this.__private.ws) return;
 
-    const { webSocketReconnectInterval, adminPort, adminHost } = this.__private.bootOptions;
+    const { adminPort, adminHost } = this.__private.bootOptions;
 
     const webSocketUrl = `ws://${adminHost}:${adminPort}`;
 
