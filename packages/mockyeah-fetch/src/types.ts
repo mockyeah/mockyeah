@@ -6,7 +6,6 @@ interface BootOptions {
   prependServerURL?: boolean;
   noPolyfill?: boolean;
   noWebSocket?: boolean;
-  webSocketReconnectInterval?: number;
   host?: string;
   port?: number;
   adminHost?: string;
