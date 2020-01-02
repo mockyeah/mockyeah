@@ -576,6 +576,8 @@ class Mockyeah {
           delete this.__private.ws;
 
           reject(new Error('WebSocket closed'));
+
+          this.__private.recording = false;
         };
 
         ws.onmessage = (event: MessageEvent) => {
