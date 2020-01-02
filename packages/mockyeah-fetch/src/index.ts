@@ -14,7 +14,6 @@ import { Expectation } from './Expectation';
 import { parseBody } from './parseBody';
 import {
   BootOptions,
-  ConnectWebSocketOptions,
   FetchOptions,
   MockNormal,
   MockFunction,
@@ -112,7 +111,7 @@ class Mockyeah {
   constructor(bootOptions: Readonly<BootOptions> = DEFAULT_BOOT_OPTIONS) {
     const defaultBootOptions = getDefaultBootOptions(bootOptions);
 
-    const { name, noPolyfill, noWebSocket, aliases, fetch } = defaultBootOptions;
+    const { name, noPolyfill, aliases, fetch } = defaultBootOptions;
 
     this.__private = {
       recording: false,
@@ -127,14 +126,6 @@ class Mockyeah {
       const errorMessage = `${logPrefix} @mockyeah/fetch requires a fetch implementation`;
       debugError(errorMessage);
       throw new Error(errorMessage);
-    }
-
-    if (!noWebSocket) {
-      try {
-        this.connectWebSocket();
-      } catch (error) {
-        // silence
-      }
     }
 
     const aliasReplacements: Record<string, string[]> = {};
@@ -544,7 +535,7 @@ class Mockyeah {
     };
   }
 
-  async connectWebSocket({ retries = Infinity }: ConnectWebSocketOptions = {}) {
+  async connectWebSocket() {
     if (typeof WebSocket === 'undefined') return;
     if (this.__private.ws) return;
 
@@ -554,13 +545,17 @@ class Mockyeah {
 
     debugAdmin(`WebSocket trying to connect to '${webSocketUrl}'.`);
 
-    await new Promise((resolve, reject) => {
-      try {
-        this.__private.ws = new WebSocket(webSocketUrl);
-      } catch (error) {
-        debugAdminError(`WebSocket couldn't connect to '${webSocketUrl}':`, error);
-      }
+    try {
+      this.__private.ws = new WebSocket(webSocketUrl);
+    } catch (error) {
+      debugAdminError(`WebSocket couldn't connect to '${webSocketUrl}':`, error);
 
+      delete this.__private.ws;
+
+      throw error;
+    }
+
+    await new Promise((resolve, reject) => {
       const { ws } = this.__private;
 
       if (ws) {
@@ -572,7 +567,7 @@ class Mockyeah {
 
         ws.onerror = error => {
           debugAdminError('WebSocket errored', error);
-          reject();
+          reject(error);
         };
 
         ws.onclose = () => {
@@ -583,13 +578,7 @@ class Mockyeah {
 
           delete this.__private.ws;
 
-          if (retries > 0) {
-            setTimeout(() => {
-              this.connectWebSocket({ retries: retries - 1 });
-            }, webSocketReconnectInterval);
-          }
-
-          reject();
+          reject(new Error('WebSocket closed'));
         };
 
         ws.onmessage = (event: MessageEvent) => {

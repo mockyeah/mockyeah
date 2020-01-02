@@ -24,10 +24,6 @@ interface BootOptions {
   mockSuiteResolver?: MockSuiteResolver;
 }
 
-interface ConnectWebSocketOptions {
-  retries?: number;
-}
-
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
 type MethodUpper = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'OPTIONS' | 'PATCH';
 type Method = MethodLower | MethodUpper;
@@ -176,7 +172,6 @@ interface Action {
 export {
   Json,
   BootOptions,
-  ConnectWebSocketOptions,
   FetchOptions,
   Method,
   MethodOrAll,
