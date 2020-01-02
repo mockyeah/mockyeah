@@ -573,11 +573,11 @@ class Mockyeah {
         ws.onclose = () => {
           debugAdminError('WebSocket closed');
 
+          this.__private.recording = false;
+
           delete this.__private.ws;
 
           reject(new Error('WebSocket closed'));
-
-          this.__private.recording = false;
         };
 
         ws.onmessage = (event: MessageEvent) => {
