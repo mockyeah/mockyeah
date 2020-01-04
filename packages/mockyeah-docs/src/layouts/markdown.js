@@ -6,7 +6,7 @@ import Default from './default';
 const Markdown = ({ data, ...props }) => {
   const title = data.markdownRemark.frontmatter.title || '';
 
-  console.log('ADJ data', data)
+  console.log('ADJ data', data);
 
   return (
     <>
