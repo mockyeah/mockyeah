@@ -391,7 +391,7 @@ class Mockyeah {
 
   async fallbackFetch(input: RequestInfo, init?: RequestInit, fetchOptions: FetchOptions = {}) {
     const { noProxy } = fetchOptions;
-    const { responseHeaders } = this.__private.bootOptions;
+    const { responseHeaders, fetch } = this.__private.bootOptions;
 
     const url = typeof input === 'string' ? input : input.url;
 
