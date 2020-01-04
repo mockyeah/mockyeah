@@ -43,11 +43,17 @@ interface RequestForHandler {
   body?: any;
 }
 
+interface ResponseObject {
+  status?: number;
+  headers?: Record<string, string>;
+  body?: any;
+}
+
 type ResponderResult<T> = T | Promise<T>;
 
 type ResponderFunction<T> =
-  | ((arg: RequestForHandler) => T)
-  | ((arg: RequestForHandler) => Promise<T>);
+  | ((req: RequestForHandler, res?: ResponseObject) => T)
+  | ((req: RequestForHandler, res?: ResponseObject) => Promise<T>);
 
 type Responder<T> = ResponderResult<T> | ResponderFunction<T>;
 
@@ -61,21 +67,10 @@ interface ResponseOptionsObject {
   status?: Responder<number>;
   type?: Responder<string>;
   latency?: Responder<number>;
-  headers?: Record<string, string>;
+  headers?: Responder<Record<string, string>>;
 }
 
-const responseOptionsKeys = [
-  'fixture',
-  'filePath',
-  'html',
-  'json',
-  'text',
-  'status',
-  'headers',
-  'raw',
-  'latency',
-  'type'
-];
+const responseOptionsResponderKeys = ['json', 'text', 'html', 'raw', 'filePath', 'fixture', 'status', 'type', 'latency', 'headers']
 
 type ResponseOptions = string | ResponseOptionsObject;
 
@@ -179,6 +174,7 @@ export {
   Responder,
   ResponderFunction,
   ResponderResult,
+  ResponseObject,
   Matcher,
   Match,
   MatchFunction,
@@ -192,10 +188,10 @@ export {
   MockFunction,
   MockReturn,
   RequestForHandler,
-  responseOptionsKeys,
   Expectation,
   VerifyCallback,
   RunHandler,
   RunHandlerOrPromise,
-  Action
+  Action,
+  responseOptionsResponderKeys
 };

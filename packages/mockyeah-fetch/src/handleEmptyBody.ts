@@ -1,4 +1,4 @@
-const parseBody = async (res: Response) => {
+const handleEmptyBody = async (res: Response) => {
   const { status } = res;
 
   if (status === 204) return '';
@@ -6,4 +6,4 @@ const parseBody = async (res: Response) => {
   return res.text() || '';
 };
 
-export { parseBody };
+export { handleEmptyBody };
