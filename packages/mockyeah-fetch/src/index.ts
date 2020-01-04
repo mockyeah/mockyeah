@@ -3,7 +3,6 @@ import { parse } from 'url';
 import qs from 'qs';
 import isPlainObject from 'lodash/isPlainObject';
 import flatten from 'lodash/flatten';
-import fromPairs from 'lodash/fromPairs';
 import cookie from 'cookie';
 import debug from 'debug';
 import matches from 'match-deep';
@@ -11,7 +10,9 @@ import { normalize } from './normalize';
 import { isMockEqual } from './isMockEqual';
 import { respond } from './respond';
 import { Expectation } from './Expectation';
-import { parseBody } from './parseBody';
+import { handleEmptyBody } from './handleEmptyBody';
+import { parseResponseBody } from './parseResponseBody';
+import { headersToObject } from './headersToObject';
 import {
   BootOptions,
   FetchOptions,
@@ -24,7 +25,8 @@ import {
   ResponseOptions,
   ResponseOptionsObject,
   RequestForHandler,
-  Action
+  Action,
+  responseOptionsResponderKeys
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
@@ -210,16 +212,7 @@ class Mockyeah {
       return this.fallbackFetch(url, init, { noProxy });
     }
 
-    // TODO: Does this handle lowercase `content-type`?
-    const contentType = inHeaders && inHeaders.get('Content-Type');
-    // TODO: More robust content-type parsing.
-    const isBodyJson = contentType && contentType.includes('application/json');
-
-    const inBody =
-      options.body && isBodyJson
-        ? JSON.parse(options.body)
-        : // TODO: Support forms as key/value object (see https://expressjs.com/en/api.html#req.body)
-          options.body;
+    const inBody = inHeaders && parseResponseBody(inHeaders, options.body);
 
     const query = parsed.query ? qs.parse(parsed.query) : undefined;
     const method: Method = options.method ? (options.method.toLowerCase() as Method) : 'get';
@@ -345,7 +338,32 @@ class Mockyeah {
         matchingMock[0].$meta.expectation.request(requestForHandler);
       }
 
-      const { response, json } = await respond(matchingMock, requestForHandler, bootOptions);
+      let realRes;
+      const resOpts = matchingMock[1];
+
+      const intercept = resOpts && responseOptionsResponderKeys.some(option =>
+        // @ts-ignore
+        typeof resOpts[option] === 'function' && resOpts[option].length > 1
+      );
+
+      if (intercept) {
+        const realResponse = await this.fallbackFetch(url, options);
+
+        const body = parseResponseBody(realResponse.headers, await realResponse.text());
+
+        realRes = {
+          status: realResponse.status,
+          body,
+          headers: headersToObject(realResponse.headers)
+        };
+      }
+
+      const { response, json } = await respond(
+        matchingMock,
+        requestForHandler,
+        bootOptions,
+        realRes
+      );
 
       debugHit(`${logPrefix} @mockyeah/fetch matched mock for`, url, {
         request: requestForHandler,
@@ -410,16 +428,14 @@ class Mockyeah {
 
     let res = await fetch(input, init);
 
-    const body = await parseBody(res);
+    const body = await handleEmptyBody(res);
 
     const { ws, recording } = this.__private;
 
     if (recording) {
       const { status } = res;
 
-      // @ts-ignore
-      const entries = res.headers.entries();
-      const headers = fromPairs([...entries].map(e => [e[0].toLowerCase(), e[1]]));
+      const headers = headersToObject(res.headers);
 
       if (ws) {
         const action: Action = {

@@ -158,9 +158,28 @@ Response options informing mockyeah how to respond to matching requests. Support
 
 For dynamic behavior, the noted methods above can also be defined as functions that return response body values.
 For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises.
-The functions will receive the [Express request object](https://expressjs.com/en/api.html#req) as a first and only argument.
 
-Examples:
+The functions will receive a `req` argument with these properties:
+
+- `url` (`string`)
+- `path` (`string`) alias of `url`
+- `method` (`string`) lowercase
+- `query` (`Record<string, string>`) Query parameters.
+- `headers` (`Record<string, string>`)
+- `cookies` (`Record<string, string>`)
+- `body` (`string` | `Record<string, any>`)
+
+If you wish, mockyeah can also internally fetch and give you the actual response,
+which you can then manipulate or derive a mock response.
+You can enable this behavior by adding a 2nd `res` argument to your
+response option functions:
+
+- `res` has properties:
+  - `status` (`number`)
+  - `headers` (`Record<string, string>`)
+  - `body` (`string` | `Record<string, any>`)
+
+Examples of dynamic responses:
 
 ```js
 mockyeah.get('/service/exists', { json: req => ({ hello: req.query.name }) });
@@ -174,6 +193,21 @@ mockyeah.get('/service/exists', {
 
 ```js
 mockyeah.get('/service/exists', { json: Promise.resolve({ hello: 'there' }) });
+```
+
+```js
+mockyeah.get('https://httpbin.org/json', {
+  json: (req, res) => ({
+    ...(res && res.body),
+    other: 'whatever'
+  })
+});
+```
+
+```js
+mockyeah.get('https://httpbin.org/html', {
+  text: (req, res) => res.body.replace(/<h1/g, '<h2').toUpperCase()
+});
 ```
 
 **Additional options:**

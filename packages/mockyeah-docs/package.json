@@ -41,7 +41,7 @@
     "remark-react": "^6.0.0"
   },
   "devDependencies": {
-    "gatsby-cli": "^2.8.18",
+    "gatsby-cli": "^2.8.22",
     "prettier": "1.18.2"
   }
 }
