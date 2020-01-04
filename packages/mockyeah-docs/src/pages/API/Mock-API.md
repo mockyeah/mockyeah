@@ -154,6 +154,7 @@ Response options informing mockyeah how to respond to matching requests. Support
 - `json` (`Object|Function|Promise`; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
 - `raw` (`String|Function|Promise`; optional) - Text to include in response body. Content-Type is the default Express type if not specified in header.
 - `text` (`String|Function|Promise`; optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
+- `type` (`String|Function|Promise`; optional) - Override/manual content type for response as a file extension or MIME type.
 
 For dynamic behavior, the noted methods above can also be defined as functions that return response body values.
 For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises.
