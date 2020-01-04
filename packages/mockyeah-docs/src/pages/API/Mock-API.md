@@ -160,13 +160,14 @@ For dynamic behavior, the noted methods above can also be defined as functions t
 For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises.
 
 The functions will receive a `req` argument with these properties:
-  - `url` (`string`)
-  - `path` (`string`) alias of `url`
-  - `method` (`string`) lowercase
-  - `query` (`Record<string, string>`) Query parameters.
-  - `headers` (`Record<string, string>`)
-  - `cookies` (`Record<string, string>`)
-  - `body` (`string` | `Record<string, any>`)
+
+- `url` (`string`)
+- `path` (`string`) alias of `url`
+- `method` (`string`) lowercase
+- `query` (`Record<string, string>`) Query parameters.
+- `headers` (`Record<string, string>`)
+- `cookies` (`Record<string, string>`)
+- `body` (`string` | `Record<string, any>`)
 
 If you wish, mockyeah can also internally fetch and give you the actual response,
 which you can then manipulate or derive a mock response.
