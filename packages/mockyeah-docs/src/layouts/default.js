@@ -15,7 +15,7 @@ import SEO from '../components/seo';
 import Menu from './Menu';
 import '../components/layout.css';
 
-const Default = ({ children, ...props }) => {
+const Default = ({ children, title, ...props }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -37,7 +37,9 @@ const Default = ({ children, ...props }) => {
           }
         ]}
       />
-      <SEO />
+      <SEO
+        title={title || data.site.siteMetadata.title}
+      />
       <Header
         siteTitle={data.site.siteMetadata.title}
         siteDescription={data.site.siteMetadata.description}
@@ -67,10 +69,6 @@ const Default = ({ children, ...props }) => {
       </div>
     </>
   );
-};
-
-Default.propTypes = {
-  children: PropTypes.node.isRequired
 };
 
 export default Default;
