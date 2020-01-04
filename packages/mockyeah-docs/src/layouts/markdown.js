@@ -6,8 +6,6 @@ import Default from './default';
 const Markdown = ({ data, ...props }) => {
   const title = data.markdownRemark.frontmatter.title || '';
 
-  console.log('ADJ data', data);
-
   return (
     <>
       <Helmet title={title} titleTemplate={`%s | ${data.site.siteMetadata.title}`} />

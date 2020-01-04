@@ -31,7 +31,7 @@ Open the [docs site at http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 Mockyeah is a monorepo project, the dev tool `lerna` is required to connect the sub-modules in the `./packages` directory. If `lerna` doesn't run when you install the dependencies you can run it manually.
 
-```sh
+```shell
 npx lerna bootstrap
 
 # continue to run, build, and test
