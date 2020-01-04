@@ -37,7 +37,7 @@ const Default = ({ children, title, ...props }) => {
         ]}
       />
       <SEO
-        title={title || data.site.siteMetadata.title}
+        title={title}
       />
       <Header
         siteTitle={data.site.siteMetadata.title}
