@@ -79,7 +79,7 @@ const respond = async (
 
   body = body || '';
 
-  contentType = type ? mime.getType(type) : contentType;
+  contentType = type ? mime.getType(type) || type : contentType;
 
   const headers: RequestInit['headers'] = resOpts.headers
     ? {
