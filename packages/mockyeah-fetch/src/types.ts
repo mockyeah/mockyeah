@@ -21,6 +21,9 @@ interface BootOptions {
   fileResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   fixtureResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   mockSuiteResolver?: MockSuiteResolver;
+  devTools?: boolean;
+  devToolsTimeout?: number;
+  devToolsInterval?: number;
 }
 
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
@@ -70,7 +73,18 @@ interface ResponseOptionsObject {
   headers?: Responder<Record<string, string>>;
 }
 
-const responseOptionsResponderKeys = ['json', 'text', 'html', 'raw', 'filePath', 'fixture', 'status', 'type', 'latency', 'headers']
+const responseOptionsResponderKeys = [
+  'json',
+  'text',
+  'html',
+  'raw',
+  'filePath',
+  'fixture',
+  'status',
+  'type',
+  'latency',
+  'headers'
+];
 
 type ResponseOptions = string | ResponseOptionsObject;
 
@@ -105,11 +119,13 @@ interface Expectation {
 }
 
 interface MatchMeta {
+  id?: string;
   fn?: string;
   regex?: RegExp;
   matchKeys?: pathToRegexp.Key[];
   original?: Match;
   originalNormal?: MatchObject;
+  originalSerialized?: MatchObject; // technically we could replace regex types here
   expectation?: Expectation;
 }
 
@@ -142,15 +158,27 @@ type Mock = [Match, ResponseOptions];
 
 type MockSuite = Mock[];
 
-type MockSuiteResolver = (suiteName: string) => Promise<{ default: MockSuite }>;
+type MockSuiteResolver = (suiteName: string) => Promise<MockSuite & { default?: MockSuite }>;
 
 type MockNormal = [MatchNormal, ResponseOptionsObject];
 
 interface MockReturn {
+  id: string;
+  removedIds: string[];
   expect(match: Match): Expectation;
 }
 
 type MockFunction = (match: Match, res?: ResponseOptions) => MockReturn;
+
+interface MakeMockOptions {
+  keepExisting?: boolean;
+}
+
+interface MakeMockReturn {
+  mock: MockNormal;
+  removed: MockNormal[];
+  removedIndex?: number;
+}
 
 interface FetchOptions {
   dynamicMocks?: Mock[];
@@ -193,5 +221,7 @@ export {
   RunHandler,
   RunHandlerOrPromise,
   Action,
+  MakeMockOptions,
+  MakeMockReturn,
   responseOptionsResponderKeys
 };

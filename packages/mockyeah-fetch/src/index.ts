@@ -13,6 +13,7 @@ import { Expectation } from './Expectation';
 import { handleEmptyBody } from './handleEmptyBody';
 import { parseResponseBody } from './parseResponseBody';
 import { headersToObject } from './headersToObject';
+import { uuid } from './uuid';
 import {
   BootOptions,
   FetchOptions,
@@ -26,7 +27,9 @@ import {
   ResponseOptionsObject,
   RequestForHandler,
   Action,
-  responseOptionsResponderKeys
+  responseOptionsResponderKeys,
+  MakeMockOptions,
+  MakeMockReturn
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
@@ -68,7 +71,10 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     fetch = global.fetch,
     fileResolver,
     fixtureResolver,
-    mockSuiteResolver
+    mockSuiteResolver,
+    devTools,
+    devToolsTimeout = 1000,
+    devToolsInterval = 100
   } = bootOptions;
 
   const defaultBootOptions = {
@@ -90,7 +96,10 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     fetch,
     fileResolver,
     fixtureResolver,
-    mockSuiteResolver
+    mockSuiteResolver,
+    devTools,
+    devToolsTimeout,
+    devToolsInterval
   };
 
   return defaultBootOptions;
@@ -172,7 +181,10 @@ class Mockyeah {
       port,
       portHttps,
       host,
-      mockSuiteResolver
+      mockSuiteResolver,
+      devTools,
+      devToolsTimeout,
+      devToolsInterval
     } = bootOptions;
 
     const { dynamicMocks, dynamicMockSuite, noProxy = bootNoProxy } = fetchOptions;
@@ -185,6 +197,25 @@ class Mockyeah {
       }
     }
 
+    // @ts-ignore
+    if (devTools) {
+      await new Promise(resolve => {
+        let times = 0;
+        const interval = setInterval(() => {
+          // @ts-ignore
+          times += 1;
+          // @ts-ignore
+          if (
+            window.__MOCKYEAH_DEVTOOLS_EXTENSION__?.loadedMocks ||
+            times > devToolsTimeout / devToolsInterval
+          ) {
+            resolve();
+            clearInterval(interval);
+          }
+        }, devToolsInterval);
+      });
+    }
+
     // TODO: Support `Request` `input` object instead of `init`.
 
     let url = typeof input === 'string' ? input : input.url;
@@ -192,7 +223,10 @@ class Mockyeah {
     const options = init || {};
 
     const dynamicMocksNormal = (dynamicMocks || [])
-      .map(dynamicMock => dynamicMock && this.makeMock(...dynamicMock))
+      .map(
+        dynamicMock =>
+          dynamicMock && this.makeMock(dynamicMock[0], dynamicMock[1], { keepExisting: true }).mock
+      )
       .filter(Boolean);
 
     const parsed = parse(url);
@@ -248,8 +282,7 @@ class Mockyeah {
       const mockSuiteLoadeds = await Promise.all(mockSuiteLoads);
       mockSuiteLoadeds.forEach((mockSuiteLoaded, index) => {
         const name = mockSuiteNames[index];
-        const { default: mockSuite } = mockSuiteLoaded;
-        mockSuite.forEach(mock => {
+        (mockSuiteLoaded.default || mockSuiteLoaded).forEach(mock => {
           const [match, response] = mock;
           const newMatch = (isPlainObject(match)
             ? { ...(match as MatchObject) }
@@ -264,7 +297,7 @@ class Mockyeah {
                     .includes(name)
                 : false
           };
-          dynamicMocksNormal.push(this.makeMock(newMatch, response));
+          dynamicMocksNormal.push(this.makeMock(newMatch, response, { keepExisting: true }).mock);
         });
       });
     }
@@ -341,10 +374,13 @@ class Mockyeah {
       let realRes;
       const resOpts = matchingMock[1];
 
-      const intercept = resOpts && responseOptionsResponderKeys.some(option =>
-        // @ts-ignore
-        typeof resOpts[option] === 'function' && resOpts[option].length > 1
-      );
+      const intercept =
+        resOpts &&
+        responseOptionsResponderKeys.some(
+          option =>
+            // @ts-ignore
+            typeof resOpts[option] === 'function' && resOpts[option].length > 1
+        );
 
       if (intercept) {
         const realResponse = await this.fallbackFetch(url, options);
@@ -510,14 +546,23 @@ class Mockyeah {
     this.__private.mocks = [];
   }
 
-  makeMock(match: Match, res?: ResponseOptions): MockNormal {
+  makeMock(match: Match, res?: ResponseOptions, options: MakeMockOptions = {}): MakeMockReturn {
+    const { keepExisting } = options;
     const matchNormal = normalize(match);
 
     const { mocks } = this.__private;
 
-    const existingIndex = mocks.findIndex(m => isMockEqual(matchNormal, m[0]));
-    if (existingIndex >= 0) {
-      mocks.splice(existingIndex, 1);
+    const removed: MockNormal[] = [];
+
+    let firstExistingIndex;
+
+    if (!keepExisting) {
+      const existingIndex = mocks.findIndex(m => isMockEqual(matchNormal, m[0]));
+      if (existingIndex >= 0) {
+        firstExistingIndex = firstExistingIndex ?? existingIndex;
+        removed.push(mocks[existingIndex]);
+        mocks.splice(existingIndex, 1);
+      }
     }
 
     let resObj = typeof res === 'string' ? ({ text: res } as ResponseOptionsObject) : res;
@@ -525,28 +570,59 @@ class Mockyeah {
 
     if (matchNormal.$meta) {
       matchNormal.$meta.expectation = new Expectation(matchNormal);
+      matchNormal.$meta.id = uuid();
     }
 
-    return [matchNormal, resObj];
+    return { mock: [matchNormal, resObj], removed, removedIndex: firstExistingIndex };
   }
 
   mock(match: Match, res?: ResponseOptions): MockReturn {
-    const mockNormal = this.makeMock(match, res);
+    const { mock: mockNormal, removed, removedIndex } = this.makeMock(match, res);
+
+    const id = mockNormal[0].$meta?.id as string;
 
     const { mocks, logPrefix } = this.__private;
 
     debugMock(`${logPrefix} mocked`, match, res);
 
-    mocks.push(mockNormal);
+    if (removedIndex != null) {
+      mocks.splice(removedIndex, 0, mockNormal);
+    } else {
+      mocks.push(mockNormal);
+    }
 
     const expectation = (mockNormal[0].$meta && mockNormal[0].$meta.expectation) as Expectation;
 
+    const removedIds = removed.map(mock => mock[0]?.$meta?.id) as string[];
+
     const api = expectation.api.bind(expectation);
-    const expect = (_match: Match) => api(_match);
+    const expect = (_match: Match): Expectation => api(_match);
 
     return {
-      expect: expect.bind(expectation)
+      id,
+      removedIds,
+      expect
     };
+  }
+
+  /**
+   * Returns true if unmocked, false if not.
+   * @param id
+   */
+  unmock(id: string): boolean {
+    const { mocks, logPrefix } = this.__private;
+    const index = mocks.findIndex(m => m[0].$meta?.id === id);
+
+    if (index === -1) {
+      debugMock(`${logPrefix} didn't find id to unmock`, id);
+      return false;
+    }
+
+    mocks.splice(index, 1);
+
+    debugMock(`${logPrefix} unmocked`, id);
+
+    return true;
   }
 
   async connectWebSocket() {
