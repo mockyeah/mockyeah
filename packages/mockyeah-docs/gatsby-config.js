@@ -58,7 +58,7 @@ module.exports = {
         defaultLayouts: {
           default: require.resolve('./src/layouts/default.js')
         },
-        gatsbyRemarkPlugins: [`gatsby-remark-autolink-headers`]
+        gatsbyRemarkPlugins: [`gatsby-remark-autolink-headers`, `gatsby-remark-prismjs`]
       }
     },
     {
