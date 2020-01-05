@@ -5,6 +5,7 @@ node_js:
   - "8"
 script:
   - ./packages/mockyeah-tools/node_modules/.bin/prettier --check $(git ls-files | grep -E '.(js|json|md)$')
+  - git diff --name-only HEAD...$TRAVIS_BRANCH
   # skip if only changes to docs or READMEs
   - git diff --name-only HEAD...$TRAVIS_BRANCH | grep -v mockyeah-docs | grep -v README.md || travis_terminate 0
   - npm run test:ci
