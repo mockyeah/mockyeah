@@ -13,6 +13,7 @@ import { Expectation } from './Expectation';
 import { handleEmptyBody } from './handleEmptyBody';
 import { parseResponseBody } from './parseResponseBody';
 import { headersToObject } from './headersToObject';
+import { uuid } from './uuid'
 import {
   BootOptions,
   FetchOptions,
@@ -525,6 +526,7 @@ class Mockyeah {
 
     if (matchNormal.$meta) {
       matchNormal.$meta.expectation = new Expectation(matchNormal);
+      matchNormal.$meta.id = uuid();
     }
 
     return [matchNormal, resObj];
@@ -532,6 +534,8 @@ class Mockyeah {
 
   mock(match: Match, res?: ResponseOptions): MockReturn {
     const mockNormal = this.makeMock(match, res);
+
+    const id = mockNormal[0].$meta?.id as string;
 
     const { mocks, logPrefix } = this.__private;
 
@@ -545,8 +549,17 @@ class Mockyeah {
     const expect = (_match: Match) => api(_match);
 
     return {
+      id,
       expect: expect.bind(expectation)
     };
+  }
+
+  unmock(id: string): boolean {
+    const { mocks } = this.__private;
+    const index = mocks.findIndex(m => m[0].$meta?.id === id);
+    if (index === -1) return false;
+    mocks.splice(index, 1);
+    return true;
   }
 
   async connectWebSocket() {

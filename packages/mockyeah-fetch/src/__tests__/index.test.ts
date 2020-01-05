@@ -71,6 +71,24 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual('');
   });
 
+  test('should allow unmocking by id', async () => {
+    mockyeah = new Mockyeah(options);
+
+    const { id } = mockyeah.mock('*');
+
+    const response = await mockyeah.fetch('https://example.local');
+    const data = await response.text();
+
+    expect(response.status).toEqual(200);
+    expect(data).toEqual('');
+
+    mockyeah.unmock(id);
+
+    const response2 = await mockyeah.fetch('https://example.local');
+
+    expect(response2.status).toEqual(404);
+  });
+
   test('should work with only wildcard', async () => {
     mockyeah = new Mockyeah(options);
 

@@ -105,6 +105,7 @@ interface Expectation {
 }
 
 interface MatchMeta {
+  id?: string;
   fn?: string;
   regex?: RegExp;
   matchKeys?: pathToRegexp.Key[];
@@ -147,6 +148,7 @@ type MockSuiteResolver = (suiteName: string) => Promise<{ default: MockSuite }>;
 type MockNormal = [MatchNormal, ResponseOptionsObject];
 
 interface MockReturn {
+  id: string;
   expect(match: Match): Expectation;
 }
 
