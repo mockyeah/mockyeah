@@ -6,6 +6,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
+import 'prismjs/themes/prism.css';
 
 const components = {
   a: ({ href, ...props }) => <Link to={href} {...props} />

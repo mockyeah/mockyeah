@@ -9,7 +9,7 @@ const Markdown = ({ data, ...props }) => {
   return (
     <>
       <Helmet title={title} titleTemplate={`%s | ${data.site.siteMetadata.title}`} />
-      <Default>
+      <Default title={title}>
         <div dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }} />
       </Default>
     </>
