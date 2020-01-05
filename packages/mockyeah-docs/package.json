@@ -26,7 +26,7 @@
     "gatsby-plugin-mdx": "^1.0.43",
     "gatsby-plugin-offline": "3.0.8",
     "gatsby-plugin-react-helmet": "3.1.8",
-    "gatsby-plugin-sharp": "2.2.25",
+    "gatsby-plugin-sharp": "^2.3.10",
     "gatsby-plugin-sitemap": "^2.2.14",
     "gatsby-remark-autolink-headers": "^2.1.11",
     "gatsby-remark-prismjs": "^3.3.28",
