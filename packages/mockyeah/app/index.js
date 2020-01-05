@@ -103,6 +103,9 @@ module.exports = function App(config) {
     return mockyeahFetch.methods[method](match, newResOpts);
   });
 
+  app.mock = app.locals.mockyeahFetch.mock;
+  app.unmock = app.locals.mockyeahFetch.unmock;
+
   app.locals.expect = mockyeahFetch.expect;
 
   app.use('/', proxyRoute);
