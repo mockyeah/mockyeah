@@ -1,6 +1,7 @@
 import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Alert } from './Alert';
 import logo from '../images/logo/mockyeah-600.png';
 
 const Header = ({ siteTitle, siteDescription }) => (
@@ -63,6 +64,14 @@ const Header = ({ siteTitle, siteDescription }) => (
         </div>
       </div>
     </div>
+
+    <Alert>
+      <div style={{ textAlign: 'center' }}>
+        <strong>Notice:</strong> These docs are for mockyeah <code>1.x</code> & above. For legacy
+        mockyeah <code>0.x</code>, please see{' '}
+        <a href="https://mockyeah.github.io/mockyeah">mockyeah.github.io/mockyeah</a>.
+      </div>
+    </Alert>
   </header>
 );
 
