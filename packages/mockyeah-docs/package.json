@@ -42,8 +42,10 @@
     "remark-react": "^6.0.0"
   },
   "devDependencies": {
-    "@mockyeah/tools": "^1.0.0-alpha.6",
     "gatsby-cli": "^2.8.22",
     "prettier": "1.18.2"
+  },
+  "optionalDependencies": {
+    "@mockyeah/tools": "^1.0.0-alpha.6"
   }
 }
