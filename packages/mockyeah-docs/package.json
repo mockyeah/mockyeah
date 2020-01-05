@@ -18,7 +18,6 @@
   "dependencies": {
     "@mdx-js/mdx": "^1.4.5",
     "@mdx-js/react": "^1.4.5",
-    "@mockyeah/tools": "^1.0.0-alpha.6",
     "gatsby": "^2.18.11",
     "gatsby-image": "2.2.20",
     "gatsby-plugin-catch-links": "^2.1.10",
@@ -27,7 +26,7 @@
     "gatsby-plugin-mdx": "^1.0.43",
     "gatsby-plugin-offline": "3.0.8",
     "gatsby-plugin-react-helmet": "3.1.8",
-    "gatsby-plugin-sharp": "2.2.25",
+    "gatsby-plugin-sharp": "^2.3.10",
     "gatsby-plugin-sitemap": "^2.2.14",
     "gatsby-remark-autolink-headers": "^2.1.11",
     "gatsby-remark-prismjs": "^3.3.28",
@@ -45,5 +44,8 @@
   "devDependencies": {
     "gatsby-cli": "^2.8.22",
     "prettier": "1.18.2"
+  },
+  "optionalDependencies": {
+    "@mockyeah/tools": "^1.0.0-alpha.6"
   }
 }
