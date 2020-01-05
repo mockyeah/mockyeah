@@ -6,9 +6,11 @@ node_js:
 script:
   - ./packages/mockyeah-tools/node_modules/.bin/prettier --check $(git ls-files | grep -E '.(js|json|md)$')
   - echo $TRAVIS_BRANCH
-  - '[ -n "$TRAVIS_PULL_REQUEST_BRANCH" ] && git diff --name-only $TRAVIS_BRANCH...$TRAVIS_PULL_REQUEST_BRANCH'
+  - echo $TRAVIS_PULL_REQUEST_BRANCH
+  - echo $TRAVIS_PULL_REQUEST_SHA
+  - '[ -n "$TRAVIS_PULL_REQUEST_SHA" ] && git diff --name-only $TRAVIS_BRANCH...$TRAVIS_PULL_REQUEST_SHA'
   # skip if only changes to docs or READMEs
-  - '[ -n "$TRAVIS_PULL_REQUEST_BRANCH" ] && git diff --name-only $TRAVIS_BRANCH...$TRAVIS_PULL_REQUEST_BRANCH | grep -v mockyeah-docs | grep -v README.md || travis_terminate 0'
+  - '[ -n "$TRAVIS_PULL_REQUEST_SHA" ] && git diff --name-only $TRAVIS_BRANCH...$TRAVIS_PULL_REQUEST_SHA | grep -v mockyeah-docs | grep -v README.md || travis_terminate 0'
   - npm run test:ci
 after_success:
   - npm run test:coverage:report
