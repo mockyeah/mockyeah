@@ -69,7 +69,7 @@ const Header = ({ siteTitle, siteDescription }) => (
       <div style={{ textAlign: 'center' }}>
         <strong>Notice:</strong> These docs are for mockyeah <code>1.x</code> & above. For legacy
         mockyeah <code>0.x</code>, please see{' '}
-        <a href="https://mockyeah.github.io/mockyeah">mockyeah.github.io/mockyeah</a>.
+        <a href="https://mockyeah.github.io/mockyeah/">https://mockyeah.github.io/mockyeah/</a>.
       </div>
     </Alert>
   </header>
