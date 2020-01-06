@@ -249,8 +249,7 @@ class Mockyeah {
       const mockSuiteLoadeds = await Promise.all(mockSuiteLoads);
       mockSuiteLoadeds.forEach((mockSuiteLoaded, index) => {
         const name = mockSuiteNames[index];
-        const { default: mockSuite } = mockSuiteLoaded;
-        mockSuite.forEach(mock => {
+        (mockSuiteLoaded.default || mockSuiteLoaded).forEach(mock => {
           const [match, response] = mock;
           const newMatch = (isPlainObject(match)
             ? { ...(match as MatchObject) }
