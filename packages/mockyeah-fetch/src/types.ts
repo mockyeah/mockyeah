@@ -143,7 +143,7 @@ type Mock = [Match, ResponseOptions];
 
 type MockSuite = Mock[];
 
-type MockSuiteResolver = (suiteName: string) => Promise<{ default: MockSuite }>;
+type MockSuiteResolver = (suiteName: string) => Promise<MockSuite & { default?: MockSuite }>;
 
 type MockNormal = [MatchNormal, ResponseOptionsObject];
 
