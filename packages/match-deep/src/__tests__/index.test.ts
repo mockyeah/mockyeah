@@ -1,4 +1,4 @@
-import matches from '../index';
+import matches from '..';
 
 describe('matches', () => {
   test('reports all deep errors by default', () => {
@@ -41,5 +41,97 @@ describe('matches', () => {
     );
 
     expect(match.errors).toHaveLength(1);
+  });
+
+  test('matches regex', () => {
+    const match = matches({
+      a: 'cool in the city'
+    }, {
+      a: /in.*he/
+    });
+
+    expect(match.result).toBe(true);
+  });
+
+  test('does not match regex', () => {
+    const match = matches({
+      a: 'cool in the city'
+    }, {
+      a: /a.*b/
+    });
+
+    expect(match.result).toBe(false);
+  });
+
+  test('matches serialized regex as source', () => {
+    const match = matches({
+      a: 'cool in the city'
+    }, {
+      a: { $regex: 'in\\s.*[it]{2}y$' }
+    }, {
+      serializedRegex: true
+    });
+
+    expect(match.result).toBe(true);
+  });
+
+  test('does not match serialized regex as source', () => {
+    const match = matches({
+      a: 'cool in the city'
+    }, {
+      a: { $regex: 'a.*b' }
+    }, {
+      serializedRegex: true
+    });
+
+    expect(match.result).toBe(false);
+  });
+
+  test('matches serialized regex with source', () => {
+    const match = matches({
+      a: 'cool in the city'
+    }, {
+      a: { $regex: { source: 'in\\s.*[it]{2}y$' } }
+    }, {
+      serializedRegex: true
+    });
+
+    expect(match.result).toBe(true);
+  });
+
+  test('does not match serialized regex with source', () => {
+    const match = matches({
+      a: 'cool in the city'
+    }, {
+      a: { $regex: { source: 'a.*b' } }
+    }, {
+      serializedRegex: true
+    });
+
+    expect(match.result).toBe(false);
+  });
+
+  test('matches serialized regex with source and flags', () => {
+    const match = matches({
+      a: 'cool in the city'
+    }, {
+      a: { $regex: { source: 'IN\\s.*[IT]{2}y$', flags: 'i' } }
+    }, {
+      serializedRegex: true
+    });
+
+    expect(match.result).toBe(true);
+  });
+
+  test('does not match serialized regex with source and flags', () => {
+    const match = matches({
+      a: 'cool in the city'
+    }, {
+      a: { $regex: { source: 'a.*b', flags: 'i' } }
+    }, {
+      serializedRegex: true
+    });
+
+    expect(match.result).toBe(false);
   });
 });
