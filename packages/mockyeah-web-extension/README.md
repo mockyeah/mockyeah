@@ -4,7 +4,10 @@
 
 <img src="https://raw.githubusercontent.com/mockyeah/mockyeah/master/packages/mockyeah-docs/src/images/logo/mockyeah-600.png" height="200" />
 
-This extension for Chrome DevTools provides a UI to create `mockyeah` mocks to be used in the current page. You can create them based on Network entries or from scratch. You can edit mocks you've created. Chrome will save them so they're still there if you close & re-open. The extension interacts with `@mockyeah/fetch` on your web page, so it looks for a `window.__MOCKYEAH__` variable assigned to a mockyeah instance you create in your app source code (perhaps only development builds) with the `devTools` option enabled, as follows:
+This extension for Chrome DevTools provides a UI to create `mockyeah` mocks to be used in the current page.
+You can create them based on Network entries or from scratch.
+You can edit mocks you've created. Chrome will save them so they're still there if you close & re-open.
+The extension interacts with `@mockyeah/fetch` on your web page, so it looks for a `window.__MOCKYEAH__` variable assigned to a `mockyeah` instance you create in your app source code (perhaps only development builds) with the `devTools` option enabled, as follows:
 
 ```js
 import Mockyeah from '@mockyeah/fetch';
