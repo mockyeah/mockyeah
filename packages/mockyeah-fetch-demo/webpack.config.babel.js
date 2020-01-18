@@ -10,7 +10,7 @@ export default (env = {}) => ({
   module: {
     rules: [
       {
-        test: /\.[jt]s$/,
+        test: /\.ts$/,
         exclude: /node_modules/,
         use: 'babel-loader'
       },
