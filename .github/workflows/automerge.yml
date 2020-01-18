@@ -26,7 +26,7 @@ jobs:
           MERGE_METHOD: "squash"
           MERGE_COMMIT_MESSAGE: "pull-request-title"
           MERGE_FORKS: "false"
-          MERGE_RETRIES: "15"
+          MERGE_RETRIES: "20"
           MERGE_RETRY_SLEEP: "60000"
           MERGE_DELETE_BRANCH: "true"
           UPDATE_LABELS: ""
