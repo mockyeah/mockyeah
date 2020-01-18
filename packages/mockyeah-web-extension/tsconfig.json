@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2017", // Node.js 8
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "sourceMap": false,
+    "declaration": false,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmitOnError": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "allowJs": false
+  },
+  "include": ["src"]
+}

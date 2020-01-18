@@ -18,7 +18,8 @@ const isMockEqual = (match1: MatchObject, match2: MatchObject) => {
     on1.method === on2.method &&
     isEqual(on1.query, on2.query) &&
     isEqual(on1.body, on2.body) &&
-    isEqual(on1.headers, on2.headers)
+    isEqual(on1.headers, on2.headers) &&
+    isEqual(on1.cookies, on2.cookies)
   );
 };
 

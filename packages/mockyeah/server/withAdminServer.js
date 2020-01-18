@@ -41,6 +41,11 @@ const withAdminServer = ({ app, instance }) => {
       });
 
       ws.send(JSON.stringify({ type: 'connected' }));
+
+      // In case we didn't connect before the record event, send it again.
+      if (app.locals.recording) {
+        onRecord();
+      }
     });
   }
 };

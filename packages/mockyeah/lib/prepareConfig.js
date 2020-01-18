@@ -13,6 +13,7 @@ const configDefaults = {
   verbose: false,
   proxy: true,
   record: false,
+  latency: undefined,
   noWebSocket: false,
   adminServer: true,
   // TODO: Implement support for HTTPS admin server protocol.

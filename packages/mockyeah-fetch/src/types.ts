@@ -6,7 +6,6 @@ interface BootOptions {
   prependServerURL?: boolean;
   noPolyfill?: boolean;
   noWebSocket?: boolean;
-  webSocketReconnectInterval?: number;
   host?: string;
   port?: number;
   adminHost?: string;
@@ -15,15 +14,16 @@ interface BootOptions {
   suiteHeader?: string;
   suiteCookie?: string;
   ignorePrefix?: string;
+  latency?: Responder<number>;
   fetch?: WindowOrWorkerGlobalScope['fetch'];
   aliases?: string[][];
   responseHeaders?: boolean;
   fileResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   fixtureResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
-interface ConnectWebSocketOptions {
-  retries?: number;
+  mockSuiteResolver?: MockSuiteResolver;
+  devTools?: boolean;
+  devToolsTimeout?: number;
+  devToolsInterval?: number;
 }
 
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
@@ -46,11 +46,17 @@ interface RequestForHandler {
   body?: any;
 }
 
+interface ResponseObject {
+  status?: number;
+  headers?: Record<string, string>;
+  body?: any;
+}
+
 type ResponderResult<T> = T | Promise<T>;
 
 type ResponderFunction<T> =
-  | ((arg: RequestForHandler) => T)
-  | ((arg: RequestForHandler) => Promise<T>);
+  | ((req: RequestForHandler, res?: ResponseObject) => T)
+  | ((req: RequestForHandler, res?: ResponseObject) => Promise<T>);
 
 type Responder<T> = ResponderResult<T> | ResponderFunction<T>;
 
@@ -59,25 +65,25 @@ interface ResponseOptionsObject {
   text?: Responder<string>;
   html?: Responder<string>;
   raw?: Responder<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  filePath: Responder<string>;
-  fixture: Responder<string>;
+  filePath?: Responder<string>;
+  fixture?: Responder<string>;
   status?: Responder<number>;
   type?: Responder<string>;
   latency?: Responder<number>;
-  headers: Record<string, string>;
+  headers?: Responder<Record<string, string>>;
 }
 
-const responseOptionsKeys = [
-  'fixture',
-  'filePath',
-  'html',
+const responseOptionsResponderKeys = [
   'json',
   'text',
-  'status',
-  'headers',
+  'html',
   'raw',
+  'filePath',
+  'fixture',
+  'status',
+  'type',
   'latency',
-  'type'
+  'headers'
 ];
 
 type ResponseOptions = string | ResponseOptionsObject;
@@ -113,14 +119,14 @@ interface Expectation {
 }
 
 interface MatchMeta {
+  id?: string;
   fn?: string;
   regex?: RegExp;
   matchKeys?: pathToRegexp.Key[];
   original?: Match;
   originalNormal?: MatchObject;
-  // expectation?: Expectation;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  expectation?: any;
+  originalSerialized?: MatchObject; // technically we could replace regex types here
+  expectation?: Expectation;
 }
 
 interface MatchObject {
@@ -129,6 +135,7 @@ interface MatchObject {
   method?: MatchString<MethodOrAll>;
   query?: Matcher<Record<string, MatchString>>;
   headers?: Matcher<Record<string, MatchString>>;
+  cookies?: Matcher<Record<string, MatchString>>;
   // TODO: Type out `body`.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
@@ -140,15 +147,42 @@ interface MatchFunction {
   (req: RequestForHandler): boolean;
   $meta?: MatchMeta;
 }
-type MatchNormal = MatchObject | MatchFunction;
-type Match = string | RegExp | MatchNormal;
+type MatchNormal =
+  | (MatchObject & {
+      url(value: string): boolean;
+    })
+  | MatchFunction;
+type Match = string | RegExp | MatchObject | MatchFunction;
 
 type Mock = [Match, ResponseOptions];
 
+type MockSuite = Mock[];
+
+type MockSuiteResolver = (suiteName: string) => Promise<MockSuite & { default?: MockSuite }>;
+
 type MockNormal = [MatchNormal, ResponseOptionsObject];
+
+interface MockReturn {
+  id: string;
+  removedIds: string[];
+  expect(match: Match): Expectation;
+}
+
+type MockFunction = (match: Match, res?: ResponseOptions) => MockReturn;
+
+interface MakeMockOptions {
+  keepExisting?: boolean;
+}
+
+interface MakeMockReturn {
+  mock: MockNormal;
+  removed: MockNormal[];
+  removedIndex?: number;
+}
 
 interface FetchOptions {
   dynamicMocks?: Mock[];
+  dynamicMockSuite?: string;
   noProxy?: boolean;
 }
 
@@ -160,7 +194,6 @@ interface Action {
 export {
   Json,
   BootOptions,
-  ConnectWebSocketOptions,
   FetchOptions,
   Method,
   MethodOrAll,
@@ -169,18 +202,26 @@ export {
   Responder,
   ResponderFunction,
   ResponderResult,
+  ResponseObject,
   Matcher,
   Match,
   MatchFunction,
   MatchObject,
   MatchString,
+  MatchNormal,
   Mock,
+  MockSuite,
+  MockSuiteResolver,
   MockNormal,
+  MockFunction,
+  MockReturn,
   RequestForHandler,
-  responseOptionsKeys,
   Expectation,
   VerifyCallback,
   RunHandler,
   RunHandlerOrPromise,
-  Action
+  Action,
+  MakeMockOptions,
+  MakeMockReturn,
+  responseOptionsResponderKeys
 };

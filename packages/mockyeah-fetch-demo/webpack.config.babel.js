@@ -10,7 +10,7 @@ export default (env = {}) => ({
   module: {
     rules: [
       {
-        test: /\.[jt]s$/,
+        test: /\.ts$/,
         exclude: /node_modules/,
         use: 'babel-loader'
       },
@@ -21,5 +21,9 @@ export default (env = {}) => ({
       }
     ]
   },
-  plugins: [new HtmlWebpackPlugin()]
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: '@mockyeah/fetch demo'
+    })
+  ]
 });

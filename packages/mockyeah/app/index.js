@@ -84,6 +84,7 @@ module.exports = function App(config) {
     noProxy: !app.config.proxy,
     host: app.config.host,
     port: app.config.port,
+    latency: app.config.latency,
     portHttps: app.config.portHttps,
     suiteHeader: app.config.suiteHeader,
     suiteCookie: app.config.suiteCookie,
@@ -101,6 +102,9 @@ module.exports = function App(config) {
 
     return mockyeahFetch.methods[method](match, newResOpts);
   });
+
+  app.mock = app.locals.mockyeahFetch.mock;
+  app.unmock = app.locals.mockyeahFetch.unmock;
 
   app.locals.expect = mockyeahFetch.expect;
 

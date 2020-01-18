@@ -4,7 +4,8 @@ import pathToRegexp from 'path-to-regexp';
 import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
 import isRegExp from 'lodash/isRegExp';
-import { MatchObject, MatchString, Match, Method } from './types';
+import mapValues from 'lodash/mapValues';
+import { MatchNormal, MatchObject, MatchFunction, MatchString, Match, Method } from './types';
 
 const decodedPortRegex = /^(\/?https?.{3}[^/:?]+):/;
 const decodedProtocolRegex = /^(\/?https?).{3}/;
@@ -40,6 +41,22 @@ const stripQuery = (url: string) => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const serializeObject = (object: any): any =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  mapValues(object, (value: any) => {
+    if (isRegExp(value)) {
+      return {
+        $regex: {
+          source: value.source,
+          flags: value.flags
+        }
+      };
+    }
+    if (isPlainObject(value)) return mapValues(value, v => serializeObject(v));
+    return value;
+  });
+
 const leadingSlashRegex = /^\//;
 const leadUrlEncodedProtocolRegex = /^(https?)%3A%2F%2F/;
 
@@ -58,7 +75,7 @@ const makeRequestUrl = (url: string) => {
     : url;
 };
 
-const normalize = (match: Match, incoming?: boolean) => {
+const normalize = (match: Match, incoming?: boolean): MatchNormal => {
   if (typeof match === 'function') return match;
 
   const originalMatch = isPlainObject(match) ? { ...(match as MatchObject) } : match;
@@ -91,14 +108,7 @@ const normalize = (match: Match, incoming?: boolean) => {
     match.method = match.method.toLowerCase() as Method;
   }
 
-  const originalNormal = {
-    ...match
-  };
-
   const $meta = { ...(match.$meta || {}) };
-
-  $meta.original = originalMatch;
-  $meta.originalNormal = originalNormal;
 
   if (match.path) {
     match.url = match.path;
@@ -114,11 +124,34 @@ const normalize = (match: Match, incoming?: boolean) => {
 
     const stripped = stripQuery(match.url);
 
-    match.url = stripped.url.replace(/\/+$/, '');
-    match.url = match.url || '/';
+    match.url = stripped.url.replace(/\/+$/, '') || '/';
 
-    originalNormal.url = match.url;
+    match.query = isPlainObject(match.query)
+      ? { ...stripped.query, ...match.query }
+      : match.query || stripped.query;
+  }
 
+  if (isEmpty(match.query)) {
+    delete match.query;
+  }
+
+  if (isEmpty(match.cookies)) {
+    delete match.cookies;
+  }
+
+  const originalNormal = {
+    ...match
+  };
+
+  if (!match.url) {
+    originalNormal.url = '*';
+  }
+
+  $meta.original = originalMatch;
+  $meta.originalNormal = originalNormal;
+  $meta.originalSerialized = serializeObject(originalNormal);
+
+  if (typeof match.url === 'string') {
     if (!incoming) {
       const matchKeys: pathToRegexp.Key[] = [];
       // `pathToRegexp` mutates `matchKeys` to contain a list of named parameters
@@ -128,10 +161,6 @@ const normalize = (match: Match, incoming?: boolean) => {
       $meta.matchKeys = matchKeys;
       $meta.fn = match.url.toString();
     }
-
-    match.query = isPlainObject(match.query)
-      ? { ...stripped.query, ...match.query }
-      : match.query || stripped.query;
   } else if (isRegExp(match.url)) {
     if (!incoming) {
       const regex = match.url;
@@ -145,9 +174,7 @@ const normalize = (match: Match, incoming?: boolean) => {
     match.url = u => fn(u) || fn(`/${u}`);
   }
 
-  match.$meta = $meta;
-
-  return match;
+  return { ...match, $meta } as MatchNormal;
 };
 
 export { stripQuery };

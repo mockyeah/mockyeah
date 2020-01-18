@@ -1,4 +1,4 @@
-import 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch';
 import Mockyeah from '../index';
 
 // @ts-ignore
@@ -6,15 +6,22 @@ global.fetch = jest.fn();
 // @ts-ignore
 window.fetch = global.fetch;
 
+const options = {
+  noWebSocket: true,
+  noProxy: true,
+  noPolyfill: true,
+  fetch
+};
+
 describe('@mockyeah/fetch', () => {
-  let mockyeah;
+  let mockyeah: Mockyeah;
 
   afterEach(() => {
     if (mockyeah) mockyeah.reset();
   });
 
   test('should work with new constructor', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah(options);
 
     mockyeah.mock('https://example.local', { json: { a: 1 } });
 
@@ -26,7 +33,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should ignore prefix with defaults', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah(options);
 
     mockyeah.mock('https://example.local', { json: { a: 2 } });
 
@@ -52,8 +59,38 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
+  test('should work with no response options', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock('*');
+
+    const response = await mockyeah.fetch('https://example.local');
+    const data = await response.text();
+
+    expect(response.status).toEqual(200);
+    expect(data).toEqual('');
+  });
+
+  test('should allow unmocking by id', async () => {
+    mockyeah = new Mockyeah(options);
+
+    const { id } = mockyeah.mock('*');
+
+    const response = await mockyeah.fetch('https://example.local');
+    const data = await response.text();
+
+    expect(response.status).toEqual(200);
+    expect(data).toEqual('');
+
+    mockyeah.unmock(id);
+
+    const response2 = await mockyeah.fetch('https://example.local');
+
+    expect(response2.status).toEqual(404);
+  });
+
   test('should work with only wildcard', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah(options);
 
     mockyeah.mock('*', { json: { a: 1 } });
 
@@ -64,8 +101,51 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
+  test('should match cookie header', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock(
+      {
+        cookies: {
+          ok: 'yes'
+        }
+      },
+      { text: 'ok' }
+    );
+
+    const response = await mockyeah.fetch('https://example.local', {
+      headers: {
+        Cookie: 'ok=yes'
+      }
+    });
+    const data = await response.text();
+
+    expect(data).toEqual('ok');
+  });
+
+  test('should fail to match cookie header', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock(
+      {
+        cookies: {
+          ok: 'yes'
+        }
+      },
+      { text: 'ok' }
+    );
+
+    const response = await mockyeah.fetch('https://example.local', {
+      headers: {
+        Cookie: 'ok=no'
+      }
+    });
+
+    expect(response.status).toEqual(404);
+  });
+
   test('should work with regex', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah(options);
 
     mockyeah.mock(/https:\/\/e.*?e\.local/, { json: { a: 1 } });
 
@@ -76,8 +156,84 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
+  test('should work with regex not matching', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock(/oops/, { json: { a: 1 } });
+
+    const response = await mockyeah.fetch('https://example.local');
+
+    expect(response.status).toBe(404);
+  });
+
+  test('should intercept', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock('https://httpbin.org/html', {
+      status: 206,
+      text: (req, res) => `${res.body} extravaganza`
+    });
+
+    const response = await mockyeah.fetch('https://httpbin.org/html');
+
+    expect(response.status).toBe(206);
+    const text = await response.text();
+    expect(text).toContain('<html');
+    expect(text).toContain('extravaganza');
+  });
+
+  test('should intercept based on response option function length alone', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock('https://httpbin.org/html', {
+      status: 206,
+      text: (req, res) => `${res.body} extravaganza`
+    });
+
+    const response = await mockyeah.fetch('https://httpbin.org/html');
+
+    expect(response.status).toBe(206);
+    const text = await response.text();
+    expect(text).toContain('<html');
+    expect(text).toContain('extravaganza');
+  });
+
+  test('should intercept async', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock('https://httpbin.org/html', {
+      status: 206,
+      text: (req, res) => `${res.body} extravaganza`
+    });
+
+    const response = await mockyeah.fetch('https://httpbin.org/html');
+
+    expect(response.status).toBe(206);
+    const text = await response.text();
+    expect(text).toContain('<html');
+    expect(text).toContain('extravaganza');
+  });
+
+  test('should intercept json', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock('https://httpbin.org/json', {
+      json: (req, res) => ({ ...res?.body, also: true })
+    });
+
+    const response = await mockyeah.fetch('https://httpbin.org/json');
+
+    const data = await response.json();
+    expect(data).toMatchObject({
+      slideshow: {
+        title: 'Sample Slide Show'
+      },
+      also: true
+    });
+  });
+
   test('should work with express wildcard in path', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah(options);
 
     mockyeah.mock('https://example.local/v(.*)/ok', { json: { a: 1 } });
 
@@ -91,7 +247,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with post method, query and text', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah(options);
 
     mockyeah.mock(
       {
@@ -122,7 +278,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with dynamic response', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah(options);
 
     mockyeah.post('https://example.local/v1?', {
       json: req => ({ ok: req.query.ok, hmm: req.body.hmm, method: req.method })
@@ -142,7 +298,7 @@ describe('@mockyeah/fetch', () => {
   });
 
   test('should work with dynamic response checking request cookies', async () => {
-    mockyeah = new Mockyeah();
+    mockyeah = new Mockyeah(options);
 
     mockyeah.post('https://example.local/v1?', {
       json: req => ({ cookieA: req.cookies.a, cookieB: req.cookies.b })
