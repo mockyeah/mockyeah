@@ -26,11 +26,11 @@
 
 2. `cd packages/mockyeah-web-extension && npm run build`
 
-3. In Chrome, go to `Settings` (`⋮` icon in top-right corner) > `More Tools` > `Extensions`.
+3. In Chrome, go to `Settings` (`⋮` icon in upper right corner) > `More Tools` > `Extensions`.
 
 4. Make sure `Developer mode` is enabled via the toggle at the top of the page.
 
-5. Click `Load unpacked` in the upper right and navigate to select the `mockyeah-web-extension` folder.
+5. Click `Load unpacked` in the upper left and navigate to select the `mockyeah-web-extension` folder.
 
 ---
 
