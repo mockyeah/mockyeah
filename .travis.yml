@@ -3,6 +3,8 @@ node_js:
   - "node"
   - "lts/*"
   - "8"
+jobs:
+  fast_finish: true
 script:
   - ./packages/mockyeah-tools/node_modules/.bin/prettier --check $(git ls-files | grep -E '.(js|json|md)$')
   # skip if only changes to docs or READMEs
