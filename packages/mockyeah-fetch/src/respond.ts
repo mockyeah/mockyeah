@@ -13,7 +13,7 @@ import {
 const handler = <T>(
   value: Responder<T>,
   requestForHandler: RequestForHandler,
-  res: ResponseObject
+  res?: ResponseObject
 ): T | Promise<T> =>
   typeof value === 'function' ? (value as ResponderFunction<T>)(requestForHandler, res) : value;
 
