@@ -143,41 +143,64 @@ mockyeah.get('/hey', { text: 'why hello' });
 
 ### `options` Response Options (optional `Object|String`)
 
-Response options informing mockyeah how to respond to matching requests. Supported options:
+Response options informing mockyeah how to respond to matching requests.
 
-**One of the following options may be used per service:**
+If you pass just a string as response options, that's equivalent to passing just:
 
-- `filePath` (`String`; optional) - File with contents to include in response body. Assumes response Content-Type of file type.
-- `fixture` (`String`; optional) - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./fixtures` in your project.
+```js
+{ text: 'your string' }
+```
 
-- `html` (`String|Function|Promise`; optional) - HTML to include in response body. Assumes response Content-Type of `text/html`.
-- `json` (`Object|Function|Promise`; optional) - JSON to include in response body. Assumes response Content-Type of `application/json`.
-- `raw` (`String|Function|Promise`; optional) - Text to include in response body. Content-Type is the default Express type if not specified in header.
-- `text` (`String|Function|Promise`; optional) - Text to include in response body. Assumes response Content-Type of `text/plain`.
-- `type` (`String|Function|Promise`; optional) - Override/manual content type for response as a file extension or MIME type.
+See below for explanation of the `Responder` type.
 
-For dynamic behavior, the noted methods above can also be defined as functions that return response body values.
-For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises.
+**One of the following response body options may be used per mock:**
 
-The functions will receive a `req` argument with these properties:
+- `filePath` (`Responder<string>?`)
+  - File with contents to include in response body. Assumes response Content-Type of file type.
+- `fixture` (`Responder<string>?`)
+  - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./fixtures` in your project.
+- `html` (`Responder<string>?`)
+  - HTML to include in response body. Defaults to `Content-Type` of `text/html`.
+- `json` (`Responder<Record<string , any>>?`)
+  - JSON to include in response body. Defaults to `Content-Type` of `application/json`.
+- `raw` (`Responder<any>?`)
+  - Content to include in response body. `Content-Type` is default if not specified in `type` or `headers`.
+- `text` (`Responder<string>?`)
+  - Text to include in response body. Defaults to `Content-Type` of `text/plain`.
 
-- `url` (`string`)
-- `path` (`string`) alias of `url`
-- `method` (`string`) lowercase
-- `query` (`Record<string, string>`) Query parameters.
-- `headers` (`Record<string, string>`)
-- `cookies` (`Record<string, string>`)
-- `body` (`string` | `Record<string, any>`)
+For dynamic behavior, most methods can optionally be defined as functions that return the properly typed values.
+For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises. So the type is:
+
+```ts
+type Responder<T> = T | ((req?, res?) => T) | ((req?, res?) => Promise<T>) | Promise<T>;
+```
+
+The functions will receive a `req` argument with this structure:
+
+```ts
+interface Req {
+  url: string;
+  path?: string; // Alias of `url`.
+  method?: string; // Lowercase.
+  query?: Record<string, string>;
+  headers?: Record<string, string>;
+  cookies?: Record<string, string>;
+  body?: string | Record<string, any> | any; // Text or JSON or raw.
+}
+```
 
 If you wish, mockyeah can also internally fetch and give you the actual response,
 which you can then manipulate or derive a mock response.
 You can enable this behavior by adding a 2nd `res` argument to your
 response option functions:
 
-- `res` has properties:
-  - `status` (`number`)
-  - `headers` (`Record<string, string>`)
-  - `body` (`string` | `Record<string, any>`)
+```ts
+interface Res {
+  status?: number;
+  headers?: Record<string, string>;
+  body?: string | Record<string, any> | any; // Text or JSON or raw.
+}
+```
 
 Examples of dynamic responses:
 
@@ -212,7 +235,13 @@ mockyeah.get('https://httpbin.org/html', {
 
 **Additional options:**
 
-- `headers` (`Object`; optional) - Header key value pairs to include in response.
-- `latency` (`Number` in Milliseconds; optional) - Used to control the response timing of a response.
-- `type` (`String`; optional) - Content-Type HTTP header to return with response. Proxies option to Express response method `res.type(type)`; more info here: http://expressjs.com/en/4x/api.html#res.type
-- `status` (`String`; optional; default: `200`) - HTTP response status code.
+These (as above) can also be functions, promises, or functions that return promises.
+
+- `headers` (`Responder<Record<string , string>>?`)
+  - Header key value pairs to include in response.
+- `latency` (`Responder<number>?`)
+  - In milliseconds, used to control the response timing of a response.
+- `type` (`Responder<string>?`)
+  - Override the `Content-Type` HTTP header sent with the response. Also maps from file extensions via [`mime.getType(type)`](https://www.npmjs.com/package/mime#mimegettypepathorextension).
+- `status` (`Responder<string>?`)
+  - HTTP response status code. Default `200`.
