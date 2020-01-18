@@ -25,8 +25,8 @@
 | Programmatic mocked responses                 | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Delay mocked response                         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Default delay                                 | :white_check_mark: | :x:                | ?                  | :x:                | :x:                |
-| Modify real responses                         | on roadmap         | :white_check_mark: | :x:                | :x:?               |
-| Delay real response                           | on roadmap         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Modify real responses                         | :white_check_mark: | :white_check_mark: | :x:                | :x:?               |
+| Delay real response                           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Domain aliases                                | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Record to disk                                | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :x:                |
 | Record to disk from client-side               | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :x:                |
