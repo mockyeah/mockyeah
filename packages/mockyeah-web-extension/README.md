@@ -14,7 +14,7 @@
 
 ### Pre-packaged
 
-1. Download [the `.crx` file](mockyeah.crx).
+1. Download [the `.crx` file](mockyeah.crx?raw=true).
 
 2. In Chrome, go to `Settings` (the `⋮` icon in top-right corner) > `More Tools` > `Extensions`
 
