@@ -11,7 +11,7 @@ You can edit mocks you've created. Chrome will save them so they're still there 
 The extension interacts with `@mockyeah/fetch` on your web page, so it looks for a `window.__MOCKYEAH__` variable assigned to a `mockyeah` instance you create in your app source code (perhaps only development builds) with the `devTools` option enabled, as follows:
 
 ```js
-import Mockyeah from '@mockyeah/fetch';
+import Mockyeah from "@mockyeah/fetch";
 
 const mockyeah = new Mockyeah({
   devTools: true
