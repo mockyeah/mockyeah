@@ -161,7 +161,7 @@ See below for explanation of the `Responder` type.
   - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./fixtures` in your project.
 - `html` (`Responder<string>?`)
   - HTML to include in response body. Defaults to `Content-Type` of `text/html`.
-- `json` (`Responder<Record<string , any>>?`)
+- `json` (`Responder<Record<string, any>>?`)
   - JSON to include in response body. Defaults to `Content-Type` of `application/json`.
 - `raw` (`Responder<any>?`)
   - Content to include in response body. `Content-Type` is default if not specified in `type` or `headers`.
@@ -237,7 +237,7 @@ mockyeah.get('https://httpbin.org/html', {
 
 These (as above) can also be functions, promises, or functions that return promises.
 
-- `headers` (`Responder<Record<string , string>>?`)
+- `headers` (`Responder<Record<string, string>>?`)
   - Header key value pairs to include in response.
 - `latency` (`Responder<number>?`)
   - In milliseconds, used to control the response timing of a response.
