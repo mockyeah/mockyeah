@@ -6,8 +6,7 @@
     "build": "webpack",
     "dev": "NODE_ENV=development webpack -w",
     "build:prod": "NODE_ENV=production webpack",
-    "lint": "eslint --max-warnings 0 src/**/*.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint --max-warnings 0 src/**/*.ts"
   },
   "keywords": [],
   "private": true,
