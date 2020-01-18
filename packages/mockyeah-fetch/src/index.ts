@@ -581,6 +581,8 @@ class Mockyeah {
 
     const id = mockNormal[0].$meta?.id as string;
 
+    const id = mockNormal[0].$meta?.id as string;
+
     const { mocks, logPrefix } = this.__private;
 
     debugMock(`${logPrefix} mocked`, match, res);
