@@ -100,7 +100,7 @@ const respond = async (
   const latency = resOpts.latency || bootOptions.latency;
 
   if (latency) {
-    const latencyActual = await handler<number>(latency, requestForHandler);
+    const latencyActual = await handler<number>(latency, requestForHandler, res);
     await new Promise(resolve => setTimeout(resolve, latencyActual));
   }
 
