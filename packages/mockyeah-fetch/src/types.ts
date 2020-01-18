@@ -70,7 +70,18 @@ interface ResponseOptionsObject {
   headers?: Responder<Record<string, string>>;
 }
 
-const responseOptionsResponderKeys = ['json', 'text', 'html', 'raw', 'filePath', 'fixture', 'status', 'type', 'latency', 'headers']
+const responseOptionsResponderKeys = [
+  'json',
+  'text',
+  'html',
+  'raw',
+  'filePath',
+  'fixture',
+  'status',
+  'type',
+  'latency',
+  'headers'
+];
 
 type ResponseOptions = string | ResponseOptionsObject;
 
@@ -111,6 +122,7 @@ interface MatchMeta {
   matchKeys?: pathToRegexp.Key[];
   original?: Match;
   originalNormal?: MatchObject;
+  originalSerialized?: MatchObject; // technically we could replace regex types here
   expectation?: Expectation;
 }
 

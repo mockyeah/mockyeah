@@ -4,6 +4,7 @@ import pathToRegexp from 'path-to-regexp';
 import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
 import isRegExp from 'lodash/isRegExp';
+import mapValues from 'lodash/mapValues';
 import { MatchNormal, MatchObject, MatchFunction, MatchString, Match, Method } from './types';
 
 const decodedPortRegex = /^(\/?https?.{3}[^/:?]+):/;
@@ -39,6 +40,22 @@ const stripQuery = (url: string) => {
     query
   };
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const serializeObject = (object: any): any =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  mapValues(object, (value: any) => {
+    if (isRegExp(value)) {
+      return {
+        $regex: {
+          source: value.source,
+          flags: value.flags
+        }
+      };
+    }
+    if (isPlainObject(value)) return mapValues(value, v => serializeObject(v));
+    return value;
+  });
 
 const leadingSlashRegex = /^\//;
 const leadUrlEncodedProtocolRegex = /^(https?)%3A%2F%2F/;
@@ -128,6 +145,7 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
 
   $meta.original = originalMatch;
   $meta.originalNormal = originalNormal;
+  $meta.originalSerialized = serializeObject(originalNormal);
 
   if (typeof match.url === 'string') {
     if (!incoming) {
