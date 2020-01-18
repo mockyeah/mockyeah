@@ -4,7 +4,11 @@
 
 <img src="https://raw.githubusercontent.com/mockyeah/mockyeah/master/packages/mockyeah-docs/src/images/logo/mockyeah-600.png" height="200" />
 
-<img src="docs/demo.gif" />
+---
+
+![demo](docs/demo.gif)
+
+---
 
 ## Install
 
