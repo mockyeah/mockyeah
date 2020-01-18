@@ -1,3 +1,5 @@
+*.crx
+*.pem
 src/**/*.js
 dist
 webpack.config.js
