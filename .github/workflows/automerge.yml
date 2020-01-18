@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: automerge
-        uses: "pascalgn/automerge-action@a4b03eff945989d41c623c2784d6602560b91e5b"
+        uses: "pascalgn/automerge-action@v0.7.2"
         env:
           GITHUB_TOKEN: "${{ secrets.MOCKYEAH_JS_GITHUB_TOKEN }}"
           MERGE_LABELS: "!work in progress"
