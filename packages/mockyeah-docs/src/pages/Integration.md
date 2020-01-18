@@ -6,7 +6,7 @@ title: Integration
 
 To integrate mockyeah with apps or tests, you can use the `@mockyeah/fetch` package.
 
-This monkeypatches the native `fetch` API to enable some mockyeah features. It is supported in both browser and Node environments with `fetch` support (native or polyfilled). Recommended polyfills are `whatwg-fetch` for browser and `node-fetch` for Node, or `isomorhpic-fetch` for both.
+This can monkeypatch the native `fetch` API to enable some mockyeah features. It is supported in both browser and Node environments with `fetch` support (native or polyfilled). Recommended polyfills are `whatwg-fetch` for browser and `node-fetch` for Node, or `isomorhpic-fetch` for both.
 
 ## Proxy
 
@@ -19,7 +19,7 @@ since setting a cookie is often easier for users than setting a header.
 To use, simply:
 
 ```console
-$ npm add --save-dev @mockyeah/fetch
+$ npm add @mockyeah/fetch
 ```
 
 Then:
@@ -28,23 +28,10 @@ Then:
 import 'isomorhpic-fetch';
 import Mockyeah from '@mockyeah/fetch';
 
-Mockyeah({ proxy: true });
+new Mockyeah();
 ```
 
-Or, with some options overrides (defaults below):
-
-```js
-import 'isomorhpic-fetch';
-import Mockyeah from '@mockyeah/fetch';
-
-Mockyeah({
-  proxy: true,
-  host: 'localhost',
-  port: 4001,
-  suiteHeader: 'x-mockyeah-suite',
-  suiteCookie: 'mockyeahSuite'
-});
-```
+The `Mockyeah` constructor also supports options. See `BootOptions` in the [TypeScript types file][types].
 
 ## Client-side mocking
 
@@ -63,7 +50,7 @@ the mockyeah server, including:
 import 'isomorhpic-fetch';
 import Mockyeah from '@mockyeah/fetch';
 
-const mockyeah = Mockyeah();
+const mockyeah = new Mockyeah();
 
 mockyeah.mock('https://example.local?ok=yes', {
   json: { fake: 'response' }
@@ -82,16 +69,21 @@ mockyeah.post(
 );
 ```
 
-The `mockyeah` object has these properties:
+The `mockyeah` object has these properties (see [types] for more detail):
 
 ```ts
 {
-  fetch: (url: string, options: {}) => Promise<Response>,
-  mock: (match: MatchObject, options: ResponseOptions ) => void,
-  all: (match: MatchObject, options: ResponseOptions ) => void,
-  get: (match: MatchObject, options: ResponseOptions ) => void,
-  post: (match: MatchObject, options: ResponseOptions ) => void,
-  put: (match: MatchObject, options: ResponseOptions ) => void,
-  delete: (match: MatchObject, options: ResponseOptions ) => void
+  fetch: (url: string, fetchOptions?: {}, mockyeahFetchOptions?: MockyeahFetchOptions)
+    => Promise<Response>,
+  mock: (match: MatchObject, options?: ResponseOptions ) => void,
+  all: (match: MatchObject, option?s: ResponseOptions ) => void,
+  get: (match: MatchObject, options?: ResponseOptions ) => void,
+  post: (match: MatchObject, options?: ResponseOptions ) => void,
+  put: (match: MatchObject, options?: ResponseOptions ) => void,
+  delete: (match: MatchObject, options?: ResponseOptions ) => void,
+  options: (match: MatchObject, options?: ResponseOptions ) => void,
+  patch: (match: MatchObject, options?: ResponseOptions ) => void
 }
 ```
+
+[types]: https://github.com/mockyeah/mockyeah/blob/master/packages/mockyeah-fetch/src/types.ts
