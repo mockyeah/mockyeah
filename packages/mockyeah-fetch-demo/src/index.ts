@@ -48,20 +48,27 @@ const getContentHTML = (data?: DataOrError) => {
 
   const { slideshow, error } = data;
 
+  let mainContent;
   if (error) {
-    return `<div>Error!</div>`;
-  }
-
-  if (!slideshow) {
-    return `<div>No slideshow</div>`;
-  }
-
-  return `
+    mainContent = `<div>Error!</div>`;
+  } else if (!slideshow) {
+    mainContent = `<div>No slideshow</div>`;
+  } else {
+    mainContent = `
         <div>
             <h1>${slideshow.title}</h1>
             <div>author: ${slideshow.author}</div>
             <div>date: ${slideshow.date}</div>
         </div>`;
+  }
+  
+  return `
+    ${mainContent}
+    <br />
+    <hr />
+    <br />
+    <a href="https://github.com/mockyeah/mockyeah/tree/master/packages/mockyeah-fetch-demo">View source at GitHub</a>
+    `;
 };
 
 const redraw = (data?: DataOrError) => {
