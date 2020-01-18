@@ -145,16 +145,11 @@ mockyeah.get('/hey', { text: 'why hello' });
 
 Response options informing mockyeah how to respond to matching requests.
 
-For dynamic behavior, most methods can optionally be defined as functions that return the properly typed values.
-For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises.
-
-```ts
-type Responder<T> = T | ((req?, res?) => T) | ((req?, res?) => Promise<T>) | Promise<T>;
-```
+See below for explanation of the `Responder` type.
 
 **One of the following response body options may be used per mock:**
 
-- `filePath` (`Responder<string?`)
+- `filePath` (`Responder<string>?`)
   - File with contents to include in response body. Assumes response Content-Type of file type.
 - `fixture` (`Responder<string>?`)
   - Fixture file with contents to include in response body. Assumes response Content-Type of file type. Default fixture file location is `./fixtures` in your project.
@@ -166,6 +161,13 @@ type Responder<T> = T | ((req?, res?) => T) | ((req?, res?) => Promise<T>) | Pro
   - Content to include in response body. `Content-Type` is default if not specified in `type` or `headers`.
 - `text` (`Responder<string>?`)
   - Text to include in response body. Defaults to `Content-Type` of `text/plain`.
+
+For dynamic behavior, most methods can optionally be defined as functions that return the properly typed values.
+For asynchronous behavior, they can be defined as promises that resolve with such values, or a functions that return such promises. So the type is:
+
+```ts
+type Responder<T> = T | ((req?, res?) => T) | ((req?, res?) => Promise<T>) | Promise<T>;
+```
 
 The functions will receive a `req` argument with this structure:
 
