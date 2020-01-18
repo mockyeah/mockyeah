@@ -21,5 +21,7 @@ export default (env = {}) => ({
       }
     ]
   },
-  plugins: [new HtmlWebpackPlugin()]
+  plugins: [new HtmlWebpackPlugin({
+    title: '@mockyeah/fetch demo'
+  })]
 });
