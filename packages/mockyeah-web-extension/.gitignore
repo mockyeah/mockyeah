@@ -1,4 +1,5 @@
 *.crx
+!mockyeah.crx
 *.pem
 src/**/*.js
 dist
