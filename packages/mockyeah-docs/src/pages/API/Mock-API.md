@@ -145,6 +145,8 @@ mockyeah.get('/hey', { text: 'why hello' });
 
 Response options informing mockyeah how to respond to matching requests.
 
+If you pass just a string as response options, that's equivalent to passing just `{ text: 'your string' }`.
+
 See below for explanation of the `Responder` type.
 
 **One of the following response body options may be used per mock:**
