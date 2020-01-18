@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "mockyeah web extension",
   "scripts": {
-    "build": "webpack --config webpack.config.ts",
-    "dev": "NODE_ENV=development webpack --config webpack.config.ts -w",
-    "build:prod": "NODE_ENV=production webpack",
+    "build": "NODE_ENV=production webpack --config webpack.config.ts",
+    "build:dev": "webpack --config webpack.config.ts",
+    "dev": "webpack --config webpack.config.ts -w",
     "lint": "eslint --max-warnings 0 src/**/*.ts"
   },
   "keywords": [],
