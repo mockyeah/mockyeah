@@ -1,0 +1,61 @@
+table {
+  border-spacing: 0;
+  border: 1px solid black;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+th,
+td {
+  margin: 0;
+  padding: 0.5rem;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+}
+
+:is(th, td):last-child {
+  border-right: 0;
+}
+
+.error {
+  color: red;
+}
+
+.btn-primary {
+  background-color: rgb(144, 19, 254);
+  border-color: rgb(144, 19, 254);
+}
+
+.btn-primary:focus {
+  background-color: rgb(144, 19, 254);
+  border-color: rgb(144, 19, 254);
+  box-shadow: 0 0 0 0.2rem rgb(199, 136, 254);
+}
+
+.btn-primary:hover {
+  background-color: rgb(68, 3, 127);
+  border-color: rgb(68, 3, 127);
+}
+
+.btn-primary:not(:disabled):not(.disabled):active {
+  background-color: rgb(68, 3, 127);
+  border-color: rgb(68, 3, 127);
+  box-shadow: 0 0 0 0.2rem rgb(199, 136, 254);
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus {
+  box-shadow: 0 0 0 0.2rem rgb(199, 136, 254);
+}
+
+.table-cell-url {
+  width: 100%;
+}
+
+.table-cell-body {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
