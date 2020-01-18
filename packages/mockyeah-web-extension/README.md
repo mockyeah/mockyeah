@@ -6,6 +6,8 @@
 
 ---
 
+Here's a demo GIF (wait for it to load):
+
 ![demo](docs/demo.gif)
 
 ---
