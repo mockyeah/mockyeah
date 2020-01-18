@@ -197,15 +197,13 @@ class Mockyeah {
       }
     }
 
-    // @ts-ignore
     if (devTools) {
       await new Promise(resolve => {
         let times = 0;
         const interval = setInterval(() => {
-          // @ts-ignore
           times += 1;
-          // @ts-ignore
           if (
+            // @ts-ignore
             window.__MOCKYEAH_DEVTOOLS_EXTENSION__?.loadedMocks ||
             times > devToolsTimeout / devToolsInterval
           ) {
