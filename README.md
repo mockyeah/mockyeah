@@ -38,7 +38,7 @@
 | Dynamic mock opt-in (server)                  | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | `n`th mocking                                 | on roadmap         | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
 | Sessions                                      | on roadmap         | :x:                | :x:                | :x:                | :x:                |
-| Browser extension                             | on roadmap         | :x:                | :x:                | :x:                | :x:                |
+| Browser extension                             | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Unit test libraries                           | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :x:                |
 | Unit test assertions                          | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
 | Declarative request matching (more than path) | :white_check_mark: | :x:                | :x:                | :x:                | :x:                |
