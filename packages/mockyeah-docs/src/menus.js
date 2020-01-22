@@ -85,7 +85,6 @@ const menus = {
       ]
     },
     { title: 'Classes', items: [{ title: '`Server`', url: 'API/Server' }] },
-
     {
       title: 'Suites',
       url: 'Suites/Overview',
@@ -97,6 +96,7 @@ const menus = {
     { title: 'CLI', url: 'CLI/CLI' },
     { title: 'Testing', url: 'Testing' },
     { title: 'Integration', url: 'Integration' },
+    { title: 'Web Extension', url: 'WebExtension' },
     {
       title: 'Recipes & Examples',
       url: 'Recipes-and-Examples'

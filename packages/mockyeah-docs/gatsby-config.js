@@ -1,3 +1,10 @@
+const gatsbyRemarkPlugins = [
+  `gatsby-remark-autolink-headers`,
+  `gatsby-remark-prismjs`,
+  `gatsby-remark-images`,
+  `gatsby-remark-copy-linked-files`
+];
+
 module.exports = {
   siteMetadata: {
     title: `mockyeah`,
@@ -49,7 +56,7 @@ module.exports = {
         // GitHub Flavored Markdown mode (default: true)
         gfm: true,
         // Plugins configs
-        plugins: [`gatsby-remark-autolink-headers`, `gatsby-remark-prismjs`]
+        plugins: gatsbyRemarkPlugins
       }
     },
     {
@@ -58,7 +65,7 @@ module.exports = {
         defaultLayouts: {
           default: require.resolve('./src/layouts/default.js')
         },
-        gatsbyRemarkPlugins: [`gatsby-remark-autolink-headers`, `gatsby-remark-prismjs`]
+        gatsbyRemarkPlugins
       }
     },
     {
