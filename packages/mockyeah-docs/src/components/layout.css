@@ -658,6 +658,11 @@ pre tt:after {
   padding-right: 1rem;
 }
 
+#page p img:only-child {
+  display: block;
+  margin: auto;
+}
+
 footer {
   clear: both;
 }
