@@ -100,9 +100,7 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
         return acc;
       }, {} as Record<string, MatchString>);
 
-  if (!match.method) {
-    match.method = 'get';
-  } else if (match.method === 'all' || match.method === 'ALL' || match.method === '*') {
+  if (!match.method || match.method === 'all' || match.method === 'ALL' || match.method === '*') {
     delete match.method;
   } else if (typeof match.method === 'string') {
     match.method = match.method.toLowerCase() as Method;
