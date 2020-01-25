@@ -25,7 +25,7 @@ const makePlay = app => {
 
       suite.forEach((c, i) => {
         // TODO: Handle `suiteName` and `suiteIndex` in `@mockyeah/fetch` on mount for logging.
-        return app.locals.mockyeahFetch.all(...c, {
+        return app.locals.mockyeahFetch.mock(...c, {
           suiteName: name,
           suiteIndex: i
         });
