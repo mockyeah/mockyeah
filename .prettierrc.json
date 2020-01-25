@@ -1,0 +1,12 @@
+{
+  "overrides": [
+    {
+      "files": ".mockyeah",
+      "options": { "parser": "json" }
+    },
+    {
+      "files": ".eslintrc",
+      "options": { "parser": "yaml" }
+    }
+  ]
+}
