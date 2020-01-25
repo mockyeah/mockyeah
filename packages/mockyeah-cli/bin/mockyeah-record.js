@@ -12,6 +12,7 @@ const chalk = require('chalk');
 const request = require('request');
 const querystring = require('querystring');
 const boot = require('../lib/boot');
+const requireMockyeah = require('../lib/requireMockyeah');
 
 // TODO: write tests for this
 const collectHeaders = (val, memo = {}) => {
@@ -68,7 +69,7 @@ const withName = (env, name, options = {}) => {
 
       // TODO: Detect errors that shouldn't result in local fallback.
       // eslint-disable-next-line global-require, import/no-dynamic-require
-      require(env.modulePath).record(name, options);
+      requireMockyeah(env).record(name, options);
     } else {
       remote = true;
     }
@@ -94,7 +95,7 @@ const withName = (env, name, options = {}) => {
           request.get(`${adminUrl}/record-stop?${qs2}`, recordStopCallback, {});
         } else {
           // eslint-disable-next-line global-require, import/no-dynamic-require
-          require(env.modulePath).recordStop(stopOptions, recordStopCallback);
+          requireMockyeah(env).recordStop(stopOptions, recordStopCallback);
         }
       });
   });
