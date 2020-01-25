@@ -61,7 +61,7 @@ const getContentHTML = (data?: DataOrError) => {
             <div>date: ${slideshow.date}</div>
         </div>`;
   }
-  
+
   return `
     ${mainContent}
     <br />

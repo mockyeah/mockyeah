@@ -6,7 +6,7 @@ node_js:
 jobs:
   fast_finish: true
 script:
-  - ./packages/mockyeah-tools/node_modules/.bin/prettier --check $(git ls-files | grep -E '.(js|json|md)$')
+  - npm run pretty:check
   # skip if only changes to docs or READMEs
   - '[ -z "$TRAVIS_PULL_REQUEST_SHA" ] || git diff --name-only $TRAVIS_BRANCH...$TRAVIS_PULL_REQUEST_SHA | grep -v -e mockyeah-docs -e README.md || travis_terminate 0'
   - npm run test:ci

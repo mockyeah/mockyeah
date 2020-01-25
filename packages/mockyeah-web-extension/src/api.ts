@@ -80,9 +80,10 @@ const saveMock = (id, init, callback) => {
 
   const urlRegexSource = isRegExp(url) ? url.source : url?.$regex?.source;
   const urlRegexFlags = isRegExp(url) ? url.flags : url?.$regex?.flags;
-  const serializedUrl = isRegExp(url) || url?.$regex
-    ? `new RegExp('${escapeForMock(urlRegexSource)}', '${urlRegexFlags}')`
-    : `'${url}'`;
+  const serializedUrl =
+    isRegExp(url) || url?.$regex
+      ? `new RegExp('${escapeForMock(urlRegexSource)}', '${urlRegexFlags}')`
+      : `'${url}'`;
 
   const after = () => {
     const script = `
