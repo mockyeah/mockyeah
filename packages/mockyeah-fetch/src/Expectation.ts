@@ -37,7 +37,7 @@ class Expectation {
     const originalNormal =
       match.$meta && match.$meta.originalNormal ? match.$meta.originalNormal : match;
 
-    this.prefix = `[${originalNormal.method || 'get'}] ${originalNormal.path ||
+    this.prefix = `[${originalNormal.method || 'all'}] ${originalNormal.path ||
       originalNormal.url} --`;
 
     this.called = 0;
