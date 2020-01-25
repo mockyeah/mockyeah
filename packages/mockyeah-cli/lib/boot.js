@@ -28,12 +28,12 @@ module.exports = function boot(callback) {
   liftoff.launch({}, env => {
     // check for local mockyeah
     if (!env.modulePath) {
-      console.log(chalk.red(`Local mockyeah not found in ${env.cwd}`));
-      console.log(chalk.red('Try running: npm install @mockyeah/server --save-dev'));
-      process.exit(1);
+      console.log(chalk.yellow(`Local \`@mockyeah/server\` not found in ${env.cwd}`));
+      console.log(chalk.yellow('Using global `@mockyeah/server`'));
+      console.log(chalk.yellow('To pin to a version, run: npm add --save-dev @mockyeah/cli'));
+    } else {
+      getPackageAndCheckVersionMatch(env);
     }
-
-    getPackageAndCheckVersionMatch(env);
 
     // eslint-disable-next-line global-require
     env.config = require('./config')(env);
