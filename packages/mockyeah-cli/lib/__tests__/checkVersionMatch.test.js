@@ -7,7 +7,9 @@ describe('checkVerisonMatch', () => {
         const env = {};
         const pkgUp = {};
         checkVersionMatch(env, pkgUp);
-      }).toThrow('Could not find `@mockyeah/cli` package version to check against `@mockyeah/server`.');
+      }).toThrow(
+        'Could not find `@mockyeah/cli` package version to check against `@mockyeah/server`.'
+      );
     });
 
     test('throws on missing env package version', () => {
