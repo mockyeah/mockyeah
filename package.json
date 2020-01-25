@@ -12,12 +12,14 @@
     "test:coverage:report": "lerna run test:coverage:report",
     "lint": "lerna run lint",
     "lint:watch": "lerna run lint:watch",
+    "pretty": "prettier --write '**'",
+    "pretty:check": "prettier --check '**'",
     "postinstall": "lerna bootstrap",
     "postversion": "prettier --write lerna.json"
   },
   "devDependencies": {
     "lerna": "^3.18.4",
-    "prettier": "^1.18.2"
+    "prettier": "^1.19.1"
   },
   "name": "mockyeah"
 }

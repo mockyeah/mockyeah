@@ -15,7 +15,7 @@ const stringify = (value: any) => {
 const deserializeRegex = (input: any): RegExp | void => {
   if (!isObject(input)) return;
 
-  const rinput = input as { $regex?: string | { source: string, flags?: string } };
+  const rinput = input as { $regex?: string | { source: string; flags?: string } };
 
   if (!rinput.$regex) return;
 
@@ -54,7 +54,11 @@ const makeMatcher = (options = DEFAULT_MATCH_OPTIONS) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const internalMatcher = (value: any, source: any, keyPath: string[]) => {
     // eslint-disable-next-line no-nested-ternary
-    const deserializedRegex = isRegExp(source) ? source : serializedRegex ? deserializeRegex(source) : undefined;
+    const deserializedRegex = isRegExp(source)
+      ? source
+      : serializedRegex
+      ? deserializeRegex(source)
+      : undefined;
     if (deserializedRegex) {
       const result = deserializedRegex.test(value);
       if (!result)
