@@ -296,6 +296,37 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual('hello');
   });
 
+  test('should work with post form', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock(
+      {
+        method: 'POST',
+        url: 'https://example.local',
+        query: {
+          ok: /yes/
+        },
+        body: {
+          sure: (v: string): boolean => v === 'thing'
+        }
+      },
+      { text: 'hello' }
+    );
+
+    const response = await mockyeah.fetch('https://example.local?ok=yes&and=more', {
+      method: 'post',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      body: 'sure=thing'
+    });
+    const data = await response.text();
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toMatch('text/plain');
+    expect(data).toEqual('hello');
+  });
+
   test('should work with dynamic response', async () => {
     mockyeah = new Mockyeah(options);
 
