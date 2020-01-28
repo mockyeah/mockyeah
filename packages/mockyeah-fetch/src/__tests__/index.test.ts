@@ -249,9 +249,12 @@ describe('@mockyeah/fetch', () => {
   test('should work url function match', async () => {
     mockyeah = new Mockyeah(options);
 
-    mockyeah.mock({
-      url: value => value === 'https://example.local:3333/v1/ok'
-    }, { json: { a: 1 } });
+    mockyeah.mock(
+      {
+        url: value => value === 'https://example.local:3333/v1/ok'
+      },
+      { json: { a: 1 } }
+    );
 
     const response = await mockyeah.fetch('https://example.local:3333/v1/ok');
     const data = await response.json();
