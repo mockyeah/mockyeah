@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
+    "build:ci": "webpack",
     "start": "webpack-dev-server --env.dev"
   },
   "repository": "git@github.com:mockyeah/mockyeah.git",
