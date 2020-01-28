@@ -1,4 +1,4 @@
-import querystring from 'querystring';
+import qs from 'qs';
 
 const parseResponseBody = (headers: Headers, body?: string | null) => {
   // TODO: Does this handle lowercase `content-type`?
@@ -13,7 +13,7 @@ const parseResponseBody = (headers: Headers, body?: string | null) => {
     }
 
     if (isForm) {
-      return querystring.parse(body);
+      return qs.parse(body);
     }
   }
 
