@@ -62,8 +62,7 @@ module.exports = function App(config) {
 
   app.use(bodyParser.json({ verify: rawBodySaver }));
   app.use(bodyParser.text({ verify: rawBodySaver }));
-  // TODO: Consider `extended: true`.
-  app.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: false }));
+  app.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: true }));
   app.use(bodyParser.raw({ verify: rawBodySaver, type: '*/*' }));
 
   app.locals.proxying = app.config.proxy;
