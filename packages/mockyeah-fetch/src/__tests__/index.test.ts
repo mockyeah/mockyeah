@@ -246,6 +246,25 @@ describe('@mockyeah/fetch', () => {
     mockyeah.reset();
   });
 
+  test('should work url function match', async () => {
+    mockyeah = new Mockyeah(options);
+
+    mockyeah.mock(
+      {
+        url: value => value === 'https://example.local:3333/v1/ok'
+      },
+      { json: { a: 1 } }
+    );
+
+    const response = await mockyeah.fetch('https://example.local:3333/v1/ok');
+    const data = await response.json();
+
+    expect(response.headers.get('content-type')).toMatch('application/json');
+    expect(data).toEqual({ a: 1 });
+
+    mockyeah.reset();
+  });
+
   test('should work with post method, query and text', async () => {
     mockyeah = new Mockyeah(options);
 
