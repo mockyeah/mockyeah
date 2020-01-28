@@ -351,7 +351,8 @@ class Mockyeah {
         });
       });
 
-    const pathname = parsed.pathname || '/';
+    const pathname = `${parsed.protocol ? `${parsed.protocol}//` : ''}${parsed.host ||
+      ''}${parsed.pathname || '/'}`;
 
     const requestForHandler: RequestForHandler = {
       url: pathname,
