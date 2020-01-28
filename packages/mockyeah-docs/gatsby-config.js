@@ -76,7 +76,7 @@ module.exports = {
         template: 'markdown' // Default template to use if none is supplied
       }
     },
-    'gatsby-plugin-catch-links'
+    'gatsby-plugin-catch-links',
     // {
     //   resolve: '@stackbit/gatsby-plugin-menus',
     //   options: {
@@ -93,15 +93,15 @@ module.exports = {
     //         }
     //       ]
     //     },
-    //     // Gatsby node types from which we extract menus (optional, see "Advanced usage")
-    //     // sourceNodeType: 'MarkdownRemark',
-    //     sourceNodeType: 'SitePage',
-    //     // the relative node path where we can find the 'menus' container (optional)
-    //     sourceDataPath: 'frontmatter',
+    //   //   // Gatsby node types from which we extract menus (optional, see "Advanced usage")
+    //     sourceNodeType: 'Mdx',
+    //   //   sourceNodeType: 'SitePage',
+    //   //   // the relative node path where we can find the 'menus' container (optional)
+    //   //   sourceDataPath: 'frontmatter',
     //     // the relative node path where we can find the page's URL (required)
-    //     sourceUrlPath: 'fields.url',
-    //     // custom menu loading function (optional)
-    //     // menuLoader: customLoaderFunction,
+    //     sourceUrlPath: 'fields.slug',
+    //   //   // custom menu loading function (optional)
+    //   //   // menuLoader: customLoaderFunction,
     //     // the property to use for injecting to the page context (optional, see "Advanced usage")
     //     pageContextProperty: 'menus'
     //   }

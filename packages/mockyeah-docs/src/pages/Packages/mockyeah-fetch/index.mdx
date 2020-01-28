@@ -1,0 +1,75 @@
+---
+title: \@mockyeah/fetch
+---
+
+# `@mockyeah/fetch`
+
+`@mockyeah/fetch` can monkeypatch or be used in place of the native `fetch` API to enable some `mockyeah` features.
+This requires `fetch` API support - recommended client-side `fetch` polyfills are `whatwg-fetch` or `isomorhpic-fetch`.
+
+To use, simply:
+
+```shell
+$ npm add @mockyeah/fetch
+```
+
+Then:
+
+```js
+import 'isomorhpic-fetch';
+import Mockyeah from '@mockyeah/fetch';
+
+new Mockyeah();
+```
+
+Or to add mocks programmatically:
+
+```js
+import 'isomorhpic-fetch';
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah();
+
+mockyeah.mock('https://example.local?ok=yes', {
+  json: { fake: 'response' }
+});
+
+mockyeah.post(
+  {
+    url: 'https://example.local?ok=true',
+    body: {
+      up: 'yes'
+    }
+  },
+  {
+    json: () => ({ hello: 'there' })
+  }
+);
+
+fetch('https://example.local?ok=yes').then(async res => {
+  const data = await res.json();
+  console.log('data is now { fake: "response" }', data);
+});
+```
+
+## API
+
+See [Configuration](Configuration) for full constructor options.
+
+The `mockyeah` object has these public properties
+(see [types](https://github.com/mockyeah/mockyeah/blob/master/packages/mockyeah-fetch/src/types.ts) for more details):
+
+```ts
+{
+  fetch: (url: string, fetchOptions?: {}, mockyeahFetchOptions?: MockyeahFetchOptions)
+    => Promise<Response>,
+  mock: (match: MatchObject, options?: ResponseOptions ) => void,
+  all: (match: MatchObject, option?s: ResponseOptions ) => void,
+  get: (match: MatchObject, options?: ResponseOptions ) => void,
+  post: (match: MatchObject, options?: ResponseOptions ) => void,
+  put: (match: MatchObject, options?: ResponseOptions ) => void,
+  delete: (match: MatchObject, options?: ResponseOptions ) => void,
+  options: (match: MatchObject, options?: ResponseOptions ) => void,
+  patch: (match: MatchObject, options?: ResponseOptions ) => void
+}
+```

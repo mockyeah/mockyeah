@@ -63,16 +63,16 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     adminPort = 4777,
     suiteHeader = 'x-mockyeah-suite',
     suiteCookie = 'mockyeahSuite',
+    latency,
     ignorePrefix = `http${portHttps ? 's' : ''}://${host}:${portHttps || port}/`,
     aliases = [],
     responseHeaders = true,
-    // This is the fallback fetch when no mocks match.
     // @ts-ignore
     fetch = global.fetch,
     fileResolver,
     fixtureResolver,
     mockSuiteResolver,
-    devTools,
+    devTools = false,
     devToolsTimeout = 1000,
     devToolsInterval = 100
   } = bootOptions;
@@ -90,6 +90,7 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     adminPort,
     suiteHeader,
     suiteCookie,
+    latency,
     ignorePrefix,
     aliases,
     responseHeaders,
