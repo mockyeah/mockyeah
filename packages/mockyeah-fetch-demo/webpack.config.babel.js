@@ -5,7 +5,10 @@ export default (env = {}) => ({
   devtool: env.dev ? 'source-map' : undefined,
   entry: './src/index.ts',
   resolve: {
-    extensions: ['.ts', '.js', '.json']
+    extensions: ['.ts', '.js', '.json'],
+    // The '..' supports resolving packages for monorepo build on netlify
+    //  which doesn't seem to allow `lerna link`'s writes to `node_modules`.
+    modules: ['node_modules', '..']
   },
   module: {
     rules: [
