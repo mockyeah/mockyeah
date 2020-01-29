@@ -14,7 +14,7 @@
     "lint:watch": "lerna run lint:watch",
     "pretty": "prettier --write '**'",
     "pretty:check": "prettier --check '**'",
-    "postinstall": "[ -z \"$NETLIFY\" ] && lerna bootstrap",
+    "postinstall": "[ ! -z \"$NETLIFY\" ] || lerna bootstrap",
     "postversion": "prettier --write lerna.json"
   },
   "devDependencies": {
