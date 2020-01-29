@@ -14,7 +14,7 @@ import SEO from '../components/seo';
 import Menu from './Menu';
 import '../components/layout.css';
 
-const Default = (props) => {
+const Default = props => {
   const { children, title } = props;
 
   const data = useStaticQuery(graphql`

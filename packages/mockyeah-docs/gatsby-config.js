@@ -76,7 +76,7 @@ module.exports = {
         template: 'markdown' // Default template to use if none is supplied
       }
     },
-    'gatsby-plugin-catch-links',
+    'gatsby-plugin-catch-links'
     // {
     //   resolve: '@stackbit/gatsby-plugin-menus',
     //   options: {
