@@ -109,7 +109,7 @@ interface MatchDeepObjectOfStrings {
 
 type MatcherDeepObjectOfStrings = MatchDeepObjectOfStrings | MatcherFunction<DeepObjectOfStrings>;
 
-type ObjectOfStrings = Record<string, string>
+type ObjectOfStrings = Record<string, string>;
 
 type MatchObjectOfStrings = Record<string, MatchString>;
 

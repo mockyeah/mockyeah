@@ -331,13 +331,13 @@ describe('@mockyeah/fetch', () => {
     mockyeah = new Mockyeah(options);
 
     mockyeah.mock(
-        {
-          method: method => /post/i.test(method),
-          url: url => url === 'https://example.local',
-          query: query => /yes/.test(query.ok as string),
-          body: body => body.sure === 'thing'
-        },
-        { text: 'hello' }
+      {
+        method: method => /post/i.test(method),
+        url: url => url === 'https://example.local',
+        query: query => /yes/.test(query.ok as string),
+        body: body => body.sure === 'thing'
+      },
+      { text: 'hello' }
     );
 
     const response = await mockyeah.fetch('https://example.local?ok=yes&and=more', {
