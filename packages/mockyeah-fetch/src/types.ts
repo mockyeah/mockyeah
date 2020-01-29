@@ -32,9 +32,11 @@ type Method = MethodLower | MethodUpper;
 
 type MethodOrAll = Method | 'all' | 'ALL' | '*';
 
-interface Json {
-  [key: string]: string | number | boolean | null | Json;
+interface JsonObject {
+  [key: string]: Json;
 }
+type JsonPrimitive = string | number | boolean | null;
+type Json = JsonPrimitive | JsonPrimitive[] | JsonObject;
 
 interface RequestForHandler {
   url: string;
