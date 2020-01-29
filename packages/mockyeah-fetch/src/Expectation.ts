@@ -184,7 +184,7 @@ class Expectation {
     return this;
   }
 
-  params(value: MatcherObjectOfStrings) {
+  params(value: MatcherDeepObjectOfStrings) {
     const message = `${this.prefix} Params did not match expected`;
 
     this.handlers.push(req => {

@@ -126,7 +126,7 @@ interface Expectation {
   path(path: string): Expectation;
   url(url: string): Expectation;
   header(name: string, value: string): Expectation;
-  params(match: MatcherObjectOfStrings): Expectation;
+  params(match: MatcherDeepObjectOfStrings): Expectation;
   query(match: MatcherDeepObjectOfStrings): Expectation;
   // TODO: Type out `body`.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
