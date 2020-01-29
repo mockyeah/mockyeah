@@ -14,7 +14,7 @@
     "lint:watch": "lerna run lint:watch",
     "pretty": "prettier --write '**'",
     "pretty:check": "prettier --check '**'",
-    "preinstall": "find node_modules -maxdepth 1 -type l -exec rm -rf {} +",
+    "preinstall": "rm -rf node_modules/@mockyeah node_modules/match-deep",
     "postinstall": "[ ! -z \"$NETLIFY\" ] || lerna bootstrap",
     "postversion": "prettier --write lerna.json"
   },
