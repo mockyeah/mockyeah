@@ -14,7 +14,7 @@
     "lint:watch": "lerna run lint:watch",
     "pretty": "prettier --write '**'",
     "pretty:check": "prettier --check '**'",
-    "preinstall": "chmod ug+w node_modules/@mockyeah/fetch || true",
+    "preinstall": "rm -rf node_modules/@mockyeah",
     "postinstall": "[ ! -z \"$NETLIFY\" ] || lerna bootstrap",
     "postversion": "prettier --write lerna.json"
   },
