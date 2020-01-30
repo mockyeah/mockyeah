@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/web-extension",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.7",
   "description": "mockyeah web extension",
   "scripts": {
     "build": "NODE_ENV=production webpack --config webpack.config.ts",
@@ -12,8 +12,8 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "@mockyeah/fetch": "^1.0.0-alpha.6",
-    "@mockyeah/tools": "^1.0.0-alpha.6",
+    "@mockyeah/fetch": "^1.0.0-alpha.7",
+    "@mockyeah/tools": "^1.0.0-alpha.7",
     "@types/chrome": "0.0.91",
     "@types/webpack": "^4.41.1",
     "@types/webpack-merge": "^4.1.5",
