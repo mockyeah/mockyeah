@@ -154,7 +154,6 @@ const menus = {
             },
             {
               title: 'API',
-              url: 'Packages/mockyeah-server/API',
               items: [
                 { title: '`close()`', url: 'Packages/mockyeah-server/API/close' },
                 { title: '`play()`', url: 'Packages/mockyeah-server/API/play' },
