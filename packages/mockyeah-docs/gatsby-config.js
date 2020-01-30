@@ -68,14 +68,6 @@ module.exports = {
         gatsbyRemarkPlugins
       }
     },
-    {
-      resolve: 'gatsby-plugin-markdown-pages',
-      options: {
-        path: './src/pages', // Path to markdown files to be converted to pages
-        templatePath: './src/layouts', // Path to page templates
-        template: 'markdown' // Default template to use if none is supplied
-      }
-    },
     'gatsby-plugin-catch-links'
     // {
     //   resolve: '@stackbit/gatsby-plugin-menus',

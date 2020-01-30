@@ -197,7 +197,7 @@ To apply custom formatting to the JS in the suite files, specify a string path t
 
 Aliases for match URLs, so that mocks for any of the URL prefixes in an alias set work for any of the others in its set too, to support sharing suites across various environments where service domains and base path endpoints may change. So with this configuration:
 
-```
+```js
 {
   "aliases": [
     [
@@ -226,13 +226,13 @@ Would be able to respond identically to calls to:
 
 When using `--only`, rather than always typing out regular expressions, you can define them here, so that rather than:
 
-```
+```shell
 mockyeah record --only '/api/v(.*)/users' --only '/api/v(.*)/posts)'
 ```
 
 We can instead type:
 
-```
+```shell
 mockyeah record --groups users,posts
 ```
 
