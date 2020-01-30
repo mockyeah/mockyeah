@@ -5,102 +5,182 @@ const menus = {
       title: 'Getting Started',
       url: 'Getting-Started',
       items: [
-        { title: 'Install', url: 'Getting-Started#install' },
-        { title: 'Introductory tutorial', url: 'Getting-Started#introductory-tutorial' }
+        { title: 'Server', url: 'Getting-Started/Server' },
+        { title: 'Client-Side', url: 'Getting-Started/Client-Side' },
+        { title: 'Node', url: 'Getting-Started/Node' },
+        { title: 'Unit Tests', url: 'Getting-Started/Unit-Tests' },
+        { title: 'DevTools Extension', url: 'WebExtension' }
       ]
     },
     {
-      title: 'Configuration',
-      url: 'Configuration',
+      title: 'Suites',
+      url: 'Suites',
       items: [
-        { title: 'Defaults', url: 'Configuration#default-configuration' },
-        { title: 'Options', url: 'Configuration#options' },
-        { title: 'HTTPS', url: 'Configuration#https' }
+        { title: 'Ad Hoc', url: 'Suites#ad-hoc-suites' },
+        { title: 'Dynamic', url: 'Suites#dynamic-suites' }
       ]
     },
     {
-      title: 'API',
+      title: 'Packages',
       items: [
-        { title: 'Match Values', url: './API/Match-Values' },
         {
-          title: 'Mock API',
-          url: 'API/Mock-API',
+          title: '`@mockyeah/fetch`',
+          url: 'Packages/mockyeah-fetch',
           items: [
-            { title: '`get/post/put/patch/delete/all()`', url: 'API/Mock-API' },
-            { title: 'Request Match', url: 'API/Mock-API#match' },
-            { title: 'Response Options', url: 'API/Mock-API#options' },
-            { title: '`close()`', url: 'API/close' },
-            { title: '`play()`', url: 'API/play' },
-            { title: '`playAll()`', url: 'API/playAll' },
-            { title: '`proxy()`', url: 'API/proxy' },
-            { title: '`record()`', url: 'API/record' },
-            { title: '`recordStop()`', url: 'API/recordStop' },
-            { title: '`reset()`', url: 'API/reset' },
-            { title: '`start()`', url: 'API/start' },
-            { title: '`startedPromise`', url: 'API/startedPromise' },
-            { title: '`unwatch()`', url: 'API/unwatch' },
-            { title: '`watch()`', url: 'API/watch' }
-          ]
-        },
-        {
-          title: 'Expectation API',
-          url: 'API/Expectation-API',
-          items: [
-            { title: '`.expect()`', url: 'API/Expectation-API#expect' },
             {
-              title: 'Quantitative',
-              url: 'API/Expectation-API#quantitative',
+              title: 'Configuration',
+              url: 'Packages/mockyeah-fetch/Configuration',
               items: [
-                { title: '`.expect().atLeast()`', url: 'API/Expectation-API#atLeast' },
-                { title: '`.expect().atMost()`', url: 'API/Expectation-API#atMost' },
-                { title: '`.expect().never()`', url: 'API/Expectation-API#never' },
-                { title: '`.expect().once()`', url: 'API/Expectation-API#once' },
-                { title: '`.expect().twice()`', url: 'API/Expectation-API#twice' },
-                { title: '`.expect().thrice()`', url: 'API/Expectation-API#thrice' },
-                { title: '`.expect().exactly()`', url: 'API/Expectation-API#exactly' }
+                { title: 'Logging', url: 'Packages/mockyeah-fetch/Configuration#logging' },
+                { title: 'Options', url: 'Packages/mockyeah-fetch/Configuration#options' },
+                { title: 'Defaults', url: 'Packages/mockyeah-fetch/Configuration#defaults' }
+              ]
+            },
+            { title: 'Match Values', url: 'Packages/mockyeah-fetch/API/Match-Values' },
+            {
+              title: 'Mock API',
+              url: 'Packages/mockyeah-fetch/API/Mock-API',
+              items: [
+                {
+                  title: '`get/post/put/patch/delete/all()`',
+                  url: 'Packages/mockyeah-fetch/API/Mock-API'
+                },
+                { title: 'Request Match', url: 'Packages/mockyeah-fetch/API/Mock-API#match' },
+                { title: 'Response Options', url: 'Packages/mockyeah-fetch/API/Mock-API#options' }
               ]
             },
             {
-              title: 'Structural',
-              url: 'API/Expectation-API#structural',
+              title: 'Expectation API',
+              url: 'Packages/mockyeah-fetch/API/Expectation-API',
               items: [
-                { title: '`.expect().path()`', url: 'API/Expectation-API#path' },
-                { title: '`.expect().url()`', url: 'API/Expectation-API#url' },
-                { title: '`.expect().body()`', url: 'API/Expectation-API#body' },
-                { title: '`.expect().params()`', url: 'API/Expectation-API#params' },
-                { title: '`.expect().header()`', url: 'API/Expectation-API#header' }
-              ]
-            },
-            {
-              title: 'Execute',
-              url: 'API/Expectation-API#execute',
-              items: [
-                { title: '`.expect().run()`', url: 'API/Expectation-API#run' },
-                { title: '`.expect().verify()`', url: 'API/Expectation-API#verify' },
-                { title: '`.expect().verifier()`', url: 'API/Expectation-API#verifier' }
+                { title: '`.expect()`', url: 'Packages/mockyeah-fetch/API/Expectation-API#expect' },
+                {
+                  title: 'Quantitative',
+                  url: 'Packages/mockyeah-fetch/API/Expectation-API#quantitative',
+                  items: [
+                    {
+                      title: '`.expect().atLeast()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#atLeast'
+                    },
+                    {
+                      title: '`.expect().atMost()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#atMost'
+                    },
+                    {
+                      title: '`.expect().never()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#never'
+                    },
+                    {
+                      title: '`.expect().once()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#once'
+                    },
+                    {
+                      title: '`.expect().twice()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#twice'
+                    },
+                    {
+                      title: '`.expect().thrice()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#thrice'
+                    },
+                    {
+                      title: '`.expect().exactly()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#exactly'
+                    }
+                  ]
+                },
+                {
+                  title: 'Structural',
+                  url: 'Packages/mockyeah-fetch/API/Expectation-API#structural',
+                  items: [
+                    {
+                      title: '`.expect().path()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#path'
+                    },
+                    {
+                      title: '`.expect().url()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#url'
+                    },
+                    {
+                      title: '`.expect().body()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#body'
+                    },
+                    {
+                      title: '`.expect().params()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#params'
+                    },
+                    {
+                      title: '`.expect().header()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#header'
+                    }
+                  ]
+                },
+                {
+                  title: 'Execute',
+                  url: 'Packages/mockyeah-fetch/API/Expectation-API#execute',
+                  items: [
+                    {
+                      title: '`.expect().run()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#run'
+                    },
+                    {
+                      title: '`.expect().verify()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#verify'
+                    },
+                    {
+                      title: '`.expect().verifier()`',
+                      url: 'Packages/mockyeah-fetch/API/Expectation-API#verifier'
+                    }
+                  ]
+                }
               ]
             }
           ]
-        }
+        },
+        {
+          title: '`@mockyeah/server`',
+          url: 'Packages/mockyeah-server',
+          items: [
+            {
+              title: 'Configuration',
+              url: 'Packages/mockyeah-server/Configuration',
+              items: [
+                // {title: 'Logging', url: 'Packages/mockyeah-server/Configuration#logging'},
+                // {title: 'Options', url: 'Packages/mockyeah-server/Configuration#options'},
+                // {title: 'Defaults', url: 'Packages/mockyeah-server/Configuration#defaults'},
+                { title: 'Defaults', url: 'Packages/mockyeah-server/Configuration#defaults' },
+                { title: 'Options', url: 'Packages/mockyeah-server/Configuration#options' },
+                { title: 'HTTPS', url: 'Packages/mockyeah-server/Configuration#https' }
+              ]
+            },
+            {
+              title: 'API',
+              items: [
+                { title: '`close()`', url: 'Packages/mockyeah-server/API/close' },
+                { title: '`play()`', url: 'Packages/mockyeah-server/API/play' },
+                { title: '`playAll()`', url: 'Packages/mockyeah-server/API/playAll' },
+                { title: '`proxy()`', url: 'Packages/mockyeah-server/API/proxy' },
+                { title: '`record()`', url: 'Packages/mockyeah-server/API/record' },
+                { title: '`recordStop()`', url: 'Packages/mockyeah-server/API/recordStop' },
+                { title: '`reset()`', url: 'Packages/mockyeah-server/API/reset' },
+                { title: '`start()`', url: 'Packages/mockyeah-server/API/start' },
+                { title: '`startedPromise`', url: 'Packages/mockyeah-server/API/startedPromise' },
+                { title: '`unwatch()`', url: 'Packages/mockyeah-server/API/unwatch' },
+                { title: '`watch()`', url: 'Packages/mockyeah-server/API/watch' },
+                { title: '`Server`', url: 'Packages/mockyeah-server/API/Server' }
+              ]
+            }
+          ]
+        },
+        { title: '`@mockyeah/cli`', url: 'Packages/mockyeah-cli' },
+        { title: '`@mockyeah/test-jest`', url: 'Packages/mockyeah-test-jest' },
+        { title: '`@mockyeah/test-mocha`', url: 'Packages/mockyeah-test-mocha' }
       ]
     },
-    { title: 'Classes', items: [{ title: '`Server`', url: 'API/Server' }] },
-    {
-      title: 'Suites',
-      url: 'Suites/Overview',
-      items: [
-        { title: 'Suites Overview', url: 'Suites/Overview#suites-overview' },
-        { title: 'Ad Hoc Suites', url: 'Suites/Overview#ad-hoc-suites' }
-      ]
-    },
-    { title: 'CLI', url: 'CLI/CLI' },
-    { title: 'Testing', url: 'Testing' },
-    { title: 'Integration', url: 'Integration' },
-    { title: 'Web Extension', url: 'WebExtension' },
     {
       title: 'Recipes & Examples',
       url: 'Recipes-and-Examples'
     },
+    { title: 'Compare', url: 'Compare' },
     { title: 'Contributing', url: 'Contributing' }
   ]
 };

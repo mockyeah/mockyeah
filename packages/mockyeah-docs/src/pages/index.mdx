@@ -2,16 +2,20 @@
 title: Introduction
 ---
 
-## What problem does mockyeah solve?
+To skip ahead & begin at any time, see our [Getting Started](Getting-Started) guide.
 
-Helps decouple HTTP integrations throughout development and testing.
+---
+
+## What problem does `mockyeah` solve?
+
+`mockyeah` helps decouple HTTP integrations throughout development and testing.
 
 Testing is difficult when you don't have control of your data. Developing service integrations can be a painful process. APIs designs are often influx, incomplete, unstable, or completely unavailable.
-mockyeah puts you in complete control, enabling you to implement **real mock web services** with ease to integrate and test with during development. Real mock services means you have control of response payloads, HTTP status codes, response latency, and more.
+`mockyeah` puts you in complete control, enabling you to implement mock HTTP responses with ease to integrate and test with during development. Real mock services means you have control of response payloads, HTTP status codes, response latency, and more.
 
-Have a requirement to implement specific behavior when a service is slow to respond or a server returns an unexpected status code? No problem! mockyeah makes developing for such requirements easy.
+Does your app have special behavior when a service is slow to respond or a server returns an unexpected status code? No problem! `mockyeah` makes developing for such requirements easy.
 
-## What is mockyeah's purpose?
+## What is `mockyeah`'s purpose?
 
 - To eliminate service side effects, increasing test durability
 - To provide dependable integrations
@@ -19,4 +23,28 @@ Have a requirement to implement specific behavior when a service is slow to resp
 - To increase developer productivity
 - To increase integration testing performance by eliminating network latency
 
-To begin, see our [Getting Started](./Getting-Started) guide.
+## What makes `mockyeah` unique?
+
+You might be familiar with `nock` - it works great for mocking in
+server-side or other Node apps, and in unit tests.
+But it's not designed to work with client-side apps, and doesn't
+provide an actual server for mocked responses.
+`mockyeah` can do all of the above and more, all with the same syntax!
+
+You might also be familiar with `Polly.JS` - like `mockyeah`, it supports both client and server-side mocking.
+It's a great tool, but its design seems more oriented around
+automatically recording and replaying known requests,
+and to initiate recording requires configuration in app source code,
+which means rebuilding or redeploying your app just to be able to record.\
+`mockyeah` lets you create suites of mocks that you can
+opt-in to at will with a cookie. It has a powerful & expressive
+request matching API. You can easily create mocks
+from scratch or by recording. You can initiate recording
+any request on-demand from a CLI once your app is initially
+configured once upfront with `mockyeah` - set & forget!
+
+For a full comparison to other tools, see our [Compare](Compare) guide.
+
+---
+
+Great! Next, head over our [Getting Started](Getting-Started) guide.

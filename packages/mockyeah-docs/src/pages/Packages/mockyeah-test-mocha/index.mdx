@@ -1,0 +1,25 @@
+---
+title: \@mockyeah/test-mocha
+---
+
+# `@mockyeah/test-mocha`
+
+If you're using the [Mocha](https://mochajs.org) unit test framework, try our `@mockyeah/test-mocha` package to ease setup & use.
+
+All you need to do is:
+
+```shell
+$ npm add --save-dev @mockyeah/test-mocha
+```
+
+Then, in your test files:
+
+```js
+import mockyeah from '@mockyeah/test-mocha';
+
+describe('test', () => {
+  it('should work', () => {
+    mockyeah.get('/');
+  });
+});
+```

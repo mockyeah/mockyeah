@@ -1,0 +1,87 @@
+---
+title: Getting Started on Client-Side
+---
+
+# Getting Started on Client-Side
+
+To integrate `mockyeah` to mock requests within your client-side app,
+you can use the [`@mockyeah/fetch`](../../Packages/mockyeah-fetch) package.
+
+This can monkeypatch or be used in place of the native `fetch` API to enable some `mockyeah` features.
+This requires `fetch` API support - recommended client-side `fetch` polyfills are `whatwg-fetch` or `isomorhpic-fetch`.
+
+[`@mockyeah/fetch`](../../Packages/mockyeah-fetch) intercepts requests that match any mocks
+and responds with mock data, bypassing a network call entirely.
+For some use cases, this can have a number of advantages over
+the [`@mockyeah/server`](../../Packages/mockyeah-server), including:
+
+- faster responses with no networking round-trip latency
+- more deterministic unit tests
+- simplified infrastructure for integration in higher environments
+- ability to inject code into app during automated functional regression tests
+  over the WebDriver protocol, such as with Selenium, etc.
+
+To install:
+
+```shell
+$ npm add @mockyeah/fetch
+```
+
+Then, to set it up, simply add this code to run once when your app starts:
+
+```js
+import 'isomorhpic-fetch';
+import Mockyeah from '@mockyeah/fetch';
+
+new Mockyeah();
+```
+
+Or to add mocks programmatically:
+
+```js
+import 'isomorhpic-fetch';
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah();
+
+mockyeah.mock('https://example.local?ok=yes', {
+  json: { fake: 'response' }
+});
+
+mockyeah.post(
+  {
+    url: 'https://example.local?ok=true',
+    body: {
+      up: 'yes'
+    }
+  },
+  {
+    json: () => ({ hello: 'there' })
+  }
+);
+
+fetch('https://example.local?ok=yes').then(async res => {
+  const data = await res.json();
+  console.log('data is now { fake: "response" }', data);
+});
+```
+
+If you want to load [mock suites](../../Suites), fixtures, or files from your local filesystem,
+and you've configured your code bundler correctly, you can use:
+
+```js
+const mockyeah = new Mockyeah({
+  mockSuiteResolver: name => import(`../mockyeah/${name}`),
+  fixtureResolver: path => import(`../fixtures/${path}`),
+  fileResolver: path => import(`../${path}`)
+});
+```
+
+For more details, see our page on [@mockyeah/fetch](../../Packages/mockyeah-fetch).
+
+## CLI
+
+You can use our command-line interface to record [suites](../../Suites) with `@mockyeah/fetch` on the client-side.
+You just need to ensure you haven't disabled WebSockets in your [client](../../Packages/mockyeah-fetch/Configuration) or [server configuration](../../Packages/mockyeah-server/Configuration) (`noWebSocket`).
+See more at [`@mockyeah/cli`](../Packages/mockyeah-cli).
+Other CLI commands like play don't yet work with client-side [`@mockyeah/fetch`](../../Packages/mockyeah-fetch), but stay tuned.

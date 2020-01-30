@@ -1,0 +1,196 @@
+---
+title: Configuration | \@mockyeah/fetch
+---
+
+# `@mockyeah/fetch` Configuration
+
+## Logging
+
+We use the [`debug`](https://www.npmjs.com/package/debug) utility, so to see logs
+in Node you can set environment variable `DEBUG=mockyeah:*`, or in the browser
+set `localStorage.setItem('debug', 'mockyeah:*')`.
+
+## Options
+
+The `Mockyeah` constructor accepts a configuration object.
+
+### Defaults
+
+```js
+{
+  "name": "default",
+  "noProxy": false,
+  "prependServerURL": false,
+  "noPolyfill": false,
+  "noWebSocket": false,
+  "host": "localhost",
+  "port": 4001,
+  "portHttps": undefined,
+  "adminHost": "localhost",
+  "adminPort": 4777,
+  "suiteHeader": "x-mockyeah-suite",
+  "suiteCookie": "mockyeahSuite",
+  "ignorePrefix": `http${portHttps ? 's' : ''}://${host}:${portHttps || port}/`,
+  "aliases": [],
+  "responseHeaders": true,
+  "latency": undefined,
+  "fetch": global.fetch,
+  "fileResolver": undefined,
+  "fixtureResolver": undefined,
+  "mockSuiteResolver": undefined,
+  "devTools": false,
+  "devToolsTimeout": 1000,
+  "devToolsInterval": 100
+}
+```
+
+### `name`
+
+Used to identify the origin of logged output.
+
+### `noProxy`
+
+Boolean to disable proxying.
+
+The proxy will transparently forward all non-matching requests onto their original URL.
+Proxying enables working with real APIs by default but partially mocking responses for some requests.
+
+In a browser, for [dynamic suites](../../Suites#dynamic-suites),
+it will also pass any `mockyeahSuite` cookie value as a `x-mockyeah-suite` header,
+since setting a cookie is often easier for users than setting a header.
+
+Then you can hit your `mockyeah` server's URLs like:
+`https://localhost:4001/https://api.example.com?foo=bar`
+`https://localhost:4001/https://service.example.com/foo/bar`
+
+and allow the first to pass through to the actual origin by not defining any mocks, but mock the second with:
+
+```js
+mockyeah.get('https://service.example.com/foo/bar', {
+  json: {
+    hello: 'there'
+  }
+});
+```
+
+### `prependServerURL`
+
+For use with [`@mockyeah/server`](../mockyeah-server), automatically prepend the `mockyeah` server URL to outgoing `fetch` requests.
+
+This can be used for apps that don't have complex configuration mechanisms or control over re-wiring
+all their code or configuration to use URLs with the `mockyeah`~~~~ server URL prefix.
+
+### `noPolyfill`
+
+Boolean to disable `mockyeah` polyfill from installing itself to replace the global `fetch`.
+
+You can still call `mockyeah.fetch()` manually without polyfilling.
+
+### `noWebSocket`
+
+Boolean to disable the attempt to connect to the admin server in a `@mockyeah/server`
+(including the one included in `@mockyeah/cli`) over WebSockets.
+
+Keeping this enabled allows us to initiate recordings for requests going through `@mockyeah/fetch` in the browser
+from the `@mockyeah/cli` or `@mockyeah/server` (programmatically).
+
+### `host`
+
+Host on which you're running `@mockyeah/server` if you wish to integrate with that.
+
+### `port`
+
+Port on which your `@mockyeah/server` runs HTTP (or use `portHttps`) if you wish to integrate with that.
+
+### `portHttps`
+
+Port on which your `@mockyeah/server` runs over HTTPS (instead of `port`) if you wish to integrate with that.
+
+### `adminHost`
+
+Host on which your `@mockyeah/server` admin server runs if you wish to integrate with that.
+
+### `adminPort`
+
+Port on which your `@mockyeah/server` admin server runs if you wish to integrate with that.
+
+### `suiteHeader`
+
+String for the header name to use to opt-in to suites dynamically.
+
+### `suiteCookie`
+
+String for the cookie name to use to opt-in to suites dynamically.
+
+### `ignorePrefix`
+
+A URL prefix that will always be stripped off of the request URLs before trying to match against mocks.
+
+#### `aliases`
+
+Aliases for match URLs, so that mocks for any of the URL prefixes in an alias set work for any of the others in its set too, to support sharing suites across various environments where service domains and base path endpoints may change. So with this configuration:
+
+```js
+{
+  "aliases": [
+    [
+      "https://demo.api.example.com",
+      "https://test.api.example.com",
+      "https://api.example.com"
+    ],
+    // more sets of aliases...
+  ]
+}
+```
+
+So now a mock like this:
+
+```js
+mockyeah.get('https://api.example.com/some/endpoint', { text: 'hello' });
+```
+
+Would be able to respond identically to calls to:
+
+- `https://demo.api.example.com/some/endpoint`
+- `https://test.api.example.com/some/endpoint`
+- `https://api.example.com/some/endpoint`
+
+### `responseHeaders`
+
+Boolean to disable `mockyeah`'s custom response headers:
+
+- `x-mockyeah-mocked: true` Indicates the request matched a mock and responded with it.
+- `x-mockyeah-missed: true` Indicates the request missed all mocks.
+- `x-mockyeah-proxied: true` Indicates a missed request was proxied.
+
+### `latency`
+
+A default latency for all mock responses. Can override per mock.
+
+### `fetch`
+
+The `fecth` API function you want to use to make requests. Can be `window.fetch` or a polyfill you import and pass in.
+
+### `fileResolver`
+
+An async function that loads files, receiving the fixture name/path as a first argument.
+
+### `fixtureResolver`
+
+An async function that loads fixtures, receiving the fixture name/path as a first argument.
+
+### `mockSuiteResolver`
+
+An async function that loads mock suites, receiving the suite name as a first argument.
+
+### `devTools`
+
+Enable connecting to the [`mockyeah` DevTools Web Extension](../../WebExtension).
+
+### `devToolsTimeout`
+
+Time in milliseconds after which requests blocked by polling for a DevTools connection will give up and proceed.
+
+### `devToolsInterval`
+
+Time in milliseconds indicating how often to check for a DevTools connection during the `devToolsTimeout` period.

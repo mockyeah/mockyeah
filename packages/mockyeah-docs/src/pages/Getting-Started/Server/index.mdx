@@ -1,0 +1,101 @@
+---
+title: Getting Started with Server
+---
+
+# Getting Started with Server
+
+`mockyeah` can spin up a real server that can mock or proxy requests. It can work in your local or a higher environment.
+Let's see how to set it up locally for a project:
+
+1.  Create an example project and initialized with `npm`:
+
+    ```shell
+    $ mkdir example-app && cd example-app
+    $ npm init --yes # defaults will be fine
+    ```
+
+1.  Install `@mockyeah/server`
+
+    ```shell
+    $ npm add --save-dev @mockyeah/server
+    ```
+
+    or
+
+    ```shell
+    $ yarn add --dev @mockyeah/server
+    ```
+
+1.  Create script file and add the source below:
+
+    ```shell
+    $ touch index.js
+    ```
+
+    ```js
+    const mockyeah = require('@mockyeah/server');
+
+    mockyeah.get('/hello-world', { text: 'Hello World' });
+    ```
+
+1.  Run the script file with Node
+
+    ```shell
+    $ node index.js
+    ```
+
+1.  Open [http://localhost:4001/hello-world](http://localhost:4001/hello-world)
+
+1.  Profit. You should see "Hello World" returned from your mock server.
+
+Withe relative URLs like `/hello-world` above, if no mock matches, then `mockyeah` will response with a `404`.
+
+But `mockyeah` can accept absolute URLs like this:
+
+- `https://localhost:4001/https://api.example.com?foo=bar`
+- `https://localhost:4001/https://service.example.com/foo/bar`
+
+This makes it easy to simply prepend the `mockyeah` server URL to your existing API URLs (see [`Connect Your App`](#connect-your-app) below).
+
+With the [`proxy`](../../Configuration#proxy) option, `mockyeah` will also transparently forward all non-matching requests onto their original URL,
+and send the response back to you.
+This enables working with real APIs by default, but partially mocking responses for some requests.
+
+So if we added this mock:
+
+```js
+mockyeah.get('https://service.example.com/foo/bar', {
+  json: {
+    hello: 'there'
+  }
+});
+```
+
+Then a request to `https://localhost:4001/https://service.example.com/foo/bar` would result in a response of
+`{ "hello": "there" }`.
+
+But any other request like `https://localhost:4001/https://api.example.com?foo=bar` would not hit any mocks so it would proxy
+to the actual `https://api.example.com?foo=bar` endpoint and respond normally (though perhaps with some additional headers from `mockyeah`).
+
+```js
+const mockyeah = require('@mockyeah/server');
+
+mockyeah.get('https://example./hello-world', { text: 'Hello World' });
+
+fetch('https://example.local?ok=yes').then(async res => {
+  const data = await res.json();
+  console.log('data is now { fake: "response" }', data);
+});
+```
+
+## Connect Your App
+
+You can use [`@mockyeah/fetch`](../Packages/mockyeah-fetch) to automatically rewrite all `fetch` requests from your client-side or server-side app or unit tests
+to hit your new `mockyeah` server. See the [`proxy`](../../Packages/mockyeah-fetch#proxy) option.
+
+Or you can just manually configure your app's service URLs to point to your `mockyeah` server.
+
+## CLI
+
+You can use our command-line interface to start a `mockyeah` server. See more at [`@mockyeah/cli`](../Packages/mockyeah-cli).
+You can also use it to record, play, or play all [suites](../../Suites) with your [`@mockyeah/server`](../../Packages/mockyeah-server).

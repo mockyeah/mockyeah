@@ -1,0 +1,58 @@
+---
+title: Getting Started in Node
+---
+
+# Getting Started in Node
+
+To integrate `mockyeah` to mock requests within your Node or server-side app,
+you can use the [`@mockyeah/fetch`](../../Packages/mockyeah-fetch) package.
+
+This can monkeypatch or be used in place of the native `fetch` API to enable some `mockyeah` features.
+This requires `fetch` API support - recommended polyfills for `fetch` for Node are `node-fetch` or `isomorhpic-fetch`.
+
+To install:
+
+```shell
+$ npm add @mockyeah/fetch
+```
+
+Then, to set it up, simply add this code to run once when your app starts:
+
+```js
+import 'isomorhpic-fetch';
+import Mockyeah from 'packages/mockyeah-fetch/dist/index';
+
+new Mockyeah();
+```
+
+Or to add mocks programmatically:
+
+```js
+import 'isomorhpic-fetch';
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah();
+
+mockyeah.mock('https://example.local?ok=yes', {
+  json: { fake: 'response' }
+});
+
+mockyeah.post(
+  {
+    url: 'https://example.local?ok=true',
+    body: {
+      up: 'yes'
+    }
+  },
+  {
+    json: () => ({ hello: 'there' })
+  }
+);
+
+fetch('https://example.local?ok=yes').then(async res => {
+  const data = await res.json();
+  console.log('data is now { fake: "response" }', data);
+});
+```
+
+For more details, see our page on [@mockyeah/fetch](../../Packages/mockyeah-fetch).

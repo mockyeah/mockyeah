@@ -1,0 +1,34 @@
+---
+title: \@mockyeah/server
+---
+
+# `@mockyeah/server`
+
+To use, simply:
+
+```shell
+$ npm add @mockyeah/server
+```
+
+Then:
+
+```js
+const mockyeah = require('@mockyeah/server');
+
+mockyeah.get('/hello-world', { text: 'Hello World' });
+```
+
+`mockyeah` exports an instance of the [Server](mockyeah-server/API/Server) class
+with local configuration or defaults.
+
+See [Configuration](mockyeah-server/Configuration) for more info on how to configure.
+
+To create your server programmatically, see [Server](mockyeah-server/API/Server).
+
+The `mockyeah` instance supports the following
+
+## HTTPS
+
+For HTTPS support, use the `portHttps` option. By default, this uses `create-cert-files` (based on `selfsigned`, used by `webpack-dev-server`, etc.),
+where it will initially auto-generate a self-signed cert within `node_modules` then continue to re-use that as long as it exists.
+Alternatively, to provide your own, you can pass config options httpsKeyPath and httpsCertPath relative to `.mockyeah`/`MOCKYEAH_ROOT`.

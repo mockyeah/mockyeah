@@ -1,0 +1,25 @@
+---
+title: \@mockyeah/test-jest
+---
+
+# `@mockyeah/test-jest`
+
+If you're using the [Jest](https://jestjs.io) unit test framework, try our `@mockyeah/test-jest` package to ease setup & use.
+
+All you need to do is:
+
+```shell
+$ npm add --save-dev @mockyeah/test-jest
+```
+
+Then, in your test files:
+
+```js
+import mockyeah from '@mockyeah/test-jest';
+
+describe('test', () => {
+  test('should work', () => {
+    mockyeah.get('/');
+  });
+});
+```
