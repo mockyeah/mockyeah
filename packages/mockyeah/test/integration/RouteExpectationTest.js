@@ -126,7 +126,29 @@ describe('Route expectation', () => {
         cb => request.get('/foo?some=nope').end(cb),
         cb => {
           expect(expectation.verify).to.throw(
-            'Expect object did not match: Expected `"value"` and value `"nope"` not equal for "query.some". Value `"/foo"` does not pass function for "url"'
+            'Expect object did not match: Expected `"value"` and value `"nope"` not equal for "query.some". Value `"/foo"` does not pass function (`"/faoo"`) for "url"'
+          );
+          cb();
+        }
+      ],
+      done
+    );
+  });
+
+  it('should fail for expect with auto-mount not matching with regex', done => {
+    const expectation = mockyeah.expect({
+      path: /faoo/,
+      query: {
+        some: 'value'
+      }
+    });
+
+    async.series(
+      [
+        cb => request.get('/foo?some=nope').end(cb),
+        cb => {
+          expect(expectation.verify).to.throw(
+            'Expect object did not match: Expected `"value"` and value `"nope"` not equal for "query.some". Value `"/foo"` does not pass function (`/faoo/`) for "url"'
           );
           cb();
         }

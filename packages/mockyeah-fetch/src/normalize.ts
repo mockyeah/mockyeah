@@ -75,20 +75,22 @@ const makeRequestUrl = (url: string) => {
     : url;
 };
 
-const normalize = (match: Match, incoming?: boolean): MatchNormal => {
-  if (typeof match === 'function') return match;
+const normalize = (_match: Match, incoming?: boolean): MatchNormal => {
+  if (typeof _match === 'function') return _match;
 
-  const originalMatch = isPlainObject(match) ? { ...(match as MatchObject) } : match;
+  const originalMatch = isPlainObject(_match) ? { ...(_match as MatchObject) } : _match;
 
-  if (!isPlainObject(match)) {
+  let match: MatchObject;
+
+  if (!isPlainObject(_match)) {
     match = {
-      url: match
+      url: _match
     } as MatchObject;
   } else {
     // shallow copy
     match = {
       // @ts-ignore
-      ...match
+      ..._match
     } as MatchObject;
   }
 
@@ -149,6 +151,8 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
   $meta.originalNormal = originalNormal;
   $meta.originalSerialized = serializeObject(originalNormal);
 
+  const { url } = match;
+
   if (typeof match.url === 'string') {
     if (!incoming) {
       const matchKeys: pathToRegexp.Key[] = [];
@@ -158,6 +162,7 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
       $meta.regex = regex;
       $meta.matchKeys = matchKeys;
       $meta.fn = match.url.toString();
+      match.url.toStringForMatchDeep = () => `"${url?.toString()}"`;
     }
   } else if (isRegExp(match.url)) {
     if (!incoming) {
@@ -166,6 +171,7 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
         regex.test(decodeProtocolAndPort(u)) || regex.test(decodeProtocolAndPort(`/${u}`));
       $meta.regex = regex;
       $meta.fn = match.url.toString();
+      match.url.toStringForMatchDeep = () => url?.toString();
     }
   } else if (typeof match.url === 'function') {
     const fn = match.url;

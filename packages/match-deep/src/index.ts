@@ -80,6 +80,10 @@ const makeMatcher = (options = DEFAULT_MATCH_OPTIONS) => {
           errors.push({
             message: `Value \`${stringify(value)}\` does not pass function${
               source.name ? ` \`${source.name}\`` : ''
+            }${
+              typeof source.toStringForMatchDeep === 'function'
+                ? ` (\`${source.toStringForMatchDeep()}\`)`
+                : ''
             }`,
             keyPath
           });
