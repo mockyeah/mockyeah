@@ -32,14 +32,17 @@ type Method = MethodLower | MethodUpper;
 
 type MethodOrAll = Method | 'all' | 'ALL' | '*';
 
-// TODO: Better JSON type.
-type Json = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+interface JsonObject {
+  [key: string]: Json;
+}
+type JsonPrimitive = string | number | boolean | null;
+type Json = JsonPrimitive | JsonPrimitive[] | JsonObject;
 
 interface RequestForHandler {
   url: string;
   path?: string;
   method: Method;
-  query?: Record<string, string>;
+  query?: DeepObjectOfStrings;
   headers?: Record<string, string>;
   cookies?: Record<string, string>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,12 +91,29 @@ const responseOptionsResponderKeys = [
 
 type ResponseOptions = string | ResponseOptionsObject;
 
-type Matcher<T> = T | ((arg: T) => boolean | undefined);
+type MatcherFunction<T> = (arg: T) => boolean | undefined;
+type Matcher<T> = T | MatcherFunction<T>;
 type MatchString<T = string> = Matcher<T> | RegExp;
 
 type VerifyCallback = (err?: Error) => void;
 type RunHandler = (callback: (err?: Error) => void) => Promise<void> | void;
 type RunHandlerOrPromise = RunHandler | Promise<void>;
+
+interface DeepObjectOfStrings {
+  [key: string]: string | DeepObjectOfStrings;
+}
+
+interface MatchDeepObjectOfStrings {
+  [key: string]: MatchString | MatchDeepObjectOfStrings;
+}
+
+type MatcherDeepObjectOfStrings = MatchDeepObjectOfStrings | MatcherFunction<DeepObjectOfStrings>;
+
+type ObjectOfStrings = Record<string, string>;
+
+type MatchObjectOfStrings = Record<string, MatchString>;
+
+type MatcherObjectOfStrings = MatchObjectOfStrings | MatcherFunction<ObjectOfStrings>;
 
 interface Expectation {
   request(request: RequestForHandler): void;
@@ -108,8 +128,8 @@ interface Expectation {
   path(path: string): Expectation;
   url(url: string): Expectation;
   header(name: string, value: string): Expectation;
-  params(match: Matcher<Record<string, MatchString>>): Expectation;
-  query(match: Matcher<Record<string, MatchString>>): Expectation;
+  params(match: MatcherDeepObjectOfStrings): Expectation;
+  query(match: MatcherDeepObjectOfStrings): Expectation;
   // TODO: Type out `body`.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body(match: any): Expectation;
@@ -130,12 +150,12 @@ interface MatchMeta {
 }
 
 interface MatchObject {
-  url?: MatchString<string>;
-  path?: MatchString<string>;
+  url?: MatchString;
+  path?: MatchString;
   method?: MatchString<MethodOrAll>;
-  query?: Matcher<Record<string, MatchString>>;
-  headers?: Matcher<Record<string, MatchString>>;
-  cookies?: Matcher<Record<string, MatchString>>;
+  query?: MatcherDeepObjectOfStrings;
+  headers?: MatcherObjectOfStrings;
+  cookies?: MatcherObjectOfStrings;
   // TODO: Type out `body`.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
@@ -204,6 +224,8 @@ export {
   ResponderResult,
   ResponseObject,
   Matcher,
+  MatcherDeepObjectOfStrings,
+  MatcherObjectOfStrings,
   Match,
   MatchFunction,
   MatchObject,
