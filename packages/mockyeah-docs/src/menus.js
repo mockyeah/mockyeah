@@ -5,11 +5,14 @@ const menus = {
       title: 'Getting Started',
       url: 'Getting-Started',
       items: [
-        { title: 'Server', url: 'Getting-Started/Server' },
-        { title: 'Client-Side', url: 'Getting-Started/Client-Side' },
+        {
+          title: 'Client-Side',
+          url: 'Getting-Started/Client-Side',
+          items: [{ title: 'DevTools Extension', url: 'WebExtension' }]
+        },
         { title: 'Node', url: 'Getting-Started/Node' },
-        { title: 'Unit Tests', url: 'Getting-Started/Unit-Tests' },
-        { title: 'DevTools Extension', url: 'WebExtension' }
+        { title: 'Server', url: 'Getting-Started/Server' },
+        { title: 'Unit Tests', url: 'Getting-Started/Unit-Tests' }
       ]
     },
     {
