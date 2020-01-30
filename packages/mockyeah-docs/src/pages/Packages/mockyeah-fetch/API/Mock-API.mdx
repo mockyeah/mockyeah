@@ -59,6 +59,7 @@ Its structure is:
   url?: MatchValue,
   query?: MatchValue
   headers?: MatchValue
+  cookie?: MatchValue
   body?: MatchValue,
   method?: MatchValue
 }
@@ -68,7 +69,7 @@ with types:
 
 <!-- prettier-ignore -->
 ```js
-type MatchValue = string | RegExp | (string) => boolean | MatchBody;
+type MatchValue = string | RegExp | ((string) => boolean) | MatchBody;
 
 type MatchBody = {
   [key: string]: MatchValue
