@@ -162,7 +162,7 @@ const normalize = (_match: Match, incoming?: boolean): MatchNormal => {
       $meta.regex = regex;
       $meta.matchKeys = matchKeys;
       $meta.fn = match.url.toString();
-      match.url.toStringForMatchDeep = () => url?.toString();
+      match.url.toStringForMatchDeep = () => `"${url?.toString()}"`;
     }
   } else if (isRegExp(match.url)) {
     if (!incoming) {
