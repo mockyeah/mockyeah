@@ -130,7 +130,7 @@ interface MatchMeta {
 }
 
 interface MatchObject {
-  url?: MatchString<string>;
+  url?: MatchString<string> & { toStringForMatchDeep?: () => string | undefined };
   path?: MatchString<string>;
   method?: MatchString<MethodOrAll>;
   query?: Matcher<Record<string, MatchString>>;
