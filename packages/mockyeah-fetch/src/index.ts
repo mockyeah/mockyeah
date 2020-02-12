@@ -114,6 +114,8 @@ class Mockyeah {
     logPrefix: string;
     mocks: MockNormal[];
     aliasReplacements?: Record<string, string[]>;
+    devToolsFound: boolean;
+    skipDevToolsCheck: boolean;
   };
 
   methods: Record<string, MockFunction>;
@@ -127,7 +129,9 @@ class Mockyeah {
       recording: false,
       bootOptions: defaultBootOptions,
       logPrefix: `[${name}]`,
-      mocks: []
+      mocks: [],
+      devToolsFound: false,
+      skipDevToolsCheck: false
     };
 
     const { logPrefix } = this.__private;
@@ -171,7 +175,7 @@ class Mockyeah {
     init?: RequestInit,
     fetchOptions: FetchOptions = {}
   ): Promise<Response> {
-    const { logPrefix, mocks, bootOptions, aliasReplacements } = this.__private;
+    const { logPrefix, mocks, bootOptions, aliasReplacements, skipDevToolsCheck } = this.__private;
     const {
       noWebSocket,
       ignorePrefix,
@@ -198,21 +202,44 @@ class Mockyeah {
       }
     }
 
-    if (devTools) {
+    if (devTools && typeof window !== 'undefined' && !skipDevToolsCheck) {
       await new Promise(resolve => {
         let times = 0;
         const interval = setInterval(() => {
           times += 1;
           if (
             // @ts-ignore
-            window.__MOCKYEAH_DEVTOOLS_EXTENSION__?.loadedMocks ||
-            times > devToolsTimeout / devToolsInterval
+            window.__MOCKYEAH_DEVTOOLS_EXTENSION__
           ) {
-            resolve();
+            this.__private.devToolsFound = true;
             clearInterval(interval);
+            resolve();
+          } else if (times > devToolsTimeout / devToolsInterval) {
+            this.__private.skipDevToolsCheck = true;
+            clearInterval(interval);
+            resolve();
           }
         }, devToolsInterval);
       });
+
+      if (this.__private.devToolsFound) {
+        await new Promise(resolve => {
+          let times = 0;
+          const interval = setInterval(() => {
+            times += 1;
+            if (
+              // @ts-ignore
+              window.__MOCKYEAH_DEVTOOLS_EXTENSION__?.loadedMocks
+            ) {
+              clearInterval(interval);
+              resolve();
+            } else if (times > devToolsTimeout / devToolsInterval) {
+              clearInterval(interval);
+              resolve();
+            }
+          }, devToolsInterval);
+        });
+      }
     }
 
     // TODO: Support `Request` `input` object instead of `init`.
