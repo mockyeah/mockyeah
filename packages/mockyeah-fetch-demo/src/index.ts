@@ -3,7 +3,8 @@ import { Data } from './slideshow';
 
 const mockyeah = new Mockyeah({
   noWebSocket: true,
-  devTools: true
+  devTools: true,
+  serviceWorker: true
 });
 
 // @ts-ignore
@@ -27,6 +28,7 @@ const refetch = async () => {
 
     return data;
   } catch (error) {
+    console.error('fetch error', error);
     return {
       error: true
     };

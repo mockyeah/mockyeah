@@ -73,3 +73,66 @@ The `mockyeah` object has these public properties
   patch: (match: MatchObject, options?: ResponseOptions ) => void
 }
 ```
+
+## Service Worker
+
+`@mockyeah/fetch` can be configured to use a Service Worker to echo
+client-side mocked requests to the Network tab in your browser's Dev Tools,
+so that they appear like real requests, even though they're not hitting a server.
+
+If your site doesn't have a Service Worker yet,
+the easiest way is use the pre-configured one we offer
+at `@mockyeah/fetch/dist/serviceWorker`.
+
+If you're using Webpack, you could add another build config like:
+
+```js
+module.exports = [
+  // ...other configs
+  {
+    entry: '@mockyeah/fetch/dist/serviceWorker',
+    output: {
+      filename: '__mockyeahServiceWorker.js'
+    }
+  }
+];
+```
+
+Then configure in your app:
+
+```js
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah({
+  serviceWorker: true
+});
+```
+
+...or with overrides for defaults:
+
+```js
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah({
+  serviceWorker: true,
+  // the path where you'll be hosting the service worker:
+  serviceWorkerURL: '/__mockyeahServiceWorker.js',
+  // the scope of pages on your site you want it on:
+  serviceWorkerScope: '/'
+});
+```
+
+However, if you already have a Service Worker,
+`@mockyeah/fetch` exposes functions you can integrate.
+These were designed with Workbox in mind, so here's how that
+might look in your custom Service Worker:
+
+```js
+import { handlerCb, matchCb } from '@mockyeah/fetch/dist/workbox';
+import { registerRoute } from 'workbox-routing';
+
+registerRoute(matchCb, handlerCb);
+```
+
+Note that with a custom Service Worker like the above
+you'll have to have your own code to register it.

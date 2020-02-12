@@ -13,6 +13,7 @@ import { Expectation } from './Expectation';
 import { handleEmptyBody } from './handleEmptyBody';
 import { parseResponseBody } from './parseResponseBody';
 import { headersToObject } from './headersToObject';
+import { postMessageToServiceWorker, registerServiceWorker } from './registerServiceWorker';
 import { uuid } from './uuid';
 import {
   BootOptions,
@@ -39,6 +40,9 @@ const debugMissEach = debug('mockyeah:fetch:miss:each');
 const debugError = debug('mockyeah:fetch:error');
 const debugAdmin = debug('mockyeah:fetch:admin');
 const debugAdminError = debug('mockyeah:fetch:admin:error');
+
+let serviceWorkerRequestId = 0;
+const serviceWorkerFetches: Record<number, () => void> = {};
 
 const DEFAULT_BOOT_OPTIONS: Readonly<BootOptions> = {};
 
@@ -73,8 +77,12 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     fixtureResolver,
     mockSuiteResolver,
     devTools = false,
-    devToolsTimeout = 1000,
-    devToolsInterval = 100
+    devToolsTimeout = 2000,
+    devToolsInterval = 100,
+    serviceWorker,
+    serviceWorkerRegister = serviceWorker,
+    serviceWorkerURL = '/__mockyeahServiceWorker.js',
+    serviceWorkerScope = '/'
   } = bootOptions;
 
   const defaultBootOptions = {
@@ -100,7 +108,11 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     mockSuiteResolver,
     devTools,
     devToolsTimeout,
-    devToolsInterval
+    devToolsInterval,
+    serviceWorker,
+    serviceWorkerRegister,
+    serviceWorkerURL,
+    serviceWorkerScope
   };
 
   return defaultBootOptions;
@@ -114,6 +126,8 @@ class Mockyeah {
     logPrefix: string;
     mocks: MockNormal[];
     aliasReplacements?: Record<string, string[]>;
+    devToolsFound: boolean;
+    skipDevToolsCheck: boolean;
   };
 
   methods: Record<string, MockFunction>;
@@ -121,13 +135,24 @@ class Mockyeah {
   constructor(bootOptions: Readonly<BootOptions> = DEFAULT_BOOT_OPTIONS) {
     const defaultBootOptions = getDefaultBootOptions(bootOptions);
 
-    const { name, noPolyfill, aliases, fetch } = defaultBootOptions;
+    const {
+      name,
+      noPolyfill,
+      aliases,
+      fetch,
+      serviceWorker,
+      serviceWorkerRegister,
+      serviceWorkerURL,
+      serviceWorkerScope
+    } = defaultBootOptions;
 
     this.__private = {
       recording: false,
       bootOptions: defaultBootOptions,
       logPrefix: `[${name}]`,
-      mocks: []
+      mocks: [],
+      devToolsFound: false,
+      skipDevToolsCheck: false
     };
 
     const { logPrefix } = this.__private;
@@ -164,6 +189,25 @@ class Mockyeah {
     };
 
     this.methods = methods;
+
+    if (serviceWorker && typeof window !== 'undefined') {
+      if (serviceWorkerRegister) {
+        registerServiceWorker({ url: serviceWorkerURL, scope: serviceWorkerScope });
+      }
+
+      navigator.serviceWorker.addEventListener('message', event => {
+        if (event.data && event.data.type === 'mockyeahRequestReady') {
+          const {
+            data: {
+              payload: { requestId }
+            }
+          } = event;
+          if (serviceWorkerFetches[requestId]) {
+            serviceWorkerFetches[requestId]();
+          }
+        }
+      });
+    }
   }
 
   async fetch(
@@ -171,7 +215,7 @@ class Mockyeah {
     init?: RequestInit,
     fetchOptions: FetchOptions = {}
   ): Promise<Response> {
-    const { logPrefix, mocks, bootOptions, aliasReplacements } = this.__private;
+    const { logPrefix, mocks, bootOptions, aliasReplacements, skipDevToolsCheck } = this.__private;
     const {
       noWebSocket,
       ignorePrefix,
@@ -183,9 +227,11 @@ class Mockyeah {
       portHttps,
       host,
       mockSuiteResolver,
+      fetch,
       devTools,
       devToolsTimeout,
-      devToolsInterval
+      devToolsInterval,
+      serviceWorker
     } = bootOptions;
 
     const { dynamicMocks, dynamicMockSuite, noProxy = bootNoProxy } = fetchOptions;
@@ -198,21 +244,44 @@ class Mockyeah {
       }
     }
 
-    if (devTools) {
+    if (devTools && typeof window !== 'undefined' && !skipDevToolsCheck) {
       await new Promise(resolve => {
         let times = 0;
         const interval = setInterval(() => {
           times += 1;
           if (
             // @ts-ignore
-            window.__MOCKYEAH_DEVTOOLS_EXTENSION__?.loadedMocks ||
-            times > devToolsTimeout / devToolsInterval
+            window.__MOCKYEAH_DEVTOOLS_EXTENSION__
           ) {
-            resolve();
+            this.__private.devToolsFound = true;
             clearInterval(interval);
+            resolve();
+          } else if (times > devToolsTimeout / devToolsInterval) {
+            this.__private.skipDevToolsCheck = true;
+            clearInterval(interval);
+            resolve();
           }
         }, devToolsInterval);
       });
+
+      if (this.__private.devToolsFound) {
+        await new Promise(resolve => {
+          let times = 0;
+          const interval = setInterval(() => {
+            times += 1;
+            if (
+              // @ts-ignore
+              window.__MOCKYEAH_DEVTOOLS_EXTENSION__?.loadedMocks
+            ) {
+              clearInterval(interval);
+              resolve();
+            } else if (times > devToolsTimeout / devToolsInterval) {
+              clearInterval(interval);
+              resolve();
+            }
+          }, devToolsInterval);
+        });
+      }
     }
 
     // TODO: Support `Request` `input` object instead of `init`.
@@ -394,12 +463,42 @@ class Mockyeah {
         };
       }
 
-      const { response, json } = await respond(
+      const { response, json, body: responseBody, headers: responseHeaders } = await respond(
         matchingMock,
         requestForHandler,
         bootOptions,
         realRes
       );
+
+      if (serviceWorker) {
+        const responseObject = {
+          status: response.status,
+          body: responseBody,
+          headers: responseHeaders
+        };
+
+        serviceWorkerRequestId += 1;
+        const currentServiceWorkerRequestId = serviceWorkerRequestId;
+
+        postMessageToServiceWorker({
+          type: 'mockyeahRequest',
+          payload: {
+            requestId: currentServiceWorkerRequestId,
+            request: requestForHandler,
+            response: responseObject
+          }
+        });
+
+        serviceWorkerFetches[currentServiceWorkerRequestId] = (): void => {
+          fetch(url, {
+            ...options,
+            headers: {
+              ...options.headers,
+              'x-mockyeah-service-worker-request': currentServiceWorkerRequestId
+            }
+          });
+        };
+      }
 
       debugHit(`${logPrefix} @mockyeah/fetch matched mock for`, url, {
         request: requestForHandler,

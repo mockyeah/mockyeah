@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo
+} from "react";
 import { Table } from "../Table";
 import { NetworkActionsCell } from "./NetworkActionsCell";
 
@@ -28,32 +34,44 @@ const TabNetwork = ({ editMock }) => {
     []
   );
 
-  const columns = [
-    {
-      Header: () => null,
-      id: "actions",
-      Cell: ({ row }) => <NetworkActionsCell row={row} editMock={editMock} />
-    },
-    {
-      Header: "Method",
-      accessor: "method"
-    },
-    {
-      Header: "URL",
-      accessor: "url"
-    }
-  ];
+  const columns = useMemo(
+    () => [
+      {
+        Header: () => null,
+        id: "actions",
+        Cell: ({ row }) => <NetworkActionsCell row={row} editMock={editMock} />
+      },
+      {
+        Header: "Method",
+        accessor: "method"
+      },
+      {
+        Header: "URL",
+        accessor: "url"
+      },
+      {
+        Header: "Resource Type",
+        accessor: "resourceType"
+      }
+    ],
+    [editMock]
+  );
 
-  const data = harLog?.entries?.map(entry => {
-    const { request } = entry;
-    const { url, method } = request ?? {};
+  const data = useMemo(
+    () =>
+      harLog?.entries?.map(entry => {
+        const { request, _resourceType } = entry;
+        const { url, method } = request ?? {};
 
-    return {
-      entry,
-      method: typeof method === "string" ? method : typeof method,
-      url: typeof url === "string" ? url : typeof url
-    };
-  });
+        return {
+          entry,
+          method: typeof method === "string" ? method : typeof method,
+          url: typeof url === "string" ? url : typeof url,
+          resourceType: _resourceType
+        };
+      }),
+    [harLog?.entries]
+  );
 
   if (!data) return null;
 

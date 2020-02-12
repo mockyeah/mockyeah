@@ -1,9 +1,8 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-export default (env = {}) => ({
+const defaults = (env = {}) => ({
   mode: env.dev ? 'development' : 'production',
   devtool: env.dev ? 'source-map' : undefined,
-  entry: './src/index.ts',
   resolve: {
     extensions: ['.ts', '.js', '.json'],
     // The '..' supports resolving packages for monorepo build on netlify
@@ -23,10 +22,24 @@ export default (env = {}) => ({
         enforce: 'pre'
       }
     ]
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: '@mockyeah/fetch demo'
-    })
-  ]
+  }
 });
+
+export default [
+  (env = {}) => ({
+    ...defaults(env),
+    entry: './src/index.ts',
+    plugins: [
+      new HtmlWebpackPlugin({
+        title: '@mockyeah/fetch demo'
+      })
+    ]
+  }),
+  (env = {}) => ({
+    ...defaults(env),
+    entry: '@mockyeah/fetch/dist/serviceWorker',
+    output: {
+      filename: '__mockyeahServiceWorker.js'
+    }
+  })
+];
