@@ -1,6 +1,7 @@
 interface MatchOptions {
     shortCircuit?: boolean;
     skipKeys?: string[];
+    serializedRegex?: boolean;
 }
 interface MatchError {
     message: string;

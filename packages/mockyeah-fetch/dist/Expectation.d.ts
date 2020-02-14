@@ -1,4 +1,4 @@
-import { MatchObject, Match, Matcher, VerifyCallback, RunHandlerOrPromise, RequestForHandler, MatchString } from './types';
+import { MatchObject, Match, Matcher, VerifyCallback, RunHandlerOrPromise, RequestForHandler, MatcherDeepObjectOfStrings } from './types';
 declare class Expectation {
     prefix: string;
     called: number;
@@ -18,8 +18,8 @@ declare class Expectation {
     path(value: Matcher<string>): this;
     url(value: Matcher<string>): this;
     header(name: string, value: Matcher<string>): this;
-    params(value: Matcher<Record<string, MatchString>>): this;
-    query(value: Matcher<Record<string, MatchString>>): this;
+    params(value: MatcherDeepObjectOfStrings): this;
+    query(value: MatcherDeepObjectOfStrings): this;
     body(value: any): this;
     verifier(done: (err?: Error) => void): (err?: Error | undefined) => void;
     run(handlerOrPromise: RunHandlerOrPromise): this;
