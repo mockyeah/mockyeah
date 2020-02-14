@@ -85,7 +85,7 @@ const handlerCb = ({ event }): Response | Promise<Response> => {
 };
 
 // eslint-disable-next-line no-restricted-globals
-self.addEventListener('message', async event => {
+self.addEventListener('message', event => {
   if (event.data && event.data.type === 'mockyeahRequest') {
     const { data: { payload: { requestId, request, response } } = {}, source: client } = event;
 
