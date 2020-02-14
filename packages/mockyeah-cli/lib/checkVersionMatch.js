@@ -6,12 +6,16 @@ const semver = require('semver');
 const checkVersionMatch = (env, pkgUp) => {
   if (!pkgUp || !pkgUp.package || !pkgUp.package.version) {
     throw new Error(
-      chalk.red('Could not find `@mockyeah/cli` package version to check against core.')
+      chalk.red(
+        'Could not find `@mockyeah/cli` package version to check against `@mockyeah/server`.'
+      )
     );
   }
 
   if (!env.modulePackage || !env.modulePackage.version) {
-    throw new Error(chalk.red('Could not find `mockyeah` package version to check against CLI.'));
+    throw new Error(
+      chalk.red('Could not find `@mockyeah/server` package version to check against CLI.')
+    );
   }
 
   const cliVersion = pkgUp.package.version;
@@ -22,7 +26,7 @@ const checkVersionMatch = (env, pkgUp) => {
   if (['minor', 'major', 'preminor', 'premajor'].includes(diff)) {
     throw new Error(
       chalk.red(
-        `Version mismatch between @mockyeah/cli@${cliVersion} and @mockyeah/server@${serverVersion} - please install compatible versions.`
+        `Version mismatch between \`@mockyeah/cli@${cliVersion}\` and \`@mockyeah/server@${serverVersion}\` - please install compatible versions.`
       )
     );
   }

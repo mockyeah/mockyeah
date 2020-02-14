@@ -8,7 +8,8 @@ import {
   RunHandlerOrPromise,
   RunHandler,
   RequestForHandler,
-  MatchString
+  MatcherObjectOfStrings,
+  MatcherDeepObjectOfStrings
 } from './types';
 import { normalize } from './normalize';
 
@@ -37,7 +38,7 @@ class Expectation {
     const originalNormal =
       match.$meta && match.$meta.originalNormal ? match.$meta.originalNormal : match;
 
-    this.prefix = `[${originalNormal.method || 'get'}] ${originalNormal.path ||
+    this.prefix = `[${originalNormal.method || 'all'}] ${originalNormal.path ||
       originalNormal.url} --`;
 
     this.called = 0;
@@ -183,7 +184,7 @@ class Expectation {
     return this;
   }
 
-  params(value: Matcher<Record<string, MatchString>>) {
+  params(value: MatcherDeepObjectOfStrings) {
     const message = `${this.prefix} Params did not match expected`;
 
     this.handlers.push(req => {
@@ -193,7 +194,7 @@ class Expectation {
     return this;
   }
 
-  query(value: Matcher<Record<string, MatchString>>) {
+  query(value: MatcherDeepObjectOfStrings) {
     return this.params(value);
   }
 

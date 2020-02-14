@@ -1,0 +1,45 @@
+---
+title: Compare
+---
+
+# Compare
+
+There are several tools that share some goals and use cases with `mockyeah`.
+Here's an attempt to map out some of their features to help compare:
+
+|                                               | `mockyeah` | Polly.JS | nock | fetch-mock | pretender |
+| --------------------------------------------- | ---------- | -------- | ---- | ---------- | --------- |
+| browser support                               | ✅         | ✅       | ❌   | ✅         | ❓        |
+| Node.js support                               | ✅         | ✅       | ✅   | ✅         | ❌        |
+| Recording suites                              | ✅         | ❌       | ❌   | ❌         | ❌        |
+| Shareable recordings                          | ✅         | ❌       | ❌   | ❌         | ❌        |
+| Hot-reloading client-side suites              | 🚧         | ❌       | ❌   | ❌         | ❌        |
+| CLI dynamic record & play (server)            | ✅         | ❌       | ❌   | ❌         | ❌        |
+| CLI dynamic record (client)                   | ✅         | ❌       | ❌   | ❌         | ❌        |
+| CLI dynamic play (client)                     | 🚧         | ❌       | ❌   | ❌         | ❌        |
+| CLI record groups                             | ✅         | ❌       | ❌   | ❌         | ❌        |
+| Pass-thru/proxy                               | ✅         | ✅       | ✅   | ✅         | ❓        |
+| Pass-thru as default                          | ✅         | ✅       | ✅   | ✅         | ❌❓      |
+| Real server                                   | ✅         | ✅       | ❌   | ❌         | ❌        |
+| Programmatic mocked responses                 | ✅         | ✅       | ✅   | ✅         | ✅        |
+| Delay mocked response                         | ✅         | ✅       | ✅   | ✅         | ✅        |
+| Default delay                                 | ✅         | ❌       | ❓   | ❌         | ❌        |
+| Modify real responses                         | ✅         | ✅       | ❌   | ❌❓       | ❓        |
+| Delay real response                           | ✅         | ✅       | ✅   | ✅         | ✅        |
+| Domain aliases                                | ✅         | ❌       | ❌   | ❌         | ❌        |
+| Record to disk                                | ✅         | ✅       | ❌   | ❌         | ❌        |
+| Record to disk from client-side               | ✅         | ✅       | ❌   | ❌         | ❌        |
+| Record to local storage                       | 🚧         | ✅       | ❌   | ❌         | ❌        |
+| `fetch` mocking                               | ✅         | ✅       | ✅   | ✅         | ✅        |
+| XHR mocking                                   | 🚧         | ✅       | ❌   | ❌         | ✅        |
+| Events                                        | 🚧         | ✅       | ❌❓ | ❌❓       | ❌❓      |
+| Middleware                                    | 🚧         | ✅       | ❌❓ | ❌❓       | ❌        |
+| Dynamic mock opt-in (server)                  | ✅         | ❌       | ❌   | ❌         | ❌        |
+| `n`th mocking                                 | 🚧         | ✅       | ✅   | ❌         | ❌        |
+| Sessions                                      | 🚧         | ❌       | ❌   | ❌         | ❌        |
+| Browser extension                             | ✅         | ❌       | ❌   | ❌         | ❌        |
+| Unit test libraries                           | ✅         | ✅       | ❌   | ❌         | ❌        |
+| Unit test assertions                          | ✅         | ❌       | ❌   | ❌         | ❌        |
+| Declarative request matching (more than path) | ✅         | ❌       | ❌   | ❌         | ❌        |
+| Programmatic request matching                 | ✅         | ✅       | ✅   | ✅         | ❌❓      |
+| GraphQL-aware mocking                         | 🚧         | ❌       | ❌   | ❌         | ❌        |

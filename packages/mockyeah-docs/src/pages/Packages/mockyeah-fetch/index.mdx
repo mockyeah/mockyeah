@@ -1,0 +1,150 @@
+---
+title: \@mockyeah/fetch
+---
+
+# `@mockyeah/fetch`
+
+`@mockyeah/fetch` can monkeypatch or be used in place of the native `fetch` API to enable some `mockyeah` features.
+This requires `fetch` API support - recommended client-side `fetch` polyfills are `whatwg-fetch` or `isomorhpic-fetch`.
+
+To use, simply:
+
+```shell
+$ npm add @mockyeah/fetch
+```
+
+Then:
+
+```js
+import 'isomorhpic-fetch';
+import Mockyeah from '@mockyeah/fetch';
+
+new Mockyeah();
+```
+
+Or to add mocks programmatically:
+
+```js
+import 'isomorhpic-fetch';
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah();
+
+mockyeah.mock('https://example.local?ok=yes', {
+  json: { fake: 'response' }
+});
+
+mockyeah.post(
+  {
+    url: 'https://example.local?ok=true',
+    body: {
+      up: 'yes'
+    }
+  },
+  {
+    json: () => ({ hello: 'there' })
+  }
+);
+
+fetch('https://example.local?ok=yes').then(async res => {
+  const data = await res.json();
+  console.log('data is now { fake: "response" }', data);
+});
+```
+
+## API
+
+See [Configuration](Configuration) for full constructor options.
+
+The `mockyeah` object has these public properties
+(see [types](https://github.com/mockyeah/mockyeah/blob/master/packages/mockyeah-fetch/src/types.ts) for more details):
+
+```ts
+{
+  fetch: (url: string, fetchOptions?: {}, mockyeahFetchOptions?: MockyeahFetchOptions)
+    => Promise<Response>,
+  mock: (match: MatchObject, options?: ResponseOptions ) => void,
+  all: (match: MatchObject, option?s: ResponseOptions ) => void,
+  get: (match: MatchObject, options?: ResponseOptions ) => void,
+  post: (match: MatchObject, options?: ResponseOptions ) => void,
+  put: (match: MatchObject, options?: ResponseOptions ) => void,
+  delete: (match: MatchObject, options?: ResponseOptions ) => void,
+  options: (match: MatchObject, options?: ResponseOptions ) => void,
+  patch: (match: MatchObject, options?: ResponseOptions ) => void
+}
+```
+
+## Service Worker
+
+`@mockyeah/fetch` can be configured to use a Service Worker to echo
+client-side mocked requests to the Network tab in your browser's Dev Tools,
+so that they appear like real requests, even though they're not hitting a server.
+
+If your site doesn't have a Service Worker yet,
+the easiest way is use the pre-configured one we offer
+at `@mockyeah/fetch/dist/serviceWorker`.
+
+If you're using Webpack, you could add another build config like:
+
+```js
+module.exports = [
+  // ...other configs
+  {
+    entry: '@mockyeah/fetch/dist/serviceWorker',
+    output: {
+      filename: '__mockyeahServiceWorker.js'
+    }
+  }
+];
+```
+
+Then configure in your app:
+
+```js
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah({
+  serviceWorker: true
+});
+```
+
+...or with overrides for defaults:
+
+```js
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah({
+  serviceWorker: true,
+  // the path where you'll be hosting the service worker:
+  serviceWorkerURL: '/__mockyeahServiceWorker.js',
+  // the scope of pages on your site you want it on:
+  serviceWorkerScope: '/'
+});
+```
+
+However, if you already have a Service Worker,
+`@mockyeah/fetch` exposes functions you can integrate.
+These were designed with Workbox in mind, so here's how that
+might look in your custom Service Worker:
+
+```js
+import { handlerCb, matchCb } from '@mockyeah/fetch/dist/workbox';
+import { registerRoute } from 'workbox-routing';
+
+registerRoute(matchCb, handlerCb);
+```
+
+Note that with a custom Service Worker like the above
+you'll have to have your own code to register it.
+
+Then you'll want to disable auto-registering in your `mockyeah` instance
+with `serviceWorkerRegister`:
+
+```js
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah({
+  serviceWorker: true,
+  serviceWorkerRegister: false
+});
+```

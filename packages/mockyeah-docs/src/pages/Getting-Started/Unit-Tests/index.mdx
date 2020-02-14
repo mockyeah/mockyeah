@@ -1,0 +1,72 @@
+---
+title: Getting Started in Unit Tests
+---
+
+# Getting Started in Unit Tests
+
+`mockyeah` makes it easy to mock requests in your unit tests.
+
+To ease setup & use for popular unit test frameworks, `mockyeah` maintains some packages - see packages for [`jest`](../../Packages/mockyeah-test-jest) and [`mocha`](../../Packages/mockyeah-test-mocha). Or you can [configure manually](#configure-manually) for your test framework of choice.
+
+Here's an example of using `mockyeah` in unit tests with `jest`:
+
+```js
+const mockyeah = require('@mockyeah/test-jest');
+const supertest = require('supertest');
+
+const request = supertest(mockyeah.server.url);
+
+describe('Wondrous service', () => {
+  it('should create a mock service that returns an internal error', done => {
+    // create failing service mock
+    mockyeah.get('/wondrous', { status: 500 });
+
+    // assert service mock is working
+    request.get('/wondrous').expect(500, done);
+  });
+
+  it('should create a mock service that returns JSON', done => {
+    // create service mock that returns json data
+    mockyeah.get('/wondrous', { json: { foo: 'bar' } });
+
+    // assert service mock is working
+    request.get('/wondrous').expect(200, { foo: 'bar' }, done);
+  });
+
+  it('should verify a mock service expectation', () =>
+    // create service mock with expectation
+    mockyeah
+      .get('/wondrous', { text: 'it worked' })
+      .expect()
+      .params({
+        foo: 'bar'
+      })
+      .once()
+      // invoke request and verify expectation
+      .run(request.get('/wondrous?foo=bar'))
+      .verify());
+});
+```
+
+See [Mock API](../../Packages/mockyeah-fetch/API/Mock-API) and [Expectation API](../../Packages/mockyeah-fetch/API/Expectation-API) for more details.
+
+## Configure Manually
+
+You'll want to construct a `mockyeah` instance with the following options,
+and wire it into before/after each/all hooks for your testing framework.
+
+```js
+const Mockyeah = require('@mockyeah/fetch');
+
+const mockyeah = new Mockyeah({
+  noWebSocket: true
+  // other options...
+});
+
+// Tell mockyeah to reset its mocks after each test
+//  with lifecycle hooks in your unit test framework:
+
+afterEach(() => mockyeah.reset());
+
+// ...
+```

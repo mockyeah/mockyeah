@@ -1,16 +1,18 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-export default (env = {}) => ({
+const defaults = (env = {}) => ({
   mode: env.dev ? 'development' : 'production',
   devtool: env.dev ? 'source-map' : undefined,
-  entry: './src/index.ts',
   resolve: {
-    extensions: ['.ts', '.js', '.json']
+    extensions: ['.ts', '.js', '.json'],
+    // The '..' supports resolving packages for monorepo build on netlify
+    //  which doesn't seem to allow `lerna link`'s writes to `node_modules`.
+    modules: ['node_modules', '..']
   },
   module: {
     rules: [
       {
-        test: /\.[jt]s$/,
+        test: /\.ts$/,
         exclude: /node_modules/,
         use: 'babel-loader'
       },
@@ -20,6 +22,24 @@ export default (env = {}) => ({
         enforce: 'pre'
       }
     ]
-  },
-  plugins: [new HtmlWebpackPlugin()]
+  }
 });
+
+export default [
+  (env = {}) => ({
+    ...defaults(env),
+    entry: './src/index.ts',
+    plugins: [
+      new HtmlWebpackPlugin({
+        title: '@mockyeah/fetch demo'
+      })
+    ]
+  }),
+  (env = {}) => ({
+    ...defaults(env),
+    entry: '@mockyeah/fetch/dist/serviceWorker',
+    output: {
+      filename: '__mockyeahServiceWorker.js'
+    }
+  })
+];

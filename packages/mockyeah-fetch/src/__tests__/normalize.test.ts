@@ -61,12 +61,60 @@ describe('normalize', () => {
       }
     });
   });
+
+  test('original normal with url as top-level regex', () => {
+    expect(normalize(/ok/)).toMatchObject({
+      $meta: {
+        originalNormal: {
+          url: /ok/
+        }
+      }
+    });
+  });
+
+  test('original normal with url as regex', () => {
+    expect(
+      normalize({
+        url: /ok/
+      })
+    ).toMatchObject({
+      $meta: {
+        originalNormal: {
+          url: /ok/
+        }
+      }
+    });
+  });
+
+  test('original serialized with url as top-level regex', () => {
+    expect(normalize(/ok/)).toMatchObject({
+      $meta: {
+        originalSerialized: {
+          url: { $regex: { source: 'ok' } }
+        }
+      }
+    });
+  });
+
+  test('original serialized with url as regex', () => {
+    expect(
+      normalize({
+        url: /ok/
+      })
+    ).toMatchObject({
+      $meta: {
+        originalSerialized: {
+          url: { $regex: { source: 'ok' } }
+        }
+      }
+    });
+  });
 });
 
 describe('stripQuery', () => {
   test('strips', () => {
     expect(stripQuery('https://ok.com:123/yes?hello=there&sir')).toMatchObject({
       url: 'https://ok.com:123/yes'
-    })
+    });
   });
 });

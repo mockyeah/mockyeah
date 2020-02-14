@@ -1,0 +1,16 @@
+{
+  "name": "mockyeah",
+  "version": "1.0.0",
+  "description": "A powerful HTTP mocking extension.",
+  "manifest_version": 2,
+  "minimum_chrome_version": "68",
+  "browser_action": {
+    "default_icon": "icon-32.png"
+  },
+  "icons": {
+    "128": "icon-128.png"
+  },
+  "devtools_page": "devtools.html",
+  "permissions": ["tabs", "storage"],
+  "optional_permissions": ["http://*/*", "https://*/*"]
+}

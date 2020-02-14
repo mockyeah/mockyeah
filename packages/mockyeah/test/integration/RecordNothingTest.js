@@ -45,7 +45,7 @@ describe('Record Nothing Test', function() {
         }
       ],
       () => {
-        proxyReq = supertest(`${proxy.server.rootUrl}/http://mockyeah.js.org`);
+        proxyReq = supertest(`${proxy.server.url}/whatever`);
         done();
       }
     );

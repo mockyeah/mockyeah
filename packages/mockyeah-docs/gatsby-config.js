@@ -1,3 +1,10 @@
+const gatsbyRemarkPlugins = [
+  `gatsby-remark-autolink-headers`,
+  `gatsby-remark-prismjs`,
+  `gatsby-remark-images`,
+  `gatsby-remark-copy-linked-files`
+];
+
 module.exports = {
   siteMetadata: {
     title: `mockyeah`,
@@ -49,7 +56,7 @@ module.exports = {
         // GitHub Flavored Markdown mode (default: true)
         gfm: true,
         // Plugins configs
-        plugins: [`gatsby-remark-autolink-headers`]
+        plugins: gatsbyRemarkPlugins
       }
     },
     {
@@ -58,15 +65,7 @@ module.exports = {
         defaultLayouts: {
           default: require.resolve('./src/layouts/default.js')
         },
-        gatsbyRemarkPlugins: [`gatsby-remark-autolink-headers`]
-      }
-    },
-    {
-      resolve: 'gatsby-plugin-markdown-pages',
-      options: {
-        path: './src/pages', // Path to markdown files to be converted to pages
-        templatePath: './src/layouts', // Path to page templates
-        template: 'markdown' // Default template to use if none is supplied
+        gatsbyRemarkPlugins
       }
     },
     'gatsby-plugin-catch-links'
@@ -86,15 +85,15 @@ module.exports = {
     //         }
     //       ]
     //     },
-    //     // Gatsby node types from which we extract menus (optional, see "Advanced usage")
-    //     // sourceNodeType: 'MarkdownRemark',
-    //     sourceNodeType: 'SitePage',
-    //     // the relative node path where we can find the 'menus' container (optional)
-    //     sourceDataPath: 'frontmatter',
+    //   //   // Gatsby node types from which we extract menus (optional, see "Advanced usage")
+    //     sourceNodeType: 'Mdx',
+    //   //   sourceNodeType: 'SitePage',
+    //   //   // the relative node path where we can find the 'menus' container (optional)
+    //   //   sourceDataPath: 'frontmatter',
     //     // the relative node path where we can find the page's URL (required)
-    //     sourceUrlPath: 'fields.url',
-    //     // custom menu loading function (optional)
-    //     // menuLoader: customLoaderFunction,
+    //     sourceUrlPath: 'fields.slug',
+    //   //   // custom menu loading function (optional)
+    //   //   // menuLoader: customLoaderFunction,
     //     // the property to use for injecting to the page context (optional, see "Advanced usage")
     //     pageContextProperty: 'menus'
     //   }

@@ -26,17 +26,6 @@ const common = (env = {}) => ({
 export default [
   env => ({
     ...common(env),
-    entry: './src/normalize.ts',
-    target: 'node',
-    externals: [nodeExternals()],
-    output: {
-      filename: 'normalize.ts',
-      libraryTarget: 'commonjs2',
-      libraryExport: 'default'
-    }
-  }),
-  env => ({
-    ...common(env),
     target: 'node',
     externals: [nodeExternals()],
     output: {
@@ -51,6 +40,13 @@ export default [
       library: 'Mockyeah',
       libraryTarget: 'var',
       libraryExport: 'default'
+    }
+  }),
+  env => ({
+    ...common(env),
+    entry: './src/serviceWorker.ts',
+    output: {
+      filename: 'serviceWorker.js'
     }
   })
 ];

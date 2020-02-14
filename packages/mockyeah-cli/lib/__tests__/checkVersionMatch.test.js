@@ -7,7 +7,9 @@ describe('checkVerisonMatch', () => {
         const env = {};
         const pkgUp = {};
         checkVersionMatch(env, pkgUp);
-      }).toThrow('Could not find `@mockyeah/cli` package version to check against core.');
+      }).toThrow(
+        'Could not find `@mockyeah/cli` package version to check against `@mockyeah/server`.'
+      );
     });
 
     test('throws on missing env package version', () => {
@@ -19,7 +21,7 @@ describe('checkVerisonMatch', () => {
           }
         };
         checkVersionMatch(env, pkgUp);
-      }).toThrow('Could not find `mockyeah` package version to check against CLI.');
+      }).toThrow('Could not find `@mockyeah/server` package version to check against CLI.');
     });
 
     test('throws on mismatch package versions', () => {
@@ -36,7 +38,7 @@ describe('checkVerisonMatch', () => {
         };
         checkVersionMatch(env, pkgUp);
       }).toThrow(
-        'Version mismatch between @mockyeah/cli@0.0.0-test and @mockyeah/server@99.99.99-test - please install compatible versions.'
+        'Version mismatch between `@mockyeah/cli@0.0.0-test` and `@mockyeah/server@99.99.99-test` - please install compatible versions.'
       );
     });
 
@@ -118,7 +120,7 @@ describe('checkVerisonMatch', () => {
         };
         checkVersionMatch(env, pkgUp);
       }).toThrow(
-        'Version mismatch between @mockyeah/cli@0.1.0 and @mockyeah/server@0.2.0 - please install compatible versions.'
+        'Version mismatch between `@mockyeah/cli@0.1.0` and `@mockyeah/server@0.2.0` - please install compatible versions.'
       );
     });
 
@@ -136,7 +138,7 @@ describe('checkVerisonMatch', () => {
         };
         checkVersionMatch(env, pkgUp);
       }).toThrow(
-        'Version mismatch between @mockyeah/cli@1.0.0 and @mockyeah/server@2.0.0 - please install compatible versions.'
+        'Version mismatch between `@mockyeah/cli@1.0.0` and `@mockyeah/server@2.0.0` - please install compatible versions.'
       );
     });
 
@@ -154,7 +156,7 @@ describe('checkVerisonMatch', () => {
         };
         checkVersionMatch(env, pkgUp);
       }).toThrow(
-        'Version mismatch between @mockyeah/cli@1.0.0 and @mockyeah/server@2.0.0-alpha.0 - please install compatible versions.'
+        'Version mismatch between `@mockyeah/cli@1.0.0` and `@mockyeah/server@2.0.0-alpha.0` - please install compatible versions.'
       );
     });
   });

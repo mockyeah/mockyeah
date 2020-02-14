@@ -6,7 +6,6 @@ interface BootOptions {
   prependServerURL?: boolean;
   noPolyfill?: boolean;
   noWebSocket?: boolean;
-  webSocketReconnectInterval?: number;
   host?: string;
   port?: number;
   adminHost?: string;
@@ -22,6 +21,13 @@ interface BootOptions {
   fileResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   fixtureResolver?: (filePath: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   mockSuiteResolver?: MockSuiteResolver;
+  devTools?: boolean;
+  devToolsTimeout?: number;
+  devToolsInterval?: number;
+  serviceWorker?: boolean;
+  serviceWorkerRegister?: boolean;
+  serviceWorkerURL?: string;
+  serviceWorkerScope?: string;
 }
 
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
@@ -30,25 +36,34 @@ type Method = MethodLower | MethodUpper;
 
 type MethodOrAll = Method | 'all' | 'ALL' | '*';
 
-// TODO: Better JSON type.
-type Json = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+interface JsonObject {
+  [key: string]: Json;
+}
+type JsonPrimitive = string | number | boolean | null;
+type Json = JsonPrimitive | JsonPrimitive[] | JsonObject;
 
 interface RequestForHandler {
   url: string;
   path?: string;
   method: Method;
-  query?: Record<string, string>;
+  query?: DeepObjectOfStrings;
   headers?: Record<string, string>;
   cookies?: Record<string, string>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
 }
 
+interface ResponseObject {
+  status?: number;
+  headers?: Record<string, string>;
+  body?: any;
+}
+
 type ResponderResult<T> = T | Promise<T>;
 
 type ResponderFunction<T> =
-  | ((arg: RequestForHandler) => T)
-  | ((arg: RequestForHandler) => Promise<T>);
+  | ((req: RequestForHandler, res?: ResponseObject) => T)
+  | ((req: RequestForHandler, res?: ResponseObject) => Promise<T>);
 
 type Responder<T> = ResponderResult<T> | ResponderFunction<T>;
 
@@ -62,30 +77,47 @@ interface ResponseOptionsObject {
   status?: Responder<number>;
   type?: Responder<string>;
   latency?: Responder<number>;
-  headers?: Record<string, string>;
+  headers?: Responder<Record<string, string>>;
 }
 
-const responseOptionsKeys = [
-  'fixture',
-  'filePath',
-  'html',
+const responseOptionsResponderKeys = [
   'json',
   'text',
-  'status',
-  'headers',
+  'html',
   'raw',
+  'filePath',
+  'fixture',
+  'status',
+  'type',
   'latency',
-  'type'
+  'headers'
 ];
 
 type ResponseOptions = string | ResponseOptionsObject;
 
-type Matcher<T> = T | ((arg: T) => boolean | undefined);
+type MatcherFunction<T> = (arg: T) => boolean | undefined;
+type Matcher<T> = T | MatcherFunction<T>;
 type MatchString<T = string> = Matcher<T> | RegExp;
 
 type VerifyCallback = (err?: Error) => void;
 type RunHandler = (callback: (err?: Error) => void) => Promise<void> | void;
 type RunHandlerOrPromise = RunHandler | Promise<void>;
+
+interface DeepObjectOfStrings {
+  [key: string]: string | DeepObjectOfStrings;
+}
+
+interface MatchDeepObjectOfStrings {
+  [key: string]: MatchString | MatchDeepObjectOfStrings;
+}
+
+type MatcherDeepObjectOfStrings = MatchDeepObjectOfStrings | MatcherFunction<DeepObjectOfStrings>;
+
+type ObjectOfStrings = Record<string, string>;
+
+type MatchObjectOfStrings = Record<string, MatchString>;
+
+type MatcherObjectOfStrings = MatchObjectOfStrings | MatcherFunction<ObjectOfStrings>;
 
 interface Expectation {
   request(request: RequestForHandler): void;
@@ -100,8 +132,8 @@ interface Expectation {
   path(path: string): Expectation;
   url(url: string): Expectation;
   header(name: string, value: string): Expectation;
-  params(match: Matcher<Record<string, MatchString>>): Expectation;
-  query(match: Matcher<Record<string, MatchString>>): Expectation;
+  params(match: MatcherDeepObjectOfStrings): Expectation;
+  query(match: MatcherDeepObjectOfStrings): Expectation;
   // TODO: Type out `body`.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body(match: any): Expectation;
@@ -111,21 +143,23 @@ interface Expectation {
 }
 
 interface MatchMeta {
+  id?: string;
   fn?: string;
   regex?: RegExp;
   matchKeys?: pathToRegexp.Key[];
   original?: Match;
   originalNormal?: MatchObject;
+  originalSerialized?: MatchObject; // technically we could replace regex types here
   expectation?: Expectation;
 }
 
 interface MatchObject {
-  url?: MatchString<string>;
-  path?: MatchString<string>;
+  url?: MatchString & { toStringForMatchDeep?: () => string | undefined };
+  path?: MatchString;
   method?: MatchString<MethodOrAll>;
-  query?: Matcher<Record<string, MatchString>>;
-  headers?: Matcher<Record<string, MatchString>>;
-  cookies?: Matcher<Record<string, MatchString>>;
+  query?: MatcherDeepObjectOfStrings;
+  headers?: MatcherObjectOfStrings;
+  cookies?: MatcherObjectOfStrings;
   // TODO: Type out `body`.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
@@ -148,15 +182,27 @@ type Mock = [Match, ResponseOptions];
 
 type MockSuite = Mock[];
 
-type MockSuiteResolver = (suiteName: string) => Promise<{ default: MockSuite }>;
+type MockSuiteResolver = (suiteName: string) => Promise<MockSuite & { default?: MockSuite }>;
 
 type MockNormal = [MatchNormal, ResponseOptionsObject];
 
 interface MockReturn {
+  id: string;
+  removedIds: string[];
   expect(match: Match): Expectation;
 }
 
 type MockFunction = (match: Match, res?: ResponseOptions) => MockReturn;
+
+interface MakeMockOptions {
+  keepExisting?: boolean;
+}
+
+interface MakeMockReturn {
+  mock: MockNormal;
+  removed: MockNormal[];
+  removedIndex?: number;
+}
 
 interface FetchOptions {
   dynamicMocks?: Mock[];
@@ -180,7 +226,10 @@ export {
   Responder,
   ResponderFunction,
   ResponderResult,
+  ResponseObject,
   Matcher,
+  MatcherDeepObjectOfStrings,
+  MatcherObjectOfStrings,
   Match,
   MatchFunction,
   MatchObject,
@@ -193,10 +242,12 @@ export {
   MockFunction,
   MockReturn,
   RequestForHandler,
-  responseOptionsKeys,
   Expectation,
   VerifyCallback,
   RunHandler,
   RunHandlerOrPromise,
-  Action
+  Action,
+  MakeMockOptions,
+  MakeMockReturn,
+  responseOptionsResponderKeys
 };

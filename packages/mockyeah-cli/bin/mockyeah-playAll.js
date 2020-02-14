@@ -11,6 +11,7 @@ const program = require('commander');
 const chalk = require('chalk');
 const request = require('request');
 const boot = require('../lib/boot');
+const requireMockyeah = require('../lib/requireMockyeah');
 
 program.option('-v, --verbose', 'verbose output').parse(process.argv);
 
@@ -34,7 +35,7 @@ boot(env => {
     if (err) {
       // TODO: Detect errors that shouldn't result in local fallback.
       // eslint-disable-next-line global-require, import/no-dynamic-require
-      require(env.modulePath).playAll();
+      requireMockyeah(env).playAll();
     }
   });
 });

@@ -4,6 +4,7 @@ import pathToRegexp from 'path-to-regexp';
 import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
 import isRegExp from 'lodash/isRegExp';
+import mapValues from 'lodash/mapValues';
 import { MatchNormal, MatchObject, MatchFunction, MatchString, Match, Method } from './types';
 
 const decodedPortRegex = /^(\/?https?.{3}[^/:?]+):/;
@@ -40,6 +41,22 @@ const stripQuery = (url: string) => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const serializeObject = (object: any): any =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  mapValues(object, (value: any) => {
+    if (isRegExp(value)) {
+      return {
+        $regex: {
+          source: value.source,
+          flags: value.flags
+        }
+      };
+    }
+    if (isPlainObject(value)) return mapValues(value, v => serializeObject(v));
+    return value;
+  });
+
 const leadingSlashRegex = /^\//;
 const leadUrlEncodedProtocolRegex = /^(https?)%3A%2F%2F/;
 
@@ -58,20 +75,22 @@ const makeRequestUrl = (url: string) => {
     : url;
 };
 
-const normalize = (match: Match, incoming?: boolean): MatchNormal => {
-  if (typeof match === 'function') return match;
+const normalize = (_match: Match, incoming?: boolean): MatchNormal => {
+  if (typeof _match === 'function') return _match;
 
-  const originalMatch = isPlainObject(match) ? { ...(match as MatchObject) } : match;
+  const originalMatch = isPlainObject(_match) ? { ...(_match as MatchObject) } : _match;
 
-  if (!isPlainObject(match)) {
+  let match: MatchObject;
+
+  if (!isPlainObject(_match)) {
     match = {
-      url: match
+      url: _match
     } as MatchObject;
   } else {
     // shallow copy
     match = {
       // @ts-ignore
-      ...match
+      ..._match
     } as MatchObject;
   }
 
@@ -83,9 +102,7 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
         return acc;
       }, {} as Record<string, MatchString>);
 
-  if (!match.method) {
-    match.method = 'get';
-  } else if (match.method === 'all' || match.method === 'ALL' || match.method === '*') {
+  if (!match.method || match.method === 'all' || match.method === 'ALL' || match.method === '*') {
     delete match.method;
   } else if (typeof match.method === 'string') {
     match.method = match.method.toLowerCase() as Method;
@@ -126,8 +143,15 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
     ...match
   };
 
+  if (!match.url) {
+    originalNormal.url = '*';
+  }
+
   $meta.original = originalMatch;
   $meta.originalNormal = originalNormal;
+  $meta.originalSerialized = serializeObject(originalNormal);
+
+  const { url } = match;
 
   if (typeof match.url === 'string') {
     if (!incoming) {
@@ -138,6 +162,7 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
       $meta.regex = regex;
       $meta.matchKeys = matchKeys;
       $meta.fn = match.url.toString();
+      match.url.toStringForMatchDeep = () => `"${url?.toString()}"`;
     }
   } else if (isRegExp(match.url)) {
     if (!incoming) {
@@ -146,6 +171,7 @@ const normalize = (match: Match, incoming?: boolean): MatchNormal => {
         regex.test(decodeProtocolAndPort(u)) || regex.test(decodeProtocolAndPort(`/${u}`));
       $meta.regex = regex;
       $meta.fn = match.url.toString();
+      match.url.toStringForMatchDeep = () => url?.toString();
     }
   } else if (typeof match.url === 'function') {
     const fn = match.url;

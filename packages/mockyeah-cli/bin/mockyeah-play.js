@@ -13,6 +13,7 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 const request = require('request');
 const boot = require('../lib/boot');
+const requireMockyeah = require('../lib/requireMockyeah');
 
 program
   .arguments('[suiteNames]')
@@ -26,7 +27,7 @@ const withNames = (env, names) => {
     if (err) {
       // TODO: Detect errors that shouldn't result in local fallback.
       // eslint-disable-next-line global-require, import/no-dynamic-require
-      require(env.modulePath).play(names);
+      requireMockyeah(env).play(names);
     }
   });
 };

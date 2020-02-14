@@ -11,10 +11,33 @@ const stringify = (value: any) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const deserializeRegex = (input: any): RegExp | void => {
+  if (!isObject(input)) return;
+
+  const rinput = input as { $regex?: string | { source: string; flags?: string } };
+
+  if (!rinput.$regex) return;
+
+  let source;
+  let flags;
+
+  if (typeof rinput.$regex === 'string') {
+    source = rinput.$regex;
+  } else {
+    source = rinput.$regex.source;
+    flags = rinput.$regex.flags;
+  }
+
+  // eslint-disable-next-line consistent-return
+  return new RegExp(source, flags);
+};
+
 interface MatchOptions {
   shortCircuit?: boolean;
   // TODO: Support skip keys as singular, as regex, as functions, etc.
   skipKeys?: string[];
+  serializedRegex?: boolean;
 }
 
 interface MatchError {
@@ -25,12 +48,19 @@ interface MatchError {
 const DEFAULT_MATCH_OPTIONS: MatchOptions = {};
 
 const makeMatcher = (options = DEFAULT_MATCH_OPTIONS) => {
-  const { shortCircuit, skipKeys } = options;
+  const { shortCircuit, skipKeys, serializedRegex } = options;
   const errors: MatchError[] = [];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const internalMatcher = (value: any, source: any, keyPath: string[]) => {
-    if (isRegExp(source)) {
-      const result = source.test(value);
+    // eslint-disable-next-line no-nested-ternary
+    const deserializedRegex = isRegExp(source)
+      ? source
+      : serializedRegex
+      ? deserializeRegex(source)
+      : undefined;
+    if (deserializedRegex) {
+      const result = deserializedRegex.test(value);
       if (!result)
         errors.push({
           message: `Regex \`${source}\` does not match value \`${stringify(value)}\``,
@@ -50,6 +80,10 @@ const makeMatcher = (options = DEFAULT_MATCH_OPTIONS) => {
           errors.push({
             message: `Value \`${stringify(value)}\` does not pass function${
               source.name ? ` \`${source.name}\`` : ''
+            }${
+              typeof source.toStringForMatchDeep === 'function'
+                ? ` (\`${source.toStringForMatchDeep()}\`)`
+                : ''
             }`,
             keyPath
           });
