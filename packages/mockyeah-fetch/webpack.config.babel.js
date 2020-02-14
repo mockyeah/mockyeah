@@ -48,5 +48,12 @@ export default [
     output: {
       filename: 'serviceWorker.js'
     }
+  }),
+  env => ({
+    ...common(env),
+    entry: './src/workbox.ts',
+    output: {
+      filename: 'workbox.js'
+    }
   })
 ];
