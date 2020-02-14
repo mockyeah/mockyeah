@@ -136,3 +136,15 @@ registerRoute(matchCb, handlerCb);
 
 Note that with a custom Service Worker like the above
 you'll have to have your own code to register it.
+
+Then you'll want to disable auto-registering in your `mockyeah` instance
+with `serviceWorkerRegister`:
+
+```js
+import Mockyeah from '@mockyeah/fetch';
+
+const mockyeah = new Mockyeah({
+  serviceWorker: true,
+  serviceWorkerRegister: false
+});
+```
