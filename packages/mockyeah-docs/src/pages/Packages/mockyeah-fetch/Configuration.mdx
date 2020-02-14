@@ -199,17 +199,17 @@ Time in milliseconds after which requests blocked by polling for a DevTools conn
 
 Time in milliseconds indicating how often to check for a DevTools connection during the `devToolsTimeout` period.
 
-### serviceWorker
+### `serviceWorker`
 
 Whether to enable the service worker that mockyeah can use to echo client-side mocked requests to the Network tab in your browser's Dev Tools.
 
-### serviceWorkerRegister
+### `serviceWorkerRegister`
 
 Whether to auto-register the service worker file at `serviceWorkerURL`.
 You can ignore this if you're manually registering the mockyeah
 route handlers in your own custom service worker.
 
-### serviceWorkerURL
+### `serviceWorkerURL`
 
 Path to where you're hosting the mockyeah service worker file.
 Should be somewhere you publish a script file that imports
@@ -217,7 +217,7 @@ Should be somewhere you publish a script file that imports
 You can ignore this if you're manually registering the mockyeah
 route handlers in your own custom service worker.
 
-### serviceWorkerScope
+### `serviceWorkerScope`
 
 Scope path for which you want the service worker to apply.
 Default of `/` should work unless your app is
