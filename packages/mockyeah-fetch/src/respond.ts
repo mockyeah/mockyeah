@@ -19,7 +19,9 @@ const handler = <T>(
 
 interface Respond {
   response: Response;
+  body?: string;
   json?: Json;
+  headers?: Record<string, string>;
 }
 
 const respond = async (
@@ -109,6 +111,8 @@ const respond = async (
   // eslint-disable-next-line consistent-return
   return {
     response,
+    body,
+    headers,
     json
   };
 };

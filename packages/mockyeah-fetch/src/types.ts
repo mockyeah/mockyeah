@@ -24,6 +24,10 @@ interface BootOptions {
   devTools?: boolean;
   devToolsTimeout?: number;
   devToolsInterval?: number;
+  serviceWorker?: boolean;
+  serviceWorkerRegister?: boolean;
+  serviceWorkerURL?: string;
+  serviceWorkerScope?: string;
 }
 
 type MethodLower = 'get' | 'put' | 'delete' | 'post' | 'options' | 'patch';
