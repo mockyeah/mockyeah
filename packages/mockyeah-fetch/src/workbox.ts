@@ -89,10 +89,12 @@ const handlerCb = ({ event }: { event: FetchEvent }): Response | Promise<Respons
     // @ts-ignore
     // eslint-disable-next-line no-restricted-globals
     return self.clients.get(clientId).then((client: Client) => {
-      client.postMessage({
+      const action: ActionMockyeahServiceWorkerDataRequest = {
         type: 'mockyeahServiceWorkerDataRequest',
         payload: { requestId }
-      });
+      };
+
+      client.postMessage(action);
 
       return promise.then(({ response }) => {
         const { status, body, headers } = response;

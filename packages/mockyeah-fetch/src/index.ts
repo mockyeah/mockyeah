@@ -218,6 +218,7 @@ class Mockyeah {
                 response: serviceWorkerFetches[requestId].response
               }
             };
+
             postMessageToServiceWorker(action);
           }
         }
