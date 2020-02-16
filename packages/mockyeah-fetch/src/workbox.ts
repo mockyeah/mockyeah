@@ -1,17 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference lib="webworker" />
-import { ResponseObject } from './types';
-
-type ActionTypeMockyeahServiceWorkerDataResponse = 'mockyeahServiceWorkerDataResponse';
-interface ActionMockyeahServiceWorkerDataResponse {
-  type?: ActionTypeMockyeahServiceWorkerDataResponse;
-  payload?: {
-    requestId?: string;
-    response?: ResponseObject;
-  };
-}
-
-const actionTypeMockyeahServiceWorkerDataResponse: ActionTypeMockyeahServiceWorkerDataResponse = 'mockyeahServiceWorkerDataResponse';
+import {
+  ResponseObject,
+  ActionMockyeahServiceWorkerDataRequest,
+  ActionMockyeahServiceWorkerDataResponse
+} from './types';
 
 const PROMISE_GC_TIMEOUT = 120000; // two minutes
 
@@ -25,7 +18,7 @@ const promises: Record<string, Record<string, PromiseCache>> = {};
 
 // eslint-disable-next-line no-restricted-globals
 self.addEventListener('message', ((event: ExtendableMessageEvent) => {
-  const { source } = event as { source: Client };
+  const { source, data } = event as { source: Client; data: any };
 
   if (!source) return;
 
@@ -33,10 +26,9 @@ self.addEventListener('message', ((event: ExtendableMessageEvent) => {
 
   if (!clientId) return;
 
-  const data = event.data as ActionMockyeahServiceWorkerDataResponse | undefined;
-
-  if (data && data.type === actionTypeMockyeahServiceWorkerDataResponse) {
-    const { requestId, response } = data.payload || {};
+  if (data && data.type === 'mockyeahServiceWorkerDataResponse') {
+    const { requestId, response } =
+      (data.payload as ActionMockyeahServiceWorkerDataResponse['payload']) || {};
 
     if (!requestId) return;
     if (!response) return;

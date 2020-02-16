@@ -215,6 +215,21 @@ interface Action {
   payload?: Record<string, any>;
 }
 
+interface ActionMockyeahServiceWorkerDataResponse {
+  type?: 'mockyeahServiceWorkerDataResponse';
+  payload?: {
+    requestId?: string;
+    response?: ResponseObject;
+  };
+}
+
+interface ActionMockyeahServiceWorkerDataRequest {
+  type?: 'mockyeahServiceWorkerDataRequest';
+  payload?: {
+    requestId?: string;
+  };
+}
+
 export {
   Json,
   BootOptions,
@@ -249,5 +264,7 @@ export {
   Action,
   MakeMockOptions,
   MakeMockReturn,
-  responseOptionsResponderKeys
+  responseOptionsResponderKeys,
+  ActionMockyeahServiceWorkerDataResponse,
+  ActionMockyeahServiceWorkerDataRequest
 };

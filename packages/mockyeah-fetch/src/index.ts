@@ -31,7 +31,9 @@ import {
   Action,
   responseOptionsResponderKeys,
   MakeMockOptions,
-  MakeMockReturn
+  MakeMockReturn,
+  ActionMockyeahServiceWorkerDataResponse,
+  ActionMockyeahServiceWorkerDataRequest
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
@@ -203,20 +205,20 @@ class Mockyeah {
 
       navigator.serviceWorker.addEventListener('message', event => {
         if (event.data && event.data.type === 'mockyeahServiceWorkerDataRequest') {
-          const {
-            data: {
-              payload: { requestId }
-            }
-          } = event;
+          const { data } = event as { data: ActionMockyeahServiceWorkerDataRequest };
+          const { requestId } = data.payload || {};
+
+          if (!requestId) return;
 
           if (serviceWorkerFetches[requestId]) {
-            postMessageToServiceWorker({
+            const action: ActionMockyeahServiceWorkerDataResponse = {
               type: 'mockyeahServiceWorkerDataResponse',
               payload: {
                 requestId,
                 response: serviceWorkerFetches[requestId].response
               }
-            });
+            };
+            postMessageToServiceWorker(action);
           }
         }
       });
