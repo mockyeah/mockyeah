@@ -1,12 +1,31 @@
-// @ts-nocheck
+// eslint-disable-next-line spaced-comment
+/// <reference lib="webworker" />
+import { ResponseObject } from './types';
+
+type ActionTypeMockyeahServiceWorkerDataResponse = 'mockyeahServiceWorkerDataResponse';
+interface ActionMockyeahServiceWorkerDataResponse {
+  type?: ActionTypeMockyeahServiceWorkerDataResponse;
+  payload?: {
+    requestId?: string;
+    response?: ResponseObject;
+  };
+}
+
+const actionTypeMockyeahServiceWorkerDataResponse: ActionTypeMockyeahServiceWorkerDataResponse = 'mockyeahServiceWorkerDataResponse';
 
 const PROMISE_GC_TIMEOUT = 120000; // two minutes
 
-const promises = {};
+interface PromiseCache {
+  resolve({ response }: { response: ResponseObject }): void;
+  reject(): void;
+  timestamp: number;
+}
+
+const promises: Record<string, Record<string, PromiseCache>> = {};
 
 // eslint-disable-next-line no-restricted-globals
-self.addEventListener('message', event => {
-  const { source } = event;
+self.addEventListener('message', ((event: ExtendableMessageEvent) => {
+  const { source } = event as { source: Client };
 
   if (!source) return;
 
@@ -14,10 +33,13 @@ self.addEventListener('message', event => {
 
   if (!clientId) return;
 
-  if (event.data && event.data.type === 'mockyeahServiceWorkerDataResponse') {
-    const { data: { payload: { requestId, response } } = {} } = event;
+  const data = event.data as ActionMockyeahServiceWorkerDataResponse | undefined;
+
+  if (data && data.type === actionTypeMockyeahServiceWorkerDataResponse) {
+    const { requestId, response } = data.payload || {};
 
     if (!requestId) return;
+    if (!response) return;
 
     promises[clientId] = promises[clientId] || {};
     const promise = promises[clientId][requestId];
@@ -28,7 +50,7 @@ self.addEventListener('message', event => {
       response
     });
   }
-});
+}) as (event: Event) => void);
 
 const matchCb = ({ event }: { event: FetchEvent }): boolean => {
   try {
@@ -40,7 +62,7 @@ const matchCb = ({ event }: { event: FetchEvent }): boolean => {
   }
 };
 
-const handlerCb = ({ event }): Response | Promise<Response> => {
+const handlerCb = ({ event }: { event: FetchEvent }): Response | Promise<Response> => {
   try {
     // TODO: Add a cleanup routine to delete old promises based on timestamps.
     Object.entries(promises).forEach(([clientId, requests]) => {
@@ -58,7 +80,11 @@ const handlerCb = ({ event }): Response | Promise<Response> => {
 
     const requestId = request.headers.get('x-mockyeah-service-worker-request');
 
-    const promise = new Promise((resolve, reject) => {
+    if (!requestId) {
+      return fetch(event.request);
+    }
+
+    const promise = new Promise<{ response: ResponseObject }>((resolve, reject) => {
       promises[clientId] = promises[clientId] || {};
       promises[clientId][requestId] = {
         resolve,
@@ -68,7 +94,9 @@ const handlerCb = ({ event }): Response | Promise<Response> => {
     });
 
     // eslint-disable-next-line no-restricted-globals
-    return self.clients.get(clientId).then(client => {
+    // @ts-ignore
+    // eslint-disable-next-line no-restricted-globals
+    return self.clients.get(clientId).then((client: Client) => {
       client.postMessage({
         type: 'mockyeahServiceWorkerDataRequest',
         payload: { requestId }

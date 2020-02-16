@@ -27,6 +27,7 @@ import {
   ResponseOptions,
   ResponseOptionsObject,
   RequestForHandler,
+  ResponseObject,
   Action,
   responseOptionsResponderKeys,
   MakeMockOptions,
@@ -42,7 +43,12 @@ const debugAdmin = debug('mockyeah:fetch:admin');
 const debugAdminError = debug('mockyeah:fetch:admin:error');
 
 let serviceWorkerRequestId = 0;
-const serviceWorkerFetches: Record<number, any> = {};
+const serviceWorkerFetches: Record<
+  string,
+  {
+    response: ResponseObject;
+  }
+> = {};
 
 const DEFAULT_BOOT_OPTIONS: Readonly<BootOptions> = {};
 
@@ -478,7 +484,7 @@ class Mockyeah {
       );
 
       if (serviceWorker) {
-        const responseObject = {
+        const responseObject: ResponseObject = {
           status: response.status,
           body: responseBody,
           headers: responseHeaders
