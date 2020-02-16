@@ -85,7 +85,6 @@ const handlerCb = ({ event }: { event: FetchEvent }): Response | Promise<Respons
       };
     });
 
-    // eslint-disable-next-line no-restricted-globals
     // @ts-ignore
     // eslint-disable-next-line no-restricted-globals
     return self.clients.get(clientId).then((client: Client) => {
