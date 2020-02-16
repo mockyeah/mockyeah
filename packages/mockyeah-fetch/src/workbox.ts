@@ -1,59 +1,38 @@
 // @ts-nocheck
 
-const clientsMeta = {};
+const PROMISE_GC_TIMEOUT = 120000; // two minutes
 
-const deleteRequest = ({ event }): void => {
-  const { request, clientId } = event;
+const promises = {};
 
-  const requestId = request.headers.get('x-mockyeah-service-worker-request');
+// eslint-disable-next-line no-restricted-globals
+self.addEventListener('message', event => {
+  const { source } = event;
 
-  const clientMeta = clientsMeta[clientId];
+  if (!source) return;
 
-  if (!clientMeta) {
-    return;
+  const { id: clientId } = source;
+
+  if (!clientId) return;
+
+  if (event.data && event.data.type === 'mockyeahServiceWorkerDataResponse') {
+    const { data: { payload: { requestId, response } } = {} } = event;
+
+    if (!requestId) return;
+
+    promises[clientId] = promises[clientId] || {};
+    const promise = promises[clientId][requestId];
+
+    if (!promise) return;
+
+    promise.resolve({
+      response
+    });
   }
-
-  const { requests } = clientMeta;
-
-  if (!requests) {
-    return;
-  }
-
-  delete requests[requestId];
-
-  if (Object.keys(requests).length === 0) {
-    delete clientMeta[clientId];
-  }
-};
-
-const getRequest = ({ event }) => {
-  const { request, clientId } = event;
-
-  if (!request.headers) {
-    return;
-  }
-
-  const requestId = request.headers.get('x-mockyeah-service-worker-request');
-
-  const clientMeta = clientsMeta[clientId];
-
-  if (!clientMeta) {
-    return;
-  }
-
-  const { requests } = clientMeta;
-
-  if (!requests) {
-    return;
-  }
-
-  // eslint-disable-next-line consistent-return
-  return requests[requestId];
-};
+});
 
 const matchCb = ({ event }: { event: FetchEvent }): boolean => {
   try {
-    return Boolean(getRequest({ event }));
+    return Boolean(event.request.headers.get('x-mockyeah-service-worker-request'));
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log('@mockyeah/fetch service worker match error', error);
@@ -63,47 +42,52 @@ const matchCb = ({ event }: { event: FetchEvent }): boolean => {
 
 const handlerCb = ({ event }): Response | Promise<Response> => {
   try {
-    const request = getRequest({ event });
-
-    const {
-      response: { status, body, headers }
-    } = request;
-
-    const response = new Response(body, {
-      status,
-      headers
+    // TODO: Add a cleanup routine to delete old promises based on timestamps.
+    Object.entries(promises).forEach(([clientId, requests]) => {
+      Object.entries(requests).forEach(([requestId, promise]) => {
+        if (Date.now() - promise.timestamp > PROMISE_GC_TIMEOUT) {
+          delete requests[requestId];
+        }
+      });
+      if (Object.keys(requests).length === 0) {
+        delete promises[clientId];
+      }
     });
 
-    deleteRequest({ event });
+    const { request, clientId } = event;
 
-    return response;
+    const requestId = request.headers.get('x-mockyeah-service-worker-request');
+
+    const promise = new Promise((resolve, reject) => {
+      promises[clientId] = promises[clientId] || {};
+      promises[clientId][requestId] = {
+        resolve,
+        reject,
+        timestamp: Date.now()
+      };
+    });
+
+    // eslint-disable-next-line no-restricted-globals
+    return self.clients.get(clientId).then(client => {
+      client.postMessage({
+        type: 'mockyeahServiceWorkerDataRequest',
+        payload: { requestId }
+      });
+
+      return promise.then(({ response }) => {
+        const { status, body, headers } = response;
+
+        return new Response(body, {
+          status,
+          headers
+        });
+      });
+    });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log('@mockyeah/fetch service worker handler error', error);
     return fetch(event.request);
   }
 };
-
-// eslint-disable-next-line no-restricted-globals
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'mockyeahRequest') {
-    const { data: { payload: { requestId, request, response } } = {}, source: client } = event;
-
-    if (!requestId) return;
-
-    clientsMeta[client.id] = clientsMeta[client.id] || {};
-    const clientMeta = clientsMeta[client.id];
-
-    clientMeta.requests = clientMeta.requests || {};
-    const { requests } = clientsMeta[client.id];
-
-    requests[requestId] = {
-      request,
-      response
-    };
-
-    client.postMessage({ type: 'mockyeahRequestReady', payload: { requestId } });
-  }
-});
 
 export { matchCb, handlerCb };

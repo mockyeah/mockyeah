@@ -42,7 +42,7 @@ const debugAdmin = debug('mockyeah:fetch:admin');
 const debugAdminError = debug('mockyeah:fetch:admin:error');
 
 let serviceWorkerRequestId = 0;
-const serviceWorkerFetches: Record<number, () => void> = {};
+const serviceWorkerFetches: Record<number, any> = {};
 
 const DEFAULT_BOOT_OPTIONS: Readonly<BootOptions> = {};
 
@@ -196,14 +196,21 @@ class Mockyeah {
       }
 
       navigator.serviceWorker.addEventListener('message', event => {
-        if (event.data && event.data.type === 'mockyeahRequestReady') {
+        if (event.data && event.data.type === 'mockyeahServiceWorkerDataRequest') {
           const {
             data: {
               payload: { requestId }
             }
           } = event;
+
           if (serviceWorkerFetches[requestId]) {
-            serviceWorkerFetches[requestId]();
+            postMessageToServiceWorker({
+              type: 'mockyeahServiceWorkerDataResponse',
+              payload: {
+                requestId,
+                response: serviceWorkerFetches[requestId].response
+              }
+            });
           }
         }
       });
@@ -480,24 +487,17 @@ class Mockyeah {
         serviceWorkerRequestId += 1;
         const currentServiceWorkerRequestId = serviceWorkerRequestId;
 
-        postMessageToServiceWorker({
-          type: 'mockyeahRequest',
-          payload: {
-            requestId: currentServiceWorkerRequestId,
-            request: requestForHandler,
-            response: responseObject
+        serviceWorkerFetches[currentServiceWorkerRequestId] = {
+          response: responseObject
+        };
+
+        fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            'x-mockyeah-service-worker-request': currentServiceWorkerRequestId
           }
         });
-
-        serviceWorkerFetches[currentServiceWorkerRequestId] = (): void => {
-          fetch(url, {
-            ...options,
-            headers: {
-              ...options.headers,
-              'x-mockyeah-service-worker-request': currentServiceWorkerRequestId
-            }
-          });
-        };
       }
 
       debugHit(`${logPrefix} @mockyeah/fetch matched mock for`, url, {

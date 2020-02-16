@@ -93,13 +93,40 @@ const buttonMock = document.createElement('button');
 buttonMock.innerText = 'mock';
 
 buttonMock.addEventListener('click', async () => {
-  mockyeah.mock('*', 'nice!');
+  mockyeah.mock(/json/, {
+    json: {
+      slideshow: {
+        author: 'Mocked Truly',
+        date: 'date of publication',
+        slides: [
+          {
+            title: 'Wake up to WonderWidgets!',
+            type: 'all'
+          },
+          {
+            items: ['Why <em>WonderWidgets</em> are great', 'Who <em>buys</em> WonderWidgets'],
+            title: 'Overview',
+            type: 'all'
+          }
+        ],
+        title: 'Sample Slide Show'
+      }
+    }
+  });
+});
+
+const buttonReset = document.createElement('button');
+
+buttonReset.innerText = 'reset';
+
+buttonReset.addEventListener('click', async () => {
+  mockyeah.reset();
 });
 
 const h1 = document.createElement('h1');
 h1.innerText = '@mockyeah/fetch demo';
 
-document.body.append(h1, button, buttonMock, content);
+document.body.append(h1, button, buttonMock, buttonReset, content);
 
 (async () => {
   const data = await refetch();
