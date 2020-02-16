@@ -14,7 +14,7 @@ interface PromiseCache {
   timestamp: number;
 }
 
-const promises: Record<string, Record<string, PromiseCache>> = {};
+const promisesByClient: Record<string, Record<string, PromiseCache>> = {};
 
 // eslint-disable-next-line no-restricted-globals
 self.addEventListener('message', ((event: ExtendableMessageEvent) => {
@@ -33,8 +33,8 @@ self.addEventListener('message', ((event: ExtendableMessageEvent) => {
     if (!requestId) return;
     if (!response) return;
 
-    promises[clientId] = promises[clientId] || {};
-    const promise = promises[clientId][requestId];
+    promisesByClient[clientId] = promisesByClient[clientId] || {};
+    const promise = promisesByClient[clientId][requestId];
 
     if (!promise) return;
 
@@ -56,14 +56,14 @@ const matchCb = ({ event }: { event: FetchEvent }): boolean => {
 
 const handlerCb = ({ event }: { event: FetchEvent }): Response | Promise<Response> => {
   try {
-    Object.entries(promises).forEach(([clientId, requests]) => {
-      Object.entries(requests).forEach(([requestId, promise]) => {
+    Object.entries(promisesByClient).forEach(([clientId, promisesByRequest]) => {
+      Object.entries(promisesByRequest).forEach(([requestId, promise]) => {
         if (Date.now() - promise.timestamp > PROMISE_GC_TIMEOUT) {
-          delete requests[requestId];
+          delete promisesByRequest[requestId];
         }
       });
-      if (Object.keys(requests).length === 0) {
-        delete promises[clientId];
+      if (Object.keys(promisesByRequest).length === 0) {
+        delete promisesByClient[clientId];
       }
     });
 
@@ -76,8 +76,8 @@ const handlerCb = ({ event }: { event: FetchEvent }): Response | Promise<Respons
     }
 
     const promise = new Promise<{ response: ResponseObject }>((resolve, reject) => {
-      promises[clientId] = promises[clientId] || {};
-      promises[clientId][requestId] = {
+      promisesByClient[clientId] = promisesByClient[clientId] || {};
+      promisesByClient[clientId][requestId] = {
         resolve,
         reject,
         timestamp: Date.now()
