@@ -56,7 +56,6 @@ const matchCb = ({ event }: { event: FetchEvent }): boolean => {
 
 const handlerCb = ({ event }: { event: FetchEvent }): Response | Promise<Response> => {
   try {
-    // TODO: Add a cleanup routine to delete old promises based on timestamps.
     Object.entries(promises).forEach(([clientId, requests]) => {
       Object.entries(requests).forEach(([requestId, promise]) => {
         if (Date.now() - promise.timestamp > PROMISE_GC_TIMEOUT) {
