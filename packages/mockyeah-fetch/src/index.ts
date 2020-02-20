@@ -1,3 +1,5 @@
+// eslint-disable-next-line spaced-comment
+/// <reference lib="dom" />
 /* eslint-disable no-underscore-dangle */
 import { parse } from 'url';
 import qs from 'qs';
