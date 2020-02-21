@@ -1,5 +1,6 @@
-// eslint-disable-next-line spaced-comment
-/// <reference lib="webworker" />
+// @ts-nocheck
+// // eslint-disable-next-line spaced-comment
+// /// <reference lib="webworker" />
 import { handlerCb, matchCb } from './workbox';
 
 // eslint-disable-next-line no-restricted-globals
