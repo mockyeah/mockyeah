@@ -1,59 +1,53 @@
 // @ts-nocheck
+// // eslint-disable-next-line spaced-comment
+// /// <reference lib="webworker" />
+import {
+  ResponseObject,
+  ActionMockyeahServiceWorkerDataRequest,
+  ActionMockyeahServiceWorkerDataResponse
+} from './types';
 
-const clientsMeta = {};
+const PROMISE_GC_TIMEOUT = 120000; // two minutes
 
-const deleteRequest = ({ event }): void => {
-  const { request, clientId } = event;
+interface PromiseCache {
+  resolve({ response }: { response: ResponseObject }): void;
+  reject(): void;
+  timestamp: number;
+}
 
-  const requestId = request.headers.get('x-mockyeah-service-worker-request');
+const promisesByClient: Record<string, Record<string, PromiseCache>> = {};
 
-  const clientMeta = clientsMeta[clientId];
+// eslint-disable-next-line no-restricted-globals
+self.addEventListener('message', ((event: ExtendableMessageEvent) => {
+  const { source, data } = event as { source: Client; data: any };
 
-  if (!clientMeta) {
-    return;
+  if (!source) return;
+
+  const { id: clientId } = source;
+
+  if (!clientId) return;
+
+  if (data && data.type === 'mockyeahServiceWorkerDataResponse') {
+    const { requestId, response } =
+      (data.payload as ActionMockyeahServiceWorkerDataResponse['payload']) || {};
+
+    if (!requestId) return;
+    if (!response) return;
+
+    promisesByClient[clientId] = promisesByClient[clientId] || {};
+    const promise = promisesByClient[clientId][requestId];
+
+    if (!promise) return;
+
+    promise.resolve({
+      response
+    });
   }
-
-  const { requests } = clientMeta;
-
-  if (!requests) {
-    return;
-  }
-
-  delete requests[requestId];
-
-  if (Object.keys(requests).length === 0) {
-    delete clientMeta[clientId];
-  }
-};
-
-const getRequest = ({ event }) => {
-  const { request, clientId } = event;
-
-  if (!request.headers) {
-    return;
-  }
-
-  const requestId = request.headers.get('x-mockyeah-service-worker-request');
-
-  const clientMeta = clientsMeta[clientId];
-
-  if (!clientMeta) {
-    return;
-  }
-
-  const { requests } = clientMeta;
-
-  if (!requests) {
-    return;
-  }
-
-  // eslint-disable-next-line consistent-return
-  return requests[requestId];
-};
+}) as (event: Event) => void);
 
 const matchCb = ({ event }: { event: FetchEvent }): boolean => {
   try {
-    return Boolean(getRequest({ event }));
+    return Boolean(event.request.headers.get('x-mockyeah-service-worker-request'));
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log('@mockyeah/fetch service worker match error', error);
@@ -61,49 +55,60 @@ const matchCb = ({ event }: { event: FetchEvent }): boolean => {
   }
 };
 
-const handlerCb = ({ event }): Response | Promise<Response> => {
+const handlerCb = ({ event }: { event: FetchEvent }): Response | Promise<Response> => {
   try {
-    const request = getRequest({ event });
-
-    const {
-      response: { status, body, headers }
-    } = request;
-
-    const response = new Response(body, {
-      status,
-      headers
+    Object.entries(promisesByClient).forEach(([clientId, promisesByRequest]) => {
+      Object.entries(promisesByRequest).forEach(([requestId, promise]) => {
+        if (Date.now() - promise.timestamp > PROMISE_GC_TIMEOUT) {
+          delete promisesByRequest[requestId];
+        }
+      });
+      if (Object.keys(promisesByRequest).length === 0) {
+        delete promisesByClient[clientId];
+      }
     });
 
-    deleteRequest({ event });
+    const { request, clientId } = event;
 
-    return response;
+    const requestId = request.headers.get('x-mockyeah-service-worker-request');
+
+    if (!requestId) {
+      return fetch(event.request);
+    }
+
+    const promise = new Promise<{ response: ResponseObject }>((resolve, reject) => {
+      promisesByClient[clientId] = promisesByClient[clientId] || {};
+      promisesByClient[clientId][requestId] = {
+        resolve,
+        reject,
+        timestamp: Date.now()
+      };
+    });
+
+    // @ts-ignore
+    // eslint-disable-next-line no-restricted-globals
+    return self.clients.get(clientId).then((client: Client) => {
+      const action: ActionMockyeahServiceWorkerDataRequest = {
+        type: 'mockyeahServiceWorkerDataRequest',
+        payload: { requestId }
+      };
+
+      client.postMessage(action);
+
+      return promise.then(({ response }) => {
+        const { status, body, headers } = response;
+
+        return new Response(body, {
+          status,
+          headers
+        });
+      });
+    });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log('@mockyeah/fetch service worker handler error', error);
     return fetch(event.request);
   }
 };
-
-// eslint-disable-next-line no-restricted-globals
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'mockyeahRequest') {
-    const { data: { payload: { requestId, request, response } } = {}, source: client } = event;
-
-    if (!requestId) return;
-
-    clientsMeta[client.id] = clientsMeta[client.id] || {};
-    const clientMeta = clientsMeta[client.id];
-
-    clientMeta.requests = clientMeta.requests || {};
-    const { requests } = clientsMeta[client.id];
-
-    requests[requestId] = {
-      request,
-      response
-    };
-
-    client.postMessage({ type: 'mockyeahRequestReady', payload: { requestId } });
-  }
-});
 
 export { matchCb, handlerCb };
