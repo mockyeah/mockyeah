@@ -56,5 +56,12 @@ export default [
       filename: 'workbox.js',
       libraryTarget: 'commonjs2'
     }
+  }),
+  env => ({
+    ...common(env),
+    entry: './src/workbox.ts',
+    output: {
+      filename: 'workbox.vanilla.js'
+    }
   })
 ];
