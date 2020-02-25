@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import { BootOptions, FetchOptions, MockFunction, MockReturn, Match, ResponseOptions, MakeMockOptions, MakeMockReturn } from './types';
 declare class Mockyeah {
     private __private;

@@ -164,4 +164,17 @@ interface Action {
     type?: string;
     payload?: Record<string, any>;
 }
-export { Json, BootOptions, FetchOptions, Method, MethodOrAll, ResponseOptions, ResponseOptionsObject, Responder, ResponderFunction, ResponderResult, ResponseObject, Matcher, MatcherDeepObjectOfStrings, MatcherObjectOfStrings, Match, MatchFunction, MatchObject, MatchString, MatchNormal, Mock, MockSuite, MockSuiteResolver, MockNormal, MockFunction, MockReturn, RequestForHandler, Expectation, VerifyCallback, RunHandler, RunHandlerOrPromise, Action, MakeMockOptions, MakeMockReturn, responseOptionsResponderKeys };
+interface ActionMockyeahServiceWorkerDataResponse {
+    type?: 'mockyeahServiceWorkerDataResponse';
+    payload?: {
+        requestId?: string;
+        response?: ResponseObject;
+    };
+}
+interface ActionMockyeahServiceWorkerDataRequest {
+    type?: 'mockyeahServiceWorkerDataRequest';
+    payload?: {
+        requestId?: string;
+    };
+}
+export { Json, BootOptions, FetchOptions, Method, MethodOrAll, ResponseOptions, ResponseOptionsObject, Responder, ResponderFunction, ResponderResult, ResponseObject, Matcher, MatcherDeepObjectOfStrings, MatcherObjectOfStrings, Match, MatchFunction, MatchObject, MatchString, MatchNormal, Mock, MockSuite, MockSuiteResolver, MockNormal, MockFunction, MockReturn, RequestForHandler, Expectation, VerifyCallback, RunHandler, RunHandlerOrPromise, Action, MakeMockOptions, MakeMockReturn, responseOptionsResponderKeys, ActionMockyeahServiceWorkerDataResponse, ActionMockyeahServiceWorkerDataRequest };
