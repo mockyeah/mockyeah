@@ -1,3 +1,5 @@
+// eslint-disable-next-line spaced-comment
+/// <reference lib="dom" />
 /* eslint-disable no-underscore-dangle */
 import { parse } from 'url';
 import qs from 'qs';
@@ -27,10 +29,13 @@ import {
   ResponseOptions,
   ResponseOptionsObject,
   RequestForHandler,
+  ResponseObject,
   Action,
   responseOptionsResponderKeys,
   MakeMockOptions,
-  MakeMockReturn
+  MakeMockReturn,
+  ActionMockyeahServiceWorkerDataResponse,
+  ActionMockyeahServiceWorkerDataRequest
 } from './types';
 
 const debugMock = debug('mockyeah:fetch:mock');
@@ -42,7 +47,12 @@ const debugAdmin = debug('mockyeah:fetch:admin');
 const debugAdminError = debug('mockyeah:fetch:admin:error');
 
 let serviceWorkerRequestId = 0;
-const serviceWorkerFetches: Record<number, () => void> = {};
+const serviceWorkerFetches: Record<
+  string,
+  {
+    response: ResponseObject;
+  }
+> = {};
 
 const DEFAULT_BOOT_OPTIONS: Readonly<BootOptions> = {};
 
@@ -196,14 +206,22 @@ class Mockyeah {
       }
 
       navigator.serviceWorker.addEventListener('message', event => {
-        if (event.data && event.data.type === 'mockyeahRequestReady') {
-          const {
-            data: {
-              payload: { requestId }
-            }
-          } = event;
+        if (event.data && event.data.type === 'mockyeahServiceWorkerDataRequest') {
+          const { data } = event as { data: ActionMockyeahServiceWorkerDataRequest };
+          const { requestId } = data.payload || {};
+
+          if (!requestId) return;
+
           if (serviceWorkerFetches[requestId]) {
-            serviceWorkerFetches[requestId]();
+            const action: ActionMockyeahServiceWorkerDataResponse = {
+              type: 'mockyeahServiceWorkerDataResponse',
+              payload: {
+                requestId,
+                response: serviceWorkerFetches[requestId].response
+              }
+            };
+
+            postMessageToServiceWorker(action);
           }
         }
       });
@@ -471,7 +489,7 @@ class Mockyeah {
       );
 
       if (serviceWorker) {
-        const responseObject = {
+        const responseObject: ResponseObject = {
           status: response.status,
           body: responseBody,
           headers: responseHeaders
@@ -480,24 +498,17 @@ class Mockyeah {
         serviceWorkerRequestId += 1;
         const currentServiceWorkerRequestId = serviceWorkerRequestId;
 
-        postMessageToServiceWorker({
-          type: 'mockyeahRequest',
-          payload: {
-            requestId: currentServiceWorkerRequestId,
-            request: requestForHandler,
-            response: responseObject
+        serviceWorkerFetches[currentServiceWorkerRequestId] = {
+          response: responseObject
+        };
+
+        fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            'x-mockyeah-service-worker-request': currentServiceWorkerRequestId
           }
         });
-
-        serviceWorkerFetches[currentServiceWorkerRequestId] = (): void => {
-          fetch(url, {
-            ...options,
-            headers: {
-              ...options.headers,
-              'x-mockyeah-service-worker-request': currentServiceWorkerRequestId
-            }
-          });
-        };
       }
 
       debugHit(`${logPrefix} @mockyeah/fetch matched mock for`, url, {

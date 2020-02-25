@@ -53,7 +53,18 @@ export default [
     ...common(env),
     entry: './src/workbox.ts',
     output: {
-      filename: 'workbox.js'
+      filename: 'workbox.js',
+      libraryTarget: 'commonjs2'
+    }
+  }),
+  env => ({
+    ...common(env),
+    entry: './src/workbox.ts',
+    output: {
+      filename: 'workbox.global.js',
+      globalObject: 'self',
+      library: 'mockyeahFetchWorkbox',
+      libraryTarget: 'global'
     }
   })
 ];
