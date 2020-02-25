@@ -111,18 +111,4 @@ const handlerCb = ({ event }: { event: FetchEvent }): Response | Promise<Respons
   }
 };
 
-try {
-  // Expose these callbacks for access from your service worker.
-  // eslint-disable-next-line no-restricted-globals
-  self.mockyeahFetchWorkbox = {
-    matchCb,
-    handlerCb
-  };
-} catch (error) {
-  console.error(
-    'Could not expose @mockyeah/fetch workbox callbacks on `self.mockyeahFetchWorkbox`.',
-    error
-  );
-}
-
 export { matchCb, handlerCb };
