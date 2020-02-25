@@ -53,7 +53,7 @@ export default [
     ...common(env),
     entry: './src/workbox.ts',
     output: {
-      filename: 'workbox.common.js',
+      filename: 'workbox.js',
       libraryTarget: 'commonjs2'
     }
   }),
