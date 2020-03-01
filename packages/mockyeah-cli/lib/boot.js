@@ -8,6 +8,8 @@ const chalk = require('chalk');
 const readPkgUp = require('read-pkg-up');
 const checkVersionMatch = require('./checkVersionMatch');
 
+process.env.DEBUG = process.env.DEBUG || 'mockyeah:*';
+
 const liftoff = new Liftoff({
   name: 'mockyeah',
   moduleName: '@mockyeah/server',
