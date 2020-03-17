@@ -432,7 +432,8 @@ class Mockyeah {
           }
 
           debugMissEach(`${logPrefix} @mockyeah/fetch missed mock for`, url, matchResult.message, {
-            request: incoming
+            request: incoming,
+            match
           });
 
           return false;
