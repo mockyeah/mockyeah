@@ -313,7 +313,7 @@ class Mockyeah {
         dynamicMock =>
           dynamicMock && this.makeMock(dynamicMock[0], dynamicMock[1], { keepExisting: true }).mock
       )
-      .filter(Boolean);
+      .filter(Boolean) as MockNormal[];
 
     const parsed = parse(url);
 
@@ -421,8 +421,13 @@ class Mockyeah {
     ]
       .filter(Boolean)
       .find(inc => {
-        return [...(dynamicMocksNormal || []).filter(Boolean), ...mocks].find(m => {
-          const match = normalize(m[0]);
+        const allMocks = [...dynamicMocksNormal, ...mocks];
+        return allMocks.find(m => {
+          if (!m) {
+            return false;
+          }
+
+          const match = m[0];
 
           const matchResult = matches(inc, match, { skipKeys: ['$meta'] });
 
