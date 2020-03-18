@@ -1,0 +1,29 @@
+{% extends template.self %}
+
+{% block body %}
+<div id="notice-1x">
+    <b>Notice:</b> These docs are for mockyeah <code>0.x</code>. For latest mockyeah <code>1.x</code>, please see <a href="https://mockyeah.js.org/">https://mockyeah.js.org/</a>.
+</div>
+
+<style>
+    #notice-1x {
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+        padding: 12px;
+        text-align: center;
+    }
+    .book {
+        height: calc(100% - 80px);
+        margin-top: 80px;
+    }
+</style>
+
+{{ super() }}
+
+{% endblock %}
