@@ -46,5 +46,6 @@
   ],
   "dependencies": {
     "@mockyeah/cli": "^1.0.0-alpha.10"
-  }
+  },
+  "devDependencies": {}
 }
