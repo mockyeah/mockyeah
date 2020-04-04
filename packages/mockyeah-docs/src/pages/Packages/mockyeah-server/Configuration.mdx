@@ -37,7 +37,8 @@ Also supports a `.mockyeah.js` as a Node module that exports a JavaScript object
   "groups": {},
   "suiteHeader": "x-mockyeah-suite",
   "suiteCookie": "mockyeahSuite",
-  "aliases": []
+  "aliases": [],
+  "modifyRequest": undefined
 }
 ```
 
@@ -152,11 +153,7 @@ Boolean to enable watch more on startup. See [`watch()`](API/watch).
 
 ### `responseHeaders`
 
-Boolean to disable `mockyeah`'s custom response headers:
-
-- `x-mockyeah-mocked: true` Indicates the request matched a mock and responded with it.
-- `x-mockyeah-missed: true` Indicates the request missed all mocks.
-- `x-mockyeah-proxied: true` Indicates a missed request was proxied.
+See [@mockyeah/fetch Configuration responseHeaders](../mockyeah-fetch/Configuration#responseheaders).
 
 ### `suiteHeader`
 
@@ -195,32 +192,11 @@ To apply custom formatting to the JS in the suite files, specify a string path t
 
 #### `aliases`
 
-Aliases for match URLs, so that mocks for any of the URL prefixes in an alias set work for any of the others in its set too, to support sharing suites across various environments where service domains and base path endpoints may change. So with this configuration:
+See [@mockyeah/fetch Configuration aliases](../mockyeah-fetch/Configuration#aliases).
 
-```js
-{
-  "aliases": [
-    [
-      "https://demo.api.example.com",
-      "https://test.api.example.com",
-      "https://api.example.com"
-    ],
-    // more sets of aliases...
-  ]
-}
-```
+## `modifyRequest`
 
-So now a mock like this:
-
-```js
-mockyeah.get('https://api.example.com/some/endpoint', { text: 'hello' });
-```
-
-Would be able to respond identically to calls to:
-
-- `https://demo.api.example.com/some/endpoint`
-- `https://test.api.example.com/some/endpoint`
-- `https://api.example.com/some/endpoint`
+See [@mockyeah/fetch Configuration modifyRequest](../mockyeah-fetch/Configuration#modifyrequest).
 
 ### `groups`
 

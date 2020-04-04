@@ -8,7 +8,6 @@ import {
   RunHandlerOrPromise,
   RunHandler,
   RequestForHandler,
-  MatcherObjectOfStrings,
   MatcherDeepObjectOfStrings
 } from './types';
 import { normalize } from './normalize';

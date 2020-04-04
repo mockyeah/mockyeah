@@ -4,6 +4,7 @@ interface BootOptions {
   name?: string;
   noProxy?: boolean;
   prependServerURL?: boolean;
+  modifyRequest?: ModifyRequest;
   noPolyfill?: boolean;
   noWebSocket?: boolean;
   host?: string;
@@ -41,6 +42,8 @@ interface JsonObject {
 }
 type JsonPrimitive = string | number | boolean | null;
 type Json = JsonPrimitive | JsonPrimitive[] | JsonObject;
+
+type ModifyRequest = (req: RequestForHandler) => RequestForHandler | RequestForHandler[];
 
 interface RequestForHandler {
   url: string;

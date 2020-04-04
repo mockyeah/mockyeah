@@ -78,6 +78,7 @@ module.exports = function App(config) {
     noWebSocket: true,
     fetch,
     name: app.config.name,
+    modifyRequest: app.config.modifyRequest,
     aliases: app.config.aliases,
     responseHeaders: true, // we'll use these to coordinate logging and manually delete from response
     noProxy: !app.config.proxy,

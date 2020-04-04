@@ -101,6 +101,50 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
+  test('should work with modifyRequest option', async () => {
+    mockyeah = new Mockyeah({
+      ...options,
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+      modifyRequest: req => ({
+        ...req,
+        url: '/url'
+      })
+    });
+
+    mockyeah.mock('/url', { json: { a: 1 } });
+
+    const response = await mockyeah.fetch('https://example.local');
+    const data = await response.json();
+
+    expect(response.headers.get('content-type')).toMatch('application/json');
+    expect(data).toEqual({ a: 1 });
+  });
+
+  test('should work with modifyRequest option when returns array', async () => {
+    mockyeah = new Mockyeah({
+      ...options,
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+      modifyRequest: req => [
+        {
+          ...req,
+          url: '/nope'
+        },
+        {
+          ...req,
+          url: '/url'
+        }
+      ]
+    });
+
+    mockyeah.mock('/url', { json: { a: 1 } });
+
+    const response = await mockyeah.fetch('https://example.local');
+    const data = await response.json();
+
+    expect(response.headers.get('content-type')).toMatch('application/json');
+    expect(data).toEqual({ a: 1 });
+  });
+
   test('should match cookie header', async () => {
     mockyeah = new Mockyeah(options);
 
