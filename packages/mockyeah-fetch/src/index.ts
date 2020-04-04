@@ -713,7 +713,7 @@ class Mockyeah {
     }
 
     let resObj =
-      typeof res === 'string' ? ({ text: res } as ResponseOptionsObject) : { name, ...res };
+      typeof res === 'string' ? ({ name, text: res } as ResponseOptionsObject) : { name, ...res };
     resObj = resObj || ({ status: 200 } as ResponseOptionsObject);
 
     if (matchNormal.$meta) {
