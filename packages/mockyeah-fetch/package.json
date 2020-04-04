@@ -14,7 +14,12 @@
     "test": "npm run type-check && npm run lint && npm run test:unit",
     "test:unit": "rm -rf src/**/*.js && jest"
   },
-  "repository": "git@github.com:mockyeah/mockyeah.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mockyeah/mockyeah.git",
+    "directory": "packages/mockyeah-fetch"
+  },
+  "homepage": "https://mockyeah.js.org/Packages/mockyeah-fetch",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

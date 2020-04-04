@@ -11,7 +11,12 @@
     "test": "npm run lint && jest",
     "lint": "eslint --max-warnings 0 *.js ./bin ./lib"
   },
-  "repository": "git@github.com:mockyeah/mockyeah.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mockyeah/mockyeah.git",
+    "directory": "packages/mockyeah-cli"
+  },
+  "homepage": "https://mockyeah.js.org/Packages/mockyeah-cli",
   "author": "Ryan Ricard",
   "license": "MIT",
   "publishConfig": {
