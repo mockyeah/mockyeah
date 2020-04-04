@@ -430,7 +430,7 @@ class Mockyeah {
             return false;
           }
 
-          const match = m[0];
+          const [match, response] = m;
 
           const matchResult = matches(inc, match, { skipKeys: ['$meta'] });
 
@@ -439,10 +439,17 @@ class Mockyeah {
             return true;
           }
 
-          debugMissEach(`${logPrefix} @mockyeah/fetch missed mock for`, url, matchResult.message, {
-            request: incoming,
-            match
-          });
+          debugMissEach(
+            `${logPrefix} @mockyeah/fetch missed mock ${
+              response.name ? `"${response.name}" ` : ''
+            }for`,
+            url,
+            matchResult.message,
+            {
+              request: incoming,
+              match
+            }
+          );
 
           return false;
         });
@@ -520,12 +527,20 @@ class Mockyeah {
         });
       }
 
-      debugHit(`${logPrefix} @mockyeah/fetch matched mock for`, url, {
-        request: requestForHandler,
-        response,
-        json,
-        mock: matchingMock
-      });
+      const [match, mockResponse] = matchingMock;
+
+      debugHit(
+        `${logPrefix} @mockyeah/fetch matched mock ${
+          mockResponse.name ? `"${mockResponse.name}" ` : ''
+        }for`,
+        url,
+        {
+          request: requestForHandler,
+          response,
+          json,
+          mock: matchingMock
+        }
+      );
 
       return response;
     }
