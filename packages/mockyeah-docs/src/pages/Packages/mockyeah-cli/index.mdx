@@ -79,15 +79,16 @@ $ mockyeah record --help
 
 Usage: mockyeah-record [options]
 
-  Options:
-
-    -g, --group, --groups [names]  record with these named groups from configuration (comma-separated and/or repeatable)
-    -o, --only [regex]   only record calls to URLs matching given regex pattern (repeatable)
-    -h, --use-headers    record headers to response options
-    -l, --use-latency    record latency to response options
-    -H, --header [pair]  record matches will require these headers ("Name: Value") (repeatable)
-    -v, --verbose        verbose output
-    -h, --help           output usage information
+Options:
+  -g, --groups [names]      record with these named groups from configuration (comma-separated and/or repeatable)
+  --group [names]           alias of -g, --groups
+  -o, --only [string]       only record calls to URLs containing given string (repeatable)
+  -r, --only-regex [regex]  only record calls to URLs matching given regex pattern (repeatable)
+  -h, --use-headers         record headers to response options
+  -l, --use-latency         record latency to response options
+  -H, --header [pair]       record matches will require these headers ("Name: Value") (repeatable)
+  -v, --verbose             verbose output
+  -h, --help                output usage information
 ```
 
 ## Play

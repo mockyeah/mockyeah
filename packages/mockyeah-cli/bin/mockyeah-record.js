@@ -36,7 +36,7 @@ program
   .option('--group [names]', 'alias of -g, --groups', collectCommaSeparated)
   .option(
     '-o, --only [string]',
-    'only record calls to URLs containiing given string (repeatable)',
+    'only record calls to URLs containing given string (repeatable)',
     collect
   )
   .option(
