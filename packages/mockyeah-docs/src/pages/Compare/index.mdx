@@ -5,6 +5,19 @@ title: Compare
 # Compare
 
 There are several tools that share some goals and use cases with `mockyeah`.
+
+You might be familiar with `nock` - it works great for mocking in
+server-side or other Node apps, and in unit tests.
+But it's not designed to work with client-side apps, and doesn't
+provide an actual server for mocked responses.
+`mockyeah` can do all of the above and more, all with the same syntax!
+
+You might also be familiar with `Polly.JS` - like `mockyeah`, it supports both client and server-side mocking.
+It's a great tool, but its design seems more oriented around
+automatically recording and replaying known requests,
+and to initiate recording requires configuration in app source code,
+which means rebuilding or redeploying your app just to be able to record.
+
 Here's an attempt to map out some of their features to help compare:
 
 |                                               | `mockyeah` | Polly.JS | nock | fetch-mock | pretender |

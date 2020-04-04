@@ -7,6 +7,8 @@ a powerful service mocking, recording, and playback utility.
 
 [![npm](https://img.shields.io/npm/v/@mockyeah/test-server-jest.svg)](https://www.npmjs.com/package/@mockyeah/test-server-jest)
 
+More at https://mockyeah.js.org/Packages/mockyeah-test-jest.
+
 All you need to do is:
 
 ```js

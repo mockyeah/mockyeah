@@ -7,7 +7,7 @@ a powerful service mocking, recording, and playback utility.
 
 [![npm](https://img.shields.io/npm/v/@mockyeah/cli.svg)](https://www.npmjs.com/package/@mockyeah/cli)
 
-More at **https://mockyeah.js.org/CLI/CLI.html**.
+More at https://mockyeah.js.org/Packages/mockyeah-cli.
 
 ## Options
 

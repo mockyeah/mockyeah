@@ -7,6 +7,8 @@ a powerful service mocking, recording, and playback utility.
 
 [![npm](https://img.shields.io/npm/v/@mockyeah/test-server-mocha.svg)](https://www.npmjs.com/package/@mockyeah/test-server-mocha)
 
+More at https://mockyeah.js.org/Packages/mockyeah-test-mocha.
+
 All you need to do is:
 
 ```js

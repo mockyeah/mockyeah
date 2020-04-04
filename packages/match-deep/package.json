@@ -13,7 +13,12 @@
     "test": "npm run type-check && npm run lint && npm run test:unit",
     "test:unit": "jest"
   },
-  "repository": "git@github.com:mockyeah/mockyeah.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mockyeah/mockyeah.git",
+    "directory": "packages/match-deep"
+  },
+  "homepage": "https://github.com/mockyeah/mockyeah/tree/master/packages/match-deep",
   "license": "MIT",
   "engines": {
     "node": ">=6.0.0"

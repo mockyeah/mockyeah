@@ -13,7 +13,12 @@
     "test:coverage:report": "nyc report --reporter=text-lcov | coveralls ../..",
     "lint": "eslint --max-warnings 0 ./app ./lib ./server ./test"
   },
-  "repository": "git@github.com:mockyeah/mockyeah.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mockyeah/mockyeah.git",
+    "directory": "packages/mockyeah"
+  },
+  "homepage": "https://mockyeah.js.org/Packages/mockyeah-server",
   "author": "Ryan Ricard",
   "license": "MIT",
   "publishConfig": {

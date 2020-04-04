@@ -7,7 +7,7 @@ a powerful service mocking, recording, and playback utility.
 
 [![npm](https://img.shields.io/npm/v/@mockyeah/fetch.svg)](https://www.npmjs.com/package/@mockyeah/fetch)
 
-More at **https://mockyeah.js.org/Integration.html**.
+More at https://mockyeah.js.org/Packages/mockyeah-fetch.
 
 ## License
 

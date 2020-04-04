@@ -6,7 +6,12 @@
   "scripts": {
     "test": "jest"
   },
-  "repository": "git@github.com:mockyeah/mockyeah.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mockyeah/mockyeah.git",
+    "directory": "packages/mockyeah-test-server-jest"
+  },
+  "homepage": "https://mockyeah.js.org/Packages/mockyeah-test-mocha",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
