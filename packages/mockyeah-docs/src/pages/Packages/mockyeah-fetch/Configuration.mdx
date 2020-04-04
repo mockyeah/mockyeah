@@ -130,7 +130,7 @@ String for the cookie name to use to opt-in to suites dynamically.
 
 A URL prefix that will always be stripped off of the request URLs before trying to match against mocks.
 
-#### `aliases`
+### `aliases`
 
 Aliases for match URLs, so that mocks for any of the URL prefixes in an alias set work for any of the others in its set too, to support sharing suites across various environments where service domains and base path endpoints may change. So with this configuration:
 
@@ -158,6 +158,61 @@ Would be able to respond identically to calls to:
 - `https://demo.api.example.com/some/endpoint`
 - `https://test.api.example.com/some/endpoint`
 - `https://api.example.com/some/endpoint`
+
+### `modifyRequest`
+
+An optional function that can modify incoming requests before they are matched.
+This lets you define custom rules for how requests are matched against your mocks,
+giving you more power than [`aliases`](#aliases) or [`ignorePrefix`](#ignorePrefix).
+
+You can return a single request object to be matched,
+or an array of multiple requests against each of which a match attempt is made in order.
+
+Say you wanted to strip a proxy prefix URL and remove a cookie:
+
+```js
+{
+  modifyRequest: req => ({
+    ...req,
+    url: req.url.replace('https://proxy.example.com/', 'https://'),
+    cookies: {
+      ...req.cookies,
+      nope: ''
+    }
+  });
+}
+```
+
+Or maybe support multiple API environments:
+
+```js
+{
+  modifyRequest: req => [
+    req,
+    {
+      ...req,
+      url: req.url.replace('https://api.example.com/', 'https://api.stage.example.com')
+    },
+    {
+      ...req,
+      url: req.url.replace('https://api.example.com/', 'https://api.test.example.com')
+    }
+  ];
+}
+```
+
+The `req` object looks like this:
+
+```ts
+{
+  url: string;
+  method: Method;
+  query?: DeepObjectOfStrings;
+  headers?: Record<string, string>;
+  cookies?: Record<string, string>;
+  body?: any;
+}
+```
 
 ### `responseHeaders`
 

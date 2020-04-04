@@ -26,6 +26,7 @@ import {
   MockReturn,
   Match,
   MatchObject,
+  MatchNormal,
   Method,
   ResponseOptions,
   ResponseOptionsObject,
@@ -69,6 +70,7 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     name = 'default',
     noProxy = false,
     prependServerURL = false,
+    modifyRequest,
     noPolyfill = false,
     noWebSocket = false,
     host = 'localhost',
@@ -100,6 +102,7 @@ const getDefaultBootOptions = (bootOptions: Readonly<BootOptions>) => {
     name,
     noProxy,
     prependServerURL,
+    modifyRequest,
     noPolyfill,
     noWebSocket,
     host,
@@ -238,6 +241,7 @@ class Mockyeah {
     const {
       noWebSocket,
       ignorePrefix,
+      modifyRequest,
       noProxy: bootNoProxy,
       prependServerURL,
       suiteCookie,
@@ -391,7 +395,7 @@ class Mockyeah {
       });
     }
 
-    const incoming = {
+    const incoming: RequestForHandler = {
       url: url.replace(ignorePrefix, ''),
       query,
       headers,
@@ -400,28 +404,37 @@ class Mockyeah {
       cookies
     };
 
-    const incomingNormal = normalize(incoming, true);
+    const incomingModifieds: RequestForHandler | RequestForHandler[] = modifyRequest?.(
+      incoming
+    ) ?? [incoming];
+
+    const incomingNormals: MatchNormal[] = (Array.isArray(incomingModifieds)
+      ? incomingModifieds
+      : [incomingModifieds]
+    ).map(inc => normalize(inc, true));
 
     let matchingMock: MockNormal | undefined;
 
-    [
-      incomingNormal,
-      ...(isPlainObject(incomingNormal)
-        ? flatten(
-            aliasReplacements &&
-              Object.entries(aliasReplacements).map(([alias, aliasSet]) => {
-                const { url } = incomingNormal as MatchObject;
-                if (typeof url === 'string' && url.replace(/^\//, '').startsWith(alias)) {
-                  return aliasSet.map(alias2 => ({
-                    ...incomingNormal,
-                    url: url.replace(alias, alias2)
-                  }));
-                }
-                return [];
-              })
-          )
-        : [])
-    ]
+    flatten(
+      incomingNormals.map(incomingNormal => [
+        incomingNormal,
+        ...(isPlainObject(incomingNormal)
+          ? flatten(
+              aliasReplacements &&
+                Object.entries(aliasReplacements).map(([alias, aliasSet]) => {
+                  const { url } = incomingNormal as MatchObject;
+                  if (typeof url === 'string' && url.replace(/^\//, '').startsWith(alias)) {
+                    return aliasSet.map(alias2 => ({
+                      ...incomingNormal,
+                      url: url.replace(alias, alias2)
+                    }));
+                  }
+                  return [];
+                })
+            )
+          : [])
+      ])
+    )
       .filter(Boolean)
       .find(inc => {
         const allMocks = [...dynamicMocksNormal, ...mocks];
