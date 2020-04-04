@@ -16,14 +16,22 @@ const makeRecord = app => {
       (Array.isArray(options.only) ? options.only : [options.only]).map(o => {
         app.log(['serve', 'record', 'only'], o);
 
-        // if only is truthy, assume it is a regex pattern
+        return {
+          test: str => str.includes(o)
+        };
+      });
+
+    const onlyRegex =
+      options.onlyRegex &&
+      (Array.isArray(options.onlyRegex) ? options.onlyRegex : [options.onlyRegex]).map(o => {
+        app.log(['serve', 'record', 'only'], 'regex', o);
+
+        // if onlyRegex is truthy, assume it is a regex pattern
         const regex = new RegExp(o);
 
-        const obj = {
+        return {
           test: regex.test.bind(regex)
         };
-
-        return obj;
       });
 
     let groups = options.groups || options.group; // support alias
@@ -35,29 +43,32 @@ const makeRecord = app => {
         .map(groupName => {
           // map like `{"myGroup": "/some.*/regex/"}`
           let configGroup = app.config.groups[groupName];
+
           // TODO: Log that group was not found.
           // eslint-disable-next-line array-callback-return
           if (!configGroup) return;
+
           if (typeof configGroup === 'string') {
             configGroup = {
               pattern: configGroup
               // by default, no `directory`
             };
           }
+
           const regex = new RegExp(configGroup.pattern);
-          const group = {
+
+          // eslint-disable-next-line consistent-return
+          return {
             name: groupName,
             directory: configGroup.directory === true ? groupName : configGroup.directory,
             test: regex.test.bind(regex)
           };
-          // eslint-disable-next-line consistent-return
-          return group;
         })
         .filter(Boolean);
     }
 
     const enhancedOptions = Object.assign({}, options, {
-      only,
+      only: [...(only || []), ...(onlyRegex || [])],
       groups
     });
 
