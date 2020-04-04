@@ -30,7 +30,8 @@ const configDefaults = {
   groups: {},
   suiteHeader: 'x-mockyeah-suite',
   suiteCookie: 'mockyeahSuite',
-  aliases: []
+  aliases: [],
+  modifyRequest: undefined
 };
 
 module.exports = (config = {}) => {
