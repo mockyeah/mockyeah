@@ -120,7 +120,7 @@ describe('@mockyeah/fetch', () => {
     expect(data).toEqual({ a: 1 });
   });
 
-  test('should work with modifyRequest option reutrns array', async () => {
+  test('should work with modifyRequest option when returns array', async () => {
     mockyeah = new Mockyeah({
       ...options,
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
