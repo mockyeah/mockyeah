@@ -1,4 +1,4 @@
-const { isPlainObject, flatten } = require('lodash');
+const { isPlainObject, flatten, omitBy } = require('lodash');
 const { decodeProtocolAndPort } = require('./helpers');
 const proxyRecord = require('./proxyRecord');
 const getDynamicSuites = require('./getDynamicSuites');
@@ -111,9 +111,7 @@ const proxyRoute = (req, res, next) => {
       }
 
       if (!app.config.responseHeaders) {
-        delete headers['x-mockyeah-proxied'];
-        delete headers['x-mockyeah-missed'];
-        delete headers['x-mockyeah-mocked'];
+        headers = omitBy(headers, (v, k) => k.startsWith('x-mockyeah'));
       }
 
       Object.entries(headers).forEach(([k, v]) => {
