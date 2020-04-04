@@ -41,7 +41,7 @@ interface JsonObject {
   [key: string]: Json;
 }
 type JsonPrimitive = string | number | boolean | null;
-type Json = JsonPrimitive | JsonPrimitive[] | JsonObject;
+type Json = JsonPrimitive | JsonPrimitive[] | JsonObject | JsonObject[];
 
 type ModifyRequest = (req: RequestForHandler) => RequestForHandler | RequestForHandler[];
 
@@ -71,6 +71,7 @@ type ResponderFunction<T> =
 type Responder<T> = ResponderResult<T> | ResponderFunction<T>;
 
 interface ResponseOptionsObject {
+  name?: string;
   json?: Responder<Json>;
   text?: Responder<string>;
   html?: Responder<string>;
@@ -198,6 +199,7 @@ interface MockReturn {
 type MockFunction = (match: Match, res?: ResponseOptions) => MockReturn;
 
 interface MakeMockOptions {
+  name?: string;
   keepExisting?: boolean;
 }
 

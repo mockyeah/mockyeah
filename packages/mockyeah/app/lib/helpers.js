@@ -1,5 +1,6 @@
 const nodePath = require('path');
 const JSONparseSafe = require('json-parse-safe');
+const { isPlainObject } = require('lodash');
 const {
   decodedPortRegex,
   decodedProtocolRegex,
@@ -22,9 +23,12 @@ const requireSuite = (app, name) => {
 
   try {
     // eslint-disable-next-line import/no-dynamic-require, global-require
-    const suites = require(filePath);
+    const mocks = require(filePath);
 
-    return suites;
+    return mocks.map(mock => [
+      mock[0],
+      isPlainObject(mock[1]) ? Object.assign({ name }, mock[1]) : mock[1]
+    ]);
   } catch (err) {
     app.log(['suite', 'error'], `Error reading suite: ${err.message}`);
   }

@@ -20,6 +20,7 @@ import { uuid } from './uuid';
 import {
   BootOptions,
   FetchOptions,
+  Mock,
   MockNormal,
   MockFunction,
   MockReturn,
@@ -372,7 +373,7 @@ class Mockyeah {
       const mockSuiteLoadeds = await Promise.all(mockSuiteLoads);
       mockSuiteLoadeds.forEach((mockSuiteLoaded, index) => {
         const name = mockSuiteNames[index];
-        (mockSuiteLoaded.default || mockSuiteLoaded).forEach(mock => {
+        (mockSuiteLoaded.default || mockSuiteLoaded).forEach((mock: Mock) => {
           const [match, response] = mock;
           const newMatch = (isPlainObject(match)
             ? { ...(match as MatchObject) }
@@ -387,7 +388,9 @@ class Mockyeah {
                     .includes(name)
                 : false
           };
-          dynamicMocksNormal.push(this.makeMock(newMatch, response, { keepExisting: true }).mock);
+          dynamicMocksNormal.push(
+            this.makeMock(newMatch, response, { name, keepExisting: true }).mock
+          );
         });
       });
     }
@@ -440,7 +443,7 @@ class Mockyeah {
             return false;
           }
 
-          const match = m[0];
+          const [match, response] = m;
 
           const matchResult = matches(inc, match, { skipKeys: ['$meta'] });
 
@@ -449,10 +452,17 @@ class Mockyeah {
             return true;
           }
 
-          debugMissEach(`${logPrefix} @mockyeah/fetch missed mock for`, url, matchResult.message, {
-            request: incoming,
-            match
-          });
+          debugMissEach(
+            `${logPrefix} @mockyeah/fetch missed mock ${
+              response.name ? `"${response.name}" ` : ''
+            }for`,
+            url,
+            matchResult.message,
+            {
+              request: incoming,
+              match
+            }
+          );
 
           return false;
         });
@@ -530,12 +540,20 @@ class Mockyeah {
         });
       }
 
-      debugHit(`${logPrefix} @mockyeah/fetch matched mock for`, url, {
-        request: requestForHandler,
-        response,
-        json,
-        mock: matchingMock
-      });
+      const [match, mockResponse] = matchingMock;
+
+      debugHit(
+        `${logPrefix} @mockyeah/fetch matched mock ${
+          mockResponse.name ? `"${mockResponse.name}" ` : ''
+        }for`,
+        url,
+        {
+          request: requestForHandler,
+          response,
+          json,
+          mock: matchingMock
+        }
+      );
 
       return response;
     }
@@ -676,7 +694,7 @@ class Mockyeah {
   }
 
   makeMock(match: Match, res?: ResponseOptions, options: MakeMockOptions = {}): MakeMockReturn {
-    const { keepExisting } = options;
+    const { keepExisting, name } = options;
     const matchNormal = normalize(match);
 
     const { mocks } = this.__private;
@@ -694,7 +712,8 @@ class Mockyeah {
       }
     }
 
-    let resObj = typeof res === 'string' ? ({ text: res } as ResponseOptionsObject) : res;
+    let resObj =
+      typeof res === 'string' ? ({ name, text: res } as ResponseOptionsObject) : { name, ...res };
     resObj = resObj || ({ status: 200 } as ResponseOptionsObject);
 
     if (matchNormal.$meta) {

@@ -248,3 +248,5 @@ These (as above) can also be functions, promises, or functions that return promi
   - Override the `Content-Type` HTTP header sent with the response. Also maps from file extensions via [`mime.getType(type)`](https://www.npmjs.com/package/mime#mimegettypepathorextension).
 - `status` (`Responder<string>?`)
   - HTTP response status code. Default `200`.
+- `name` (`string`)
+  - Optional name for this mock. This will be used in logs, echoed as a `x-mockyeah-name` header with the [`responseHeaders`](../Configuration#responseheaders) option, etc.
