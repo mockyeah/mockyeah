@@ -34,6 +34,8 @@ const respond = async (
 
   const resOpts: ResponseOptionsObject = matchingMock[1] || {};
 
+  const { name } = resOpts;
+
   const status =
     (resOpts.status && (await handler<number>(resOpts.status, requestForHandler, res))) || 200;
 
@@ -46,18 +48,21 @@ const respond = async (
 
   let json;
 
+  let fixture: string | undefined;
+  let filePath: string | undefined;
+
   if (resOpts.fixture) {
     if (!fixtureResolver) {
       throw new Error('Using `fixture` in mock response options requires a `fixtureResolver`.');
     }
-    const fixture = await handler<string>(resOpts.fixture, requestForHandler, res);
+    fixture = await handler<string>(resOpts.fixture, requestForHandler, res);
     type = type || fixture; // TODO: Use base name only to conceal file path?
     body = fixture ? await fixtureResolver(fixture) : undefined;
   } else if (resOpts.filePath) {
     if (!fileResolver) {
       throw new Error('Using `filePath` in mock response options requires a `fileResolver`.');
     }
-    const filePath = await handler<string>(resOpts.filePath, requestForHandler, res);
+    filePath = await handler<string>(resOpts.filePath, requestForHandler, res);
     type = type || filePath; // TODO: Use base name only to conceal file path?
     body = filePath ? await fileResolver(filePath) : undefined;
   } else if (resOpts.json) {
@@ -80,6 +85,14 @@ const respond = async (
 
   contentType = type ? mime.getType(type) || type : contentType;
 
+  const latency = resOpts.latency || bootOptions.latency;
+
+  let latencyActual: number | undefined;
+  if (latency) {
+    latencyActual = await handler<number>(latency, requestForHandler, res);
+    await new Promise(resolve => setTimeout(resolve, latencyActual));
+  }
+
   const headers: RequestInit['headers'] = resOpts.headers
     ? {
         ...(await handler<Record<string, string>>(resOpts.headers, requestForHandler, res))
@@ -88,6 +101,22 @@ const respond = async (
 
   if (responseHeaders) {
     headers['x-mockyeah-mocked'] = 'true';
+
+    if (name) {
+      headers['x-mockyeah-name'] = name;
+    }
+
+    if (fixture) {
+      headers['x-mockyeah-fixture'] = fixture;
+    }
+
+    if (filePath) {
+      headers['x-mockyeah-filePath'] = filePath;
+    }
+
+    if (latencyActual) {
+      headers['x-mockyeah-latency'] = latencyActual.toString();
+    }
   }
 
   if (contentType) {
@@ -98,13 +127,6 @@ const respond = async (
     status,
     headers
   };
-
-  const latency = resOpts.latency || bootOptions.latency;
-
-  if (latency) {
-    const latencyActual = await handler<number>(latency, requestForHandler, res);
-    await new Promise(resolve => setTimeout(resolve, latencyActual));
-  }
 
   const response = new Response(body, responseInit);
 

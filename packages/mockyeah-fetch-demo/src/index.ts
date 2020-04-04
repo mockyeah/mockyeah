@@ -94,6 +94,8 @@ buttonMock.innerText = 'mock';
 
 buttonMock.addEventListener('click', async () => {
   mockyeah.mock(/json/, {
+    name: 'myMock',
+    latency: 100,
     json: {
       slideshow: {
         author: 'Mocked Truly',

@@ -20,6 +20,7 @@ import { uuid } from './uuid';
 import {
   BootOptions,
   FetchOptions,
+  Mock,
   MockNormal,
   MockFunction,
   MockReturn,
@@ -368,7 +369,7 @@ class Mockyeah {
       const mockSuiteLoadeds = await Promise.all(mockSuiteLoads);
       mockSuiteLoadeds.forEach((mockSuiteLoaded, index) => {
         const name = mockSuiteNames[index];
-        (mockSuiteLoaded.default || mockSuiteLoaded).forEach(mock => {
+        (mockSuiteLoaded.default || mockSuiteLoaded).forEach((mock: Mock) => {
           const [match, response] = mock;
           const newMatch = (isPlainObject(match)
             ? { ...(match as MatchObject) }
@@ -383,7 +384,9 @@ class Mockyeah {
                     .includes(name)
                 : false
           };
-          dynamicMocksNormal.push(this.makeMock(newMatch, response, { keepExisting: true }).mock);
+          dynamicMocksNormal.push(
+            this.makeMock(newMatch, response, { name, keepExisting: true }).mock
+          );
         });
       });
     }
@@ -663,7 +666,7 @@ class Mockyeah {
   }
 
   makeMock(match: Match, res?: ResponseOptions, options: MakeMockOptions = {}): MakeMockReturn {
-    const { keepExisting } = options;
+    const { keepExisting, name } = options;
     const matchNormal = normalize(match);
 
     const { mocks } = this.__private;
@@ -681,7 +684,8 @@ class Mockyeah {
       }
     }
 
-    let resObj = typeof res === 'string' ? ({ text: res } as ResponseOptionsObject) : res;
+    let resObj =
+      typeof res === 'string' ? ({ text: res } as ResponseOptionsObject) : { name, ...res };
     resObj = resObj || ({ status: 200 } as ResponseOptionsObject);
 
     if (matchNormal.$meta) {
