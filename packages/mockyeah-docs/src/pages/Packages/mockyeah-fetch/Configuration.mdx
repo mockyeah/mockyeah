@@ -172,14 +172,14 @@ Say you wanted to strip a proxy prefix URL and remove a cookie:
 
 ```js
 {
-    modifyRequest: req => ({
-      ...req,
-      url: req.url.replace('https://proxy.example.com/', 'https://'),
-      cookies: {
-        ...req.cookies,
-        nope: ''
-      }
-    })
+  modifyRequest: req => ({
+    ...req,
+    url: req.url.replace('https://proxy.example.com/', 'https://'),
+    cookies: {
+      ...req.cookies,
+      nope: ''
+    }
+  });
 }
 ```
 
@@ -187,23 +187,17 @@ Or maybe support multiple API environments:
 
 ```js
 {
-    modifyRequest: req => [
-      req,
-      {
-        ...req,
-        url: req.url.replace(
-          'https://api.example.com/',
-          'https://api.stage.example.com'
-        )
-      },
-      {
-        ...req,
-        url: req.url.replace(
-          'https://api.example.com/',
-          'https://api.test.example.com'
-        )
-      }
-    ]
+  modifyRequest: req => [
+    req,
+    {
+      ...req,
+      url: req.url.replace('https://api.example.com/', 'https://api.stage.example.com')
+    },
+    {
+      ...req,
+      url: req.url.replace('https://api.example.com/', 'https://api.test.example.com')
+    }
+  ];
 }
 ```
 
