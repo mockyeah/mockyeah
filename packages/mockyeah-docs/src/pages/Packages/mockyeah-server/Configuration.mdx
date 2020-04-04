@@ -200,10 +200,10 @@ See [@mockyeah/fetch Configuration modifyRequest](../mockyeah-fetch/Configuratio
 
 ### `groups`
 
-When using `--only`, rather than always typing out regular expressions, you can define them here, so that rather than:
+Instead of always typing out matches using `--only` or `--only-regex`, you can define them here, so that rather than:
 
 ```shell
-mockyeah record --only '/api/v(.*)/users' --only '/api/v(.*)/posts)'
+mockyeah record --only-regex '/api/v(.*)/users' --only-regex '/api/v(.*)/posts)'
 ```
 
 We can instead type:
