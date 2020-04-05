@@ -26,15 +26,15 @@
     "gatsby-plugin-mdx": "^1.0.67",
     "gatsby-plugin-offline": "3.0.8",
     "gatsby-plugin-react-helmet": "3.1.8",
-    "gatsby-plugin-sharp": "^2.3.10",
+    "gatsby-plugin-sharp": "^2.5.4",
     "gatsby-plugin-sitemap": "^2.2.14",
     "gatsby-remark-autolink-headers": "^2.1.11",
     "gatsby-remark-copy-linked-files": "^2.1.36",
-    "gatsby-remark-images": "^3.1.42",
+    "gatsby-remark-images": "^3.2.2",
     "gatsby-remark-prismjs": "^3.3.30",
     "gatsby-source-filesystem": "2.1.26",
     "gatsby-transformer-remark": "^2.6.48",
-    "gatsby-transformer-sharp": "^2.3.9",
+    "gatsby-transformer-sharp": "^2.4.4",
     "is-absolute-url": "^3.0.2",
     "prismjs": "^1.19.0",
     "prop-types": "15.7.2",
@@ -44,7 +44,7 @@
     "remark-react": "^6.0.0"
   },
   "devDependencies": {
-    "gatsby-cli": "^2.8.22",
+    "gatsby-cli": "^2.11.5",
     "prettier": "1.18.2"
   },
   "optionalDependencies": {
