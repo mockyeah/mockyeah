@@ -518,8 +518,12 @@ class Mockyeah {
       );
 
       // Fake responses don't have URLs by default, but we'll try to add (some browsers may not allow).
-      // @ts-ignore
-      response.url = url;
+      try {
+        // @ts-ignore
+        response.url = url;
+      } catch (error) {
+        // silence
+      }
 
       if (serviceWorker) {
         const responseObject: ResponseObject = {
