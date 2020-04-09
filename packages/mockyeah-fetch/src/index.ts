@@ -375,21 +375,8 @@ class Mockyeah {
         const name = mockSuiteNames[index];
         (mockSuiteLoaded.default || mockSuiteLoaded).forEach((mock: Mock) => {
           const [match, response] = mock;
-          const newMatch = (isPlainObject(match)
-            ? { ...(match as MatchObject) }
-            : { url: match }) as MatchObject;
-          newMatch.cookies = {
-            ...newMatch.cookies,
-            mockSuite: (value?: string): boolean =>
-              value
-                ? value
-                    .split(',')
-                    .map(s => s.trim())
-                    .includes(name)
-                : false
-          };
           dynamicMocksNormal.push(
-            this.makeMock(newMatch, response, { name, keepExisting: true }).mock
+            this.makeMock(match, response, { name, keepExisting: true }).mock
           );
         });
       });
