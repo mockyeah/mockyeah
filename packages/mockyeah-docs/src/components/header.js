@@ -51,8 +51,8 @@ const Header = ({ siteTitle, siteDescription }) => (
             <a href="https://github.com/mockyeah/mockyeah" alt="GitHub">
               <i class="fa fa-github"></i>
             </a>{' '}
-            <a href="https://www.npmjs.com/package/mockyeah">
-              <img alt="npm" src="https://img.shields.io/npm/v/mockyeah.svg" />
+            <a href="https://www.npmjs.com/package/@mockyeah/server">
+              <img alt="npm" src="https://img.shields.io/npm/v/@mockyeah/server.svg" />
             </a>{' '}
             <a href="https://travis-ci.org/mockyeah/mockyeah">
               <img alt="Travis CI" src="https://img.shields.io/travis/mockyeah/mockyeah.svg" />
