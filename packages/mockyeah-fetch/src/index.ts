@@ -517,6 +517,10 @@ class Mockyeah {
         realRes
       );
 
+      // Fake responses don't have URLs by default, but we'll try to add (some browsers may not allow).
+      // @ts-ignore
+      response.url = url;
+
       if (serviceWorker) {
         const responseObject: ResponseObject = {
           status: response.status,
@@ -549,9 +553,11 @@ class Mockyeah {
         url,
         {
           request: requestForHandler,
+          mock: matchingMock,
           response,
+          body: responseBody,
           json,
-          mock: matchingMock
+          headers: responseHeaders
         }
       );
 
