@@ -134,8 +134,8 @@ const respond = async (
   return {
     response,
     body,
-    json,
-    headers
+    headers,
+    json
   };
 };
 
