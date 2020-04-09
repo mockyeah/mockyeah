@@ -365,29 +365,40 @@ class Mockyeah {
       debugError(`${logPrefix} @mockyeah/fetch couldn't parse cookies: ${error.message}`);
     }
 
-    const mockSuiteName = dynamicMockSuite || (cookies && cookies[suiteCookie]);
+    const cookieMockSuite = cookies && cookies[suiteCookie];
+    const mockSuiteName = dynamicMockSuite || cookieMockSuite;
 
     if (mockSuiteName && mockSuiteResolver) {
       const mockSuiteNames = mockSuiteName.split(',').map(s => s.trim());
       const mockSuiteLoads = mockSuiteNames.map(mockSuiteResolver);
       const mockSuiteLoadeds = await Promise.all(mockSuiteLoads);
+
       mockSuiteLoadeds.forEach((mockSuiteLoaded, index) => {
         const name = mockSuiteNames[index];
+
         (mockSuiteLoaded.default || mockSuiteLoaded).forEach((mock: Mock) => {
           const [match, response] = mock;
-          const newMatch = (isPlainObject(match)
-            ? { ...(match as MatchObject) }
-            : { url: match }) as MatchObject;
-          newMatch.cookies = {
-            ...newMatch.cookies,
-            mockSuite: (value?: string): boolean =>
-              value
-                ? value
-                    .split(',')
-                    .map(s => s.trim())
-                    .includes(name)
-                : false
-          };
+
+          let newMatch: Match;
+
+          if (cookieMockSuite) {
+            newMatch = (isPlainObject(match)
+              ? { ...(match as MatchObject) }
+              : { url: match }) as MatchObject;
+            newMatch.cookies = {
+              ...newMatch.cookies,
+              mockSuite: (value?: string): boolean =>
+                value
+                  ? value
+                      .split(',')
+                      .map(s => s.trim())
+                      .includes(name)
+                  : false
+            };
+          } else {
+            newMatch = match;
+          }
+
           dynamicMocksNormal.push(
             this.makeMock(newMatch, response, { name, keepExisting: true }).mock
           );
