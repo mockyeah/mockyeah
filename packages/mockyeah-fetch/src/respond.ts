@@ -58,6 +58,14 @@ const respond = async (
     fixture = await handler<string>(resOpts.fixture, requestForHandler, res);
     type = type || fixture; // TODO: Use base name only to conceal file path?
     body = fixture ? await fixtureResolver(fixture) : undefined;
+
+    if (type.includes('json')) {
+      try {
+        json = JSON.parse(body);
+      } catch (error) {
+        // silence
+      }
+    }
   } else if (resOpts.filePath) {
     if (!fileResolver) {
       throw new Error('Using `filePath` in mock response options requires a `fileResolver`.');
@@ -65,6 +73,14 @@ const respond = async (
     filePath = await handler<string>(resOpts.filePath, requestForHandler, res);
     type = type || filePath; // TODO: Use base name only to conceal file path?
     body = filePath ? await fileResolver(filePath) : undefined;
+
+    if (type.includes('json')) {
+      try {
+        json = JSON.parse(body);
+      } catch (error) {
+        // silence
+      }
+    }
   } else if (resOpts.json) {
     json = await handler(resOpts.json, requestForHandler, res);
     body = JSON.stringify(json);
