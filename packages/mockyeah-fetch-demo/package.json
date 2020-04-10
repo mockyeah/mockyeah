@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/fetch-demo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "demoing fetch integration for mockyeah request mocking utility.",
   "private": true,
   "scripts": {
@@ -29,10 +29,10 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.2",
-    "@mockyeah/fetch": "^1.0.1",
+    "@mockyeah/fetch": "^1.0.2",
     "core-js-compat": "^3.6.4"
   },
   "optionalDependencies": {
-    "@mockyeah/tools": "^1.0.1"
+    "@mockyeah/tools": "^1.0.2"
   }
 }
