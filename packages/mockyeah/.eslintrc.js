@@ -1,6 +1,9 @@
 const tools = require('@mockyeah/tools/.eslintrc.js');
 
 module.exports = Object.assign({}, tools, {
+  globals: {
+    fetch: 'readonly'
+  },
   rules: Object.assign({}, tools.rules, {
     'import/no-extraneous-dependencies': [
       'error',

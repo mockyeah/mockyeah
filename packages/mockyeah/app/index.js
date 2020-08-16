@@ -1,11 +1,11 @@
 'use strict';
 
+require('cross-fetch/polyfill');
 const EventEmitter = require('events');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const _ = require('lodash');
-const fetch = require('isomorphic-fetch');
 const MockyeahFetch = require('@mockyeah/fetch');
 const Logger = require('./lib/Logger');
 const proxyRoute = require('./lib/proxyRoute');
