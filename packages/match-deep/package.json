@@ -1,6 +1,6 @@
 {
   "name": "match-deep",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "deep object matcher",
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
@@ -33,7 +33,7 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
     "@babel/register": "^7.9.0",
-    "@mockyeah/tools": "^1.0.2",
+    "@mockyeah/tools": "^1.0.3",
     "@types/jest": "^24.9.1",
     "@types/lodash": "^4.14.137",
     "@types/vfile-message": "^1",

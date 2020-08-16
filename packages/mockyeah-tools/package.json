@@ -1,6 +1,6 @@
 {
   "name": "@mockyeah/tools",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "local package centralizing monorepo tools",
   "private": true,
   "devDependencies": {
