@@ -75,7 +75,7 @@ module.exports = [
   (env: Args = {}, argv: Args = {}) =>
     merge(defaults(env, argv), {
       entry: {
-        devtools: "./src/devtools/index.tsx"
+        devtools: ["webextension-polyfill", "./src/devtools/index.tsx"]
       },
       plugins: [
         new HtmlWebpackPlugin({
@@ -91,7 +91,7 @@ module.exports = [
   (env: Args = {}, argv: Args = {}) =>
     merge(defaults(env, argv), {
       entry: {
-        panel: "./src/panel/index.tsx"
+        panel: ["webextension-polyfill", "./src/panel/index.tsx"]
       },
       plugins: [
         new HtmlWebpackPlugin({
