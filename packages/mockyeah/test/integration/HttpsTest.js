@@ -1,5 +1,6 @@
 'use strict';
 
+const { expect } = require('chai');
 const TestHelper = require('../TestHelper');
 
 const mockyeah = TestHelper.mockyeahHttps;
@@ -32,5 +33,9 @@ describe('HTTPS', () => {
     mockyeah.get('/some/service/end/point', { status: req => parseInt(req.query.status, 10) });
 
     request.get('/some/service/end/point?status=300').expect(300, done);
+  });
+
+  it('should enable https even if port is zero', () => {
+    expect(mockyeah.server.url).to.match(/^https:/)
   });
 });

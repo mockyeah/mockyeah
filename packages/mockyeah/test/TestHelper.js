@@ -15,7 +15,7 @@ const mockyeah = new Server({
 
 const configHttps = Object.assign({}, mockyeah.config, {
   port: undefined,
-  portHttps: 4443,
+  portHttps: 0,
   adminPort: 4773
 });
 const mockyeahHttps = new Server(configHttps);

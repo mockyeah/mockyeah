@@ -78,7 +78,7 @@ module.exports = function Server(config, onStart) {
     };
 
     const startServer = () => {
-      if (config.portHttps) {
+      if (config.portHttps !== undefined) {
         let certFiles;
         if (!config.httpsKeyPath && !config.httpsCertPath) {
           certFiles = createCertFiles();
